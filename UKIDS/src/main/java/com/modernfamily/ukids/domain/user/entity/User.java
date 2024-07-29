@@ -2,6 +2,7 @@ package com.modernfamily.ukids.domain.user.entity;
 
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -13,6 +14,7 @@ public class User extends BaseTimeEntity {
     public User() {
     }
 
+    @Builder
     public User(Long userId, String id, String password, String name, String birthDate, String email, String phone, String imageName, String profileImage, Role role, boolean isDelete) {
         this.userId = userId;
         this.id = id;
@@ -54,6 +56,20 @@ public class User extends BaseTimeEntity {
     @Column(columnDefinition = "TINYINT(1)")
     private boolean isDelete;
 
-
-    
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", id='" + id + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", birthDate='" + birthDate + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                ", role=" + role +
+                ", isDelete=" + isDelete +
+                '}';
+    }
 }
