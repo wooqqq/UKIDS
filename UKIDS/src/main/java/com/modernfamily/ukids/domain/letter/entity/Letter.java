@@ -21,23 +21,23 @@ public class Letter extends BaseTimeEntity {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "tree_id")
+    @JoinColumn(name = "tree_id", nullable = false)
     private Tree tree;
 
     @ManyToOne
-    @JoinColumn(name = "from_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "from_id", referencedColumnName = "user_id", nullable = false)
     private User fromUser;
 
     @ManyToOne
-    @JoinColumn(name = "to_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "to_id", referencedColumnName = "user_id", nullable = false)
     private User toUser;
 
     @ColumnDefault("false")
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isDelete;
 
     @ColumnDefault("false")
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isOpen;
 
     private Letter(String content, Tree tree, User fromUser, User toUser, boolean isDelete, boolean isOpen) {
