@@ -1,5 +1,7 @@
+import Footer from "./components/Footer";
+
 function App() {
-  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_KEY = import.meta.env.VITE_API_KEY;
   const num: number = 1234;
 
   return (
@@ -9,6 +11,8 @@ function App() {
       </div>
       <div>{API_KEY}</div>
       <div>{num}</div>
+
+      <Footer />
     </>
   );
 }
