@@ -5,9 +5,7 @@ import com.modernfamily.ukids.domain.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/user")
@@ -18,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<String> signUp(@RequestBody SignUpDto signUpDto, @RequestHeader("Authorization") String token) {
 //        System.out.println(signUpDto);
         boolean isSuccess = userService.signUp(signUpDto);
 
@@ -28,9 +26,9 @@ public class UserController {
         return ResponseEntity.status(500).body("회원가입 실패");
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(){
-//
-//        return null;
-//    }
+    @GetMapping("/sss")
+    public ResponseEntity<?> login(){
+
+        return ResponseEntity.ok().body("인증");
+    }
 }

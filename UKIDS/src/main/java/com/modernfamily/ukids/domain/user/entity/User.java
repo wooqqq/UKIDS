@@ -40,9 +40,9 @@ public class User extends BaseTimeEntity {
     @Column(length = 45, nullable = false)
     private String name;
     private String birthDate;
-    @Column(length = 45, nullable = false, unique = true)
+    @Column(length = 45, unique = true)
     private String email;
-    @Column(length = 45, nullable = false, unique = true)
+    @Column(length = 45, unique = true)
     private String phone;
     @Column(length = 255)
     private String imageName;

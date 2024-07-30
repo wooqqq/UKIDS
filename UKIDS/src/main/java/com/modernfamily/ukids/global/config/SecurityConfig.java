@@ -1,7 +1,9 @@
 package com.modernfamily.ukids.global.config;
 
+import com.modernfamily.ukids.domain.user.mapper.UserMapper;
+import com.modernfamily.ukids.global.jwt.JWTFilter;
+import com.modernfamily.ukids.global.jwt.JWTUtil;
 import com.modernfamily.ukids.global.jwt.LoginFilter;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,7 @@ public class SecurityConfig {
 
     // authenticationManager에 넣어줄 인자
     private final AuthenticationConfiguration configuration;
+    private final JWTUtil jwtUtil;
 
     // LoginFilter에 넣어줄 인자
     @Bean
@@ -45,11 +48,14 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/" ,"/login", "/user/signup").permitAll()
+                        .requestMatchers("/user/sss").hasRole("admin")
                         .anyRequest().authenticated()
+
         );
 
+        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         // 등록할 필터와 어디에 등록할 것인지
-        http.addFilterAt(new LoginFilter(authenticationManager(configuration)), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new LoginFilter(authenticationManager(configuration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // 세션 설정 (stateless)
         http.sessionManagement((session) -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)));
