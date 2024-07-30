@@ -32,4 +32,9 @@ public class LetterService {
     public List<Letter> findByFromUser(User fromUserId) {
         return letterRepository.findAllByFromUser(fromUserId);
     }
+
+    // 편지 상세 조회
+    public Letter findByLetterId(Long letterId) {
+        return letterRepository.findByLetterId(letterId);
+    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface LetterRepository extends JpaRepository<Letter, Long> {
+    Letter findByLetterId(Long letterId);
     List<Letter> findAllByFromUser(User fromUser);
     List<Letter> findAllByToUser(User toUser);
 }

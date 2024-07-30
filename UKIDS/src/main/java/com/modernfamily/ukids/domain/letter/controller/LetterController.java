@@ -52,6 +52,11 @@ public class LetterController {
     }
 
     // 편지 내용 상세 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long letterId) {
+        Letter letter = letterService.findByLetterId(letterId);
+        return new ResponseEntity<>(letter, HttpStatus.OK);
+    }
 
     // 편지 삭제
 
