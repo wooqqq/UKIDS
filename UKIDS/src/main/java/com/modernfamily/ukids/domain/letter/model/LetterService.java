@@ -6,7 +6,9 @@ import com.modernfamily.ukids.domain.letter.repository.LetterRepository;
 import com.modernfamily.ukids.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LetterService {
@@ -34,7 +36,18 @@ public class LetterService {
     }
 
     // 편지 상세 조회
-    public Letter findByLetterId(Long letterId) {
+    public Optional<Letter> findByLetterId(Long letterId) {
         return letterRepository.findByLetterId(letterId);
+    }
+
+    // 편지 삭제 (논리적 삭제)
+    public void deleteByLetterId(Long letterId) {
+        Optional<Letter> optionalLetter = letterRepository.findByLetterId(letterId);
+        if (optionalLetter.isPresent()) {
+            Letter letter = optionalLetter.get();
+            letter.setIsDelete(true);
+            letter.setUpdateTime(LocalDateTime.now());  // updateTime 갱신
+            letterRepository.save(letter);
+        }
     }
 }

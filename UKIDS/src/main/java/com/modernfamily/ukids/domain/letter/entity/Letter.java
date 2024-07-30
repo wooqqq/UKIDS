@@ -57,6 +57,10 @@ public class Letter extends BaseTimeEntity {
         this.isOpen = isOpen;
     }
 
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public LetterDto toDto() {
         return LetterDto.builder()
                 .content(this.content)

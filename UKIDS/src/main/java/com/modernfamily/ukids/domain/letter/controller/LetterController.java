@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/letter")
@@ -54,11 +54,20 @@ public class LetterController {
     // 편지 내용 상세 조회
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long letterId) {
-        Letter letter = letterService.findByLetterId(letterId);
-        return new ResponseEntity<>(letter, HttpStatus.OK);
+        Optional<Letter> optionalLetter = letterService.findByLetterId(letterId);
+        if (optionalLetter.isPresent()) {
+            return new ResponseEntity<>(optionalLetter.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     // 편지 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLetter(@PathVariable("id") Long letterId) {
+        letterService.deleteByLetterId(letterId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     // 타임캡슐 오픈하여 편지 상태(isOpen)를 true로 변경
     // 프론트로부터 오픈 요청 받기 (편지 개수 보내기)

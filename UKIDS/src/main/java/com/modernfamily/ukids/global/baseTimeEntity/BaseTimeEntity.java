@@ -20,4 +20,7 @@ public class BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime updateTime;
 
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
 }
