@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.user.model.service;
 
 import com.modernfamily.ukids.domain.user.dto.SignUpDto;
+import com.modernfamily.ukids.domain.user.dto.UserOtherDto;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
@@ -26,9 +27,27 @@ public class UserServIceImpl implements UserService{
         signUpDto.setPassword(bCryptPasswordEncoder.encode(signUpDto.getPassword()));
 
         User user = userMapper.toSignUpEntity(signUpDto);
-//        System.out.println("user: " + user);
+
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    public boolean idExist(String id) {
+        return userRepository.existsById(id);
+    }
+
+    @Override
+    public boolean emailExist(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public UserOtherDto findByIdOther(String id) {
+
+        User user = userRepository.findById(id);
+
+        return userMapper.toUserOtherDto(user);
     }
 }

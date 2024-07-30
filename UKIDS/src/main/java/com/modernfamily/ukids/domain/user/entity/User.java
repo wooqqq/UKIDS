@@ -56,20 +56,5 @@ public class User extends BaseTimeEntity {
     @Column(columnDefinition = "TINYINT(1)")
     private boolean isDelete;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", id='" + id + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", birthDate='" + birthDate + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", imageName='" + imageName + '\'' +
-                ", profileImage='" + profileImage + '\'' +
-                ", role=" + role +
-                ", isDelete=" + isDelete +
-                '}';
-    }
+
 }

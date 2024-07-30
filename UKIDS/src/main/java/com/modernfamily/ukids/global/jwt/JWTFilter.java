@@ -1,10 +1,5 @@
 package com.modernfamily.ukids.global.jwt;
 
-import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
-import com.modernfamily.ukids.domain.user.dto.JwtFilterDto;
-import com.modernfamily.ukids.domain.user.dto.JwtUserDto;
-import com.modernfamily.ukids.domain.user.entity.User;
-import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +36,7 @@ public class JWTFilter extends OncePerRequestFilter {
             return ;
         }
 
-        Authentication authToken = jwtUtil.getAutentication(token);
+        Authentication authToken = jwtUtil.getAuthentication(token);
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
 

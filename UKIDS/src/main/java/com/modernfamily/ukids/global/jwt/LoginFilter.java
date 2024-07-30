@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.global.jwt;
 
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
-import com.modernfamily.ukids.domain.user.dto.JwtUserDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,8 +26,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = obtainUsername(request);
         String password = obtainPassword(request);
-        // database에서 username을 어떻게 이용하는것이 맞을지 내일 하기
-        System.out.println(username);
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 

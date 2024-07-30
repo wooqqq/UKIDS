@@ -1,14 +1,12 @@
 package com.modernfamily.ukids.global.jwt;
 
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
-import com.modernfamily.ukids.domain.user.dto.JwtUserDto;
 import com.modernfamily.ukids.domain.user.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -64,8 +62,9 @@ public class JWTUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration().before(new Date());
     }
 
-    public Authentication getAutentication(String token){
+    public Authentication getAuthentication(String token){
         UserDetails user = userDetailsService.loadUserByUsername(getId(token));
+        System.out.println(user.getAuthorities());
         return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
@@ -78,7 +77,7 @@ public class JWTUtil {
         claims.put("phone", user.getPhone());
         claims.put("email", user.getEmail());
         claims.put("birthDate", user.getBirthDate());
-        claims.put("role", "admin");
+        claims.put("role", user.getRole());
 
         return Jwts.builder()
                 .setClaims(claims)
