@@ -31,7 +31,7 @@ public class LetterController {
 
     // 요청 사용자 id가 받은 편지 리스트 조회
     @GetMapping("/to")
-    public ResponseEntity<?> listToUser(@RequestParam("userId") Long userId) {
+    public ResponseEntity<?> getReceivedLetters(@RequestParam("userId") Long userId) {
         // UserService 이용해 User 찾은 후 해당 객체를 사용해 Letter 찾기
         // UserService 구현된 후 수정 (현재는 임시)
 //        User toUser = userService.findByUserId(userId);
@@ -42,7 +42,7 @@ public class LetterController {
 
     // 요청 사용자 id가 보낸 편지 리스트 조회
     @GetMapping("/from")
-    public ResponseEntity<?> listFromUser(@RequestParam("userId") Long userId) {
+    public ResponseEntity<?> getSentLetters(@RequestParam("userId") Long userId) {
         // UserService 이용해 User 찾은 후 해당 객체를 사용해 Letter 찾기
         // UserService 구현된 후 수정 (현재는 임시)
 //        User fromUser = userService.findByUserId(userId);
