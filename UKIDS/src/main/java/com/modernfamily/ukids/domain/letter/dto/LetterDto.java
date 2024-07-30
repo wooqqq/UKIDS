@@ -19,6 +19,17 @@ public class LetterDto {
     private boolean isDelete;
     private boolean isOpen;
 
+    @Builder
+    public LetterDto(Long letterId, String content, Tree tree, User fromUser, User toUser, boolean isDelete, boolean isOpen) {
+        this.letterId = letterId;
+        this.content = content;
+        this.tree = tree;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+        this.isDelete = isDelete;
+        this.isOpen = isOpen;
+    }
+
     public Letter toEntity() {
         Letter letter = Letter.builder()
                 .content(content)
@@ -29,16 +40,5 @@ public class LetterDto {
                 .isOpen(isOpen)
                 .build();
         return letter;
-    }
-
-    @Builder
-    public LetterDto(Long letterId, String content, Tree tree, User fromUser, User toUser, boolean isDelete, boolean isOpen) {
-        this.letterId = letterId;
-        this.content = content;
-        this.tree = tree;
-        this.fromUser = fromUser;
-        this.toUser = toUser;
-        this.isDelete = isDelete;
-        this.isOpen = isOpen;
     }
 }
