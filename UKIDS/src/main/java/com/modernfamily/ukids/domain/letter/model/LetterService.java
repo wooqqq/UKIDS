@@ -3,7 +3,10 @@ package com.modernfamily.ukids.domain.letter.model;
 import com.modernfamily.ukids.domain.letter.dto.LetterDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.domain.letter.repository.LetterRepository;
+import com.modernfamily.ukids.domain.user.entity.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LetterService {
@@ -18,5 +21,10 @@ public class LetterService {
         Letter letter = letterDto.toEntity();
         System.out.println("왔음");
         return letterRepository.save(letter);
+    }
+
+    // 로그인한 사용자가 toUser(수신인)인 경우
+    public List<Letter> findByToUser(User toUserId) {
+        return letterRepository.findAllByToUser(toUserId);
     }
 }
