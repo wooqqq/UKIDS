@@ -41,6 +41,15 @@ public class LetterController {
     }
 
     // 요청 사용자 id가 보낸 편지 리스트 조회
+    @GetMapping("/from")
+    public ResponseEntity<?> listFromUser(@RequestParam("userId") Long userId) {
+        // UserService 이용해 User 찾은 후 해당 객체를 사용해 Letter 찾기
+        // UserService 구현된 후 수정 (현재는 임시)
+//        User fromUser = userService.findByUserId(userId);
+        User fromUser = new User(1L, "ssafy", "1234", "김싸피", "2000-01-01", "ssafy@naver.com", "010-1234-5678", null, null, null, false);
+        List<Letter> letterList = letterService.findByFromUser(fromUser);
+        return new ResponseEntity<>(letterList, HttpStatus.OK);
+    }
 
     // 편지 내용 상세 조회
 

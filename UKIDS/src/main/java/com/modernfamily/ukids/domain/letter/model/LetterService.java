@@ -27,4 +27,9 @@ public class LetterService {
     public List<Letter> findByToUser(User toUserId) {
         return letterRepository.findAllByToUser(toUserId);
     }
+
+    // 로그인한 사용자가 fromUser(발신인)인 경우
+    public List<Letter> findByFromUser(User fromUserId) {
+        return letterRepository.findAllByFromUser(fromUserId);
+    }
 }
