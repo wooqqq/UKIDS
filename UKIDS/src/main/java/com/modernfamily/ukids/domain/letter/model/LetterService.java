@@ -21,7 +21,6 @@ public class LetterService {
 
     public Letter save(LetterDto letterDto) {
         Letter letter = letterDto.toEntity();
-        System.out.println("왔음");
         return letterRepository.save(letter);
     }
 
