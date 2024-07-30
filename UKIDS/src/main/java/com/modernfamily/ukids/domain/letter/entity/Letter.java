@@ -4,6 +4,7 @@ import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -40,6 +41,7 @@ public class Letter extends BaseTimeEntity {
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isOpen;
 
+    @Builder
     private Letter(String content, Tree tree, User fromUser, User toUser, boolean isDelete, boolean isOpen) {
         this.content = content;
         this.tree = tree;
