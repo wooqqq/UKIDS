@@ -25,7 +25,7 @@ public class Family extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long familyId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "representative", referencedColumnName = "user_id")
     private User user;
 
