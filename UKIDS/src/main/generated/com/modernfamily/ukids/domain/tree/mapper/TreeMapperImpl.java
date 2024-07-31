@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-07-31T14:38:58+0900",
+    date = "2024-07-31T15:28:56+0900",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.8.jar, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
@@ -32,6 +32,7 @@ public class TreeMapperImpl implements TreeMapper {
 
         Tree tree = new Tree();
 
+        tree.setFamily( treeDto.getFamily() );
         tree.exp = treeDto.getExp();
 
         return tree;

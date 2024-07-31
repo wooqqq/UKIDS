@@ -14,4 +14,5 @@ public class TreeDto {
     private boolean isComplete;
     private TreeType treeType;
     private Family family;
+    private Long familyId;
 }
