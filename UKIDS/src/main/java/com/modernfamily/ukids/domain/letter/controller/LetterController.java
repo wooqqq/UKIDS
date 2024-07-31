@@ -73,7 +73,7 @@ public class LetterController {
     public ResponseEntity<?> deleteLetter(@PathVariable("id") Long letterId) {
         letterService.deleteByLetterId(letterId);
 
-        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_LETTER);
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_LETTER.getMessage());
     }
 
     // 타임캡슐 오픈하여 편지 상태(isOpen)를 true로 변경
