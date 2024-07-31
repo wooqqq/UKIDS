@@ -1,19 +1,20 @@
-import React from 'react';
-import GrayButton from './components/common/GrayButton';
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import MyPage from './pages/MyPage';
+import FamilyChatting from './pages/FamilyChatting';
+import FamilyVideoCall from './pages/FamilyVideoCall';
 
-function App() {
+const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/myPage" element={<MyPage />} />
+        <Route path="/user" element={<MyPage />} />
+        <Route path="/chat-room" element={<FamilyChatting />} />
+        <Route path="/video-call-room" element={<FamilyVideoCall />} />
       </Routes>
-      <GrayButton name="Go to MyPage" path="/myPage" />
     </>
   );
-}
+};
 
 export default App;

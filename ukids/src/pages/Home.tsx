@@ -1,19 +1,21 @@
-import React from 'react';
 import MainLayout from '../components/MainLayout';
+import GrayButton from '../components/common/GrayButton';
 
-const Home: React.FC = () => {
+const Home = () => {
   const API_KEY = import.meta.env.VITE_API_KEY;
   const num: number = 1234;
 
   return (
     <>
+      <MainLayout />
       <div className="text-3xl text-blue-500">
         <h1>Hello World!</h1>
       </div>
       <div>{API_KEY}</div>
       <div>{num}</div>
 
-      <MainLayout />
+      <GrayButton name="마이페이지" path="/user" />
+      <GrayButton name="가족대화방" path="/chat-room" />
     </>
   );
 };
