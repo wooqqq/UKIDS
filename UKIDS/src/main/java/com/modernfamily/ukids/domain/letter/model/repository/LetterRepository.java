@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.letter.repository;
+package com.modernfamily.ukids.domain.letter.model.repository;
 
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.domain.user.entity.User;

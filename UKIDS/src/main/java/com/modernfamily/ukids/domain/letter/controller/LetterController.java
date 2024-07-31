@@ -2,7 +2,7 @@ package com.modernfamily.ukids.domain.letter.controller;
 
 import com.modernfamily.ukids.domain.letter.dto.LetterDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
-import com.modernfamily.ukids.domain.letter.model.LetterService;
+import com.modernfamily.ukids.domain.letter.model.service.LetterService;
 import com.modernfamily.ukids.domain.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

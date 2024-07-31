@@ -1,8 +1,8 @@
-package com.modernfamily.ukids.domain.letter.model;
+package com.modernfamily.ukids.domain.letter.model.service;
 
 import com.modernfamily.ukids.domain.letter.dto.LetterDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
-import com.modernfamily.ukids.domain.letter.repository.LetterRepository;
+import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
 import com.modernfamily.ukids.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
