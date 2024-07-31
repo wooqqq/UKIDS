@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.global.jwt;
 
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
-import com.modernfamily.ukids.domain.user.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.util.Date;
 
 @Component
 public class JWTUtil {
-    private final Key key;
+    private Key key;
 
     private final UserDetailsService userDetailsService;
 
@@ -38,33 +38,12 @@ public class JWTUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("id", String.class);
     }
 
-    public String getName(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("name", String.class);
-    }
-
-    public String getPhone(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("phone", String.class);
-    }
-
-    public String getBirthDay(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("birthDay", String.class);
-    }
-
-    public String getEmail(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("email", String.class);
-    }
-
-    public Role getRole(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role", Role.class);
-    }
-
     public Boolean isExpired(String token){
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration().before(new Date());
     }
 
     public Authentication getAuthentication(String token){
         UserDetails user = userDetailsService.loadUserByUsername(getId(token));
-        System.out.println(user.getAuthorities());
         return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
@@ -77,7 +56,6 @@ public class JWTUtil {
         claims.put("phone", user.getPhone());
         claims.put("email", user.getEmail());
         claims.put("birthDate", user.getBirthDate());
-        claims.put("role", user.getRole());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -86,4 +64,5 @@ public class JWTUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 }

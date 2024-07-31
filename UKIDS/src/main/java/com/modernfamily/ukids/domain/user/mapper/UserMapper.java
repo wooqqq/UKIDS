@@ -1,6 +1,8 @@
 package com.modernfamily.ukids.domain.user.mapper;
 
+import com.modernfamily.ukids.domain.user.dto.PasswordCheckDto;
 import com.modernfamily.ukids.domain.user.dto.SignUpDto;
+import com.modernfamily.ukids.domain.user.dto.UserDto;
 import com.modernfamily.ukids.domain.user.dto.UserOtherDto;
 import com.modernfamily.ukids.domain.user.entity.User;
 import org.mapstruct.Mapper;
@@ -14,5 +16,9 @@ public interface UserMapper {
 
     User toSignUpEntity(SignUpDto dto);
 
+    User toPasswordCheckEntity(PasswordCheckDto dto);
+
     UserOtherDto toUserOtherDto(User user);
+
+    UserDto toUserDto(User user);
 }

@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,7 +41,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // jwt 방식은 stateless이기 때문에 csrf에 딱히 방어하지 않아도 된다.
-        http.csrf((auth) -> auth.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         // jwt 방식 로그인 진행할 것 이기 때문에 disable
         http.formLogin((auth) -> auth.disable());
@@ -47,7 +49,6 @@ public class SecurityConfig {
 
 
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/" ,"/login", "/user/signup", "/user/test").permitAll()
                         .anyRequest().authenticated()
 
         );
@@ -61,5 +62,15 @@ public class SecurityConfig {
 
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> {
+            web.ignoring()
+                    .requestMatchers(
+                            "/user/signup"
+                    );
+        };
     }
 }

@@ -4,6 +4,7 @@ import com.modernfamily.ukids.domain.user.entity.Role;
 import com.modernfamily.ukids.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class CustomUserDetails implements UserDetails {
 
             @Override
             public String getAuthority() {
-//                System.out.println(user.getRole().name());
                 return user.getRole().name();
             }
         });
@@ -60,9 +60,6 @@ public class CustomUserDetails implements UserDetails {
     public String getBirthDate() {
         return user.getBirthDate();
     }
-    public Role getRole() {
-        return user.getRole();
-    }
 
 
 
@@ -85,5 +82,10 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
 
         return true;
+    }
+
+    public static String contextGetUserId() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication().getName();
     }
 }

@@ -49,6 +49,7 @@ public class User extends BaseTimeEntity {
     @Column(length = 255)
     private String profileImage;
 
+//    @ColumnDefault("ROLE_USER")
     @Enumerated(EnumType.STRING)
     private Role role;
 

@@ -36,12 +36,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication){
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-//        GrantedAuthority auth = iterator.next();
-//
-//        String role = auth.getAuthority();
-
         String token = jwtUtil.CreateJwt(customUserDetails, 60 * 60 * 1000L);
 
         response.addHeader("Authorization", "Bearer " + token);

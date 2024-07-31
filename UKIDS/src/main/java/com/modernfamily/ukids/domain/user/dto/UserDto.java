@@ -4,15 +4,11 @@ import com.modernfamily.ukids.domain.user.entity.Role;
 import lombok.Data;
 
 @Data
-public class SignUpDto {
-
+public class UserDto {
+    private String userId;
     private String id;
-    private String password;
     private String name;
     private String email;
     private String phone;
     private String birthDate;
-    private String profileImage;
-
-
 }

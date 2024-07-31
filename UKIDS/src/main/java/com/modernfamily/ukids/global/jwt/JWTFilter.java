@@ -1,5 +1,8 @@
 package com.modernfamily.ukids.global.jwt;
 
+import com.modernfamily.ukids.global.exception.CustomException;
+import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import com.modernfamily.ukids.global.util.HttpResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,22 +18,19 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
-        System.out.println("token: " + authorization);
         if(authorization == null || !authorization.startsWith("Bearer ")) {
-            System.out.println("token null");
             filterChain.doFilter(request, response);
-
-            return;
+            throw new ExceptionResponse(CustomException.NOT_VALID_JWT_EXCEPTION);
         }
 
         // Bearer 부분 제거 토큰 획득
         String token = authorization.replace("Bearer ", "");
 
         if(jwtUtil.isExpired(token)){
-            System.out.println("token expired");
             filterChain.doFilter(request, response);
 
             return ;
