@@ -21,7 +21,7 @@ const Header: React.FC = () => {
     <div className="flex place-content-between m-1">
       {/* 로고 */}
       <button onClick={handleClick}>
-        <img src="./assets/logo.png" alt="ukids-logo" />
+        <img src="src/assets/logo.png" alt="ukids-logo" width="230" />
       </button>
       <ProfileBtn />
       {/* 로그인 영역 */}
