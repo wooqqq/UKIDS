@@ -2,9 +2,14 @@ package com.modernfamily.ukids.domain.letter.controller;
 
 import com.modernfamily.ukids.domain.letter.dto.LetterDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
+import com.modernfamily.ukids.domain.letter.message.SuccessMessage;
 import com.modernfamily.ukids.domain.letter.model.service.LetterService;
 import com.modernfamily.ukids.domain.user.entity.User;
-import org.springframework.http.HttpStatus;
+import com.modernfamily.ukids.global.exception.CustomException;
+import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import com.modernfamily.ukids.global.util.HttpMethodCode;
+import com.modernfamily.ukids.global.util.HttpResponseUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,20 +18,19 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/letter")
+@RequiredArgsConstructor
 public class LetterController {
 
-    private LetterService letterService;
-
-    public LetterController (LetterService letterService) {
-        this.letterService = letterService;
-    }
+    private final HttpResponseUtil responseUtil;
+    private final LetterService letterService;
 
     // 편지 작성
     @PostMapping("")
     public ResponseEntity<?> write(@RequestBody LetterDto letterDto) {
         // 유효성 검사 필요
         Letter savedLetter = letterService.save(letterDto);
-        return new ResponseEntity<Letter>(savedLetter, HttpStatus.CREATED);
+
+        return responseUtil.createResponse(HttpMethodCode.POST, savedLetter);
     }
 
     // 요청 사용자 id가 받은 편지 리스트 조회
@@ -37,7 +41,8 @@ public class LetterController {
 //        User toUser = userService.findByUserId(userId);
         User toUser = new User(1L, "ssafy", "1234", "김싸피", "2000-01-01", "ssafy@naver.com", "010-1234-5678", null, null, null, false);
         List<Letter> letterList = letterService.findByToUser(toUser);
-        return new ResponseEntity<>(letterList, HttpStatus.OK);
+
+        return responseUtil.createResponse(HttpMethodCode.GET, letterList);
     }
 
     // 요청 사용자 id가 보낸 편지 리스트 조회
@@ -48,7 +53,8 @@ public class LetterController {
 //        User fromUser = userService.findByUserId(userId);
         User fromUser = new User(1L, "ssafy", "1234", "김싸피", "2000-01-01", "ssafy@naver.com", "010-1234-5678", null, null, null, false);
         List<Letter> letterList = letterService.findByFromUser(fromUser);
-        return new ResponseEntity<>(letterList, HttpStatus.OK);
+
+        return responseUtil.createResponse(HttpMethodCode.GET, letterList);
     }
 
     // 편지 내용 상세 조회
@@ -56,17 +62,18 @@ public class LetterController {
     public ResponseEntity<?> findById(@PathVariable("id") Long letterId) {
         Optional<Letter> optionalLetter = letterService.findByLetterId(letterId);
         if (optionalLetter.isPresent()) {
-            return new ResponseEntity<>(optionalLetter.get(), HttpStatus.OK);
+            return responseUtil.createResponse(HttpMethodCode.GET, optionalLetter.get());
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ExceptionResponse(CustomException.NOT_FOUND_LETTER_EXCEPTION);
         }
     }
 
     // 편지 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLetter(@PathVariable("id") Long letterId) {
+    public ResponseEntity<?> deleteLetter(@PathVariable("id") Long letterId) {
         letterService.deleteByLetterId(letterId);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_LETTER);
     }
 
     // 타임캡슐 오픈하여 편지 상태(isOpen)를 true로 변경
