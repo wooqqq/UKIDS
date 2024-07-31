@@ -38,12 +38,12 @@ public class Tree extends BaseTimeEntity {
     @JoinColumn(name = "family_id")
     private Family family;
 
-    @Builder
-    private Tree(Long exp, boolean isComplete, TreeType treeType, Family family) {
-        this.exp = exp;
-        this.isComplete = isComplete;
-        this.treeType = treeType;
-        this.family = family;
-    }
+//    @Builder
+//    private Tree(Long exp, boolean isComplete, TreeType treeType, Family family) {
+//        this.exp = exp;
+//        this.isComplete = isComplete;
+//        this.treeType = treeType;
+//        this.family = family;
+//    }
 
 }
