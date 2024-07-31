@@ -1,18 +1,17 @@
-import Footer from "./components/Footer";
+import React from 'react';
+import GrayButton from './components/common/GrayButton';
+import { Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import MyPage from './pages/MyPage';
 
 function App() {
-  const API_KEY = import.meta.env.VITE_API_KEY;
-  const num: number = 1234;
-
   return (
     <>
-      <div className="text-3xl text-blue-500">
-        <h1>Hello World!</h1>
-      </div>
-      <div>{API_KEY}</div>
-      <div>{num}</div>
-
-      <Footer />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/myPage" element={<MyPage />} />
+      </Routes>
+      <GrayButton name="Go to MyPage" path="/myPage" />
     </>
   );
 }
