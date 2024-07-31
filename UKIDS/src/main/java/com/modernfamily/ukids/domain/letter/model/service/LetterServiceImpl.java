@@ -50,7 +50,6 @@ public class LetterServiceImpl implements LetterService {
         if (optionalLetter.isPresent()) {
             Letter letter = optionalLetter.get();
             letter.setIsDelete(true);
-            letter.setUpdateTime(LocalDateTime.now());  // updateTime 갱신
             letterRepository.save(letter);
         }
     }
