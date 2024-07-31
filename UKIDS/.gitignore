@@ -8,6 +8,8 @@ build/
 resources
 application.properties
 
+src/main/generated
+
 ### STS ###
 .apt_generated
 .classpath
