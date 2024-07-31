@@ -9,6 +9,8 @@ resources
 application.properties
 docker-compose.yml
 
+src/main/generated
+
 ### STS ###
 .apt_generated
 .classpath
