@@ -36,7 +36,7 @@ public class TreeServiceImpl implements TreeService {
     // 가족 id를 통한 현재 나무 조회
     @Override
     public Tree findByFamilyId(Long familyId) {
-        // familyI로 Family 엔티티 조회
+        // familyId로 Family 엔티티 조회
         Family family = familyRepository.findById(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
@@ -49,6 +49,32 @@ public class TreeServiceImpl implements TreeService {
             throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_TREE_EXCEPTION);
 
         return tree;
+    }
+
+    // 가족 id를 통해 나무 경험치 업데이트
+    @Override
+    public Tree updateTree(TreeDto treeDto) {
+        // familyId로 Family 엔티티 조회
+        Family family = familyRepository.findById(treeDto.getFamilyId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
+
+        // family로 Tree 엔티티 조회
+        Tree tree = treeRepository.findByFamily(family)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
+
+        // tree가 이미 완성된 나무인지 확인
+        if (tree.isComplete())
+            throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_TREE_EXCEPTION);
+
+        // point를 exp에 저장
+        Long grownExp = tree.getExp() + treeDto.getPoint();
+
+        // 성장 exp 가 최대치를 넘는지 안넘는지 체크
+        if (grownExp >= 1000)
+            tree.setIsComplete(true);
+        tree.setExp(grownExp);
+
+        return treeRepository.save(tree);
     }
 
 }

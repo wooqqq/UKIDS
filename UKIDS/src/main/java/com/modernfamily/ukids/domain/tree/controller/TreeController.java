@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.tree.controller;
 
-import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.tree.dto.TreeDto;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.model.service.TreeService;
@@ -28,6 +27,12 @@ public class TreeController {
     public ResponseEntity<?> findByFamilyId(@PathVariable("id") Long familyId) {
         Tree tree = treeService.findByFamilyId(familyId);
         return responseUtil.createResponse(HttpMethodCode.GET, tree);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateTreeExp(@RequestBody TreeDto treeDto) {
+        Tree grownTree = treeService.updateTree(treeDto);
+        return responseUtil.createResponse(HttpMethodCode.PUT, grownTree);
     }
 
 }

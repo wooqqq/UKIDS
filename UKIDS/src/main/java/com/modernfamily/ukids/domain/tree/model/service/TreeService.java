@@ -8,4 +8,6 @@ public interface TreeService {
     Tree save(TreeDto treeDto);
 
     Tree findByFamilyId(Long familyId);
+
+    Tree updateTree(TreeDto treeDto);
 }

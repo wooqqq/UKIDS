@@ -11,6 +11,7 @@ public class TreeDto {
 
     private Long treeId;
     private Long exp;
+    private Long point;
     private boolean isComplete;
     private TreeType treeType;
     private Family family;
