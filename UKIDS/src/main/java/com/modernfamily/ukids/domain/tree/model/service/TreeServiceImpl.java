@@ -33,4 +33,22 @@ public class TreeServiceImpl implements TreeService {
         return treeRepository.save(tree);
     }
 
+    // 가족 id를 통한 현재 나무 조회
+    @Override
+    public Tree findByFamilyId(Long familyId) {
+        // familyI로 Family 엔티티 조회
+        Family family = familyRepository.findById(familyId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
+
+        // family로 Tree 엔티티 조회
+        Tree tree = treeRepository.findByFamily(family)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
+
+        // 가족 id를 통해 찾은 나무가 isComplete == false인지 확인하는 작업 필요
+        if (tree.isComplete())
+            throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_TREE_EXCEPTION);
+
+        return tree;
+    }
+
 }

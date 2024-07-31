@@ -16,6 +16,8 @@ public enum CustomException {
     DUPLICATED_ID_EXCEPTION(400,"DuplicatedIDException","가입된 아이디가 존재합니다."),
     NOT_FOUND_LETTER_EXCEPTION(400, "NotFoundLetterException", "편지가 존재하지 않습니다."),
     NOT_FOUND_FAMILY_EXCEPTION(400, "NotFoundFamilyException", "가족이 존재하지 않습니다."),
+    NOT_FOUND_TREE_EXCEPTION(400, "NotFoundTreeException", "나무가 존재하지 않습니다."),
+    ALREADY_COMPLETED_TREE_EXCEPTION(400, "AlreadyCompletedTreeException", "나무가 이미 완료된 상태입니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
