@@ -18,7 +18,7 @@ const GrayButton: React.FC<GrayButtonProps> = ({ name, path }) => {
       onClick={handleClick}
       className="w-[100px] h-10 px-[15px] py-2 bg-[#777777] rounded-[50px] shadow justify-center items-center gap-2.5 inline-flex"
     >
-      <div className="text-center text-white text-xl font-semibold font-['Pretendard']">
+      <div className="text-center text-white text-base font-semibold font-['Pretendard']">
         {name}
       </div>
     </button>

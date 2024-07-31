@@ -29,6 +29,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+  padding: 1rem 5rem;
 }
 
 @layer utilities {

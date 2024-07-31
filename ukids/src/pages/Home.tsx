@@ -8,9 +8,7 @@ const Home = () => {
   return (
     <>
       <MainLayout />
-      <div className="text-3xl text-blue-500">
-        <h1>Hello World!</h1>
-      </div>
+      <div className="text-3xl text-blue-500">Hello World!</div>
       <div>{API_KEY}</div>
       <div>{num}</div>
 

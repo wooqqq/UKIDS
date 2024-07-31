@@ -1,14 +1,12 @@
 import MainLayout from '../components/MainLayout';
-import GrayButton from '../components/common/GrayButton';
+import VideoCall from '../components/feature/videocall/VideoCall';
 
 const FamilyVideoCall = () => {
   return (
     <>
       <MainLayout />
-
-      <h1>가족 통화방</h1>
-
-      <GrayButton name="채팅방" path="/chat-room" />
+      <div className="text-4xl">가족 통화방</div>
+      <VideoCall />
     </>
   );
 };
