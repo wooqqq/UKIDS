@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProfileBtn from './common/ProfileButton';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Header: React.FC = () => {
       <button onClick={handleClick}>
         <img src="./assets/logo.png" alt="ukids-logo" />
       </button>
-
+      <ProfileBtn />
       {/* 로그인 영역 */}
       <div>
         {isLogin ? (

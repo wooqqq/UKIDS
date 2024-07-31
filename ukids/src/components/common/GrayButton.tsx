@@ -28,4 +28,4 @@ const GrayButton: React.FC<GrayButtonProps> = ({ name, path }) => {
 export default GrayButton;
 
 // 로그아웃, 설정, 목록, 수정, 삭제, 편지쓰기, 보내기, 게임(게임하기, 돌아가기)
-// 메뉴바(내비바), 로고, 역할 태그, 프로필, 프로필 확장,
+// 로고, 역할 태그, 프로필, 프로필 확장,
