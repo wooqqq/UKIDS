@@ -9,3 +9,5 @@ ENV USE_PROFILE prod
 
 # 이미지 빌드 명령
 ENTRYPOINT ["java", "-Dspring.profiles.active=${USE_PROFILE}", "-jar", "app.jar"]
+
+EXPOSE 8080
