@@ -1,41 +1,40 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Publisher, Subscriber } from 'openvidu-browser';
 
-type SessionProps = {
-  publisher: Publisher;
-  subscribers: Subscriber[];
-};
+interface SessionProps {
+  publisher: { publisher: Publisher; name: string } | null;
+  subscribers: { subscriber: Subscriber; name: string }[];
+}
 
 const Session: React.FC<SessionProps> = ({ publisher, subscribers }) => {
-  const publisherVideoRef = useRef<HTMLVideoElement>(null);
-  const subscriberVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-
-  useEffect(() => {
-    if (publisherVideoRef.current && publisher) {
-      publisher.addVideoElement(publisherVideoRef.current);
-    }
-  }, [publisher]);
-
-  useEffect(() => {
-    subscribers.forEach((subscriber, index) => {
-      if (subscriberVideoRefs.current[index] && subscriber) {
-        subscriber.addVideoElement(subscriberVideoRefs.current[index]);
-      }
-    });
-  }, [subscribers]);
-
   return (
-    <div>
-      <div id="publisher">
-        {publisher && <video ref={publisherVideoRef} autoPlay={true} />}
-      </div>
-      <div id="subscribers">
-        {subscribers.map((subscriber, index) => (
-          <video
-            key={index}
-            ref={(el) => (subscriberVideoRefs.current[index] = el)}
-            autoPlay={true}
-          />
+    <div className="session-container">
+      {/* 나의 비디오 스트림 */}
+      {publisher && (
+        <div className="video-container">
+          <div id="publisher" className="stream-container">
+            <video
+              autoPlay
+              ref={(ref) => {
+                if (ref) publisher.publisher.addVideoElement(ref);
+              }}
+            />
+            <div className="name-tag">{publisher.name}</div>
+          </div>
+        </div>
+      )}
+      {/* 상대방 비디오 스트림 */}
+      <div className="video-container">
+        {subscribers.map((subscriberObj, index) => (
+          <div key={index} className="stream-container">
+            <video
+              autoPlay
+              ref={(ref) => {
+                if (ref) subscriberObj.subscriber.addVideoElement(ref);
+              }}
+            />
+            <div className="name-tag">{subscriberObj.name}</div>
+          </div>
         ))}
       </div>
     </div>
