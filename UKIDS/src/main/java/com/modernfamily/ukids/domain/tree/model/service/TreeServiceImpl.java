@@ -17,9 +17,10 @@ public class TreeServiceImpl implements TreeService {
     private FamilyRepository familyRepository;
     private TreeMapper treeMapper;
 
-    public TreeServiceImpl(TreeRepository treeRepository, FamilyRepository familyRepository) {
+    public TreeServiceImpl(TreeRepository treeRepository, FamilyRepository familyRepository, TreeMapper treeMapper) {
         this.treeRepository = treeRepository;
         this.familyRepository = familyRepository;
+        this.treeMapper = treeMapper;
     }
 
     @Override
@@ -28,8 +29,9 @@ public class TreeServiceImpl implements TreeService {
         Family family = familyRepository.findById(treeDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
-        Tree tree = new Tree();
+        Tree tree = treeMapper.toEntity(treeDto);
         tree.setFamily(family);
+
         return treeRepository.save(tree);
     }
 

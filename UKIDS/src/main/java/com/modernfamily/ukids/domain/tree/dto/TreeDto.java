@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 public class TreeDto {
 
     private Long treeId;
-    private Long exp;
-    private Long point;
-    private boolean isComplete;
+    private Long exp = 0L;
+    private Long point = 0L;
+    private boolean isComplete = false;
     private TreeType treeType;
     private Family family;
     private Long familyId;
