@@ -1,6 +1,6 @@
 FROM node:20.15.0-alpine as builder
 WORKDIR /app
-COPY package.json
+COPY package.json .
 ENV PATH ./node_modules/.bin:$PATH
 
 RUN npm install
