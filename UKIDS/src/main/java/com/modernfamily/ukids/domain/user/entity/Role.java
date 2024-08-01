@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.user.entity;
 
 public enum Role {
-    father, mother, child,
-    grandfather, grandmother
+    ROLE_USER, ROLE_ADMIN;
 }

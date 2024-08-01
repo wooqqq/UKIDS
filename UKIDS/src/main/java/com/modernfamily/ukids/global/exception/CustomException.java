@@ -19,6 +19,8 @@ public enum CustomException {
     NOT_FOUND_TREE_EXCEPTION(400, "NotFoundTreeException", "나무가 존재하지 않습니다."),
     ALREADY_COMPLETED_TREE_EXCEPTION(400, "AlreadyCompletedTreeException", "나무가 이미 완료된 상태입니다."),
 
+    DUPLICATED_EMAIL_EXCEPTION(400,"DuplicatedEmailException","가입된 이메일이 존재합니다."),
+
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
     NOT_VALID_JWT_EXCEPTION(401,"NotValidJwtException","토큰이 유효하지 않습니다."),
