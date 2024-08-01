@@ -18,14 +18,14 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex place-content-between m-1">
+    <div className="flex justify-between m-1">
       {/* 로고 */}
-      <button onClick={handleClick}>
+      <button onClick={handleClick} className="w-52">
         <img src="src/assets/logo.png" alt="ukids-logo" width="230" />
       </button>
-      <ProfileBtn />
+      <ProfileBtn name="이삼성" hasFamily={true} isManager={true} />
       {/* 로그인 영역 */}
-      <div>
+      {/* <div>
         {isLogin ? (
           // 로그인이 확인되지 않았을 때
           <div hidden={isLogin}>로그인/회원가입</div>
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
           // 로그인이 확인되었을 때 -> 이름, 가족방 정보도 띄워야함...
           <div hidden={!isLogin}>로그인되었습니다!</div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

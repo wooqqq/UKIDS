@@ -1,0 +1,70 @@
+@import url(../../reset.css);
+
+.common-btn {
+  display: flex;
+  /* width: 100px;
+  height: 40px; */
+  padding: 8px 25px;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 5rem;
+  opacity: var(--sds-size-stroke-border);
+  box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.25);
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* 긍정(등록, 편지쓰기, 보내기, 답장하기, 완료 등) */
+.blue-btn {
+  background: #36d5f1;
+}
+
+/* 수정, 돌아가기 버튼 */
+/* 로그아웃, 설정 버튼은 박스모양 변경 필요 */
+.gray-btn {
+  background: #777;
+}
+
+.setting {
+  padding: 8px;
+}
+
+/* 목록 버튼 */
+.white-btn {
+  background: #fff;
+  color: #777;
+}
+
+/* 부정(해체, 연결끊기 등) 관련 버튼 */
+.red-btn {
+  background: #f56457;
+}
+
+/* 부정(삭제) 폰트 색상 */
+.red-font {
+  color: #f56457;
+}
+
+/* 통화 연결하기 버튼 */
+.green-btn {
+  background: #2cda0f;
+}
+
+/* 게임 버튼 스타일 */
+.game-btn-common {
+  font-family: 'ONE Mobile POP';
+  font-size: 2rem;
+}
+
+/* 가족 퀴즈 긍정 */
+.game-btn-quiz {
+  background: #ffbf33;
+}
+
+/* 콜마넴 긍정 */
+.game-btn-callmyname {
+  background: #9f6ad5;
+}
