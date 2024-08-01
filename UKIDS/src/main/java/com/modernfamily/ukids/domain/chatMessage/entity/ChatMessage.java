@@ -19,10 +19,9 @@ public class ChatMessage {
 
     private Long senderId;
     private String senderName;
-    private String senderAvatar;
+    private String senderProfile;
 
     private Long chatRoomId;
-    private String chatId;
 
     private LocalDateTime createTime;
 
