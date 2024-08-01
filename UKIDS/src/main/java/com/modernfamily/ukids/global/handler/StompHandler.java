@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.global.config;
+package com.modernfamily.ukids.global.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;

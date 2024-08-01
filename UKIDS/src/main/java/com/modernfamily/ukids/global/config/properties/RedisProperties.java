@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.global.config;
+package com.modernfamily.ukids.global.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

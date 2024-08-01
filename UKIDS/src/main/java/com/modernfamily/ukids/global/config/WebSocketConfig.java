@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.global.config;
 
+import com.modernfamily.ukids.global.handler.StompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
