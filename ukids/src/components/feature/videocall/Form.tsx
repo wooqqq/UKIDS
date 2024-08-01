@@ -1,31 +1,35 @@
 import React from 'react';
 
-type FormProps = {
+interface FormProps {
   joinSession: () => void;
   sessionId: string;
   sessionIdChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
+  userName: string;
+  userNameChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
 const Form: React.FC<FormProps> = ({
   joinSession,
   sessionId,
   sessionIdChangeHandler,
+  userName,
+  userNameChangeHandler,
 }) => {
   return (
     <div>
       <input
         type="text"
+        placeholder="세션 ID"
         value={sessionId}
         onChange={sessionIdChangeHandler}
-        placeholder="세션 ID를 입력하세요"
-        className="border border-[#999999] p-1"
       />
-      <button
-        onClick={joinSession}
-        className="bg-emerald-400 text-white p-1 rounded-md"
-      >
-        세션 참여
-      </button>
+      <input
+        type="text"
+        placeholder="이름"
+        value={userName}
+        onChange={userNameChangeHandler}
+      />
+      <button onClick={joinSession}>세션 참가</button>
     </div>
   );
 };
