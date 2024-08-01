@@ -7,7 +7,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessMessage {
-    SUCCESS_APPLY_FAMILY_MEMBER("가족 신청 완료");
+    SUCCESS_APPLY_FAMILY_MEMBER("구성원 신청 완료"),
+    SUCCESS_APPROVE_FAMILY_MEMBER("구성원 신청 승인 완료"),
+    SUCCESS_CANCEL_FAMILY_MEMBER("구성원 신청 취소 완료"),
+    SUCCESS_DENY_FAMILY_MEMBER("구성원 신청 거절 완료"),
+    SUCCESS_ROLE_FAMILY_MEMBER("구성원 역할 변경 완료");
+
 
 
     private final String message;

@@ -1,8 +1,8 @@
 package com.modernfamily.ukids.domain.familyMember.controller;
 
-import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberJoinDto;
+import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRequestDto;
-import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
+import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRoleDto;
 import com.modernfamily.ukids.domain.familyMember.message.SuccessMessage;
 import com.modernfamily.ukids.domain.familyMember.model.service.FamilyMemberService;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
@@ -34,8 +34,46 @@ public class FamilyMemberController {
 
     @GetMapping("/approval/{familyId}")
     public ResponseEntity<Map<String, Object>> getFamilyMember(@PathVariable("familyId") Long familyId){
-        List<FamilyMemberJoinDto> familyMembers = familyMemberService.getFamilyMember(familyId);
+        List<FamilyMemberDto> familyMembers = familyMemberService.getFamilyMember(familyId);
 
         return httpResponseUtil.createResponse(HttpMethodCode.GET, familyMembers);
+    }
+
+    @GetMapping("/{familyId}")
+    public ResponseEntity<Map<String,Object>> getApprovedFamilyMember(@PathVariable("familyId") Long familyId){
+        List<FamilyMemberDto> familyMembers = familyMemberService.getApprovedFamilyMember(familyId);
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, familyMembers);
+    }
+
+    @PutMapping("/{familyMemberId}")
+    public ResponseEntity<Map<String, Object>> approveFamilyMember(@PathVariable("familyMemberId") Long familyMemberId){
+        familyMemberService.approveFamilyMember(familyMemberId);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_APPROVE_FAMILY_MEMBER);
+
+    }
+
+    @PutMapping("/role")
+    public ResponseEntity<Map<String, Object>> setFamilyMemberRole(@RequestBody FamilyMemberRoleDto familyMemberRoleDto){
+        familyMemberService.setFamilyMemberRole(familyMemberRoleDto);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_ROLE_FAMILY_MEMBER);
+
+    }
+
+    @DeleteMapping("/cancellation/{familyMemberId}")
+    public ResponseEntity<Map<String, Object>> cancelFamilyMember(@PathVariable("familyMemberId") Long familyMemberId){
+        familyMemberService.cancelFamilyMember(familyMemberId);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_CANCEL_FAMILY_MEMBER);
+
+    }
+
+    @DeleteMapping("/denial/{familyMemberId}")
+    public ResponseEntity<Map<String, Object>> denyFamilyMember(@PathVariable("familyMemberId") Long familyMemberId){
+        familyMemberService.denyFamilyMember(familyMemberId);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_CANCEL_FAMILY_MEMBER);
+
     }
 }
