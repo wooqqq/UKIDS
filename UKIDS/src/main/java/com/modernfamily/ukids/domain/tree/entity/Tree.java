@@ -50,12 +50,4 @@ public class Tree extends BaseTimeEntity {
         this.isComplete = isComplete;
     }
 
-//    @Builder
-//    private Tree(Long exp, boolean isComplete, TreeType treeType, Family family) {
-//        this.exp = exp;
-//        this.isComplete = isComplete;
-//        this.treeType = treeType;
-//        this.family = family;
-//    }
-
 }
