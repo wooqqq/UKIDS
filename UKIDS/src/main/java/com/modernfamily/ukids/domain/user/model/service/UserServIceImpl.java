@@ -63,7 +63,8 @@ public class UserServIceImpl implements UserService{
 
     @Override
     public UserDto getUser(Long userId) {
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         if(user == null){
             throw new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION);
@@ -76,7 +77,8 @@ public class UserServIceImpl implements UserService{
     public boolean pwCheck(PasswordCheckDto userDto) {
         String id = userDto.getId();
 
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         return bCryptPasswordEncoder.matches(userDto.getPassword(), user.getPassword());
     }
@@ -85,7 +87,8 @@ public class UserServIceImpl implements UserService{
     @Override
     public UserOtherDto findByIdOther(String id) {
 
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         return userMapper.toUserOtherDto(user);
     }

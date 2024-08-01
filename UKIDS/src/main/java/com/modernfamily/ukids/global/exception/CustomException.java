@@ -21,7 +21,9 @@ public enum CustomException {
     // 가족방
     NOT_FOUND_FAMILY_EXCEPTION(400, "NotFoundFamilyException", "가족방이 존재하지 않습니다."),
     INPUT_FAMILY_EXCEPTION(400, "InputFamilyException", "가족방 입력이 잘못되었습니다."),
-    NOSUCH_ALGORITHM_EXCEPTION(400, "NoSuchAlgorithmException", "가족방 암호 생성이 실패했습니다."),
+    NOSUCH_ALGORITHM_EXCEPTION(400, "NoSuchAlgorithmException", "가족방 고유코드 생성이 실패했습니다."),
+    NOT_SAME_REPRESENTATIVE_EXCEPTION(400, "NotSameRepresentativeException", "사용자와 대표자가 일치하지 않습니다."),
+    NOT_SAME_PASSWORD_EXCEPTION(400, "NotSamePasswordException", "가족방 비밀번호가 일치하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),

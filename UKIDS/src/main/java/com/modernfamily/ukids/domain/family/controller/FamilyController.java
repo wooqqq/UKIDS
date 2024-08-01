@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.domain.family.controller;
 
-import com.modernfamily.ukids.domain.family.dto.FamilyRequestDto;
-import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
+import com.modernfamily.ukids.domain.family.dto.*;
 import com.modernfamily.ukids.domain.family.message.SuccessMessage;
 import com.modernfamily.ukids.domain.family.model.service.FamilyService;
 import com.modernfamily.ukids.global.exception.CustomException;
@@ -24,17 +23,18 @@ public class FamilyController {
     private final FamilyService familyService;
     private final HttpResponseUtil responseUtil;
 
+    // 가족방 정보
     @GetMapping("/{familyId}")
     public ResponseEntity<Map<String, Object>> getFamily(@PathVariable("familyId") Long familyId){
         FamilyResponseDto familyResponseDto = familyService.getFamily(familyId);
 
-        System.out.println("family: " + familyResponseDto);
-
-        return null;
+        return responseUtil.createResponse(HttpMethodCode.GET, familyResponseDto);
     }
 
+    // 가족방 생성
     @PostMapping
     public ResponseEntity<Map<String,Object>> createFamily(@RequestBody FamilyRequestDto familyRequestDto){
+        System.out.println(familyRequestDto);
         try {
             familyService.createFamily(familyRequestDto);
         } catch (NoSuchAlgorithmException e) {
@@ -44,5 +44,35 @@ public class FamilyController {
         return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_FAMILY);
     }
 
+    // 고유코드로 가족방 찾기
+    @GetMapping("/search/{code}")
+    public ResponseEntity<Map<String,Object>> searchFamily(@PathVariable("code") String code){
+        FamilySearchResponseDto familyDto = familyService.findByCode(code);
 
+        return responseUtil.createResponse(HttpMethodCode.GET, familyDto);
+    }
+
+    @PostMapping("/pwcheck")
+    public ResponseEntity<Map<String,Object>> checkPassword(@RequestBody FamilyPasswordDto familyPasswordDto){
+       boolean check = familyService.checkPassword(familyPasswordDto);
+
+       if(check)
+            return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_PASSWORD_SAME);
+
+       return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_PASSWORD_DISCORD);
+    }
+
+    @PutMapping
+    public ResponseEntity<Map<String,Object>> updateFamily(@RequestBody FamilyUpdateDto familyUpdateDto){
+        familyService.updateFamily(familyUpdateDto);
+
+        return responseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_FAMILY);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> deleteFamily(@RequestBody FamilyPasswordDto familyPasswordDto){
+        familyService.deleteFamily(familyPasswordDto);
+
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_FAMILY);
+    }
 }
