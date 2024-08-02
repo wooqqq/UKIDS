@@ -10,22 +10,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChatMessageService {
 
-    private final ChatMessageRepository chatMessageRepository;
-    private final SimpMessageSendingOperations messagingTemplate;
-
-    // 채팅 메시지 저장
-    public void saveChatMessage(ChatMessage chatMessage) {
-        chatMessageRepository.saveChatMessage(chatMessage.getChatRoomId().toString(), chatMessage);
-    }
-
-    // 채팅 메시지 전송
-    public void sendChatMessage(ChatMessage chatMessage) {
-        // 메시지 전송
-        messagingTemplate.convertAndSend("/sub/chatroom/" + chatMessage.getChatRoomId().toString(), chatMessage);
-
-        // 메시지 저장
-        saveChatMessage(chatMessage);
-    }
+//    private final ChatMessageRepository chatMessageRepository;
+//    // @EnableWebSocketMessageBroker를 통해 등록되는 Bean으로, Broker로 메시지 전달
+//    private final SimpMessageSendingOperations messagingTemplate;
+//
+//    // 채팅 메시지 저장
+//    public void saveChatMessage(ChatMessage chatMessage) {
+//        chatMessageRepository.saveChatMessage(chatMessage.getChatRoomId().toString(), chatMessage);
+//    }
+//
+//    // 채팅 메시지 전송
+//    public void sendChatMessage(ChatMessage chatMessage) {
+//        // 메시지 전송
+//        messagingTemplate.convertAndSend("/sub/chat/message" + chatMessage.getChatRoomId().toString(), chatMessage);
+//
+//        // 메시지 저장
+//        saveChatMessage(chatMessage);
+//    }
 
 
 }

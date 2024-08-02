@@ -4,27 +4,41 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class ChatMessage {
 
-    @Id
-    private Long chatMessageId;
+    public enum MessageType {
+        ENTER, TALK
+    }
 
-    private String content;
+    private MessageType type;
+    private String roomId;
+    private String sender;
+    private String message;
 
-    private Long senderId;
-    private String senderName;
-    private String senderProfile;
-
-    private Long chatRoomId;
-
-    private LocalDateTime createTime;
-
-    @Enumerated(EnumType.STRING)
-    private ChatMessageType type;
+//    @Id
+//    private Long chatMessageId;
+//
+//    private String content;
+//
+//    @Setter
+//    private String message;
+//
+//    private Long senderId;
+//    private String senderName;
+////    private String senderProfile;
+//
+//    private Long chatRoomId;
+//
+//    private LocalDateTime createTime;
+//
+//    @Enumerated(EnumType.STRING)
+//    private ChatMessageType type;
 }

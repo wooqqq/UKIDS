@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     // LoginFilter에 넣어줄 인자
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws  Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -49,7 +49,8 @@ public class SecurityConfig {
 
 
         http.authorizeHttpRequests((auth) -> auth
-                        .anyRequest().authenticated()
+                .requestMatchers("/ws/chat").permitAll()
+                .anyRequest().authenticated()
 
         );
 
@@ -69,7 +70,9 @@ public class SecurityConfig {
         return (web) -> {
             web.ignoring()
                     .requestMatchers(
-                            "/user/signup"
+                            "/login",
+                            "/user/signup",
+                            "/ws/chat"
                     );
         };
     }

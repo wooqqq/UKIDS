@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RedisSubscriber {
 
-    private final SimpMessageSendingOperations messagingTemplate;
+//    private final SimpMessageSendingOperations messagingTemplate;
 
     public void sendMessage(String publishMessage) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
-//            messagingTemplate.convertAndSendToUser("/sub/chatroom/" + chatMessage.getChatRoomId(), chatMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
+////            messagingTemplate.convertAndSendToUser("/sub/chatroom/" + chatMessage.getChatRoomId(), chatMessage);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }
