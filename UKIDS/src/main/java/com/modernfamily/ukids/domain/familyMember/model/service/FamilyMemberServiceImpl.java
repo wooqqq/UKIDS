@@ -7,12 +7,10 @@ import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRequestDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRoleDto;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
-import com.modernfamily.ukids.domain.familyMember.entity.FamilyRole;
 import com.modernfamily.ukids.domain.familyMember.mapper.FamilyMemberMapper;
 import com.modernfamily.ukids.domain.familyMember.model.repository.CustomFamilyMemberRepository;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
-import com.modernfamily.ukids.domain.user.entity.Role;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
@@ -42,7 +40,6 @@ public class FamilyMemberServiceImpl implements FamilyMemberService{
 
         familyMemberRequestDto.setUserId(user.getUserId());
         FamilyMember familyMember = familyMemberMapper.toFamilyMemberRequestEntity(familyMemberRequestDto);
-        System.out.println(familyMemberRequestDto);
 
 
         familyMemberRepository.save(familyMember);

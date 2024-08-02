@@ -16,6 +16,7 @@ public interface FamilyMemberMapper {
     @Mapping(source = "familyId", target = "family.familyId")
     FamilyMember toFamilyMemberRequestEntity(FamilyMemberRequestDto familyMemberRequestDto);
 
+    // List Named용
     @Mapping(source = "familyMember.user", target="userFamilyDto")
     @Named("join")
     FamilyMemberDto toFamilyMemberJoinDto(FamilyMember familyMember);

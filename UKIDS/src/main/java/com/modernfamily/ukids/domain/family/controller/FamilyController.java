@@ -34,7 +34,6 @@ public class FamilyController {
     // 가족방 생성
     @PostMapping
     public ResponseEntity<Map<String,Object>> createFamily(@RequestBody FamilyRequestDto familyRequestDto){
-        System.out.println(familyRequestDto);
         try {
             familyService.createFamily(familyRequestDto);
         } catch (NoSuchAlgorithmException e) {

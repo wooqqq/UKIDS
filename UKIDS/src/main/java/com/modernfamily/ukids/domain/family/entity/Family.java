@@ -1,14 +1,11 @@
 package com.modernfamily.ukids.domain.family.entity;
 
-import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -46,7 +43,5 @@ public class Family extends BaseTimeEntity {
     @Column(length = 255)
     private String password;
 
-//    @OneToMany(mappedBy = "family")
-//    private List<FamilyMember> familyMembers;
 
 }

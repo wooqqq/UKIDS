@@ -144,7 +144,6 @@ public class FamilyServiceImpl implements FamilyService{
         }
         
         // 가족 구성원 > 1 이면 삭제 불가
-
         customFamilyRepository.deleteFamily(familyPasswordDto);
     }
 

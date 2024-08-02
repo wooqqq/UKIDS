@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.familyMember.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.user.entity.User;
 import jakarta.persistence.*;

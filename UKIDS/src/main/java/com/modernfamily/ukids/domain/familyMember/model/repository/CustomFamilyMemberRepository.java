@@ -1,8 +1,6 @@
 package com.modernfamily.ukids.domain.familyMember.model.repository;
 
 
-import com.modernfamily.ukids.domain.familyMember.dto.FamilyDeleteDto;
-import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberDto;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 
 import java.util.List;
