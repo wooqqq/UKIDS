@@ -41,4 +41,17 @@ public class CustomFamilyMemberRepositoryImpl implements CustomFamilyMemberRepos
                         familyMember.isApproval.eq(true))
                 .fetch();
     }
+
+    @Transactional
+    @Override
+    public void deleteFamilyMember(Long familyMemberId) {
+        QFamilyMember familyMember = QFamilyMember.familyMember;
+        jpaQueryFactory
+                .update(familyMember)
+                .set(familyMember.isDelete, true)
+                .where(familyMember.familyMemberId.eq(familyMemberId))
+                .execute();
+    }
+
+
 }

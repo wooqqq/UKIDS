@@ -45,7 +45,7 @@ public class FamilyMember {
     @Column(columnDefinition = "TINYINT(1)")
     private boolean isApproval;
 
-//    @Column(nullable = false)
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private FamilyRole role;
 

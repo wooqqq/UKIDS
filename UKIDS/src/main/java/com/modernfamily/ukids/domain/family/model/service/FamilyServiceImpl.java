@@ -71,7 +71,6 @@ public class FamilyServiceImpl implements FamilyService{
         try{
             String id = CustomUserDetails.contextGetUserId();
             UserOtherDto userDto = userService.findByIdOther(id);
-            System.out.println("userId: " + userDto.getUserId());
             familyRequestDto.setRepresentative(userDto.getUserId());
             //암호화
             familyRequestDto.setPassword(bCryptPasswordEncoder.encode(familyRequestDto.getPassword()));

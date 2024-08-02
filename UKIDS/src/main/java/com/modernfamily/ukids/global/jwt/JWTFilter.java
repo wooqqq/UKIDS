@@ -30,7 +30,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // Bearer 부분 제거 토큰 획득
         String token = authorization.replace("Bearer ", "");
-        System.out.println(token);
         if(jwtUtil.isExpired(token)){
             filterChain.doFilter(request, response);
 

@@ -2,6 +2,7 @@ package com.modernfamily.ukids.domain.familyMember.model.service;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
+import com.modernfamily.ukids.domain.familyMember.dto.FamilyDeleteDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRequestDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRoleDto;
@@ -115,5 +116,38 @@ public class FamilyMemberServiceImpl implements FamilyMemberService{
 
         familyMemberRepository.setFamilyMemberRole(familyMemberRoleDto);
 
+    }
+
+    @Override
+    public void deleteFamilyMember(FamilyDeleteDto familyDeleteDto) {
+        int type = familyDeleteDto.getType();
+        FamilyMember familyMember = familyMemberRepository.findByFamilyMemberId(familyDeleteDto.getFamilyMemberId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+        String id = CustomUserDetails.contextGetUserId();
+
+        // 자진 탈퇴 시 탈퇴하려는 user와 로그인 한 유저의 일치 여부
+        if(type == 0) {
+            if (familyMember.getUser().getId().equals(id)) {
+                throw new ExceptionResponse(CustomException.NOT_SAME_FAMILYMEMBER_USER_EXCEPTION);
+            }
+        }
+
+        // 강제 탈퇴 시 family의 대표와 로그인 한 유저의 일치 여부
+        else if(type == 1) {
+            Family family = familyRepository.findByFamilyId(familyMember.getFamily().getFamilyId())
+                    .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
+            if (!family.getUser().getId().equals(id)) {
+                throw new ExceptionResponse(CustomException.NOT_SAME_REPRESENTATIVE_EXCEPTION);
+            }
+        }
+        else return;
+
+        // 구성원 승인이 되지 않았다면
+        if(!familyMember.isApproval()){
+            throw new ExceptionResponse(CustomException.NOT_APPROVAL_FAMILYMEMBER_EXCEPTION);
+        }
+
+        customFamilyMemberRepository.deleteFamilyMember(familyDeleteDto.getFamilyMemberId());
+        
     }
 }

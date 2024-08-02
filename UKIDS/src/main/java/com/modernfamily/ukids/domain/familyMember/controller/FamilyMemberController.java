@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.domain.familyMember.controller;
 
+import com.modernfamily.ukids.domain.familyMember.dto.FamilyDeleteDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRequestDto;
 import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRoleDto;
@@ -73,7 +74,14 @@ public class FamilyMemberController {
     public ResponseEntity<Map<String, Object>> denyFamilyMember(@PathVariable("familyMemberId") Long familyMemberId){
         familyMemberService.denyFamilyMember(familyMemberId);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_CANCEL_FAMILY_MEMBER);
+        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_CANCEL_FAMILY_MEMBER);
 
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> deleteFamilyMember(@RequestBody FamilyDeleteDto familyDeleteDto){
+        familyMemberService.deleteFamilyMember(familyDeleteDto);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_MEMBER);
     }
 }
