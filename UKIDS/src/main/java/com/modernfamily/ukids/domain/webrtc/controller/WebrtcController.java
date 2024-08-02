@@ -26,7 +26,7 @@ public class WebrtcController {
         webrtcService.init();
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> initializeSessions(@RequestBody(required = false) Map<String, Object> sessionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
         String sessionId = webrtcService.initializeSessions(sessionProperties);
 
