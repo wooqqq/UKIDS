@@ -8,7 +8,7 @@ interface UserProps {
   isManager: boolean;
 }
 
-const ProfileBtn: React.FC<UserProps> = ({ name, hasFamily, isManager }) => {
+const ProfileBtn: React.FC<UserProps> = ({ name, hasFamily }) => {
   const handleClick = () => {
     console.log('dropdown');
   };
