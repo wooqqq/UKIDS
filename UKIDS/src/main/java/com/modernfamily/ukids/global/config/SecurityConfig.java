@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.global.config;
 
-import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.jwt.JWTFilter;
 import com.modernfamily.ukids.global.jwt.JWTUtil;
 import com.modernfamily.ukids.global.jwt.LoginFilter;
@@ -69,7 +68,8 @@ public class SecurityConfig {
         return (web) -> {
             web.ignoring()
                     .requestMatchers(
-                            "/user/signup"
+                            "/user/signup",
+                            "/webrtc/**"
                     );
         };
     }
