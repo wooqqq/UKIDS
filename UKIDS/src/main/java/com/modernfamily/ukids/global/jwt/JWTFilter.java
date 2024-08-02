@@ -24,7 +24,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
         if(authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            throw new ExceptionResponse(CustomException.NOT_VALID_JWT_EXCEPTION);
+            return;
         }
 
         // Bearer 부분 제거 토큰 획득

@@ -20,6 +20,7 @@ public enum CustomException {
     ALREADY_COMPLETED_TREE_EXCEPTION(400, "AlreadyCompletedTreeException", "나무가 이미 완료된 상태입니다."),
 
     DUPLICATED_EMAIL_EXCEPTION(400,"DuplicatedEmailException","가입된 이메일이 존재합니다."),
+    NOT_FOUND_SESSION_EXCEPTION(400,"NotFoundSessionException","세션 ID가 존재하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
