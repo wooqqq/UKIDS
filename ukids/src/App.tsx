@@ -3,7 +3,7 @@ import Home from './pages/Home';
 import MyPage from './pages/MyPage';
 import FamilyChatting from './pages/FamilyChatting';
 import FamilyVideoCall from './pages/FamilyVideoCall';
-// import Calendar from './pages/Schedule';
+import Schedule from './pages/Schedule';
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전, 후)
 // 2. Albums "/albums" : 사진 앨범
@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/user" element={<MyPage />} />
         <Route path="/chat-room" element={<FamilyChatting />} />
         <Route path="/video-call-room" element={<FamilyVideoCall />} />
-        {/* <Route path="/schedule" element={<Calendar />} /> */}
+        <Route path="/schedule" element={<Schedule />} />
       </Routes>
     </>
   );

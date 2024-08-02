@@ -1,19 +1,16 @@
-import { Calendar } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 
-const CalendarBox: React.FC = () => {
-  document.addEventListener('DOMContentLoaded', function () {
-    let calendarEl: HTMLElement = document.getElementById('calendar')!;
-
-    let calendar = new Calendar(calendarEl, {
-      plugins: [dayGridPlugin],
-      // options here
-    });
-
-    calendar.render();
-  });
-
-  return <></>;
-};
-
-export default CalendarBox;
+export default function Calendar() {
+  return (
+    <FullCalendar
+      plugins={[dayGridPlugin]}
+      initialView="dayGridMonth"
+      weekends={false}
+      events={[
+        { title: 'event 1', date: '2019-04-01' },
+        { title: 'event 2', date: '2019-04-02' },
+      ]}
+    />
+  );
+}

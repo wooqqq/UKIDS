@@ -1,6 +1,6 @@
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import CalendarBox from '../components/feature/calendar/CalendarBox';
+import Calendar from '../components/feature/calendar/CalendarBox';
 
 const Schedule: React.FC = () => {
   return (
@@ -9,7 +9,7 @@ const Schedule: React.FC = () => {
       <div className="main-layout">
         {/* 메뉴바 */}
         {/* 콘텐츠 */}
-        <CalendarBox />
+        <Calendar />
       </div>
       <Footer />
     </>
