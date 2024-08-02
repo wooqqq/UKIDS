@@ -96,8 +96,8 @@
 
 /* 기능 박스 */
 .feature-box {
-  width: 911px;
-  height: 576px;
+  width: 1200px;
+  height: 600px;
   flex-shrink: 0;
   border-radius: 20px;
   opacity: var(--sds-size-stroke-border);
