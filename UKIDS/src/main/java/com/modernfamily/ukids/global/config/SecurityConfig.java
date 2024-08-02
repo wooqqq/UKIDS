@@ -43,14 +43,13 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         // jwt 방식 로그인 진행할 것 이기 때문에 disable
-        http.formLogin((auth) -> auth.disable());
-        http.httpBasic((auth) -> auth.disable());
+        http.formLogin(AbstractHttpConfigurer::disable);
+        http.httpBasic(AbstractHttpConfigurer::disable);
 
 
         http.authorizeHttpRequests((auth) -> auth
-                        .anyRequest().authenticated()
-
-        );
+                .requestMatchers("/login", "/", "/user/signup").permitAll()
+                        .anyRequest().authenticated());
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         // 등록할 필터와 어디에 등록할 것인지

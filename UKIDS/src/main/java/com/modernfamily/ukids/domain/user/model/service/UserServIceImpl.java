@@ -1,9 +1,6 @@
 package com.modernfamily.ukids.domain.user.model.service;
 
-import com.modernfamily.ukids.domain.user.dto.PasswordCheckDto;
-import com.modernfamily.ukids.domain.user.dto.SignUpDto;
-import com.modernfamily.ukids.domain.user.dto.UserDto;
-import com.modernfamily.ukids.domain.user.dto.UserOtherDto;
+import com.modernfamily.ukids.domain.user.dto.*;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
