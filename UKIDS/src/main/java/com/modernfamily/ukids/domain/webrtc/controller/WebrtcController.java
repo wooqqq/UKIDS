@@ -33,7 +33,7 @@ public class WebrtcController {
         return responseUtil.createResponse(HttpMethodCode.POST, sessionId);
     }
 
-    @PostMapping("/{sessionId}/connections")
+    @PostMapping("/{sessionId}")
     public ResponseEntity<?> createConnection(@PathVariable("sessionId") String sessionId,
                                               @RequestBody(required = false) Map<String, Object> connectionProperties)
             throws OpenViduJavaClientException, OpenViduHttpException {
