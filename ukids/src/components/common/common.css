@@ -1,0 +1,106 @@
+@import url(../../reset.css);
+
+.character-tag {
+  display: inline-block;
+  min-width: 1.8rem;
+  min-height: 1rem;
+  padding: 3px 2px;
+  border-radius: 4px;
+  background: #f6aeef;
+  color: var(--Grays-White, #fff);
+  text-align: center;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: Pretendard;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.tag-mom {
+  background: #ffbf33;
+}
+
+.tag-dad {
+  background: #36d5f1;
+}
+
+.tag-daughter {
+  background: #6bc985;
+}
+
+.tag-son {
+  background: #9f6ad5;
+}
+
+.tag-grand-child {
+  background: #767af4;
+}
+
+/* 프로필 */
+.profile-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  gap: 1rem;
+  width: 15.3125rem;
+  height: 3.0625rem;
+  flex-shrink: 0;
+  border-radius: 1.625rem;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.25);
+  color: #999;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.profile-btn-family {
+  color: #333;
+}
+
+.profile-name {
+  color: #333;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: Pretendard;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+}
+
+.profile-list {
+  display: flex;
+  width: 249px;
+  height: 244px;
+  padding: var(--sds-size-space-200) var(--sds-size-space-300);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sds-size-space-0);
+  flex-shrink: 0;
+  border-radius: var(--sds-size-radius-200);
+  border: var(--sds-size-stroke-border) solid
+    var(--sds-color-border-default-default);
+  opacity: var(--sds-size-stroke-border);
+  background: rgba(255, 255, 255, 0.9);
+
+  /* Drop Shadow/200 */
+  box-shadow: var(--sds-size-depth-0) var(--sds-size-depth-025)
+      var(--sds-size-depth-100) var(--sds-size-depth-0)
+      var(--sds-color-black-200),
+    var(--sds-size-depth-0) var(--sds-size-depth-025) var(--sds-size-depth-100)
+      var(--sds-size-depth-0) var(--sds-color-black-100);
+}
+
+/* 기능 박스 */
+.feature-box {
+  width: 911px;
+  height: 576px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+}
