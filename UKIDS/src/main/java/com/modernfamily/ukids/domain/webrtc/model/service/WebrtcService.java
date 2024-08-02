@@ -7,5 +7,6 @@ import java.util.Map;
 
 public interface WebrtcService {
     void init();
-    String initializeSessions(Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException;
+    String initializeSessions(Map<String, Object> sessionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
+    String createConnection(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
 }

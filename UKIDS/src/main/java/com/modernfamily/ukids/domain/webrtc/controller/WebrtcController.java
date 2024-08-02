@@ -3,6 +3,8 @@ package com.modernfamily.ukids.domain.webrtc.controller;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
 import com.modernfamily.ukids.global.util.HttpResponseUtil;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/call")
+@RequestMapping("/webrtc")
 @RequiredArgsConstructor
 public class WebrtcController {
 
@@ -24,12 +26,20 @@ public class WebrtcController {
         webrtcService.init();
     }
 
-    @PostMapping("/sessions")
-    public ResponseEntity<?> initializeSessions(@RequestBody(required = false) Map<String, Object> sessionProperties) {
+    @PostMapping()
+    public ResponseEntity<?> initializeSessions(@RequestBody(required = false) Map<String, Object> sessionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
         String sessionId = webrtcService.initializeSessions(sessionProperties);
 
         return responseUtil.createResponse(HttpMethodCode.POST, sessionId);
     }
 
+    @PostMapping("/{sessionId}/connections")
+    public ResponseEntity<?> createConnection(@PathVariable("sessionId") String sessionId,
+                                              @RequestBody(required = false) Map<String, Object> connectionProperties)
+            throws OpenViduJavaClientException, OpenViduHttpException {
 
+        String token = webrtcService.createConnection(sessionId, connectionProperties);
+
+        return responseUtil.createResponse(HttpMethodCode.POST, token);
+    }
 }
