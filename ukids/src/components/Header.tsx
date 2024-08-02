@@ -1,21 +1,21 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileBtn from './common/ProfileButton';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
 
   const handleClick = () => {
     navigate(`/`);
   };
 
-  // 로그인 정보 한 번만 가져오기
-  useEffect(() => {
-    // if 사용해서 로그인 토큰 있는지 확인
-    setIsLogin(true);
-  }, []);
+  // // 로그인 정보 한 번만 가져오기
+  // useEffect(() => {
+  //   // if 사용해서 로그인 토큰 있는지 확인
+  //   setIsLogin(true);
+  // }, []);
 
   return (
     <div className="flex justify-between m-1">

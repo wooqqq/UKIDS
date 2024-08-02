@@ -1,10 +1,15 @@
-import MainLayout from '../components/MainLayout';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const Letter: React.FC = () => {
   return (
     <>
-      <h1>편지함</h1>
-      <MainLayout />
+      <Header />
+      <div className="main-layout">
+        {/* 메뉴바 */}
+        {/* 콘텐츠 */}
+      </div>
+      <Footer />
     </>
   );
 };
