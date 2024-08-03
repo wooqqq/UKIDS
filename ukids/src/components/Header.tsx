@@ -13,7 +13,7 @@ const Header: React.FC = () => {
     <div className="flex justify-start m-1 items-center" style={{ width: '100%' }}> {/* 부모 컨테이너를 전체 너비로 설정 */}
       {/* 로고 */}
       <button onClick={handleClick} className="w-52">
-        <img src="/assets/logo.png" alt="ukids-logo" width="230" />
+        <img src="../../assets/logo.png" alt="ukids-logo" width="230" />
       </button>
       {/* 고정 너비의 빈 공간 */}
       <div style={{ width: '890px' }}></div> {/* 로고와 버튼 사이 1200px 공간 추가 */}
