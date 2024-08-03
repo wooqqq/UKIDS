@@ -1,9 +1,7 @@
-import MainLayout from '../components/MainLayout';
-
-const Albums: React.FC = () => {
+const Albums = () => {
   return (
     <>
-      <MainLayout />
+      <h1>사진 앨범</h1>
     </>
   );
 };

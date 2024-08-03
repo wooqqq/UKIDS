@@ -30,8 +30,9 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  padding: 1rem 5rem;
+  padding: 1rem 10.62rem;
   max-height: 750px;
+  overflow: hidden;
 }
 
 @layer base {

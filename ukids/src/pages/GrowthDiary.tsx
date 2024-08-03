@@ -1,10 +1,7 @@
-import MainLayout from '../components/MainLayout';
-
-const GrowthDiary: React.FC = () => {
+const GrowthDiary = () => {
   return (
     <>
       <h1>성장일지</h1>
-      <MainLayout />
     </>
   );
 };

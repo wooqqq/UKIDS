@@ -1,17 +1,10 @@
-import Footer from '../components/Footer';
-import Header from '../components/Header';
 import CalendarBox from '../components/feature/calendar/CalendarBox';
 
-const Schedule: React.FC = () => {
+const Schedule = () => {
   return (
     <>
-      <Header />
-      <div className="main-layout">
-        {/* 메뉴바 */}
-        {/* 콘텐츠 */}
-        <CalendarBox />
-      </div>
-      <Footer />
+      <h1>일정 관리</h1>
+      <CalendarBox />
     </>
   );
 };

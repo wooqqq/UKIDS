@@ -8,15 +8,15 @@ interface UserProps {
   isManager: boolean;
 }
 
-const ProfileBtn: React.FC<UserProps> = ({ name, hasFamily }) => {
+const ProfileBtn = (UserProps: UserProps) => {
   const handleClick = () => {
     console.log('dropdown');
   };
 
-  if (!hasFamily) {
+  if (!UserProps.hasFamily) {
     return (
       <div className="">
-        <div className="inline-block profile-name">{name}</div>
+        <div className="inline-block profile-name">{UserProps.name}</div>
         <button onClick={handleClick} className="profile-btn">
           <div>가족방을 만들어보세요!</div>
           <div className="fill-black">▼</div>
@@ -26,7 +26,7 @@ const ProfileBtn: React.FC<UserProps> = ({ name, hasFamily }) => {
   } else {
     return (
       <div className="flex items-center gap-5">
-        <div className="inline-block profile-name">{name}</div>
+        <div className="inline-block profile-name">{UserProps.name}</div>
         <button onClick={handleClick} className="profile-btn">
           <div>현재 선택된 가족방 + 대표 + 태그</div>
           <div className="fill-black">▼</div>

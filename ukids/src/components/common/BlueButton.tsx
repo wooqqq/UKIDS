@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './button.css';
 
@@ -7,22 +6,22 @@ interface BlueButtonProps {
   path: string;
 }
 
-const BlueButton: React.FC<BlueButtonProps> = ({ name, path }) => {
+const BlueButton = (BlueButtonProps: BlueButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(path);
+    navigate(BlueButtonProps.path);
   };
-  if (name == '연결하기') {
+  if (BlueButtonProps.name == '연결하기') {
     return (
       <button onClick={handleClick} className="common-btn green-btn">
-        {name}
+        {BlueButtonProps.name}
       </button>
     );
   } else {
     return (
       <button onClick={handleClick} className="common-btn blue-btn">
-        {name}
+        {BlueButtonProps.name}
       </button>
     );
   }

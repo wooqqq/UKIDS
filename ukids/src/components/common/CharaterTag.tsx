@@ -6,19 +6,36 @@ interface CharacterTagProps {
   character: string;
 }
 
-const CharacterTag: React.FC<CharacterTagProps> = ({ character }) => {
-  if (character == '엄마') {
-    return <div className="character-tag tag-mom">{character}</div>;
-  } else if (character == '아빠') {
-    return <div className="character-tag tag-dad">{character}</div>;
-  } else if (character == '딸') {
-    return <div className="character-tag tag-daughter">{character}</div>;
-  } else if (character == '아들') {
-    return <div className="character-tag tag-son">{character}</div>;
-  } else if (character == '손자' || character == '손녀') {
-    return <div className="character-tag tag-grand-child">{character}</div>;
+const CharacterTag = (CharacterTagProps: CharacterTagProps) => {
+  if (CharacterTagProps.character == '엄마') {
+    return (
+      <div className="character-tag tag-mom">{CharacterTagProps.character}</div>
+    );
+  } else if (CharacterTagProps.character == '아빠') {
+    return (
+      <div className="character-tag tag-dad">{CharacterTagProps.character}</div>
+    );
+  } else if (CharacterTagProps.character == '딸') {
+    return (
+      <div className="character-tag tag-daughter">
+        {CharacterTagProps.character}
+      </div>
+    );
+  } else if (CharacterTagProps.character == '아들') {
+    return (
+      <div className="character-tag tag-son">{CharacterTagProps.character}</div>
+    );
+  } else if (
+    CharacterTagProps.character == '손자' ||
+    CharacterTagProps.character == '손녀'
+  ) {
+    return (
+      <div className="character-tag tag-grand-child">
+        {CharacterTagProps.character}
+      </div>
+    );
   } else {
-    return <div className="character-tag">{character}</div>;
+    return <div className="character-tag">{CharacterTagProps.character}</div>;
   }
 };
 
