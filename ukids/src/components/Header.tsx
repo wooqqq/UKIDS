@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <div
-      className="flex justify-start m-1 items-center"
+      className="flex justify-between m-1 items-center"
       style={{ width: '100%' }}
     >
       {' '}
@@ -19,10 +19,8 @@ const Header = () => {
       <button onClick={handleClick} className="w-52">
         <img src="/assets/logo.png" alt="ukids-logo" width="230" />
       </button>
-      {/* 고정 너비의 빈 공간 */}
-      <div style={{ width: '890px' }}></div>{' '}
-      {/* 로고와 버튼 사이 1200px 공간 추가 */}
-      {/* 프로필 버튼 */}
+      {/* 로그인이 안되었으면 로그인/회원가입 버튼*/}
+      {/* 로그인 완료 시 프로필 버튼 */}
       <ProfileBtn name="이삼성" hasFamily={true} isManager={true} />
     </div>
   );

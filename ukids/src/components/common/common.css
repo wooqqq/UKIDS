@@ -96,11 +96,37 @@
 
 /* 기능 박스 */
 .feature-box {
-  width: 1200px;
-  height: 600px;
+  width: 56.9375rem;
+  height: 36rem;
   flex-shrink: 0;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   opacity: var(--sds-size-stroke-border);
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+}
+
+/* 사이드바 */
+.sidebar {
+  width: 7.9375rem;
+  height: 36rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.3);
+  align-items: center;
+}
+
+.sidebar-text {
+  color: #777;
+  text-align: center;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: 'Goryeong Strawberry';
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

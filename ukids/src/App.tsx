@@ -12,6 +12,7 @@ import Setting from './pages/Setting';
 import Notfound from './pages/Notfound';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Sidebar from './components/common/Sidebar';
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전, 후 모두 사용)
 // 2. Schedule "/schedule" : 일정 관리
@@ -30,23 +31,29 @@ import Footer from './components/Footer';
 
 const App = () => {
   return (
-    <>
+    <div className="">
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/schedule" element={<Schedule />} />
-        <Route path="/letters" element={<Letters />} />
-        <Route path="/albums" element={<Albums />} />
-        <Route path="/paintdiary" element={<PaintingDiary />} />
-        <Route path="/growthdiary" element={<GrowthDiary />} />
-        <Route path="/chat" element={<FamilyChatting />} />
-        <Route path="/chat/call" element={<FamilyVideoCall />} />
-        <Route path="/game" element={<Game />} />
-        <Route path="/setting" element={<Setting />} />
-        <Route path="*" element={<Notfound />} />
-      </Routes>
+      <div className="flex justify-between">
+        {/* 로그인 안한 홈, 가족방 생성/찾기는 사이드바X */}
+        <Sidebar />
+        <div className="feature-box">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/letters" element={<Letters />} />
+            <Route path="/albums" element={<Albums />} />
+            <Route path="/paintdiary" element={<PaintingDiary />} />
+            <Route path="/growthdiary" element={<GrowthDiary />} />
+            <Route path="/chat" element={<FamilyChatting />} />
+            <Route path="/chat/call" element={<FamilyVideoCall />} />
+            <Route path="/game" element={<Game />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="*" element={<Notfound />} />
+          </Routes>
+        </div>
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
