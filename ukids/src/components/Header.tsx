@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <div
-      className="flex justify-between m-1 items-center"
+      className="flex justify-between m-1 items-center mb-7"
       style={{ width: '100%' }}
     >
       {' '}
