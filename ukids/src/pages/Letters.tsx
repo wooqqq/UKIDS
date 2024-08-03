@@ -1,10 +1,7 @@
 const Letter = () => {
   return (
     <>
-      <div className="main-layout">
-        {/* 메뉴바 */}
-        {/* 콘텐츠 */}
-      </div>
+      <h1>편지함</h1>
     </>
   );
 };

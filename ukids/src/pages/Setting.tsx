@@ -1,10 +1,7 @@
 const MyPage = () => {
   return (
     <>
-      <div className="main-layout">
-        {/* 메뉴바 */}
-        {/* 콘텐츠 */}
-      </div>
+      <h1>회원, 가족 설정</h1>
     </>
   );
 };
