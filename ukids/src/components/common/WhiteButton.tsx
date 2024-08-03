@@ -1,7 +1,6 @@
 // 목록
 // 삭제 (red text, small)
 // 삭제 - 쓰레기통 아이콘
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './button.css';
 
@@ -10,17 +9,17 @@ interface WhiteButtonProps {
   path: string;
 }
 
-const WhiteButton: React.FC<WhiteButtonProps> = ({ name, path }) => {
+const WhiteButton = (WhiteButtonProps: WhiteButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(path);
+    navigate(WhiteButtonProps.path);
   };
 
-  if (name == '삭제') {
+  if (WhiteButtonProps.name == '삭제') {
     return (
       <button onClick={handleClick} className="red-font white-btn common-btn">
-        {name}
+        {WhiteButtonProps.name}
       </button>
     );
   } else {
@@ -40,7 +39,7 @@ const WhiteButton: React.FC<WhiteButtonProps> = ({ name, path }) => {
             fill="#777777"
           />
         </svg>
-        {name}
+        {WhiteButtonProps.name}
       </button>
     );
   }

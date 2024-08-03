@@ -1,6 +1,6 @@
 import GrayButton from './GrayButton';
 
-const ProfileList: React.FC = () => {
+const ProfileList = () => {
   return (
     <div className="profile-list">
       <GrayButton name="로그아웃" path="/" />

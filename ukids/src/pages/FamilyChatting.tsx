@@ -1,11 +1,8 @@
-import MainLayout from '../components/MainLayout';
 import GrayButton from '../components/common/GrayButton';
 
 const FamilyChatting = () => {
   return (
     <>
-      <MainLayout />
-
       <div id="본문 컨테이너 내부">
         <div id="채팅영역">
           <div id="대화영역"></div>

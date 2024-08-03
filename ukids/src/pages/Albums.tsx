@@ -1,11 +1,5 @@
-import MainLayout from '../components/MainLayout';
-
-const Albums: React.FC = () => {
-  return (
-    <>
-      <MainLayout />
-    </>
-  );
+const Albums = () => {
+  return <></>;
 };
 
 export default Albums;

@@ -1,10 +1,7 @@
-import MainLayout from '../components/MainLayout';
-
-const Game: React.FC = () => {
+const Game = () => {
   return (
     <>
       <h1>게임</h1>
-      <MainLayout />
     </>
   );
 };

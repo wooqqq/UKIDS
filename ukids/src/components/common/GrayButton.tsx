@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './button.css';
 
@@ -7,20 +6,20 @@ interface GrayButtonProps {
   path: string;
 }
 
-const GrayButton: React.FC<GrayButtonProps> = ({ name, path }) => {
+const GrayButton = (GrayButtonProps: GrayButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(path);
+    navigate(GrayButtonProps.path);
   };
 
-  if (name == '로그아웃') {
+  if (GrayButtonProps.name == '로그아웃') {
     return (
       <button onClick={handleClick} className="rounded-md gray-btn common-btn">
-        {name}
+        {GrayButtonProps.name}
       </button>
     );
-  } else if (name == '설정') {
+  } else if (GrayButtonProps.name == '설정') {
     return (
       <button
         onClick={handleClick}
@@ -51,7 +50,7 @@ const GrayButton: React.FC<GrayButtonProps> = ({ name, path }) => {
       //   </div>
       // </button>
       <button onClick={handleClick} className="gray-btn common-btn">
-        {name}
+        {GrayButtonProps.name}
       </button>
     );
   }

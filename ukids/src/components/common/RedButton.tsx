@@ -1,5 +1,4 @@
 // 가족해체(red, big) 등 부정
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './button.css';
 
@@ -8,22 +7,22 @@ interface RedButtonProps {
   path: string;
 }
 
-const RedButton: React.FC<RedButtonProps> = ({ name, path }) => {
+const RedButton = (RedButtonProps: RedButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(path);
+    navigate(RedButtonProps.path);
   };
-  if (name == '연결하기') {
+  if (RedButtonProps.name == '연결하기') {
     return (
       <button onClick={handleClick} className="common-btn green-btn">
-        {name}
+        {RedButtonProps.name}
       </button>
     );
   } else {
     return (
       <button onClick={handleClick} className="common-btn red-btn">
-        {name}
+        {RedButtonProps.name}
       </button>
     );
   }
