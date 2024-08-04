@@ -1,3 +1,4 @@
+/* common.css 공통 컴포넌트들 스타일 */
 @import url(../../reset.css);
 
 .character-tag {
@@ -104,6 +105,16 @@
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
 }
+.half-feature-box {
+  width: 27.5rem;
+  height: 36rem;
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+  padding: 30px 15px;
+}
 
 /* 사이드바 */
 .sidebar {
@@ -127,6 +138,26 @@
   font-family: 'Goryeong Strawberry';
   font-size: 0.75rem;
   font-style: normal;
-  font-weight: 400;
   line-height: normal;
+}
+
+.pre-box {
+  width: 25.625rem;
+  height: 14.86581rem;
+  flex-shrink: 0;
+  background: #fff;
+  border: #ffefcc 3px solid;
+  border-radius: 20px;
+  opacity: var(--sds-size-stroke-border);
+  filter: drop-shadow(0px 0px 7px rgba(153, 153, 153, 0.25));
+}
+.half-pre-box {
+  width: 11.875rem;
+  height: 11.875rem;
+  flex-shrink: 0;
+  background: #fff;
+  border: #ffefcc 3px solid;
+  border-radius: 20px;
+  opacity: var(--sds-size-stroke-border);
+  filter: drop-shadow(0px 0px 7px rgba(153, 153, 153, 0.25));
 }
