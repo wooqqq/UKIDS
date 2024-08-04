@@ -90,6 +90,7 @@ function VideoCall() {
         const response = await axios.post(`${SERVER_URL}/api/webrtc`, {
           sessionId: sessionIds,
         });
+        console.log(`response.data: ${response.data}`);
         return (response.data as { id: string }).id;
       } catch (error) {
         const errorResponse = (error as AxiosError)?.response;
@@ -105,7 +106,7 @@ function VideoCall() {
         axios
           .post(`${SERVER_URL}/api/webrtc/${sessionIds}`, {})
           .then((response) => {
-            resolve((response.data as { token: string }).token);
+            resolve((response.data as { result: string }).result);
           })
           .catch((error) => reject(error));
       });
@@ -116,6 +117,7 @@ function VideoCall() {
         const sessionIds = await createSession(sessionId);
         console.log(sessionIds);
         const token = await createToken(sessionIds);
+        console.log(`token: ${token}`);
         return token;
       } catch (error) {
         throw new Error('Failed to get token.');
