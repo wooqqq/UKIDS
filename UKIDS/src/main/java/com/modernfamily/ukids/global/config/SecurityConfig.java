@@ -40,40 +40,34 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // jwt 방식은 stateless이기 때문에 csrf에 딱히 방어하지 않아도 된다.
         http.csrf(AbstractHttpConfigurer::disable);
-
-        // jwt 방식 로그인 진행할 것 이기 때문에 disable
-        http.formLogin((auth) -> auth.disable());
-        http.httpBasic((auth) -> auth.disable());
-
+        http.formLogin(AbstractHttpConfigurer::disable);
+        http.httpBasic(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/ws/chat").permitAll()
-                .anyRequest().authenticated()
-
+                .requestMatchers("/chat/room").permitAll() // 모든 요청 허용
+                .anyRequest().authenticated() // 나머지 요청은 인증 필요
         );
 
-        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-        // 등록할 필터와 어디에 등록할 것인지
-        http.addFilterAt(new LoginFilter(authenticationManager(configuration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-        // 세션 설정 (stateless)
-        http.sessionManagement((session) -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)));
-
+        http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> {
-            web.ignoring()
-                    .requestMatchers(
-                            "/login",
-                            "/user/signup",
-                            "/ws/chat"
-                    );
-        };
+        return (web) -> web
+                .ignoring()
+//                .requestMatchers(
+//                        "/login",
+//                        "/user/signup",
+//                        "/ws/chat",
+//                        "/ws-stomp",
+//                        "/chat/room",
+//                        "/resources/**"
+//                );
+                .requestMatchers("/**");
     }
 }

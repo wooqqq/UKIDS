@@ -1,27 +1,22 @@
 package com.modernfamily.ukids.domain.chatRoom.controller;
 
-import com.modernfamily.ukids.domain.chatRoom.dto.ChatRoomDto;
-import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
-import com.modernfamily.ukids.domain.chatRoom.model.service.ChatService;
+import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
 
+// Publisher 구현
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/chat")
+@Controller
 public class ChatController {
 
-    private final ChatService chatService;
+    private final SimpMessageSendingOperations messagingTemplate;
 
-    @PostMapping
-    public ChatRoom createChatRoom(@RequestBody ChatRoomDto chatRoomDto) {
-        return chatService.createRoom(chatRoomDto);
+    @MessageMapping("/chat/message")
+    public void message(ChatMessage message) {
+        if (ChatMessage.MessageType.JOIN.equals(message.getType()))
+            message.setMessage(message.getSender() + " 님이 입장하셨습니다.");
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
-
-    @GetMapping("/{id}")
-    public ChatRoom findChatRoom(@PathVariable Long chatRoomId) {
-        return chatService.findRoomById(chatRoomId);
-    }
-
 }
