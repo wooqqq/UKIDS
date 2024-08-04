@@ -116,6 +116,7 @@ function VideoCall() {
     const getToken = async (): Promise<string> => {
       try {
         const sessionIds = await createSession(sessionId);
+        console.log(sessionIds);
         const token = await createToken(sessionIds);
         console.log(`token: ${token}`);
         return token;
