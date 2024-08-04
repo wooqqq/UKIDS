@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.album.controller;
 
 import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.message.SuccessMessage;
 import com.modernfamily.ukids.domain.album.model.service.AlbumService;
@@ -32,6 +33,13 @@ public class AlbumController {
     public ResponseEntity<Map<String, Object>> updateAlbum(@RequestBody AlbumUpdateRequestDto requestDto){
         albumService.updateAlbum(requestDto);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_UPDATE_ALBUM);
+        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_ALBUM);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getAlbumInfo(@PathVariable("id") Long albumId){
+        AlbumInfoResponseDto responseDto = albumService.getAlbumInfo(albumId);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, responseDto);
     }
 }

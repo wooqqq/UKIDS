@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.album.model.service;
 
 import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
@@ -32,9 +33,8 @@ public class AlbumServiceImpl implements AlbumService {
 
         Family family = checkFamilyMember(requestDto.getFamilyId());
 
-        albumRepository.findByDate(requestDto.getDate()).orElseThrow(() -> {
-            throw new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION);
-        });
+        albumRepository.findByDate(requestDto.getDate()).orElseThrow(() ->
+            new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION));
 
         Album album = Album.createAlbum(requestDto, family);
 
@@ -49,9 +49,8 @@ public class AlbumServiceImpl implements AlbumService {
 //        if(!familyService.checkPassword(new FamilyPasswordDto(family.getFamilyId(), requestDto.getPassword())))
 //            throw new ExceptionResponse(CustomException.NOT_SAME_PASSWORD_EXCEPTION);
 
-        albumRepository.findByAlbumId(requestDto.getAlbumId()).orElseThrow(() -> {
-            throw new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION);
-        });
+        albumRepository.findByAlbumId(requestDto.getAlbumId()).orElseThrow(() ->
+            new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
         Album album = Album.updateAlbum(requestDto, family);
 
@@ -59,15 +58,26 @@ public class AlbumServiceImpl implements AlbumService {
 
     }
 
+    public AlbumInfoResponseDto getAlbumInfo(Long albumId) {
+
+        Album album = albumRepository.findByAlbumId(albumId).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
+
+        checkFamilyMember(album.getFamily().getFamilyId());
+
+        return AlbumInfoResponseDto.createAlbumInfoResponseDro(album);
+    }
+
     public Family checkFamilyMember(Long familyId){
         String userId = CustomUserDetails.contextGetUserId();
 
-        Family family = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId).orElseThrow(() -> {
-            throw new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION);
-        }).getFamily();
+        Family family = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId).orElseThrow(() ->
+            new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION)).getFamily();
 
         return family;
     }
+
+
 }
 
 
