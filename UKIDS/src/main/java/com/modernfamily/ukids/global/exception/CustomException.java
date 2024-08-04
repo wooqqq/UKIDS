@@ -32,6 +32,11 @@ public enum CustomException {
     APPROVAL_FAMILYMEMBER_EXCEPTION(400, "ApprovalFamilyMemberException", "이미 승인된 인원입니다."),
     NOT_APPROVAL_FAMILYMEMBER_EXCEPTION(400, "NotApprovalFamilyMemberException", "가족 구성원이 아닙니다."),
 
+    // 자녀성장일지
+    NOT_FOUND_GROWTHFOLDER_EXCEPTION(400, "NotFoundGrowthFolderException", "자녀 성장일지 폴더가 존재하지 않습니다."),
+    NOT_FOUND_GROWTHRECORD_EXCEPTION(400, "NotFoundGrowthRecordException", "자녀 성장일지가 존재하지 않습니다."),
+    NOT_SAME_WRITER_EXCEPTION(400, "NotFoundWriterException", "사용자와 작성자가 일치하지 않습니다."),
+
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
     NOT_VALID_JWT_EXCEPTION(401,"NotValidJwtException","토큰이 유효하지 않습니다."),
