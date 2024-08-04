@@ -43,26 +43,15 @@ public class Album{
         this.family = family;
     }
 
-    @Builder
-    private Album(Long albumId, LocalDate date, String title, boolean isDelete, Family family){
+    public static Album createAlbum(LocalDate date, String title, Family family){
+        return new Album(date, title, false,  family);
+    }
+
+    public void updateAlbum(Long albumId){
         this.albumId = albumId;
-        this.date = date;
-        this.title = title;
-        this.isDelete = isDelete;
-        this.family = family;
     }
 
-    public static Album createAlbum(AlbumCreateRequestDto requestDto, Family family){
-        return new Album(requestDto.getDate(), requestDto.getTitle(), false,  family);
-    }
-
-    public static Album updateAlbum(AlbumUpdateRequestDto requestDto, Family family){
-        return Album.builder()
-                .albumId(requestDto.getAlbumId())
-                .title(requestDto.getTitle())
-                .date(requestDto.getDate())
-                .isDelete(false)
-                .family(family)
-                .build();
+    public void deleteAlbum(){
+        this.isDelete = true;
     }
 }

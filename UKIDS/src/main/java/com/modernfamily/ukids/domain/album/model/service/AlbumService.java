@@ -16,4 +16,6 @@ public interface AlbumService {
     AlbumInfoResponseDto getAlbumInfo(Long albumId);
 
     List<AlbumInfoListResponseDto> getAlbumInfoList(Long familyId);
+
+    void deleteAlbum(Long albumId);
 }

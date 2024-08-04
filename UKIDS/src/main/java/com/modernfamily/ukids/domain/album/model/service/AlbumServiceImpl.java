@@ -39,23 +39,22 @@ public class AlbumServiceImpl implements AlbumService {
         albumRepository.findByDate(requestDto.getDate()).orElseThrow(() ->
             new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION));
 
-        Album album = Album.createAlbum(requestDto, family);
+        Album album = Album.createAlbum(requestDto.getDate(), requestDto.getTitle(), family);
 
         albumRepository.save(album);
     }
 
     @Transactional
     public void updateAlbum(AlbumUpdateRequestDto requestDto) {
+        // 비밀번호 확인 가정
 
         Family family = checkFamilyMember(requestDto.getFamilyId());
-
-//        if(!familyService.checkPassword(new FamilyPasswordDto(family.getFamilyId(), requestDto.getPassword())))
-//            throw new ExceptionResponse(CustomException.NOT_SAME_PASSWORD_EXCEPTION);
 
         albumRepository.findByAlbumId(requestDto.getAlbumId()).orElseThrow(() ->
             new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
-        Album album = Album.updateAlbum(requestDto, family);
+        Album album = Album.createAlbum(requestDto.getDate(), requestDto.getTitle(), family);
+        album.updateAlbum(requestDto.getAlbumId());
 
         albumRepository.save(album);
 
@@ -82,6 +81,19 @@ public class AlbumServiceImpl implements AlbumService {
         }
 
         return responseDtoList;
+    }
+
+    @Transactional
+    public void deleteAlbum(Long albumId){
+        // 비밀번호 확인 가정
+
+        Album album = albumRepository.findByAlbumId(albumId).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
+
+        checkFamilyMember(album.getFamily().getFamilyId());
+
+        album.deleteAlbum();
+        albumRepository.save(album);
     }
 
     public Family checkFamilyMember(Long familyId){

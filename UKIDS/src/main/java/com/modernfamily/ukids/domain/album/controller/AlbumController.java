@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.domain.album.controller;
 
 import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.message.SuccessMessage;
 import com.modernfamily.ukids.domain.album.model.service.AlbumService;
@@ -9,7 +8,6 @@ import com.modernfamily.ukids.global.util.HttpMethodCode;
 import com.modernfamily.ukids.global.util.HttpResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -48,5 +46,10 @@ public class AlbumController {
         return httpResponseUtil.createResponse(HttpMethodCode.GET, albumService.getAlbumInfoList(familyId));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteAlbum(@PathVariable("id") Long albumId){
+        albumService.deleteAlbum(albumId);
 
+        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_ALBUM);
+    }
 }
