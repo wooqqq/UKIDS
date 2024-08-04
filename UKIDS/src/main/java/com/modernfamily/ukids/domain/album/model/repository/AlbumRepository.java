@@ -12,4 +12,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     Optional<Album> findByDate(LocalDate date);
 
+    Optional<Album> findByAlbumId(Long albumId);
+
 }

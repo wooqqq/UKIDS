@@ -34,6 +34,7 @@ public enum CustomException {
 
     // 앨범
     DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
+    NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
