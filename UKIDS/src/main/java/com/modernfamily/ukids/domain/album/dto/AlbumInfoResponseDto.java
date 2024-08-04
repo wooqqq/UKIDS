@@ -1,9 +1,6 @@
 package com.modernfamily.ukids.domain.album.dto;
 
 import com.modernfamily.ukids.domain.album.entity.Album;
-import com.modernfamily.ukids.domain.family.entity.Family;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,22 +18,26 @@ public class AlbumInfoResponseDto {
 
     LocalDate date;
 
-    Family family;
+    Long familyId;
+
+    String familyName;
 
     @Builder
-    private AlbumInfoResponseDto(Long albumId, String title, LocalDate date, Family family) {
+    private AlbumInfoResponseDto(Long albumId, String title, LocalDate date, Long familyId, String familyName) {
         this.albumId = albumId;
         this.title = title;
         this.date = date;
-        this.family = family;
+        this.familyId = familyId;
+        this.familyName = familyName;
     }
 
-    public static AlbumInfoResponseDto createAlbumInfoResponseDro(Album album) {
+    public static AlbumInfoResponseDto createAlbumInfoResponseDto(Album album) {
         return AlbumInfoResponseDto.builder()
                 .albumId(album.getAlbumId())
                 .title(album.getTitle())
                 .date(album.getDate())
-                .family(album.getFamily())
+                .familyId(album.getFamily().getFamilyId())
+                .familyName(album.getFamily().getName())
                 .build();
     }
 

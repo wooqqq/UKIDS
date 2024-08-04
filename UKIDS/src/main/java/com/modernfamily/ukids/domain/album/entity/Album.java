@@ -1,11 +1,8 @@
 package com.modernfamily.ukids.domain.album.entity;
 
-import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;

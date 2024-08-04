@@ -1,9 +1,7 @@
 package com.modernfamily.ukids.domain.album.dto;
 
 import com.modernfamily.ukids.domain.album.entity.Album;
-import com.modernfamily.ukids.domain.family.entity.Family;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

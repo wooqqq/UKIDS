@@ -6,25 +6,25 @@ import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
-import com.modernfamily.ukids.domain.family.dto.FamilyPasswordDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
-import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
 import com.modernfamily.ukids.domain.family.model.service.FamilyService;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class AlbumServiceImpl implements AlbumService {
 
     private final AlbumRepository albumRepository;
@@ -36,8 +36,10 @@ public class AlbumServiceImpl implements AlbumService {
 
         Family family = checkFamilyMember(requestDto.getFamilyId());
 
-        albumRepository.findByDate(requestDto.getDate()).orElseThrow(() ->
-            new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION));
+        Optional<Album> existAlbum =  albumRepository.findByDate(requestDto.getDate());
+
+        if(!existAlbum.isEmpty())
+            throw new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION);
 
         Album album = Album.createAlbum(requestDto.getDate(), requestDto.getTitle(), family);
 
@@ -67,7 +69,8 @@ public class AlbumServiceImpl implements AlbumService {
 
         checkFamilyMember(album.getFamily().getFamilyId());
 
-        return AlbumInfoResponseDto.createAlbumInfoResponseDro(album);
+        AlbumInfoResponseDto responseDto = AlbumInfoResponseDto.createAlbumInfoResponseDto(album);
+        return responseDto;
     }
 
     public List<AlbumInfoListResponseDto> getAlbumInfoList(Long familyId) {
