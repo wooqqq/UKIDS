@@ -73,6 +73,7 @@ function VideoCall() {
   const sessionIdChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    console.log(event.target.value);
     setSessionId(event.target.value);
   };
 
