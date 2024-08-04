@@ -1,12 +1,15 @@
 package com.modernfamily.ukids.domain.album.entity;
 
+import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor( access = AccessLevel.PROTECTED )
@@ -34,7 +37,7 @@ public class Album{
         this.family = family;
     }
 
-    public static Album createAlbum(LocalDate date, String title, Family family){
-        return new Album(date, title, family);
+    public static Album createAlbum(AlbumCreateRequestDto requestDto, Family family){
+        return new Album(requestDto.getDate(), requestDto.getTitle(), family);
     }
 }
