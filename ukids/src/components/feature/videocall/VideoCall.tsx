@@ -86,7 +86,6 @@ function VideoCall() {
     if (session === '' || !OV) return;
 
     const createSession = async (sessionIds: string): Promise<string> => {
-      console.log(sessionIds)
       try {
         const response = await axios.post(`${SERVER_URL}/api/webrtc`, {
           sessionId: sessionIds,
@@ -115,6 +114,7 @@ function VideoCall() {
     const getToken = async (): Promise<string> => {
       try {
         const sessionIds = await createSession(sessionId);
+        console.log(sessionIds);
         const token = await createToken(sessionIds);
         return token;
       } catch (error) {

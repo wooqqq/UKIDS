@@ -1,3 +1,4 @@
+// 가족채팅방 연결하기 이미지 추가
 import { useNavigate } from 'react-router-dom';
 import './button.css';
 
@@ -6,22 +7,24 @@ interface BlueButtonProps {
   path: string;
 }
 
-const BlueButton = (BlueButtonProps: BlueButtonProps) => {
+const BlueButton = ({ name, path }: BlueButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(BlueButtonProps.path);
+    navigate(path);
   };
-  if (BlueButtonProps.name == '연결하기') {
+
+  if (name == '연결하기') {
     return (
       <button onClick={handleClick} className="common-btn green-btn">
-        {BlueButtonProps.name}
+        <img src="/assets/subway_call-2.png" alt="call-icon" />
+        {name}
       </button>
     );
   } else {
     return (
       <button onClick={handleClick} className="common-btn blue-btn">
-        {BlueButtonProps.name}
+        {name}
       </button>
     );
   }
