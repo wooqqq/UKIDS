@@ -38,8 +38,15 @@ public class AlbumController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getAlbumInfo(@PathVariable("id") Long albumId){
-        AlbumInfoResponseDto responseDto = albumService.getAlbumInfo(albumId);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.GET, responseDto);
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, albumService.getAlbumInfo(albumId));
     }
+
+    @GetMapping("/family/{id}")
+    public ResponseEntity<Map<String, Object>> getAlbumInfoList(@PathVariable("id") Long familyId){
+
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, albumService.getAlbumInfoList(familyId));
+    }
+
+
 }

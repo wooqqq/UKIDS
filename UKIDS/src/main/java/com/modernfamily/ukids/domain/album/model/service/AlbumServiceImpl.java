@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.album.model.service;
 
 import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.AlbumInfoListResponseDto;
 import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -66,6 +69,19 @@ public class AlbumServiceImpl implements AlbumService {
         checkFamilyMember(album.getFamily().getFamilyId());
 
         return AlbumInfoResponseDto.createAlbumInfoResponseDro(album);
+    }
+
+    public List<AlbumInfoListResponseDto> getAlbumInfoList(Long familyId) {
+
+        checkFamilyMember(familyId);
+        List<Album> albumList = albumRepository.findAllByFamily_FamilyId(familyId);
+
+        List<AlbumInfoListResponseDto> responseDtoList = new ArrayList<>();
+        for (Album album : albumList) {
+            responseDtoList.add(AlbumInfoListResponseDto.createResponseDro(album));
+        }
+
+        return responseDtoList;
     }
 
     public Family checkFamilyMember(Long familyId){

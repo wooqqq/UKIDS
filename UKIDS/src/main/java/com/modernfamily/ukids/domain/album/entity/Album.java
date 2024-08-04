@@ -8,14 +8,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @NoArgsConstructor( access = AccessLevel.PROTECTED )
 @Getter
+@Where(clause = "is_delete = false")
 public class Album{
 
     @Id
@@ -29,26 +29,31 @@ public class Album{
     @Column(name = "title", nullable = false, length = 255)
     private String title;
 
+    @Column(name = "is_delete", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean isDelete;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id")
     private Family family;
 
-    private Album(LocalDate date, String title, Family family){
+    private Album(LocalDate date, String title, boolean isDelete, Family family){
         this.date = date;
         this.title = title;
+        this.isDelete = isDelete;
         this.family = family;
     }
 
     @Builder
-    private Album(Long albumId, LocalDate date, String title, Family family){
+    private Album(Long albumId, LocalDate date, String title, boolean isDelete, Family family){
         this.albumId = albumId;
         this.date = date;
         this.title = title;
+        this.isDelete = isDelete;
         this.family = family;
     }
 
     public static Album createAlbum(AlbumCreateRequestDto requestDto, Family family){
-        return new Album(requestDto.getDate(), requestDto.getTitle(), family);
+        return new Album(requestDto.getDate(), requestDto.getTitle(), false,  family);
     }
 
     public static Album updateAlbum(AlbumUpdateRequestDto requestDto, Family family){
@@ -56,6 +61,7 @@ public class Album{
                 .albumId(requestDto.getAlbumId())
                 .title(requestDto.getTitle())
                 .date(requestDto.getDate())
+                .isDelete(false)
                 .family(family)
                 .build();
     }
