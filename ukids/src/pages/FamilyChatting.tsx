@@ -2,7 +2,7 @@ import GrayButton from '../components/common/GrayButton';
 
 const FamilyChatting = () => {
   return (
-    <>
+    <div className="feature-box">
       <div id="본문 컨테이너 내부">
         <div id="채팅영역">
           <div id="대화영역"></div>
@@ -21,7 +21,7 @@ const FamilyChatting = () => {
       </div>
 
       <GrayButton name="통화하기" path="/video-call-room" />
-    </>
+    </div>
   );
 };
 
