@@ -53,12 +53,13 @@ public class ChatService {
                 .familyId(familyId)
                 .family(family)
                 .build();
-        chatRooms.put(familyId, chatRoom);
+        chatRooms.put(chatRoom.getChatRoomId(), chatRoom);
         return chatRoom;
     }
 
     public <T> void sendMessage(WebSocketSession session, T message) {
         try {
+            System.out.println(message);
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
         } catch (IOException e) {
             log.error(e.getMessage(), e);

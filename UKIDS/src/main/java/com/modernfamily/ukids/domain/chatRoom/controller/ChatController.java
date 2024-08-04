@@ -14,7 +14,7 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ChatRoom createChatRoom(@RequestBody ChatRoomDto chatRoomDto) {
         return chatService.createRoom(chatRoomDto);
     }

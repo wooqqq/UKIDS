@@ -19,7 +19,7 @@ public class ChatMessage {
     }
 
     private MessageType type;
-    private String roomId;
+    private Long roomId;
     private String sender;
     private String message;
 
