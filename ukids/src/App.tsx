@@ -31,29 +31,31 @@ import Sidebar from './components/common/Sidebar';
 
 const App = () => {
   return (
-    <div className="">
-      <Header />
-      <div className="flex justify-between">
-        {/* 로그인 안한 홈, 가족방 생성/찾기는 사이드바X */}
-        <Sidebar />
-        <div className="feature-box">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/letters" element={<Letters />} />
-            <Route path="/albums" element={<Albums />} />
-            <Route path="/paintdiary" element={<PaintingDiary />} />
-            <Route path="/growthdiary" element={<GrowthDiary />} />
-            <Route path="/chat" element={<FamilyChatting />} />
-            <Route path="/chat/call" element={<FamilyVideoCall />} />
-            <Route path="/game" element={<Game />} />
-            <Route path="/setting" element={<Setting />} />
-            <Route path="*" element={<Notfound />} />
-          </Routes>
+    <>
+      <div className="overflow-x-auto overflow-y-auto">
+        <Header />
+        <div className="flex justify-between">
+          {/* 로그인 안한 홈, 가족방 생성/찾기는 사이드바X */}
+          <Sidebar />
+          <div className="feature-box">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/schedule" element={<Schedule />} />
+              <Route path="/letters" element={<Letters />} />
+              <Route path="/albums" element={<Albums />} />
+              <Route path="/paintdiary" element={<PaintingDiary />} />
+              <Route path="/growthdiary" element={<GrowthDiary />} />
+              <Route path="/chat" element={<FamilyChatting />} />
+              <Route path="/chat/call" element={<FamilyVideoCall />} />
+              <Route path="/game" element={<Game />} />
+              <Route path="/setting" element={<Setting />} />
+              <Route path="*" element={<Notfound />} />
+            </Routes>
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 
