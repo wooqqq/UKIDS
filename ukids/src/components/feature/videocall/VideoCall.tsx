@@ -73,6 +73,7 @@ function VideoCall() {
   const sessionIdChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    console.log(event.target.value);
     setSessionId(event.target.value);
   };
 
@@ -83,15 +84,15 @@ function VideoCall() {
   };
 
   useEffect(() => {
-    if (session === '' || !OV) return;
+    if (session === '' || !OV || sessionId === '') return;
 
     const createSession = async (sessionIds: string): Promise<string> => {
       try {
         const response = await axios.post(`${SERVER_URL}/api/webrtc`, {
           sessionId: sessionIds,
         });
-        console.log(`response.data: ${response.data}`);
-        return (response.data as { id: string }).id;
+        console.log(`response: ${response}`);
+        return (response.data as { result: string }).result;
       } catch (error) {
         const errorResponse = (error as AxiosError)?.response;
         if (errorResponse?.status === 409) {
