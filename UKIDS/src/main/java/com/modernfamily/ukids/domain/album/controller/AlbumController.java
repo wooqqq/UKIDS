@@ -1,7 +1,7 @@
 package com.modernfamily.ukids.domain.album.controller;
 
-import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.request.AlbumCreateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.request.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.message.SuccessMessage;
 import com.modernfamily.ukids.domain.album.model.service.AlbumService;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
@@ -24,14 +24,14 @@ public class AlbumController {
     public ResponseEntity<Map<String, Object>> createAlbum(@RequestBody AlbumCreateRequestDto requestDto){
         albumService.createAlbum(requestDto);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_ALBUM);
+        return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_ALBUM.getMessage());
     }
 
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateAlbum(@RequestBody AlbumUpdateRequestDto requestDto){
         albumService.updateAlbum(requestDto);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_ALBUM);
+        return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_ALBUM.getMessage());
     }
 
     @GetMapping("/{id}")
@@ -41,15 +41,18 @@ public class AlbumController {
     }
 
     @GetMapping("/family/{id}")
-    public ResponseEntity<Map<String, Object>> getAlbumInfoList(@PathVariable("id") Long familyId){
+    public ResponseEntity<Map<String, Object>> getAlbumInfoList(
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @PathVariable("id") Long familyId){
 
-        return httpResponseUtil.createResponse(HttpMethodCode.GET, albumService.getAlbumInfoList(familyId));
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, albumService.getAlbumInfoList(size, page, familyId));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deleteAlbum(@PathVariable("id") Long albumId){
         albumService.deleteAlbum(albumId);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_ALBUM);
+        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_ALBUM.getMessage());
     }
 }

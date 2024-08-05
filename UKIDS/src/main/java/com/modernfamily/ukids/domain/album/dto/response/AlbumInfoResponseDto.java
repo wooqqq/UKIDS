@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.album.dto;
+package com.modernfamily.ukids.domain.album.dto.response;
 
 import com.modernfamily.ukids.domain.album.entity.Album;
 import lombok.AccessLevel;

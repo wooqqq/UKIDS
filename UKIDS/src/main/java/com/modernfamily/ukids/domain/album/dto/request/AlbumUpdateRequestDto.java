@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.album.dto;
+package com.modernfamily.ukids.domain.album.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +12,10 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class AlbumCreateRequestDto {
+public class AlbumUpdateRequestDto {
+
+    @NotNull
+    Long albumId;
 
     @NotNull
     Long familyId;

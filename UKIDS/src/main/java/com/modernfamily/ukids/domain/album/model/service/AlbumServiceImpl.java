@@ -1,9 +1,10 @@
 package com.modernfamily.ukids.domain.album.model.service;
 
-import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumInfoListResponseDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.request.AlbumCreateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumListResponseDto;
+import com.modernfamily.ukids.domain.album.dto.response.AlbumInfoResponseDto;
+import com.modernfamily.ukids.domain.album.dto.request.AlbumUpdateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumPagenationResponseDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
 import com.modernfamily.ukids.domain.family.entity.Family;
@@ -14,6 +15,9 @@ import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +40,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         Family family = checkFamilyMember(requestDto.getFamilyId());
 
-        Optional<Album> existAlbum =  albumRepository.findByDate(requestDto.getDate());
-
+        Optional<Album> existAlbum =  albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId());
         if(!existAlbum.isEmpty())
             throw new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION);
 
@@ -48,12 +51,16 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Transactional
     public void updateAlbum(AlbumUpdateRequestDto requestDto) {
-        // 비밀번호 확인 가정
 
         Family family = checkFamilyMember(requestDto.getFamilyId());
 
         albumRepository.findByAlbumId(requestDto.getAlbumId()).orElseThrow(() ->
             new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
+
+        Optional<Album> existAlbum =  albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId());
+        if(!existAlbum.isEmpty())
+            throw new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION);
+
 
         Album album = Album.createAlbum(requestDto.getDate(), requestDto.getTitle(), family);
         album.updateAlbum(requestDto.getAlbumId());
@@ -73,17 +80,24 @@ public class AlbumServiceImpl implements AlbumService {
         return responseDto;
     }
 
-    public List<AlbumInfoListResponseDto> getAlbumInfoList(Long familyId) {
+    public FamilyAlbumPagenationResponseDto getAlbumInfoList(int size, int page, Long familyId) {
 
         checkFamilyMember(familyId);
-        List<Album> albumList = albumRepository.findAllByFamily_FamilyId(familyId);
 
-        List<AlbumInfoListResponseDto> responseDtoList = new ArrayList<>();
+        Pageable pageable = PageRequest.of(--page, size);
+        Page<Album> albumPage = albumRepository.findAllByFamily_FamilyId(familyId, pageable);
+
+        List<Album> albumList = albumPage.getContent();
+        List<FamilyAlbumListResponseDto> responseDtoList = new ArrayList<>();
+        log.info("Album List size : {}", albumList.size());
         for (Album album : albumList) {
-            responseDtoList.add(AlbumInfoListResponseDto.createResponseDro(album));
+            responseDtoList.add(FamilyAlbumListResponseDto.createResponseDto(album));
         }
 
-        return responseDtoList;
+        FamilyAlbumPagenationResponseDto pagenationResponseDto = FamilyAlbumPagenationResponseDto
+                .createResponseDto(responseDtoList, albumPage.getNumberOfElements(), albumPage.getNumber()+1, albumPage.getTotalPages());
+
+        return pagenationResponseDto;
     }
 
     @Transactional

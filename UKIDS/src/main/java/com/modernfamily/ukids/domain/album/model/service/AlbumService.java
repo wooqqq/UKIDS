@@ -1,9 +1,10 @@
 package com.modernfamily.ukids.domain.album.model.service;
 
-import com.modernfamily.ukids.domain.album.dto.AlbumCreateRequestDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumInfoListResponseDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumInfoResponseDto;
-import com.modernfamily.ukids.domain.album.dto.AlbumUpdateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.request.AlbumCreateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumListResponseDto;
+import com.modernfamily.ukids.domain.album.dto.response.AlbumInfoResponseDto;
+import com.modernfamily.ukids.domain.album.dto.request.AlbumUpdateRequestDto;
+import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumPagenationResponseDto;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface AlbumService {
 
     AlbumInfoResponseDto getAlbumInfo(Long albumId);
 
-    List<AlbumInfoListResponseDto> getAlbumInfoList(Long familyId);
+    FamilyAlbumPagenationResponseDto getAlbumInfoList(int size, int page, Long familyId);
 
     void deleteAlbum(Long albumId);
 }
