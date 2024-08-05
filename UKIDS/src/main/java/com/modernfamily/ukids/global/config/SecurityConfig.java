@@ -16,6 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -51,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/", "/user/signup").permitAll()
                         .anyRequest().authenticated());
 
+
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         // 등록할 필터와 어디에 등록할 것인지
         http.addFilterAt(new LoginFilter(authenticationManager(configuration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
@@ -62,13 +68,25 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //CORS
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처 허용
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드 설정
+        configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> {
             web.ignoring()
                     .requestMatchers(
-                            "/user/signup",
-                            "/webrtc/**"
+                            "/user/signup"
                     );
         };
     }

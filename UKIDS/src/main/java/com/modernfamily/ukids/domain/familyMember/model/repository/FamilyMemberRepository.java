@@ -36,4 +36,6 @@ public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long
             "where fm.user.userId = :#{#dto.userId} " +
             "and fm.family.familyId = :#{#dto.familyId}")
     void setFamilyMemberRole(@Param("dto") FamilyMemberRoleDto familyMemberRoleDto);
+
+    Optional<FamilyMember> findByUser_IdAndFamily_FamilyId(String id, Long familyId);
 }
