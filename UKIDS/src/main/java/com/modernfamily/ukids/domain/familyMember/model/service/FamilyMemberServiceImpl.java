@@ -41,7 +41,6 @@ public class FamilyMemberServiceImpl implements FamilyMemberService{
         familyMemberRequestDto.setUserId(user.getUserId());
         FamilyMember familyMember = familyMemberMapper.toFamilyMemberRequestEntity(familyMemberRequestDto);
 
-
         familyMemberRepository.save(familyMember);
     }
 
