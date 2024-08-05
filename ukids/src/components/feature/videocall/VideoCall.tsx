@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback, ErrorInfo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   OpenVidu,
   Session as OVSession,
   Publisher,
   Subscriber,
 } from 'openvidu-browser';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import Form from './Form';
 import Session from './Session';
 
@@ -82,7 +82,7 @@ function VideoCall() {
     setUserName(event.target.value);
   };
 
-  const createSession = async (sessionIds: string) => {
+  const createSession = async () => {
     try {
       const response = await axios.post(`${SERVER_URL}/api/webrtc`, {});
       console.log('sessionId: ', response.data);
@@ -117,9 +117,9 @@ function VideoCall() {
           //sessionIds = await createSession(sessionId);
           //console.log('Call createSession');
         } catch (error) {
-          if (error.message !== 'Failed to create session.') {
-            throw error;
-          }
+          // if (error.message !== 'Failed to create session.') {
+          //   throw error;
+          // }
         }
         console.log(`sessionIds: ${sessionIds}`);
         const token = await createToken(sessionIds);
