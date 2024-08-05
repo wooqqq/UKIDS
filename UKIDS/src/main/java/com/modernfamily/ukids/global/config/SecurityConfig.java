@@ -86,8 +86,7 @@ public class SecurityConfig {
         return (web) -> {
             web.ignoring()
                     .requestMatchers(
-                            "/user/signup",
-                            "/webrtc/**"
+                            "/user/signup"
                     );
         };
     }
