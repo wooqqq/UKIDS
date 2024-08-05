@@ -24,10 +24,10 @@
   --fc-border-color: transparent;
 }
 
-.fc-toolbar-title,
+.fc .fc-toolbar-title,
 #fc-dom-1 {
   font-weight: 700;
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
 
 .fc-event-title,
