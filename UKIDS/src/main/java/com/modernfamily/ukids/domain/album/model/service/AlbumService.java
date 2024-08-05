@@ -5,6 +5,7 @@ import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumListResponseD
 import com.modernfamily.ukids.domain.album.dto.response.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.dto.request.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumPagenationResponseDto;
+import com.modernfamily.ukids.domain.family.entity.Family;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface AlbumService {
     FamilyAlbumPagenationResponseDto getAlbumInfoList(int size, int page, Long familyId);
 
     void deleteAlbum(Long albumId);
+
+    Family checkFamilyMember(Long familyId);
 }
