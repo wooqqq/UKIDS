@@ -20,6 +20,4 @@ public interface AlbumService {
     FamilyAlbumPagenationResponseDto getAlbumInfoList(int size, int page, Long familyId);
 
     void deleteAlbum(Long albumId);
-
-    Family checkFamilyMember(Long familyId);
 }

@@ -49,10 +49,7 @@ public class PhotoServiceImpl implements PhotoService {
     @Transactional
     public void savePhoto(PhotoSaveRequestDto requestDto) throws IOException {
 
-        String userId = CustomUserDetails.contextGetUserId();
-
-        Family family = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, requestDto.getFamilyId()).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION)).getFamily();
+        Family family = checkFamilyMember(requestDto.getFamilyId());
 
         Album album = albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId())
                 .orElseGet(() -> {
@@ -117,10 +114,7 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findByPhotoId(photoId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
-        String userId = CustomUserDetails.contextGetUserId();
-
-        familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, photo.getAlbum().getFamily().getFamilyId()).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+        checkFamilyMember(photo.getAlbum().getFamily().getFamilyId());
 
         try {
             amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, photo.getPhotoS3Name()));
@@ -136,10 +130,7 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findByPhotoId(photoId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
-        String userId = CustomUserDetails.contextGetUserId();
-
-        familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, photo.getAlbum().getFamily().getFamilyId()).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+        checkFamilyMember(photo.getAlbum().getFamily().getFamilyId());
 
         return PhotoInfoResponseDto.createResponseDto(photo);
     }
@@ -148,10 +139,7 @@ public class PhotoServiceImpl implements PhotoService {
         Album album = albumRepository.findByAlbumId(albumId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
-        String userId = CustomUserDetails.contextGetUserId();
-
-        familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, album.getFamily().getFamilyId()).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+        checkFamilyMember(album.getFamily().getFamilyId());
 
         Pageable pageable = PageRequest.of(--page, size);
         Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumId(albumId, pageable);
@@ -167,5 +155,14 @@ public class PhotoServiceImpl implements PhotoService {
                 PhotoListPagenationResponseDto.createResponseDto(photoPage.getNumberOfElements(), photoPage.getNumber()+1, photoPage.getTotalPages(), album, responseDtoList);
 
         return pagenationResponseDto;
+    }
+
+    private Family checkFamilyMember(Long familyId){
+        String userId = CustomUserDetails.contextGetUserId();
+
+        Family family = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION)).getFamily();
+
+        return family;
     }
 }
