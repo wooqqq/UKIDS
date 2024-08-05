@@ -1,5 +1,4 @@
 // ScheduleDetail.tsx 일정 상세 컴포넌트
-import { useNavigate } from 'react-router-dom';
 import WhiteButton from '../../common/WhiteButton';
 import GrayButton from '../../common/GrayButton';
 
@@ -47,23 +46,11 @@ import GrayButton from '../../common/GrayButton';
 // }
 
 const ScheduleDetail = () => {
-  const nav = useNavigate();
-
-  // 목록 이동 버튼 이벤트
-  const onClickListButton = () => {
-    nav('/schedule/list');
-  };
-
-  // 수정 버튼 이벤트
-  const onClickUpdateButton = () => {
-    nav('/schedule/edit/:scheduleId');
-  };
-
   return (
     <div>
       <section className="flex justify-between">
-        <WhiteButton name="목록" onClick={onClickListButton} />
-        <GrayButton name="수정" onClick={onClickUpdateButton} />
+        <WhiteButton name="목록" path="/schedule/list" />
+        <GrayButton name="수정" path="/schedule/edit/:scheduleId" />
       </section>
       <section>
         <div>

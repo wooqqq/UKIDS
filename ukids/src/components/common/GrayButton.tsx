@@ -1,15 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import './button.css';
 
 interface GrayButtonProps {
   name: string;
-  onClick?: () => void; // onClick 프로퍼티 추가
+  path: string;
 }
 
 const GrayButton = (props: GrayButtonProps) => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    if (props.onClick) {
-      props.onClick(); // 전달된 onClick 함수 호출
-    }
+    navigate(props.path);
   };
 
   if (props.name == '로그아웃') {
