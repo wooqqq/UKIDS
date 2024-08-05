@@ -1,6 +1,6 @@
 // ScheduleCreate.tsx 일정 등록
 import { useNavigate } from 'react-router-dom';
-import BlueButton from '../../common/BlueButton';
+// import BlueButton from '../../common/BlueButton';
 import WhiteButton from '../../common/WhiteButton';
 
 const ScheduleCreate = () => {
@@ -18,7 +18,7 @@ const ScheduleCreate = () => {
     <div>
       <section className="flex justify-between">
         <WhiteButton name="목록" onClick={onClickListButton} />
-        <BlueButton name="등록" onClick={onClickDetailButton} />
+        {/* <BlueButton name="등록" onClick={onClickDetailButton} /> */}
       </section>
       <section>
         <div>

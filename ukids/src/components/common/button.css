@@ -19,6 +19,7 @@
 /* 긍정(등록, 편지쓰기, 보내기, 답장하기, 완료 등) */
 .blue-btn {
   background: #36d5f1;
+  margin-right: 1rem;
 }
 
 /* 수정, 돌아가기 버튼 */
