@@ -2,9 +2,8 @@
 
 .common-btn {
   display: flex;
-  /* width: 100px;
-  height: 40px; */
-  padding: 8px 25px;
+  width: 78px;
+  padding: 5px 25px;
   justify-content: center;
   align-items: center;
   gap: 1rem;
@@ -13,7 +12,7 @@
   box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.25);
   color: #fff;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -33,6 +32,12 @@
 }
 
 /* 목록 버튼 */
+.list-btn {
+  background: #fff;
+  color: #777;
+  padding: 5px 14px;
+}
+
 .white-btn {
   background: #fff;
   color: #777;
@@ -67,4 +72,12 @@
 /* 콜마넴 긍정 */
 .game-btn-callmyname {
   background: #9f6ad5;
+}
+
+/* 플러스 버튼 */
+.plus-btn {
+  color: #36d5f1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 30px;
 }

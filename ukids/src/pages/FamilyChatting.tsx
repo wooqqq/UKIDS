@@ -1,6 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import GrayButton from '../components/common/GrayButton';
 
 const FamilyChatting = () => {
+  const nav = useNavigate();
+  // 이동 버튼 이벤트
+  const onClickCallButton = () => {
+    nav('/video-call-room');
+  };
   return (
     <div className="feature-box">
       <div id="본문 컨테이너 내부">
@@ -20,7 +26,7 @@ const FamilyChatting = () => {
         </div>
       </div>
 
-      <GrayButton name="통화하기" path="/video-call-room" />
+      <GrayButton name="통화하기" onClick={onClickCallButton} />
     </div>
   );
 };

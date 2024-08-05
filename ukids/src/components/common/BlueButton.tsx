@@ -1,27 +1,27 @@
-import { useNavigate } from 'react-router-dom';
 import './button.css';
 
 interface BlueButtonProps {
   name: string;
-  path: string;
+  onClick?: () => void; // onClick 프로퍼티 추가
 }
 
-const BlueButton = (BlueButtonProps: BlueButtonProps) => {
-  const navigate = useNavigate();
-
+const BlueButton = (props: BlueButtonProps) => {
   const handleClick = () => {
-    navigate(BlueButtonProps.path);
+    if (props.onClick) {
+      props.onClick(); // 전달된 onClick 함수 호출
+    }
   };
-  if (BlueButtonProps.name == '연결하기') {
+
+  if (props.name == '연결하기') {
     return (
       <button onClick={handleClick} className="common-btn green-btn">
-        {BlueButtonProps.name}
+        {props.name}
       </button>
     );
   } else {
     return (
       <button onClick={handleClick} className="common-btn blue-btn">
-        {BlueButtonProps.name}
+        {props.name}
       </button>
     );
   }

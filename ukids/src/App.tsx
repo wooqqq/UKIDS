@@ -38,7 +38,7 @@ const App = () => {
         <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/schedule/*" element={<Schedule />}></Route>
           <Route path="/letters" element={<Letters />} />
           <Route path="/albums" element={<Albums />} />
           <Route path="/paintdiary" element={<PaintingDiary />} />

@@ -1,45 +1,40 @@
-// 목록
-// 삭제 (red text, small)
-// 삭제 - 쓰레기통 아이콘
-import { useNavigate } from 'react-router-dom';
 import './button.css';
 
 interface WhiteButtonProps {
   name: string;
-  path: string;
+  onClick?: () => void; // onClick 프로퍼티 추가
 }
 
-const WhiteButton = (WhiteButtonProps: WhiteButtonProps) => {
-  const navigate = useNavigate();
-
+const WhiteButton = (props: WhiteButtonProps) => {
   const handleClick = () => {
-    navigate(WhiteButtonProps.path);
+    if (props.onClick) {
+      props.onClick(); // 전달된 onClick 함수 호출
+    }
   };
 
-  if (WhiteButtonProps.name == '삭제') {
+  if (props.name === '삭제') {
     return (
       <button onClick={handleClick} className="red-font white-btn common-btn">
-        {WhiteButtonProps.name}
+        {props.name}
       </button>
     );
   } else {
     return (
-      <button onClick={handleClick} className="white-btn common-btn gap-2">
+      <button onClick={handleClick} className="list-btn common-btn gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="11"
-          // height="14"
           viewBox="0 0 8 14"
           fill="none"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M2.03592 7L8 12.8335L6.80735 14L0.246953 7.58326C0.0888289 7.42856 0 7.21876 0 7C0 6.78124 0.0888289 6.57144 0.246953 6.41673L6.80735 0L8 1.16653L2.03592 7Z"
             fill="#777777"
           />
         </svg>
-        {WhiteButtonProps.name}
+        {props.name}
       </button>
     );
   }
