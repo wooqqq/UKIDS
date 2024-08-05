@@ -22,6 +22,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
+
         if(authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -29,7 +30,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // Bearer 부분 제거 토큰 획득
         String token = authorization.replace("Bearer ", "");
-
         if(jwtUtil.isExpired(token)){
             filterChain.doFilter(request, response);
 
