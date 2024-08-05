@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, ErrorInfo } from 'react';
 import {
   OpenVidu,
   Session as OVSession,
@@ -73,7 +73,6 @@ function VideoCall() {
   const sessionIdChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    console.log(event.target.value);
     setSessionId(event.target.value);
   };
 
@@ -83,24 +82,22 @@ function VideoCall() {
     setUserName(event.target.value);
   };
 
+  const createSession = async (sessionIds: string) => {
+    try {
+      const response = await axios.post(`${SERVER_URL}/api/webrtc`, {});
+      console.log('sessionId: ', response.data);
+      //return (response.data as { result: string }).result;
+    } catch (error) {
+      //const errorResponse = (error as AxiosError)?.response;
+      // if (errorResponse?.status === 409) {
+      //   // return sessionIds;
+      // }
+      throw new Error('Failed to create session.');
+    }
+  };
+
   useEffect(() => {
     if (session === '' || !OV || sessionId === '') return;
-
-    const createSession = async (sessionIds: string): Promise<string> => {
-      try {
-        const response = await axios.post(`${SERVER_URL}/api/webrtc`, {
-          sessionId: sessionIds,
-        });
-        console.log(`response: ${response}`);
-        return (response.data as { result: string }).result;
-      } catch (error) {
-        const errorResponse = (error as AxiosError)?.response;
-        if (errorResponse?.status === 409) {
-          return sessionIds;
-        }
-        return '';
-      }
-    };
 
     const createToken = (sessionIds: string): Promise<string> => {
       return new Promise((resolve, reject) => {
@@ -115,8 +112,16 @@ function VideoCall() {
 
     const getToken = async (): Promise<string> => {
       try {
-        const sessionIds = await createSession(sessionId);
-        console.log(sessionIds);
+        let sessionIds = sessionId;
+        try {
+          //sessionIds = await createSession(sessionId);
+          //console.log('Call createSession');
+        } catch (error) {
+          if (error.message !== 'Failed to create session.') {
+            throw error;
+          }
+        }
+        console.log(`sessionIds: ${sessionIds}`);
         const token = await createToken(sessionIds);
         console.log(`token: ${token}`);
         return token;
@@ -178,6 +183,7 @@ function VideoCall() {
       ) : (
         <Form
           joinSession={joinSession}
+          createSession={createSession}
           sessionId={sessionId}
           sessionIdChangeHandler={sessionIdChangeHandler}
           userName={userName}
