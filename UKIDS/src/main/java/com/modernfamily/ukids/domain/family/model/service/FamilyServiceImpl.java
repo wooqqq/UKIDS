@@ -5,6 +5,11 @@ import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
 import com.modernfamily.ukids.domain.family.model.repository.CustomFamilyRepository;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
+import com.modernfamily.ukids.domain.familyMember.dto.FamilyMemberRepresentativeDto;
+import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
+import com.modernfamily.ukids.domain.familyMember.entity.FamilyRole;
+import com.modernfamily.ukids.domain.familyMember.mapper.FamilyMemberMapper;
+import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.dto.UserOtherDto;
 import com.modernfamily.ukids.domain.user.entity.User;
@@ -29,6 +34,8 @@ public class FamilyServiceImpl implements FamilyService{
     private final FamilyRepository familyRepository;
     private final CustomFamilyRepository customFamilyRepository;
     private final UserMapper userMapper;
+    private final FamilyMemberMapper familyMemberMapper;
+    private final FamilyMemberRepository familyMemberRepository;
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
@@ -78,6 +85,14 @@ public class FamilyServiceImpl implements FamilyService{
             Family family = familyMapper.toFamilyRequestEntity(familyRequestDto);
 
             familyRepository.save(family);
+
+            // 가족방 생성 시 생성자(대표자) 추가
+            FamilyMemberRepresentativeDto familyMemberRepresentativeDto = new FamilyMemberRepresentativeDto();
+            familyMemberRepresentativeDto.setFamilyId(family.getFamilyId());
+            familyMemberRepresentativeDto.setUserId(userDto.getUserId());
+            familyMemberRepresentativeDto.setRole(FamilyRole.ROLE_NONE);
+            FamilyMember familyMember = familyMemberMapper.toFamilyMemberRepresentativeEntity(familyMemberRepresentativeDto);
+            familyMemberRepository.save(familyMember);
         } catch (Exception e){
             throw new ExceptionResponse(CustomException.INPUT_FAMILY_EXCEPTION);
         }
