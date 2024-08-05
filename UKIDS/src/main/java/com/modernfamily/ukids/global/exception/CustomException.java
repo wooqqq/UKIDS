@@ -36,6 +36,7 @@ public enum CustomException {
     DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
     NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
     FAIL_TO_CONVERT_FILE_EXCEPTION(400, "FailToConvertFileException", "파일 변환에 실패했습니다."),
+    NOT_FOUND_PHOTO_EXCEPTION(400, "NotFoundPhotoException", "해당 사진이 존재하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),

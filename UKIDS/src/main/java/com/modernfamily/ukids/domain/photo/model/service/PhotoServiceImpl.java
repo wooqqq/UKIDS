@@ -2,7 +2,9 @@ package com.modernfamily.ukids.domain.photo.model.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.modernfamily.ukids.domain.album.dto.request.AlbumCreateRequestDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
@@ -66,6 +68,21 @@ public class PhotoServiceImpl implements PhotoService {
         photoRepository.save(photo);
     }
 
+    @Transactional
+    public void deletePhoto(Long photoId) throws IOException {
+        Photo photo = photoRepository.findByPhotoId(photoId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
+
+        try {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, photo.getPhotoS3Name()));
+        } catch (AmazonS3Exception e) {
+            throw new IOException("Error deleting photo ", e);
+        }
+
+        photo.deletePhoto();
+        photoRepository.save(photo);
+    }
+
     private Map<String, Object> uploadFile(MultipartFile multipartFile) throws IOException {
         Map<String, Object> uploadParam = new HashMap<>();
 
@@ -78,18 +95,24 @@ public class PhotoServiceImpl implements PhotoService {
         uploadParam.put("originalName", uploadFile.getName());
         uploadParam.put("s3FileName", generatedFileName);
 
-        amazonS3Client.putObject(
-                new PutObjectRequest(bucketName, generatedFileName, uploadFile)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
+        try {
+            amazonS3Client.putObject(
+                    new PutObjectRequest(bucketName, generatedFileName, uploadFile)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch (AmazonS3Exception e) {
+            throw new IOException("Error uploading file", e);
+        }
         String uploadImageUrl = amazonS3Client.getUrl(bucketName, generatedFileName).toString();
         uploadParam.put("uploadImageUrl", uploadImageUrl);
 
         uploadFile.delete();
+        log.info("Local file deleted : {}", uploadFile.getAbsolutePath());
 
         return uploadParam;
     }
 
     private Optional<File> convert(MultipartFile file, String fileName) throws IOException {
+        log.info("Converting file: {}", fileName);
         File convertFile = new File(fileName);
         if (convertFile.createNewFile()) {
             try (FileOutputStream fileOutputStream = new FileOutputStream(convertFile)) {

@@ -6,4 +6,5 @@ import java.io.IOException;
 
 public interface PhotoService {
     void savePhoto(PhotoSaveRequestDto requestDto) throws IOException;
+    void deletePhoto(Long photoId) throws IOException;
 }

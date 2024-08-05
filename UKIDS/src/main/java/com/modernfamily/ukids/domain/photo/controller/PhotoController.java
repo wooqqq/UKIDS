@@ -28,6 +28,11 @@ public class PhotoController {
         return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_SAVE_PHOTO.getMessage());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deletePhoto(@PathVariable("id") Long photoId) throws IOException {
+        photoService.deletePhoto(photoId);
 
+        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_PHOTO.getMessage());
+    }
 
 }
