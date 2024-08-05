@@ -61,7 +61,7 @@ const FamilyChatting = () => {
                 onChange={onChange}
                 value={message}
               />
-              <BlueButton name="전송" path=" " />
+              <BlueButton name="전송" path="" />
             </form>
           </div>
           {/* 메시지 영역 */}
@@ -106,6 +106,7 @@ const FamilyChatting = () => {
           {/* 통화버튼 */}
           <div className="mb-2">
             <BlueButton name="연결하기" path="/chat/call" />
+            {/*  path="/chat/call"  */}
             {/* 나중에 통화방 전환시 사용 */}
             {/* {isChatting ? (
               <BlueButton name="연결하기" path="/chat/call" />
@@ -116,7 +117,9 @@ const FamilyChatting = () => {
           {/* 카메라, 마이크 버튼 */}
           <div className="flex space-x-2">
             <BlueButton name="카메라" path="#" />
+            {/*  path="#" */}
             <BlueButton name="마이크" path="#" />
+            {/*  path="#"  */}
           </div>
         </div>
       </div>

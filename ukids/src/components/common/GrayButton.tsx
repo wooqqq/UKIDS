@@ -1,25 +1,24 @@
-import { useNavigate } from 'react-router-dom';
 import './button.css';
 
 interface GrayButtonProps {
   name: string;
-  path: string;
+  onClick?: () => void; // onClick 프로퍼티 추가
 }
 
-const GrayButton = (GrayButtonProps: GrayButtonProps) => {
-  const navigate = useNavigate();
-
+const GrayButton = (props: GrayButtonProps) => {
   const handleClick = () => {
-    navigate(GrayButtonProps.path);
+    if (props.onClick) {
+      props.onClick(); // 전달된 onClick 함수 호출
+    }
   };
 
-  if (GrayButtonProps.name == '로그아웃') {
+  if (props.name == '로그아웃') {
     return (
       <button onClick={handleClick} className="rounded-md gray-btn common-btn">
-        {GrayButtonProps.name}
+        {props.name}
       </button>
     );
-  } else if (GrayButtonProps.name == '설정') {
+  } else if (props.name == '설정') {
     return (
       <button
         onClick={handleClick}
@@ -50,7 +49,7 @@ const GrayButton = (GrayButtonProps: GrayButtonProps) => {
       //   </div>
       // </button>
       <button onClick={handleClick} className="gray-btn common-btn">
-        {GrayButtonProps.name}
+        {props.name}
       </button>
     );
   }

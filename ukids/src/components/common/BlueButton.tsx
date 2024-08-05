@@ -4,6 +4,7 @@ import './button.css';
 
 interface BlueButtonProps {
   name: string;
+  onClick?: () => void; // onClick 프로퍼티 추가
   path: string;
 }
 
