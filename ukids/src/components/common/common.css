@@ -42,6 +42,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0.5rem;
   padding: 0 30px;
   gap: 1rem;
   width: 15.3125rem;
@@ -96,27 +97,28 @@
 
 /* 기능 박스 */
 .feature-box {
-  width: 56.9375rem;
-  height: 36rem;
-  flex-shrink: 0;
+  width: 89%;
+  height: 33.5rem;
+  flex-grow: 1;
   border-radius: 1.25rem;
   opacity: var(--sds-size-stroke-border);
   background: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+  box-shadow: 0px 0px 10px 0px rgba(153, 153, 153, 0.25);
+  margin: 0.5rem;
 }
 
 /* 사이드바 */
 .sidebar {
-  width: 7.9375rem;
-  height: 36rem;
+  width: 11%;
+  height: 33.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  flex-shrink: 0;
+  flex-grow: 0;
   border-radius: 1.25rem;
   opacity: var(--sds-size-stroke-border);
   background: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.3);
+  box-shadow: 0px 0px 10px 0px rgba(153, 153, 153, 0.3);
   align-items: center;
 }
 

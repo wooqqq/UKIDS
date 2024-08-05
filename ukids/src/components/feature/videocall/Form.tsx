@@ -2,6 +2,7 @@ import React from 'react';
 
 interface FormProps {
   joinSession: () => void;
+  createSession: () => void;
   sessionId: string;
   sessionIdChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   userName: string;
@@ -10,6 +11,7 @@ interface FormProps {
 
 const Form: React.FC<FormProps> = ({
   joinSession,
+  createSession,
   sessionId,
   sessionIdChangeHandler,
   userName,
@@ -29,7 +31,8 @@ const Form: React.FC<FormProps> = ({
         value={userName}
         onChange={userNameChangeHandler}
       />
-      <button onClick={joinSession}>세션 참가</button>
+      <button onClick={joinSession}>방 참가</button>
+      <button onClick={createSession}>세션 생성</button>
     </div>
   );
 };

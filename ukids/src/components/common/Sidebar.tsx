@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar m-2">
       <Link
         to={'/albums'}
         className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-110"

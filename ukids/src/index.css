@@ -20,7 +20,6 @@
 } */
 
 body {
-  /* color: rgb(var(--foreground-rgb)); */
   background: linear-gradient(
       to bottom,
       transparent 10%,
@@ -30,8 +29,8 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  padding: 1rem 10.62rem;
-  max-height: 750px;
+  padding: 1rem 10rem;
+  max-height: 100%;
   overflow: hidden;
 }
 

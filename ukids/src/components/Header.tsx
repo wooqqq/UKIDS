@@ -10,13 +10,12 @@ const Header = () => {
 
   return (
     <div
-      className="flex justify-between m-1 items-center mb-7"
+      className="flex justify-between m-1 items-center mb-4"
       style={{ width: '100%' }}
     >
-      {' '}
       {/* 부모 컨테이너를 전체 너비로 설정 */}
       {/* 로고 */}
-      <button onClick={handleClick} className="w-52">
+      <button onClick={handleClick} className="w-52 m-2">
         <img src="../../assets/logo.png" alt="ukids-logo" width="230" />
       </button>
       {/* 로그인이 안되었으면 로그인/회원가입 버튼*/}

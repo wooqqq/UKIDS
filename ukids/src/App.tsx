@@ -32,12 +32,12 @@ import Sidebar from './components/common/Sidebar';
 const App = () => {
   return (
     <>
-      <div className="overflow-x-auto overflow-y-auto">
+      <div className="">
         <Header />
         <div className="flex justify-between">
           {/* 로그인 안한 홈, 가족방 생성/찾기는 사이드바X */}
           <Sidebar />
-          <div className="feature-box">
+          <div className="feature-box p-2">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/schedule" element={<Schedule />} />

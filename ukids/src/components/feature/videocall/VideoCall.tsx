@@ -5,9 +5,10 @@ import {
   Publisher,
   Subscriber,
 } from 'openvidu-browser';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import Form from './Form';
 import Session from './Session';
+import useStore from '../../../stores/userStore';
 
 function VideoCall() {
   const [session, setSession] = useState<OVSession | ''>('');
@@ -23,7 +24,7 @@ function VideoCall() {
   const [isVideoEnabled, setIsVideoEnabled] = useState<boolean>(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
-  const SERVER_URL = `https://i11b306.p.ssafy.io`;
+  const { ukidsURL } = useStore();
 
   const leaveSession = useCallback(() => {
     if (session) session.disconnect();
@@ -73,7 +74,6 @@ function VideoCall() {
   const sessionIdChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    console.log(event.target.value);
     setSessionId(event.target.value);
   };
 
@@ -83,29 +83,22 @@ function VideoCall() {
     setUserName(event.target.value);
   };
 
+  const createSession = async () => {
+    try {
+      const response = await axios.post(`${ukidsURL}/api/webrtc`, {});
+      console.log('SessionId Created!: ', response.data);
+    } catch (error) {
+      throw new Error('Failed to create session.');
+    }
+  };
+
   useEffect(() => {
     if (session === '' || !OV || sessionId === '') return;
-
-    const createSession = async (sessionIds: string): Promise<string> => {
-      try {
-        const response = await axios.post(`${SERVER_URL}/api/webrtc`, {
-          sessionId: sessionIds,
-        });
-        console.log(`response: ${response}`);
-        return (response.data as { result: string }).result;
-      } catch (error) {
-        const errorResponse = (error as AxiosError)?.response;
-        if (errorResponse?.status === 409) {
-          return sessionIds;
-        }
-        return '';
-      }
-    };
 
     const createToken = (sessionIds: string): Promise<string> => {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${SERVER_URL}/api/webrtc/${sessionIds}`, {})
+          .post(`${ukidsURL}/api/webrtc/${sessionIds}`, {})
           .then((response) => {
             resolve((response.data as { result: string }).result);
           })
@@ -115,9 +108,8 @@ function VideoCall() {
 
     const getToken = async (): Promise<string> => {
       try {
-        const sessionIds = await createSession(sessionId);
-        console.log(sessionIds);
-        const token = await createToken(sessionIds);
+        console.log(`sessionIds: ${sessionId}`);
+        const token = await createToken(sessionId);
         console.log(`token: ${token}`);
         return token;
       } catch (error) {
@@ -143,7 +135,7 @@ function VideoCall() {
           .catch(() => {});
       })
       .catch(() => {});
-  }, [session, OV, sessionId, userName, SERVER_URL]);
+  }, [session, OV, sessionId, userName]);
 
   const toggleVideo = () => {
     if (publisher) {
@@ -178,6 +170,7 @@ function VideoCall() {
       ) : (
         <Form
           joinSession={joinSession}
+          createSession={createSession}
           sessionId={sessionId}
           sessionIdChangeHandler={sessionIdChangeHandler}
           userName={userName}
