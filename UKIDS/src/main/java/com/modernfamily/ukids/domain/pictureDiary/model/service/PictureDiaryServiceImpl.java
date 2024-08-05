@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.pictureDiary.model.service;
 
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
+import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryPaginationDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryRequestDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryResponseDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryUpdateDto;
@@ -11,9 +12,14 @@ import com.modernfamily.ukids.domain.pictureDiary.model.repository.PictureDiaryR
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,21 +53,47 @@ public class PictureDiaryServiceImpl implements PictureDiaryService{
     }
 
     @Override
-    public List<PictureDiaryResponseDto> getPictureDiariesByDate(Long familyId, LocalDate date) {
+    public PictureDiaryPaginationDto getPictureDiariesByDate(Long familyId, LocalDate date, int size, int page) {
         familyRepository.findByFamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
-        List<PictureDiary> pictureDiaries = customPictureDiaryRepository.getPictureDiariesByDate(familyId, date);
-        return pictureDiaryMapper.toPictureDiaryResponseDtoList(pictureDiaries);
+
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC, "date"));
+        Page<PictureDiary> pictureDiaryPage = pictureDiaryRepository.findAllByDateAndFamily_FamilyId(date, familyId, pageable);
+        if(pictureDiaryPage.isEmpty()){
+            throw new ExceptionResponse(CustomException.NOT_FOUND_PICTUREDIARY_EXCEPTION);
+        }
+        List<PictureDiaryResponseDto> pictureDiaries = new ArrayList<>();
+
+        for (PictureDiary pictureDiary : pictureDiaryPage) {
+            pictureDiaries.add(pictureDiaryMapper.toPictureDiaryResponseDto(pictureDiary));
+        }
+
+        return new PictureDiaryPaginationDto(pictureDiaries, pictureDiaryPage.getTotalPages(), size, page);
     }
 
     @Override
-    public List<PictureDiaryResponseDto> getPictureDiariesAll(Long familyId) {
+    public PictureDiaryPaginationDto getPictureDiariesAll(Long familyId, int size, int page) {
         familyRepository.findByFamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
-        List<PictureDiary> pictureDiaries = customPictureDiaryRepository.getPictureDiariesAll(familyId);
-        return pictureDiaryMapper.toPictureDiaryResponseDtoList(pictureDiaries);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC, "date"));
+
+        Page<PictureDiary> pictureDiaryPage = pictureDiaryRepository.findAllByFamily_FamilyId(familyId, pageable);
+
+        if(pictureDiaryPage.isEmpty()){
+            throw new ExceptionResponse(CustomException.NOT_FOUND_PICTUREDIARY_EXCEPTION);
+        }
+        List<PictureDiaryResponseDto> pictureDiaries = new ArrayList<>();
+
+        for (PictureDiary pictureDiary : pictureDiaryPage) {
+            pictureDiaries.add(pictureDiaryMapper.toPictureDiaryResponseDto(pictureDiary));
+        }
+
+        return new PictureDiaryPaginationDto(pictureDiaries, pictureDiaryPage.getTotalPages(), size, page);
+
+
+
     }
 
     @Override

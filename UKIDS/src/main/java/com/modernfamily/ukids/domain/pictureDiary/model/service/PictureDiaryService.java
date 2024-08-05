@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.domain.pictureDiary.model.service;
 
+import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryPaginationDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryRequestDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryResponseDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryUpdateDto;
@@ -13,8 +14,8 @@ public interface PictureDiaryService {
 
     PictureDiaryResponseDto getPictureDiary(Long pictureDiaryId);
 
-    List<PictureDiaryResponseDto> getPictureDiariesByDate(Long familyId, LocalDate date);
-    List<PictureDiaryResponseDto> getPictureDiariesAll(Long familyId);
+    PictureDiaryPaginationDto getPictureDiariesByDate(Long familyId, LocalDate date, int size, int page);
+    PictureDiaryPaginationDto getPictureDiariesAll(Long familyId, int size, int page);
 
     void deletePictureDiary(Long pictureDiaryId);
 
