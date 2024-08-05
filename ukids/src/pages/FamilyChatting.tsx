@@ -31,17 +31,16 @@ const FamilyChatting = () => {
     }
   };
 
-  // 메세지 리스트 패치
-  const fetchMessages = async () => {
+  // 메세지 서버로 전송
+  const sendhMessagesToBack = async () => {
     try {
       axios
-        .get<Message[]>(`${ukidsURL}/message/${chatRoomId}`)
+        .post<Message[]>(`${ukidsURL}/message`, {
+          chatRoomId,
+          content: message,
+        })
         .then((response) => {
           setMessages(response.data);
-
-          if (messages[0].user_id === 'userId') {
-            scrollToBottom();
-          }
         });
     } catch (error: any) {
       console.log(error.message);
@@ -53,11 +52,15 @@ const FamilyChatting = () => {
     e.preventDefault();
     if (!message) return;
 
-    // 메세지 전송 기능 수정 예정
+    // 메세지 전송되고 화면 갱신
     setMessages([
       { messageId: '', content: message, user_id: 'userId', isDelete: false },
       ...messages,
     ]);
+
+    //서버로 메세지 전송
+    sendhMessagesToBack();
+
     setMessage('');
     scrollToBottom();
   };
@@ -67,7 +70,14 @@ const FamilyChatting = () => {
     axios
       .get<Message[]>(`${ukidsURL}/message/${chatRoomId}`)
       .then((response) => {
-        setMessages(response.data);
+        const messageList = response.data;
+
+        setMessages(
+          messageList.filter((message) => {
+            return !message.isDelete;
+          }),
+        );
+
         scrollToBottom();
       })
       .catch((error) => {
