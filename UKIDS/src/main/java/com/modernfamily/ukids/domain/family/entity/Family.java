@@ -6,9 +6,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
-public class Family extends BaseTimeEntity {
+public class Family extends BaseTimeEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public Family() {
     }
