@@ -3,13 +3,14 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // DayGrid 플러그인 (달�
 import interactionPlugin from '@fullcalendar/interaction'; // 상호작용 플러그인 (클릭 등의 이벤트 처리를 위해 필요)
 import koLocale from '@fullcalendar/core/locales/ko'; // 한국어 로케일 (날짜 형식 및 텍스트를 한국어로 표시)
 import { DateClickArg } from '@fullcalendar/interaction'; // DateClickArg 타입 (날짜 클릭 이벤트의 정보 타입)
-import { useStore } from '../../../stores/scheduleStore'; // zustand를 사용한 상태 관리 store
+import { useScheduleStore } from '../../../stores/scheduleStore'; // zustand를 사용한 상태 관리 store
 import { useEffect } from 'react'; // React의 useEffect 훅
 import './schedule.css'; // CSS 스타일 파일
 
 export default function Calendar() {
   // zustand store에서 상태와 상태 업데이트 함수 가져오기
-  const { events, setEvents, setSelectedDate, setEventData } = useStore();
+  const { events, setEvents, setSelectedDate, setEventData } =
+    useScheduleStore();
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 호출되는 비동기 함수
@@ -21,13 +22,28 @@ export default function Calendar() {
         }
         const data = await response.json();
         setEvents(data); // 상태 업데이트 (이벤트 데이터를 store에 저장)
+
+        // 오늘 날짜 설정
+        const today = new Date().toISOString().split('T')[0];
+        setSelectedDate(today);
+
+        // 오늘 날짜의 이벤트 필터링
+        const todayEvents = data.filter((event: any) => {
+          const eventStart = new Date(event.start).toISOString().split('T')[0];
+          const eventEnd = new Date(event.end || event.start)
+            .toISOString()
+            .split('T')[0];
+          return today >= eventStart && today <= eventEnd;
+        });
+
+        setEventData(todayEvents.length > 0 ? todayEvents : null); // 필터링된 이벤트를 store에 저장
       } catch (error) {
         console.error('Error fetching events:', error); // 오류 처리
       }
     };
 
     fetchEvents(); // API 호출
-  }, [setEvents]); // setEvents가 변경될 때마다 이 useEffect가 실행됨
+  }, [setEvents, setSelectedDate, setEventData]); // setEvents, setSelectedDate, setEventData가 변경될 때마다 이 useEffect가 실행됨
 
   // 클릭한 날짜에 해당하는 이벤트를 찾아서 설정하는 함수
   const handleDateClick = (info: DateClickArg) => {
@@ -88,9 +104,14 @@ export default function Calendar() {
         weekends={true} // 주말을 표시
         fixedWeekCount={false} // 고정된 주 수를 사용하지 않음
         height={'33rem'} // 캘린더의 높이 설정
+        customButtons={{
+          createButton: {
+            text: '일정 추가하기',
+          },
+        }}
         headerToolbar={{
           start: 'title', // 툴바의 시작 부분에 제목 표시
-          end: 'prev,next', // 툴바의 끝 부분에 이전/다음 버튼 표시
+          end: 'today, prev,next', // 툴바의 끝 부분에 이전/다음 버튼 표시
         }}
         eventTextColor="#fff" // 이벤트 텍스트 색상 설정
         titleFormat={function (date) {

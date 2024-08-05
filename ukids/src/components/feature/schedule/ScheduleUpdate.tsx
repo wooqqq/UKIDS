@@ -1,9 +1,8 @@
-// ScheduleCreate.tsx 일정 등록
 import { useNavigate } from 'react-router-dom';
 import BlueButton from '../../common/BlueButton';
 import WhiteButton from '../../common/WhiteButton';
 
-const ScheduleCreate = () => {
+const ScheduleUpdate = () => {
   const nav = useNavigate();
   // 목록 이동 버튼 이벤트
   const onClickListButton = () => {
@@ -13,7 +12,6 @@ const ScheduleCreate = () => {
   const onClickDetailButton = () => {
     nav('/schedule/detail/:scheduleId');
   };
-
   return (
     <div>
       <section className="flex justify-between">
@@ -38,15 +36,11 @@ const ScheduleCreate = () => {
           <input id="family" type="text" placeholder="가족" />
         </div>
         <div>
-          <label htmlFor="alert">메모</label>
-          <input
-            id="content"
-            type="text"
-            placeholder="메모할 내용을 입력하세요"
-          />
+          <label htmlFor="alert">알림</label>
+          <input id="alert" type="text" placeholder="알림" />
         </div>
       </section>
     </div>
   );
 };
-export default ScheduleCreate;
+export default ScheduleUpdate;

@@ -1,14 +1,29 @@
-import { useStore } from '../../../stores/scheduleStore';
+import { useScheduleStore } from '../../../stores/scheduleStore';
+import { useNavigate } from 'react-router-dom';
+import WhiteButton from '../../common/WhiteButton';
 import '../../common/common.css';
 
-export default function ScheduleList() {
-  const { selectedDate, eventData } = useStore();
-
+const ScheduleList = () => {
+  const { selectedDate, eventData } = useScheduleStore();
+  const nav = useNavigate();
+  const onClickScheduleButton = () => {
+    //  스케줄 페이지로 이동
+    nav('/schedule');
+  };
+  const onClickCreateButton = () => {
+    //  스케줄 등록 페이지로 이동
+    nav('/schedule/new');
+  };
   return (
-    <div className="pre-box">
+    <div className="schedule-box">
+      <section className="flex justify-between">
+        <WhiteButton name="이전" onClick={onClickScheduleButton} />
+        <button className="plus-btn" onClick={onClickCreateButton}>
+          +
+        </button>
+      </section>
       {selectedDate && (
         <div className="schedule-list">
-          <h3>{selectedDate}</h3>
           {eventData ? (
             eventData.map((event, index) => (
               <div key={index}>
@@ -27,4 +42,6 @@ export default function ScheduleList() {
       )}
     </div>
   );
-}
+};
+
+export default ScheduleList;
