@@ -35,4 +35,10 @@ public class PhotoController {
         return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_PHOTO.getMessage());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getPhoto(@PathVariable("id") Long photoId) {
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, photoService.getPhotoInfo(photoId));
+    }
+
+
 }

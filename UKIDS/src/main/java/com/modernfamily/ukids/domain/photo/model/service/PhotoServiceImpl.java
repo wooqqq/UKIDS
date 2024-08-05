@@ -11,9 +11,12 @@ import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
 import com.modernfamily.ukids.domain.album.model.service.AlbumService;
 import com.modernfamily.ukids.domain.family.entity.Family;
+import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.photo.dto.request.PhotoSaveRequestDto;
+import com.modernfamily.ukids.domain.photo.dto.response.PhotoInfoResponseDto;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
 import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
+import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +47,15 @@ public class PhotoServiceImpl implements PhotoService {
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
     private final AmazonS3Client amazonS3Client;
+    private final FamilyMemberRepository familyMemberRepository;
 
     @Transactional
     public void savePhoto(PhotoSaveRequestDto requestDto) throws IOException {
 
-        Family family = albumService.checkFamilyMember(requestDto.getFamilyId());
+        String userId = CustomUserDetails.contextGetUserId();
+
+        Family family = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, requestDto.getFamilyId()).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION)).getFamily();
 
         Album album = albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId())
                 .orElseGet(() -> {
@@ -65,21 +72,6 @@ public class PhotoServiceImpl implements PhotoService {
 
         Photo photo = Photo.createPhoto(uploadParam, album);
 
-        photoRepository.save(photo);
-    }
-
-    @Transactional
-    public void deletePhoto(Long photoId) throws IOException {
-        Photo photo = photoRepository.findByPhotoId(photoId)
-                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
-
-        try {
-            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, photo.getPhotoS3Name()));
-        } catch (AmazonS3Exception e) {
-            throw new IOException("Error deleting photo ", e);
-        }
-
-        photo.deletePhoto();
         photoRepository.save(photo);
     }
 
@@ -121,5 +113,37 @@ public class PhotoServiceImpl implements PhotoService {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    @Transactional
+    public void deletePhoto(Long photoId) throws IOException {
+        Photo photo = photoRepository.findByPhotoId(photoId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
+
+        String userId = CustomUserDetails.contextGetUserId();
+
+        familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, photo.getAlbum().getFamily().getFamilyId()).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+
+        try {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, photo.getPhotoS3Name()));
+        } catch (AmazonS3Exception e) {
+            throw new IOException("Error deleting photo ", e);
+        }
+
+        photo.deletePhoto();
+        photoRepository.save(photo);
+    }
+
+    public PhotoInfoResponseDto getPhotoInfo(Long photoId) {
+        Photo photo = photoRepository.findByPhotoId(photoId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
+
+        String userId = CustomUserDetails.contextGetUserId();
+
+        familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, photo.getAlbum().getFamily().getFamilyId()).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+
+        return PhotoInfoResponseDto.createResponseDto(photo);
     }
 }
