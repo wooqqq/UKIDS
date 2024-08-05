@@ -1,8 +1,10 @@
 package com.modernfamily.ukids.domain.chatRoom.controller;
 
+import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
 import com.modernfamily.ukids.domain.chatRoom.dto.ChatRoomDto;
 import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
 import com.modernfamily.ukids.domain.chatRoom.model.repository.ChatRoomRepository;
+import com.modernfamily.ukids.domain.chatRoom.model.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import java.util.Map;
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatService chatService;
 
     // 채팅 리스트 화면
     @GetMapping("/room")
@@ -52,6 +55,17 @@ public class ChatRoomController {
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable("roomId") Long roomId) {
         return chatRoomRepository.findRoomById(roomId);
+    }
+
+    @RequestMapping(value = "/room/{roomId}/messages", method = RequestMethod.GET)
+    @ResponseBody
+    public List<ChatMessage> getChatMessages(@PathVariable("roomId") Long roomId) {
+        try {
+            return chatService.getChatMessages(roomId.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
 }

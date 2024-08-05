@@ -23,6 +23,16 @@ public class ChatMessage {
     private String sender;
     private String message;
 
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "type='" + type + '\'' +
+                ", roomId=" + roomId +
+                ", sender='" + sender + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
 //    @Id
 //    private Long chatMessageId;
 //
