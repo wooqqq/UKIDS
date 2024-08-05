@@ -5,8 +5,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class ChatRoom {
+public class ChatRoom implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     private Long chatRoomId;
