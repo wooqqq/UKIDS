@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.domain.photo.dto.response;
 
 import com.modernfamily.ukids.domain.album.dto.response.AlbumInfoResponseDto;
-import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
 import lombok.Builder;
 import lombok.Getter;

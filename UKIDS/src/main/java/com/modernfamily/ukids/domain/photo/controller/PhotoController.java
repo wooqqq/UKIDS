@@ -40,5 +40,12 @@ public class PhotoController {
         return httpResponseUtil.createResponse(HttpMethodCode.GET, photoService.getPhotoInfo(photoId));
     }
 
+    @GetMapping("/all/{id}")
+    public ResponseEntity<Map<String, Object>> getPhotoList(@PathVariable("id") Long albumId,
+                                                            @RequestParam(value = "size", defaultValue = "5") int size,
+                                                            @RequestParam(value = "page", defaultValue = "1") int page)
+    {
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, photoService.getPhotoList(size, page, albumId));
+    }
 
 }

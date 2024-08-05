@@ -1,12 +1,7 @@
 package com.modernfamily.ukids.domain.photo.model.service;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.modernfamily.ukids.domain.album.dto.request.AlbumCreateRequestDto;
+import com.amazonaws.services.s3.model.*;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
 import com.modernfamily.ukids.domain.album.model.service.AlbumService;
@@ -14,6 +9,8 @@ import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.photo.dto.request.PhotoSaveRequestDto;
 import com.modernfamily.ukids.domain.photo.dto.response.PhotoInfoResponseDto;
+import com.modernfamily.ukids.domain.photo.dto.response.PhotoListPagenationResponseDto;
+import com.modernfamily.ukids.domain.photo.dto.response.PhotoListResponseDto;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
 import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
@@ -22,6 +19,9 @@ import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -145,5 +142,30 @@ public class PhotoServiceImpl implements PhotoService {
                 new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
 
         return PhotoInfoResponseDto.createResponseDto(photo);
+    }
+
+    public PhotoListPagenationResponseDto getPhotoList(int size, int page, Long albumId) {
+        Album album = albumRepository.findByAlbumId(albumId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
+
+        String userId = CustomUserDetails.contextGetUserId();
+
+        familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, album.getFamily().getFamilyId()).orElseThrow(() ->
+                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+
+        Pageable pageable = PageRequest.of(--page, size);
+        Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumId(albumId, pageable);
+
+        List<Photo> photoList = photoPage.getContent();
+        List<PhotoListResponseDto> responseDtoList = new ArrayList<>();
+        log.info("Album List size : {}", photoList.size());
+        for (Photo photo : photoList) {
+            responseDtoList.add(PhotoListResponseDto.createResponseDto(photo));
+        }
+
+        PhotoListPagenationResponseDto pagenationResponseDto =
+                PhotoListPagenationResponseDto.createResponseDto(photoPage.getNumberOfElements(), photoPage.getNumber()+1, photoPage.getTotalPages(), album, responseDtoList);
+
+        return pagenationResponseDto;
     }
 }
