@@ -1,6 +1,8 @@
 package com.modernfamily.ukids.domain.growthRecord.model.service;
 
+import com.modernfamily.ukids.domain.growthFolder.dto.GrowthFolderPaginationDto;
 import com.modernfamily.ukids.domain.growthFolder.model.repository.GrowthFolderRepository;
+import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordPaginationDto;
 import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordRequestDto;
 import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordResponseDto;
 import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordUpdateDto;
@@ -15,9 +17,14 @@ import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,8 +40,7 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
     private final EntityManager entityManager;
 
     @Override
-    public GrowthRecordResponseDto createGrowthRecord(GrowthRecordRequestDto growthRecordRequestDto) {
-        System.out.println(growthRecordRequestDto.getFolderId());
+    public void createGrowthRecord(GrowthRecordRequestDto growthRecordRequestDto) {
         growthFolderRepository.findByFolderId(growthRecordRequestDto.getFolderId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHFOLDER_EXCEPTION));
 
@@ -42,19 +48,14 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
-        // 추후 userId와 familyId로 FamilyMember를 조회 후 자식일 경우 20살 이상인지 판별
-
         growthRecordRequestDto.setWriterId(user.getUserId());
 
-        System.out.println(growthRecordMapper.toGrowthRecordRequestEntity(growthRecordRequestDto).getFolder().getFolderId());
-        GrowthRecord growthRecord = growthRecordRepository.save(growthRecordMapper.toGrowthRecordRequestEntity(growthRecordRequestDto));
+        growthRecordRepository.save(growthRecordMapper.toGrowthRecordRequestEntity(growthRecordRequestDto));
 
-        return growthRecordMapper.toGrowthRecordResponseDto(growthRecord);
     }
 
     @Override
-    @Transactional
-    public GrowthRecordResponseDto updateGrowthRecord(GrowthRecordUpdateDto growthRecordUpdate) {
+    public void updateGrowthRecord(GrowthRecordUpdateDto growthRecordUpdate) {
         GrowthRecord growthRecordInfo = growthRecordRepository.findByRecordId(growthRecordUpdate.getRecordId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHRECORD_EXCEPTION));
 
@@ -67,13 +68,6 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
 
         growthRecordRepository.updateGrowthRecord(growthRecordMapper.toGrowthRecordUpdateEntity(growthRecordUpdate));
 
-        entityManager.flush();
-        entityManager.clear();
-
-        GrowthRecord growthRecord = growthRecordRepository.findByRecordId(growthRecordUpdate.getRecordId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHRECORD_EXCEPTION));
-
-        return growthRecordMapper.toGrowthRecordResponseDto(growthRecord);
     }
 
     @Override
@@ -87,13 +81,23 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
     }
 
     @Override
-    public List<GrowthRecordResponseDto> getGrowthRecords(Long folderId) {
+    public GrowthRecordPaginationDto getGrowthRecords(Long folderId, int size, int page) {
         growthFolderRepository.findByFolderId(folderId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHFOLDER_EXCEPTION));
 
-        List<GrowthRecord> growthRecords = growthRecordRepository.getGrowthRecords(folderId);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC, "date"));
+        Page<GrowthRecord> growthRecordPage = growthRecordRepository.findAllByFolder_FolderIdAndIsDeleteFalse(folderId, pageable);
+        if(!growthRecordPage.hasContent()){
+            throw new ExceptionResponse(CustomException.NOT_FOUND_GROWTHRECORD_EXCEPTION);
+        }
 
-        return growthRecordMapper.toGrowthRecordResponseDtoList(growthRecords);
+        List<GrowthRecordResponseDto> growthRecords = new ArrayList<>();
+        for(GrowthRecord growthRecord : growthRecordPage.getContent()){
+            growthRecords.add(growthRecordMapper.toGrowthRecordResponseDto(growthRecord));
+        }
+
+
+        return new GrowthRecordPaginationDto(growthRecords, growthRecordPage.getTotalPages(), size, page);
     }
 
     @Override

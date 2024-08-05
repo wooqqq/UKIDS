@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.domain.growthRecord.controller;
 
+import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordPaginationDto;
 import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordRequestDto;
 import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordResponseDto;
 import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordUpdateDto;
@@ -25,18 +26,18 @@ public class GrowthRecordController {
     @PostMapping
     public ResponseEntity<Map<String, Object>> createGrowthRecord(@RequestBody GrowthRecordRequestDto growthRecordRequestDto){
 
-        GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.createGrowthRecord(growthRecordRequestDto);
+        growthRecordService.createGrowthRecord(growthRecordRequestDto);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, growthRecordResponseDto);
+        return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_GROWTHRECORD.getMessage());
     }
 
     @PutMapping("/{recordId}")
     public ResponseEntity<Map<String, Object>> updateGrowthRecord(@RequestBody GrowthRecordUpdateDto growthRecordUpdateDto,
                                                                   @PathVariable("recordId") Long recordId){
         growthRecordUpdateDto.setRecordId(recordId);
-        GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.updateGrowthRecord(growthRecordUpdateDto);
+        growthRecordService.updateGrowthRecord(growthRecordUpdateDto);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, growthRecordResponseDto);
+        return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_UPDATE_GROWTHRECORD.getMessage());
     }
 
     @GetMapping("/{recordId}")
@@ -47,10 +48,12 @@ public class GrowthRecordController {
     }
 
     @GetMapping("/all/{folderId}")
-    public ResponseEntity<Map<String,Object>> getGrowthRecords(@PathVariable("folderId") Long folderId){
-        List<GrowthRecordResponseDto> growthRecordResponseDtoList = growthRecordService.getGrowthRecords(folderId);
+    public ResponseEntity<Map<String,Object>> getGrowthRecords(@PathVariable("folderId") Long folderId,
+                                                               @RequestParam(value = "size", defaultValue = "5") int size,
+                                                               @RequestParam(value = "page", defaultValue = "1") int page){
+        GrowthRecordPaginationDto growthRecordPaginationDto = growthRecordService.getGrowthRecords(folderId, size, page);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.GET, growthRecordResponseDtoList);
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, growthRecordPaginationDto);
     }
 
     @DeleteMapping("/{recordId}")

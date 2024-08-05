@@ -3,6 +3,8 @@ package com.modernfamily.ukids.domain.growthFolder.model.repository;
 import com.modernfamily.ukids.domain.growthFolder.dto.GrowthFolderRequestDto;
 import com.modernfamily.ukids.domain.growthFolder.dto.GrowthFolderUpdateRequestDto;
 import com.modernfamily.ukids.domain.growthFolder.entity.GrowthFolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,23 +18,21 @@ public interface GrowthFolderRepository extends JpaRepository<GrowthFolder, Long
 
     Optional<GrowthFolder> findByFolderId(Long folderId);
 
-    @Query("select gf from GrowthFolder gf " +
-            "join fetch gf.family f " +
-            "where gf.family.familyId = :familyId " +
-            "and gf.isDelete = false")
-    List<GrowthFolder> getGrowthFolders(Long familyId);
+    Page<GrowthFolder> findAllByFamily_FamilyId(Long familyId, Pageable pageable);
 
     @Modifying
     @Transactional
     @Query(value = "update GrowthFolder gf " +
-            "set gf.folderName = :#{#growthFolderUpdateRequestDto.folderName} " +
-            "where gf.folderId = :#{#growthFolderUpdateRequestDto.folderId}")
-    void updateGrowthFolder(GrowthFolderUpdateRequestDto growthFolderUpdateRequestDto);
+            "set gf.folderName = :#{#growthFolder.folderName}, " +
+            "gf.updateTime = now() " +
+            "where gf.folderId = :#{#growthFolder.folderId}")
+    void updateGrowthFolder(GrowthFolder growthFolder);
 
     @Modifying
     @Transactional
     @Query(value = "update GrowthFolder gf " +
-            "set gf.isDelete = true " +
+            "set gf.isDelete = true, " +
+            "gf.updateTime = now() " +
             "where gf.folderId = :folderId")
     void deleteGrowthFolder(Long folderId);
 }

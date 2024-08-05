@@ -3,6 +3,8 @@ package com.modernfamily.ukids.domain.growthRecord.model.repository;
 import com.modernfamily.ukids.domain.growthRecord.entity.GrowthRecord;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,10 +19,8 @@ public interface GrowthRecordRepository extends JpaRepository<GrowthRecord, Long
 
     Optional<GrowthRecord> findByRecordId(Long recordId);
 
-    @Query(value = "select gr from GrowthRecord gr " +
-            "where gr.folder.folderId = :folderId " +
-            "and gr.isDelete is false ")
-    List<GrowthRecord> getGrowthRecords(Long folderId);
+
+    Page<GrowthRecord> findAllByFolder_FolderIdAndIsDeleteFalse(Long folderId, Pageable pageable);
 
     @Modifying
     @Transactional
@@ -29,7 +29,8 @@ public interface GrowthRecordRepository extends JpaRepository<GrowthRecord, Long
             "gr.content = :#{#growthRecord.content}," +
             "gr.date = :#{#growthRecord.date}, " +
             "gr.imageName = :#{#growthRecord.imageName}, " +
-            "gr.imageUrl = :#{#growthRecord.imageUrl} " +
+            "gr.imageUrl = :#{#growthRecord.imageUrl}, " +
+            "gr.updateTime = now() " +
             "where gr.recordId = :#{#growthRecord.recordId} ")
     void updateGrowthRecord(@Param("growthRecord") GrowthRecord growthRecord);
 
