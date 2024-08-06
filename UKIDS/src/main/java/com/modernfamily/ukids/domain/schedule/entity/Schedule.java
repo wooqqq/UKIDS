@@ -1,18 +1,21 @@
 package com.modernfamily.ukids.domain.schedule.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
+import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleCreateRequestDto;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "is_delete = false")
 public class Schedule extends BaseTimeEntity {
 
     @Id
@@ -23,7 +26,7 @@ public class Schedule extends BaseTimeEntity {
     @Column(name = "title", nullable = false, length = 300)
     private String title;
 
-    @Column(name = "content", nullable = false, length = 1000)
+    @Column(name = "content", length = 1000)
     private String content;
 
     @Column(name = "place", length = 300)
@@ -53,13 +56,13 @@ public class Schedule extends BaseTimeEntity {
         this.family = family;
     }
 
-    public static Schedule createSchedule(String title, String content, String place, LocalDateTime startTime, LocalDateTime endTime, boolean isDelete, Family family) {
+    public static Schedule createSchedule(ScheduleCreateRequestDto requestDto, Family family) {
         return Schedule.builder()
-                .title(title)
-                .content(content)
-                .place(place)
-                .startTime(startTime)
-                .endTime(endTime)
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .place(requestDto.getPlace())
+                .startTime(requestDto.getStartTime())
+                .endTime(requestDto.getEndTime())
                 .isDelete(false)
                 .family(family)
                 .build();
