@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,16 @@ public class ChatService {
         return rawMessages.stream()
                 .map(message -> {
                     try {
-                        return objectMapper.readValue((String) message, ChatMessage.class);
+                        // return objectMapper.readValue((String) message, ChatMessage.class);
+                        // rawMessages의 각 요소가 LinkedHashMap으로 변환되었을 수 있으므로,
+                        // 이를 ChatMessage로 변환하는 방법 수정
+                        if (message instanceof LinkedHashMap) {
+                            return objectMapper.convertValue(message, ChatMessage.class);
+                        } else if (message instanceof String) {
+                            return objectMapper.readValue((String) message, ChatMessage.class);
+                        } else {
+                            throw new RuntimeException("Unexpected message type: " + message.getClass());
+                        }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

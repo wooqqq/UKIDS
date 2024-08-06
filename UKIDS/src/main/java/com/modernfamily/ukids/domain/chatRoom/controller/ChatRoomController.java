@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.domain.chatRoom.controller;
 
 import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
-import com.modernfamily.ukids.domain.chatRoom.dto.ChatRoomDto;
 import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
 import com.modernfamily.ukids.domain.chatRoom.model.repository.ChatRoomRepository;
 import com.modernfamily.ukids.domain.chatRoom.model.service.ChatService;
