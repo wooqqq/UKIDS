@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import Form from './Form';
 import Session from './Session';
+import useStore from '../../../stores/userStore';
 
 function VideoCall() {
   const [session, setSession] = useState<OVSession | ''>('');
@@ -23,7 +24,7 @@ function VideoCall() {
   const [isVideoEnabled, setIsVideoEnabled] = useState<boolean>(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
-  const SERVER_URL = `https://i11b306.p.ssafy.io`;
+  const { ukidsURL } = useStore();
 
   const leaveSession = useCallback(() => {
     if (session) session.disconnect();
@@ -84,14 +85,9 @@ function VideoCall() {
 
   const createSession = async () => {
     try {
-      const response = await axios.post(`${SERVER_URL}/api/webrtc`, {});
-      console.log('sessionId: ', response.data);
-      //return (response.data as { result: string }).result;
+      const response = await axios.post(`${ukidsURL}/api/webrtc`, {});
+      console.log('SessionId Created!: ', response.data);
     } catch (error) {
-      //const errorResponse = (error as AxiosError)?.response;
-      // if (errorResponse?.status === 409) {
-      //   // return sessionIds;
-      // }
       throw new Error('Failed to create session.');
     }
   };
@@ -102,7 +98,7 @@ function VideoCall() {
     const createToken = (sessionIds: string): Promise<string> => {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${SERVER_URL}/api/webrtc/${sessionIds}`, {})
+          .post(`${ukidsURL}/api/webrtc/${sessionIds}`, {})
           .then((response) => {
             resolve((response.data as { result: string }).result);
           })
@@ -112,17 +108,8 @@ function VideoCall() {
 
     const getToken = async (): Promise<string> => {
       try {
-        let sessionIds = sessionId;
-        try {
-          //sessionIds = await createSession(sessionId);
-          //console.log('Call createSession');
-        } catch (error) {
-          // if (error.message !== 'Failed to create session.') {
-          //   throw error;
-          // }
-        }
-        console.log(`sessionIds: ${sessionIds}`);
-        const token = await createToken(sessionIds);
+        console.log(`sessionIds: ${sessionId}`);
+        const token = await createToken(sessionId);
         console.log(`token: ${token}`);
         return token;
       } catch (error) {
@@ -148,7 +135,7 @@ function VideoCall() {
           .catch(() => {});
       })
       .catch(() => {});
-  }, [session, OV, sessionId, userName, SERVER_URL]);
+  }, [session, OV, sessionId, userName]);
 
   const toggleVideo = () => {
     if (publisher) {

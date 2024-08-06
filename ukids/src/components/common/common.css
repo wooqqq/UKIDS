@@ -100,8 +100,9 @@
       var(--sds-size-depth-0) var(--sds-color-black-100);
 }
 
+/* index.css로 이동 */
 /* 기능 박스 */
-.feature-box {
+/* .feature-box {
   width: 56.9375rem;
   height: 36rem;
   flex-shrink: 0;
@@ -109,8 +110,8 @@
   opacity: var(--sds-size-stroke-border);
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
-  /* margin-top: 32px; */
-}
+} 
+
 .half-feature-box {
   width: 27.5rem;
   height: 36rem;
@@ -120,8 +121,7 @@
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
   padding: 30px 15px;
-  /* margin-top: 32px; */
-}
+}*/
 
 /* 사이드바 */
 .sidebar {

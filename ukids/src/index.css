@@ -21,7 +21,6 @@
 } */
 
 body {
-  /* color: rgb(var(--foreground-rgb)); */
   background: linear-gradient(
       to bottom,
       transparent 10%,
@@ -31,9 +30,33 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  padding: 1rem 10.62rem;
-  max-height: 750px;
+  padding: 1rem 10rem;
+  max-height: 100%;
   overflow: hidden;
+}
+
+/* 기능 박스 */
+.feature-box {
+  width: 56.9375rem;
+  height: 36rem;
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+}
+
+/* 기능 박스 (반) */
+.half-feature-box {
+  width: 27.5rem;
+  height: 36rem;
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+  padding: 30px 15px;
+  /* margin-top: 32px; */
 }
 
 @layer base {

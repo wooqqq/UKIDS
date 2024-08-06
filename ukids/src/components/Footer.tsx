@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className="flexcenter-row text-xs text-[#999999] m-9">
+    <div className="flexcenter-row text-xs text-[#999999]">
       <a href="#!" className="m-1">
         이용약관
       </a>
