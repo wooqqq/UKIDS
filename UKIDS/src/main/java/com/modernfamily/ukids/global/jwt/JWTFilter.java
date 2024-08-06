@@ -21,12 +21,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        String path = request.getRequestURI();
-//        if (path.startsWith("/chat/room")) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-
         String authorization = request.getHeader("Authorization");
 
         if(authorization == null || !authorization.startsWith("Bearer ")) {
