@@ -17,15 +17,18 @@ public class PictureDiary extends BaseTimeEntity {
     }
 
     @Builder
-    public PictureDiary(Long pictureDiaryId, Family family, String imageName, String pictureUrl, String content, LocalDate date, boolean isDelete) {
+    public PictureDiary(Long pictureDiaryId, Family family, String imageName, String pictureUrl, String imageS3Name, String content, LocalDate date, boolean isDelete) {
         this.pictureDiaryId = pictureDiaryId;
         this.family = family;
         this.imageName = imageName;
         this.pictureUrl = pictureUrl;
+        this.imageS3Name = imageS3Name;
         this.content = content;
         this.date = date;
         this.isDelete = isDelete;
     }
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +42,8 @@ public class PictureDiary extends BaseTimeEntity {
     private String imageName;
     @Column(nullable = false)
     private String pictureUrl;
+    @Column(name="image_s3_name", length = 2048, nullable = true)
+    private String imageS3Name;
     @Column(length = 3000)
     private String content;
     private LocalDate date;

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -60,14 +61,13 @@ public class PictureDiaryController {
     }
 
     @DeleteMapping("/{pictureDiaryId}")
-    public ResponseEntity<Map<String, Object>> deletePictureDiary(@PathVariable("pictureDiaryId") Long pictureDiaryId){
+    public ResponseEntity<Map<String, Object>> deletePictureDiary(@PathVariable("pictureDiaryId") Long pictureDiaryId) throws IOException {
         pictureDiaryService.deletePictureDiary(pictureDiaryId);
         return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_PICTUREDIARY.getMessage());
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updatePictureDiary(@RequestBody PictureDiaryUpdateDto pictureDiaryUpdateDto){
-        System.out.println(pictureDiaryUpdateDto);
+    public ResponseEntity<Map<String, Object>> updatePictureDiary(@ModelAttribute PictureDiaryUpdateDto pictureDiaryUpdateDto) throws IOException {
         pictureDiaryService.updatePictureDiary(pictureDiaryUpdateDto);
 
         return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_PICTUREDIARY.getMessage());

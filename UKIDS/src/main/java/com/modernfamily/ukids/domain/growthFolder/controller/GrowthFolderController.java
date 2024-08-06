@@ -45,7 +45,6 @@ public class GrowthFolderController {
     public ResponseEntity<Map<String, Object>> updateGrowthFolder(@PathVariable("folderId") Long folderId,
                                                                   @RequestBody GrowthFolderUpdateRequestDto growthFolderUpdateRequestDto){
         growthFolderUpdateRequestDto.setFolderId(folderId);
-        System.out.println(growthFolderUpdateRequestDto);
         growthFolderService.updateGrowthFolder(growthFolderUpdateRequestDto);
 
         return httpResponseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_GROWTHFOLDER.getMessage());

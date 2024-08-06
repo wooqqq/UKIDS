@@ -5,6 +5,7 @@ import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryRequestDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryResponseDto;
 import com.modernfamily.ukids.domain.pictureDiary.dto.PictureDiaryUpdateDto;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface PictureDiaryService {
     PictureDiaryPaginationDto getPictureDiariesByDate(Long familyId, LocalDate date, int size, int page);
     PictureDiaryPaginationDto getPictureDiariesAll(Long familyId, int size, int page);
 
-    void deletePictureDiary(Long pictureDiaryId);
+    void deletePictureDiary(Long pictureDiaryId) throws IOException;
 
-    void updatePictureDiary(PictureDiaryUpdateDto pictureDiaryUpdateDto);
+    void updatePictureDiary(PictureDiaryUpdateDto pictureDiaryUpdateDto) throws IOException;
 }
