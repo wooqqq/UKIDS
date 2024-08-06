@@ -3,6 +3,8 @@ import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import Letters from './pages/Letters';
 import Albums from './pages/Albums';
+import AlbumDetail from './pages/AlbumDetail'; // 추가
+import UploadPhoto from './pages/UploadPhoto'; //추가
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
 import Game from './pages/Game';
@@ -13,6 +15,7 @@ import Notfound from './pages/Notfound';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/common/Sidebar';
+
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전, 후 모두 사용)
 // 2. Schedule "/schedule" : 일정 관리
@@ -41,6 +44,8 @@ const App = () => {
           <Route path="/schedule/*" element={<Schedule />}></Route>
           <Route path="/letters" element={<Letters />} />
           <Route path="/albums" element={<Albums />} />
+          <Route path="/albums/:photoId" element={<AlbumDetail />} />  {/* 추가 */}
+          <Route path="/upload" element={<UploadPhoto />} /> {/* 추가 */}
           <Route path="/paintdiary" element={<PaintingDiary />} />
           <Route path="/growthdiary" element={<GrowthDiary />} />
           <Route path="/chat" element={<FamilyChatting />} />
