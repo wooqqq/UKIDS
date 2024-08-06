@@ -35,6 +35,11 @@ public enum CustomException {
     APPROVAL_FAMILYMEMBER_EXCEPTION(400, "ApprovalFamilyMemberException", "이미 승인된 인원입니다."),
     NOT_APPROVAL_FAMILYMEMBER_EXCEPTION(400, "NotApprovalFamilyMemberException", "가족 구성원이 아닙니다."),
 
+    // 그림일기
+    NOT_FOUND_PICTUREDIARY_EXCEPTION(400, "NotFoundPictureDiaryException", "그림일기가 존재하지 않습니다."),
+    
+    // 앨범
+
     // 앨범, 사진, 캡션
     DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
     NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
