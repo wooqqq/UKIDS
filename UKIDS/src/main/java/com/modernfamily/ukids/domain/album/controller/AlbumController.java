@@ -40,7 +40,7 @@ public class AlbumController {
         return httpResponseUtil.createResponse(HttpMethodCode.GET, albumService.getAlbumInfo(albumId));
     }
 
-    @GetMapping("/family/{id}")
+    @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getAlbumInfoList(
             @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "page", defaultValue = "1") int page,
