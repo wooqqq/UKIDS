@@ -7,11 +7,14 @@ import com.modernfamily.ukids.domain.album.dto.request.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumPagenationResponseDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
+import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
+import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
 import com.modernfamily.ukids.domain.family.model.service.FamilyService;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
+import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,8 @@ public class AlbumServiceImpl implements AlbumService {
     private final AlbumRepository albumRepository;
     private final FamilyMemberRepository familyMemberRepository;
     private final PhotoRepository photoRepository;
+    private final FamilyMapper familyMapper;
+    private final UserMapper userMapper;
 
     @Transactional
     public void createAlbum(AlbumCreateRequestDto requestDto) {
@@ -77,13 +82,16 @@ public class AlbumServiceImpl implements AlbumService {
 
         checkFamilyMember(album.getFamily().getFamilyId());
 
-        AlbumInfoResponseDto responseDto = AlbumInfoResponseDto.createAlbumInfoResponseDto(album);
+        FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(album.getFamily());
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(album.getFamily().getUser()));
+
+        AlbumInfoResponseDto responseDto = AlbumInfoResponseDto.createAlbumInfoResponseDto(album, familyResponseDto);
         return responseDto;
     }
 
     public FamilyAlbumPagenationResponseDto getAlbumInfoList(int size, int page, Long familyId) {
 
-        checkFamilyMember(familyId);
+        Family family = checkFamilyMember(familyId);
 
         Pageable pageable = PageRequest.of(--page, size);
         Page<Album> albumPage = albumRepository.findAllByFamily_FamilyId(familyId, pageable);
@@ -95,8 +103,11 @@ public class AlbumServiceImpl implements AlbumService {
             responseDtoList.add(FamilyAlbumListResponseDto.createResponseDto(album));
         }
 
+        FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
+
         FamilyAlbumPagenationResponseDto pagenationResponseDto = FamilyAlbumPagenationResponseDto
-                .createResponseDto(responseDtoList, albumPage.getNumberOfElements(), albumPage.getNumber()+1, albumPage.getTotalPages());
+                .createResponseDto(responseDtoList, albumPage.getNumberOfElements(), albumPage.getNumber()+1, albumPage.getTotalPages(), familyResponseDto);
 
         return pagenationResponseDto;
     }

@@ -14,10 +14,13 @@ public enum CustomException {
     NOT_AUTH_NUMBER_EXCEPTION(400,"NotAuthNumberException","인증되지 않은 번호입니다."),
     DUPLICATED_NUMBER_EXCEPTION(400,"DuplicatedNumberException","가입된 전화번호가 존재합니다."),
     DUPLICATED_ID_EXCEPTION(400,"DuplicatedIDException","가입된 아이디가 존재합니다."),
-    NOT_FOUND_LETTER_EXCEPTION(400, "NotFoundLetterException", "편지가 존재하지 않습니다."),
     DUPLICATED_EMAIL_EXCEPTION(400,"DuplicatedEmailException","가입된 이메일이 존재합니다."),
-    NOT_FOUND_SESSION_EXCEPTION(400,"NotFoundSessionException","세션 ID가 존재하지 않습니다."),
 
+    // 편지
+    NOT_FOUND_LETTER_EXCEPTION(400, "NotFoundLetterException", "편지가 존재하지 않습니다."),
+
+    // 화상통화
+    NOT_FOUND_SESSION_EXCEPTION(400,"NotFoundSessionException","세션 ID가 존재하지 않습니다."),
 
     // 가족방
     NOT_FOUND_FAMILY_EXCEPTION(400, "NotFoundFamilyException", "가족방이 존재하지 않습니다."),
@@ -31,9 +34,11 @@ public enum CustomException {
     NOT_SAME_FAMILYMEMBER_USER_EXCEPTION(400, "NotSameFamilyMemberUserException", "가족구성원과 사용자가 일치하지 않습니다."),
     APPROVAL_FAMILYMEMBER_EXCEPTION(400, "ApprovalFamilyMemberException", "이미 승인된 인원입니다."),
     NOT_APPROVAL_FAMILYMEMBER_EXCEPTION(400, "NotApprovalFamilyMemberException", "가족 구성원이 아닙니다."),
-    // 앨범
+
+    // 앨범, 사진, 캡션
     DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
     NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
+
     // 자녀성장일지
     NOT_FOUND_GROWTHFOLDER_EXCEPTION(400, "NotFoundGrowthFolderException", "자녀 성장일지 폴더가 존재하지 않습니다."),
     NOT_FOUND_GROWTHRECORD_EXCEPTION(400, "NotFoundGrowthRecordException", "자녀 성장일지가 존재하지 않습니다."),
@@ -42,6 +47,10 @@ public enum CustomException {
 
     FAIL_TO_CONVERT_FILE_EXCEPTION(400, "FailToConvertFileException", "파일 변환에 실패했습니다."),
     NOT_FOUND_PHOTO_EXCEPTION(400, "NotFoundPhotoException", "해당 사진이 존재하지 않습니다."),
+
+    // 일정
+    NOT_FOUND_SCHEDULE_EXCEPTION(400, "NotFoundScheduleException", "해당 일정이 존재하지 않습니다."),
+    NOT_MATCHED_SCHEDULE_FAMILY(400, "NotMatchedScheduleFamilyException", "일정을 등록한 가족과 현재 가족방이 일치하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
