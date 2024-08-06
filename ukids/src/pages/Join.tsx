@@ -1,8 +1,10 @@
+import UserJoin from '../components/feature/user/UserJoin';
+
 const Join = () => {
   return (
-    <div>
-      <div></div>
-    </div>
+    <>
+      <UserJoin />
+    </>
   );
 };
 
