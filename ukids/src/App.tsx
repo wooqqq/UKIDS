@@ -6,6 +6,8 @@ import Albums from './pages/Albums';
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
 import Game from './pages/Game';
+import Quiz from './components/feature/game/Quiz';
+import CallMyName from './components/feature/game/CallMyName';
 import FamilyChatting from './pages/FamilyChatting';
 import FamilyVideoCall from './pages/FamilyVideoCall';
 import Setting from './pages/Setting';
@@ -46,6 +48,8 @@ const App = () => {
           <Route path="/chat" element={<FamilyChatting />} />
           <Route path="/chat/call" element={<FamilyVideoCall />} />
           <Route path="/game" element={<Game />} />
+          <Route path="/game/quiz" element={<Quiz />}></Route>
+          <Route path="/game/callmyname" element={<CallMyName />}></Route>
           <Route path="/setting" element={<Setting />} />
           <Route path="*" element={<Notfound />} />
         </Routes>

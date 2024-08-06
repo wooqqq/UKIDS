@@ -1,0 +1,12 @@
+.quiz-select-box {
+  width: 246.33px;
+  height: 264.33px;
+  background-color: #ffefcc;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffbf33;
+  font-size: 56px;
+  font-family: 'ONE-Mobile-POP';
+}

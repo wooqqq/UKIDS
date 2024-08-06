@@ -1,15 +1,32 @@
-import { Route, Routes } from 'react-router-dom';
-import GameSelect from '../components/feature/game/GameSelect';
-import '../components/feature/game/Game.css';
+import { useNavigate } from 'react-router-dom';
+import '../components/feature/game/game.css';
+import quizImg from '../assets/game_quiz.png';
+import callmynameImg from '../assets/game_callmyname.png';
 
 const Game = () => {
+  const nav = useNavigate();
+  const onQuizClick = () => {
+    nav('/game/quiz');
+  };
+  const onCallMyNameClick = () => {
+    nav('/game/callMyName');
+  };
+
   return (
     <>
-      <button className="half-feature-box">
-        <h1>가족 퀴즈</h1>
+      <button onClick={onQuizClick}>
+        <img
+          src={quizImg}
+          alt="QuizButton"
+          className="half-feature-box hover:border-solid border-8 border-[#FFBF33]"
+        />
       </button>
-      <button className="half-feature-box">
-        <h1>콜 마이 네임</h1>
+      <button onClick={onCallMyNameClick}>
+        <img
+          src={callmynameImg}
+          alt="QuizButton"
+          className="half-feature-box hover:border-solid border-8 border-[#9F6AD5]"
+        />
       </button>
     </>
   );
