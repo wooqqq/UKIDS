@@ -42,8 +42,8 @@ public class CaptionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getCaption(@PathVariable("id") Long captionId) {
+    public ResponseEntity<Map<String, Object>> getCaption(@PathVariable("id") Long photoId) {
 
-        return responseUtil.createResponse(HttpMethodCode.GET, captionService.getCaption(captionId));
+        return responseUtil.createResponse(HttpMethodCode.GET, captionService.getCaption(photoId));
     }
 }

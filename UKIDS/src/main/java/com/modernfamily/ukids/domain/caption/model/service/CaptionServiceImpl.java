@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,6 +30,10 @@ public class CaptionServiceImpl implements CaptionService {
         Photo photo = photoRepository.findByPhotoId(requestDto.getPhotoId())
                         .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
+        Optional<Caption> existCaption = captionRepository.findByPhoto_PhotoId(photo.getPhotoId());
+
+        if(existCaption.isPresent())
+            throw new ExceptionResponse(CustomException.DUPLICATED_CAPTION_EXCEPTION);
 
         Caption caption = Caption.createCaption(requestDto.getContent(), photo);
         captionRepository.save(caption);
@@ -35,7 +41,7 @@ public class CaptionServiceImpl implements CaptionService {
 
     @Transactional
     public void updateCaption(CaptionUpdateRequestDto requestDto) {
-        Photo photo = photoRepository.findByPhotoId(requestDto.getPhotoId())
+        photoRepository.findByPhotoId(requestDto.getPhotoId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
         Caption caption = captionRepository.findByCaptionId(requestDto.getCaptionId())
@@ -55,8 +61,12 @@ public class CaptionServiceImpl implements CaptionService {
         captionRepository.save(caption);
     }
 
-    public CaptionInfoResponseDto getCaption(Long captionId){
-        Caption caption = captionRepository.findByCaptionId(captionId)
+    public CaptionInfoResponseDto getCaption(Long photoId){
+
+        photoRepository.findByPhotoId(photoId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
+
+        Caption caption = captionRepository.findByPhoto_PhotoId(photoId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_CAPTION_EXCEPTION));
 
         return CaptionInfoResponseDto.createResponseDto(caption);

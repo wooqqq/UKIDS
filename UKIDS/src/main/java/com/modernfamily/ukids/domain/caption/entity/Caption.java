@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "is_delete_caption = false")
 public class Caption extends BaseTimeEntity {
 
     @Id
