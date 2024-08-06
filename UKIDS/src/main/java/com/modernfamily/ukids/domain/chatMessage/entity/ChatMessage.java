@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.chatMessage.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,35 +19,21 @@ public class ChatMessage {
 
     private MessageType type;
     private Long roomId;
+    private Long senderId;
     private String sender;
     private String message;
+    private LocalDateTime createTime = LocalDateTime.now();
 
     @Override
     public String toString() {
         return "ChatMessage{" +
                 "type='" + type + '\'' +
                 ", roomId=" + roomId +
+                ", senderId=" + senderId + '\'' +
                 ", sender='" + sender + '\'' +
                 ", message='" + message + '\'' +
+                ", time=" + createTime + '\'' +
                 '}';
     }
 
-//    @Id
-//    private Long chatMessageId;
-//
-//    private String content;
-//
-//    @Setter
-//    private String message;
-//
-//    private Long senderId;
-//    private String senderName;
-////    private String senderProfile;
-//
-//    private Long chatRoomId;
-//
-//    private LocalDateTime createTime;
-//
-//    @Enumerated(EnumType.STRING)
-//    private ChatMessageType type;
 }

@@ -3,7 +3,7 @@ package com.modernfamily.ukids.domain.chatRoom.controller;
 import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
 import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
 import com.modernfamily.ukids.domain.chatRoom.model.repository.ChatRoomRepository;
-import com.modernfamily.ukids.domain.chatRoom.model.service.ChatService;
+import com.modernfamily.ukids.domain.chatMessage.model.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

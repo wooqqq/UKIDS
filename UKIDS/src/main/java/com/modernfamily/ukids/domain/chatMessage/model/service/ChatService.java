@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.chatRoom.model.service;
+package com.modernfamily.ukids.domain.chatMessage.model.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
@@ -25,7 +25,6 @@ public class ChatService {
         return rawMessages.stream()
                 .map(message -> {
                     try {
-                        // return objectMapper.readValue((String) message, ChatMessage.class);
                         // rawMessages의 각 요소가 LinkedHashMap으로 변환되었을 수 있으므로,
                         // 이를 ChatMessage로 변환하는 방법 수정
                         if (message instanceof LinkedHashMap) {

@@ -1,14 +1,10 @@
 package com.modernfamily.ukids.global.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
-import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
-import com.modernfamily.ukids.domain.chatRoom.model.service.ChatService;
+import com.modernfamily.ukids.domain.chatMessage.model.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Slf4j

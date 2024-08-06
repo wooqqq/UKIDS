@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.chatRoom.controller;
+package com.modernfamily.ukids.domain.chatMessage.controller;
 
 import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
 import com.modernfamily.ukids.domain.chatMessage.pubsub.RedisPublisher;

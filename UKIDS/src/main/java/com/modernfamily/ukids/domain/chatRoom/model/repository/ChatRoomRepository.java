@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.domain.chatRoom.model.repository;
 
 import com.modernfamily.ukids.domain.chatMessage.pubsub.RedisSubscriber;
-import com.modernfamily.ukids.domain.chatRoom.dto.ChatRoomDto;
 import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
@@ -14,7 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.socket.server.HandshakeHandler;
 
 import java.util.*;
 
@@ -22,8 +20,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ChatRoomRepository {
 
-//    private Map<Long, ChatRoom> chatRoomMap;
-//    private final FamilyRepository familyRepository;
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listener
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스

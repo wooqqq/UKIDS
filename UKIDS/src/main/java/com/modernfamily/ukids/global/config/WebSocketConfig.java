@@ -9,19 +9,6 @@ import org.springframework.web.socket.config.annotation.*;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     // HandShake 와 통신을 담당할 EndPoint 지정
-//    @Override
-//    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//        // WebSocket 연결 시 요청을 보낼 EndPoint 지정
-////        registry.addEndpoint("/ws-stomp")
-////                .setAllowedOriginPatterns("*")
-////                .withSockJS();
-////        registry.addEndpoint("/ws-stomp")
-////                .setAllowedOriginPatterns("*");
-//        registry.addHandler(webSocketHandler, "/ws/chat")
-//                .setAllowedOrigins("*");
-//    }
-
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-stomp")
@@ -37,9 +24,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 클라이언트가 서버로 메시지 보낼 URL 접두사 지정 (메시지 발행 요청)
         config.setApplicationDestinationPrefixes("/pub");
     }
-//
-//    @Override
-//    public void configureClientInboundChannel(ChannelRegistration registration) {
-//        registration.interceptors(stompHandler);
-//    }
+
 }
