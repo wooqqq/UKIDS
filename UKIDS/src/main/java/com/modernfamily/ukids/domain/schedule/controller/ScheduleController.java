@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -45,6 +46,12 @@ public class ScheduleController {
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getScheduleInfo(@PathVariable("id") Long scheduleId) {
         return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleInfo(scheduleId));
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity<Map<String, Object>> getScheduleInfo(@PathVariable("id") Long familyId,
+                                                               @RequestParam("date") LocalDate date) {
+        return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleList(familyId, date));
     }
 
 }

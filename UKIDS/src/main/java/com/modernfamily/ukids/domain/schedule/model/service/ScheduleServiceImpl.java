@@ -8,6 +8,8 @@ import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberR
 import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleCreateRequestDto;
 import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.modernfamily.ukids.domain.schedule.dto.response.ScheduleInfoResponseDto;
+import com.modernfamily.ukids.domain.schedule.dto.response.ScheduleListResponseDto;
+import com.modernfamily.ukids.domain.schedule.dto.response.ScheduleShortInfoResponseDto;
 import com.modernfamily.ukids.domain.schedule.entity.Schedule;
 import com.modernfamily.ukids.domain.schedule.model.repository.ScheduleRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
@@ -15,12 +17,18 @@ import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
@@ -75,9 +83,27 @@ public class ScheduleServiceImpl implements ScheduleService {
         Family family = checkFamilyMember(existSchedule.getFamily().getFamilyId());
 
         FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
-        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(existSchedule.getFamily().getUser()));
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
 
         return ScheduleInfoResponseDto.createResponseDto(existSchedule, familyResponseDto);
+    }
+
+    public ScheduleListResponseDto getScheduleList(Long familyId, LocalDate date) {
+        Family family = checkFamilyMember(familyId);
+
+        List<Schedule> schedules =  scheduleRepository.findAllByFamilyIdAndDate(family, date);
+
+        log.info("schedules : {}", schedules.size());
+
+        List<ScheduleShortInfoResponseDto> scheduleDtoList = new ArrayList();
+        for(Schedule schedule : schedules){
+            scheduleDtoList.add(ScheduleShortInfoResponseDto.createResponseDto(schedule));
+        }
+
+        FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
+
+        return ScheduleListResponseDto.createResponseDto(scheduleDtoList, familyResponseDto);
     }
 
     private Family checkFamilyMember(Long familyId){
