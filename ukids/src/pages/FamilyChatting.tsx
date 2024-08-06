@@ -91,7 +91,7 @@ const FamilyChatting = () => {
   }, [messages]);
 
   return (
-    <div className="flex h-full">
+    <div className="feature-box flex h-full">
       {/* 좌측 영역 */}
       <div className="flex flex-col w-3/4 p-2">
         {/* 채팅 컨테이너 (메시지 + 입력창) */}
