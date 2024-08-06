@@ -42,8 +42,8 @@ public class ChatRoomRepository {
         return opsHashChatRoom.values(CHAT_ROOMS);
     }
 
-    public ChatRoom findRoomById(Long roomId) {
-        return opsHashChatRoom.get(CHAT_ROOMS, roomId);
+    public ChatRoom findRoomByFamilyId(Long familyId) {
+        return opsHashChatRoom.get(CHAT_ROOMS, familyId);
     }
 
     /**

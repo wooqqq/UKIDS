@@ -4,6 +4,8 @@ import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
 import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
 import com.modernfamily.ukids.domain.chatRoom.model.repository.ChatRoomRepository;
 import com.modernfamily.ukids.domain.chatMessage.model.service.ChatService;
+import com.modernfamily.ukids.domain.chatRoom.model.service.ChatRoomService;
+import com.modernfamily.ukids.domain.family.entity.Family;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import java.util.Map;
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomService chatRoomService;
     private final ChatService chatService;
 
     // 채팅 리스트 화면
@@ -30,7 +33,7 @@ public class ChatRoomController {
     @GetMapping("/rooms")
     @ResponseBody
     public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
+        return chatRoomService.findAllRoom();
     }
 
     // 채팅방 생성
@@ -38,13 +41,16 @@ public class ChatRoomController {
     @ResponseBody
     public ChatRoom createRoom(@RequestBody Map<String, Long> payload) {
         Long familyId = payload.get("familyId");
-        return chatRoomRepository.createChatRoom(familyId);
+        return chatRoomService.createFamilyChatRoom(familyId);
     }
 
     // 채팅방 입장 화면
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable("roomId") Long roomId) {
-        model.addAttribute("roomId", roomId);
+        // 로그인한 유저가 해당 roomId(familyId)의 멤버인지 확인하는 코드
+        Family family = chatRoomService.validateFamilyMember(roomId);
+
+        model.addAttribute("roomId", family.getFamilyId());
         return "/chat/roomdetail";
     }
 
@@ -52,7 +58,7 @@ public class ChatRoomController {
     @GetMapping("/room/{roomId}")
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable("roomId") Long roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+        return chatRoomService.findRoomByRoomId(roomId);
     }
 
     @RequestMapping(value = "/room/{roomId}/messages", method = RequestMethod.GET)

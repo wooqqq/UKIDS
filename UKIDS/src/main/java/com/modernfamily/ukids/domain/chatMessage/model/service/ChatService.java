@@ -17,7 +17,7 @@ public class ChatService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    public List<ChatMessage> getChatMessages(String roomId) throws Exception {
+    public List<ChatMessage> getChatMessages(String roomId) {
         String key = "chat:messages:" + roomId;
         List<Object> rawMessages = redisTemplate.opsForList().range(key, 0, -1);
         return rawMessages.stream()
