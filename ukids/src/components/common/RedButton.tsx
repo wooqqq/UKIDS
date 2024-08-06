@@ -8,19 +8,19 @@ interface RedButtonProps {
   path: string;
 }
 
-const RedButton = ({ name, path }: RedButtonProps) => {
-  const navigate = useNavigate();
+const RedButton = (props: RedButtonProps) => {
+  const nav = useNavigate();
 
   const handleClick = () => {
-    navigate(path);
+    nav(props.path);
   };
 
   return (
     <button onClick={handleClick} className="common-btn red-btn">
-      {name == '연결끊기' ? (
+      {props.name == '연결끊기' ? (
         <img src="/assets/subway_call-3.png" alt="call-icon" />
       ) : null}
-      {name}
+      {props.name}
     </button>
   );
 };

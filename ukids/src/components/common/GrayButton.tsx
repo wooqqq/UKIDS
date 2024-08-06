@@ -6,20 +6,20 @@ interface GrayButtonProps {
   path: string;
 }
 
-const GrayButton = (GrayButtonProps: GrayButtonProps) => {
+const GrayButton = (props: GrayButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(GrayButtonProps.path);
+    navigate(props.path);
   };
 
-  if (GrayButtonProps.name == '로그아웃') {
+  if (props.name == '로그아웃') {
     return (
       <button onClick={handleClick} className="rounded-md gray-btn common-btn">
-        {GrayButtonProps.name}
+        {props.name}
       </button>
     );
-  } else if (GrayButtonProps.name == '설정') {
+  } else if (props.name == '설정') {
     return (
       <button
         onClick={handleClick}
@@ -50,7 +50,7 @@ const GrayButton = (GrayButtonProps: GrayButtonProps) => {
       //   </div>
       // </button>
       <button onClick={handleClick} className="gray-btn common-btn">
-        {GrayButtonProps.name}
+        {props.name}
       </button>
     );
   }

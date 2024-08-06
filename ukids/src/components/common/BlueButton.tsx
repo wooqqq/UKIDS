@@ -7,24 +7,24 @@ interface BlueButtonProps {
   path: string;
 }
 
-const BlueButton = ({ name, path }: BlueButtonProps) => {
+const BlueButton = (props: BlueButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(path);
+    navigate(props.path);
   };
 
-  if (name == '연결하기') {
+  if (props.name == '연결하기') {
     return (
       <button onClick={handleClick} className="common-btn green-btn">
         <img src="/assets/subway_call-2.png" alt="call-icon" />
-        {name}
+        {props.name}
       </button>
     );
   } else {
     return (
       <button onClick={handleClick} className="common-btn blue-btn">
-        {name}
+        {props.name}
       </button>
     );
   }

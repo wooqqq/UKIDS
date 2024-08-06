@@ -123,7 +123,7 @@ const FamilyChatting = () => {
                 onChange={onChange}
                 value={message}
               />
-              <BlueButton name="전송" path=" " />
+              <BlueButton name="전송" path="" />
             </form>
           </div>
         </div>

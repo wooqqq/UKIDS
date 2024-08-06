@@ -1,3 +1,4 @@
+/* index.css */
 @import url(./reset.css);
 @tailwind base;
 @tailwind components;
@@ -35,12 +36,78 @@ body {
 }
 
 @layer base {
-  html {
+  /* 전체 */
+  @font-face {
+    /* 프리텐다드 */
     font-family: 'Pretendard-Regular';
     src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
       format('woff');
     font-weight: 400;
     font-style: normal;
+  }
+
+  /* 사이드바 */
+  @font-face {
+    /* 고령딸기체 */
+    font-family: 'GoryeongStrawberry';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/GoryeongStrawberry.woff2')
+      format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  /* 게임 */
+  @font-face {
+    /* 원스토어 모바일POP체 */
+    font-family: 'ONE-Mobile-POP';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff')
+      format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  /* 편지 */
+  @font-face {
+    /* 온글잎 류류체 */
+    font-family: 'Ownglyph_ryurue-Rg';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_ryurue-Rg.woff2')
+      format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    /* 온글잎 류뚱체 */
+    font-family: 'Ownglyph_ryuttung-Rg';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_ryuttung-Rg.woff2')
+      format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  /* 성장일지 */
+  @font-face {
+    /* 온글잎 주리손편지 */
+    font-family: 'Ownglyph_jooreeletter-Rg';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-2@1.0/Ownglyph_jooreeletter-Rg.woff2')
+      format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  /* 그림일기 */
+  @font-face {
+    /* 어비 쩡체 */
+    font-family: 'UhBeejung';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeejung.woff')
+      format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  html {
+    font-family: 'Pretendard-Regular';
+    font-size: 1rem;
   }
 }
 
