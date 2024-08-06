@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CaptionRepository extends JpaRepository<Caption, Long>, CaptionRepositoryCustom {
     Optional<Caption> findByCaptionId(Long captionId);
+    Optional<Caption> findByPhoto_PhotoId(Long photoId);
 
     @Override
     long deleteAllByAlbum(Album album);

@@ -35,14 +35,14 @@ public class CaptionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deleteCaption(@RequestParam("id") Long captionId) {
+    public ResponseEntity<Map<String, Object>> deleteCaption(@PathVariable("id") Long captionId) {
         captionService.deleteCaption(captionId);
 
         return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_CAPTION.getMessage());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getCaption(@RequestParam("id") Long captionId) {
+    public ResponseEntity<Map<String, Object>> getCaption(@PathVariable("id") Long captionId) {
 
         return responseUtil.createResponse(HttpMethodCode.GET, captionService.getCaption(captionId));
     }

@@ -11,7 +11,6 @@ import org.hibernate.annotations.Where;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Where(clause = "is_delete = false")
 public class Caption extends BaseTimeEntity {
 
     @Id
@@ -22,7 +21,7 @@ public class Caption extends BaseTimeEntity {
     @Column(name="content", nullable = false, length = 255)
     private String content;
 
-    @Column(name = "is_delete", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "is_delete_caption", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDelete;
 
     @ManyToOne(fetch = FetchType.LAZY)
