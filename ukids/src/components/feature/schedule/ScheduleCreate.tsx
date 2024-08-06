@@ -7,7 +7,7 @@ const ScheduleCreate = () => {
     <div>
       <section className="flex justify-between">
         <WhiteButton name="목록" path="/schedule/list" />
-        <BlueButton name="등록" path="schedule/detail/:scheduleId" />
+        <BlueButton name="등록" path="/schedule/detail/:scheduleId" />
       </section>
       <section>
         <div>

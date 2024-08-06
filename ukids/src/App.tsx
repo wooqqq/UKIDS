@@ -1,5 +1,7 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Join from './pages/Join';
 import Schedule from './pages/Schedule';
 import Letters from './pages/Letters';
 import Albums from './pages/Albums';
@@ -14,31 +16,44 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/common/Sidebar';
 
-// 1. Home "/" : 가장 기본 페이지 (로그인 전, 후 모두 사용)
-// 2. Schedule "/schedule" : 일정 관리
-// 3. Letters "/letters" : 편지함
-// 4. Albums "/albums" : 사진 앨범
-// 5. PaintDiary "/paintdiary" : 그림일기
-// 6. GrowthDiary "/growthdiary" : 성장일지
-// 7. FamilyChatting "/chat" : 가족 채팅방
-// 8. FamilyVideoCall "/chat/call" : 가족 통화
+// 1. Home "/" : 가장 기본 페이지 (로그인 전)
+// 1-1. FamilyHome "/:familyId" : 로그인 후 메인 페이지
+// 2. Login "/login" : 로그인
+// 3. Join "/join" : 회원가입
+// 4. Schedule "/schedule" : 일정 관리
+// 5. Letters "/letters" : 편지함
+// 6. Albums "/albums" : 사진 앨범
+// 7. PaintDiary "/paintdiary" : 그림일기
+// 8. GrowthDiary "/growthdiary" : 성장일지
+// 9. FamilyChatting "/chat" : 가족 채팅방
+// 10. FamilyVideoCall "/chat/call" : 가족 통화
 //    => 채팅방 내의 통화여서 추후 사라질지도?
-// 9. Game "/game" : 게임
-// 9-1. QuizGame "/game/quiz" : 가족 퀴즈 게임
-// 9-2. CallMyNameGame "/game/callmyname" : 콜마이네임 게임
-// 10. Setting "/setting" : 설정 (회원정보, 가족정보 모두 수정(=마이페이지))
-// 11. Notfound "/잘못된 주소" : 잘못된 주소 입력 시
+// 11. Game "/game" : 게임
+// 11-1. QuizGame "/game/quiz" : 가족 퀴즈 게임
+// 11-2. CallMyNameGame "/game/callmyname" : 콜마이네임 게임
+// 12. Setting "/setting" : 설정 (회원정보, 가족정보 모두 수정(=마이페이지))
+// 13. Notfound "/잘못된 주소" : 잘못된 주소 입력 시
 
 const App = () => {
+  const location = useLocation();
+
+  // 로그인 안한 로그인, 회원가입, 홈, 가족방 생성/찾기는 사이드바X
+  const hideSidebar =
+    location.pathname === '/login' || location.pathname === '/join';
+
+  const removeFlexClass =
+    location.pathname === '/login' || location.pathname === '/join';
+
   return (
     <div className="">
       <Header />
-      <div className="flex justify-between">
-        {/* 로그인 안한 홈, 가족방 생성/찾기는 사이드바X */}
-        <Sidebar />
+      <div className={removeFlexClass ? '' : 'flex justify-between'}>
+        {!hideSidebar && <Sidebar />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/schedule/*" element={<Schedule />}></Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/Join" element={<Join />} />
+          <Route path="/schedule/*" element={<Schedule />} />
           <Route path="/letters" element={<Letters />} />
           <Route path="/albums" element={<Albums />} />
           <Route path="/paintdiary" element={<PaintingDiary />} />
