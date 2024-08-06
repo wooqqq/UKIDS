@@ -4,13 +4,12 @@ interface ChattingProps {
 }
 
 const ChattingBox = ({ message, isSender }: ChattingProps) => {
-  const color: string = isSender ? 'bg-[#fceecf]' : 'bg-[#cbeef4]';
-  const position = isSender ? 'self-end' : 'self-start';
+  const color = isSender ? 'bg-[#fceecf]' : 'bg-[#cbeef4]';
 
   return (
     <>
       <div
-        className={`flex justify-center items-center w-[371px] h-[94px] rounded-[5px] m-2 ${color} ${position}`}
+        className={`flex justify-center items-center w-[371px] h-[94px] rounded-[5px] mb-4 ${color}`}
       >
         {message}
       </div>

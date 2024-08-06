@@ -11,10 +11,9 @@ const Header = () => {
 
   return (
     <div
-      className="flex justify-between m-1 items-center mb-7"
+      className="flex justify-between m-1 items-center mb-4"
       style={{ width: '100%' }}
     >
-      {' '}
       {/* 부모 컨테이너를 전체 너비로 설정 */}
       {/* 로고 */}
       <button onClick={handleClick} className="w-52">
