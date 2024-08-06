@@ -7,7 +7,7 @@ import game from '../../assets/game.png';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar m-2">
+    <div className="sidebar">
       <Link
         to={'/albums'}
         className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-110"
