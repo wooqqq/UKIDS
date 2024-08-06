@@ -8,4 +8,6 @@ public interface CaptionService {
     void createCaption(CaptionCreateRequestDto requestDto);
 
     void updateCaption(CaptionUpdateRequestDto requestDto);
+
+    void deleteCaption(Long captionId);
 }

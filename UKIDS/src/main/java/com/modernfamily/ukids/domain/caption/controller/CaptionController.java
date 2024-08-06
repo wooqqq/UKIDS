@@ -33,4 +33,11 @@ public class CaptionController {
 
         return responseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_CAPTION.getMessage());
     }
+
+    @DeleteMapping("{/id}")
+    public ResponseEntity<Map<String, Object>> deleteCaption(@RequestParam("id") Long captionId) {
+        captionService.deleteCaption(captionId);
+
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_CAPTION.getMessage());
+    }
 }

@@ -44,4 +44,13 @@ public class CaptionServiceImpl implements CaptionService {
         captionRepository.save(caption);
     }
 
+    public void deleteCaption(Long captionId) {
+        Caption caption = captionRepository.findByCaptionId(captionId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_CAPTION_EXCEPTION));
+
+        caption.deleteCaption();
+
+        captionRepository.save(caption);
+    }
+
 }
