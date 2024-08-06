@@ -1,10 +1,18 @@
-import GameButton from '../components/feature/game/GameButton';
+import { Route, Routes } from 'react-router-dom';
+import GameSelect from '../components/feature/game/GameSelect';
+import '../components/feature/game/Game.css';
 
 const Game = () => {
   return (
     <>
-      <h1>게임</h1>
-      <GameButton />
+      <div className="half-feature-box">
+        <GameSelect />
+      </div>
+      <div className="half-feature-box items-center">
+        <Routes>
+          <Route path="" element={<GameSelect />} />
+        </Routes>
+      </div>
     </>
   );
 };
