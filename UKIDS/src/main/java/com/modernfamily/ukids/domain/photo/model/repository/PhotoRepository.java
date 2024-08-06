@@ -14,7 +14,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long>, PhotoReposi
 
     Optional<Photo> findByPhotoId(Long id);
 
-    Page<Photo> findAllByAlbum_AlbumId(Long AlbumId, Pageable pageable);
+    Page<Photo> findAllByAlbum_AlbumIdOrderByCreateTimeDesc(Long AlbumId, Pageable pageable);
 
     @Override
     long deleteAllByAlbum(Album album);

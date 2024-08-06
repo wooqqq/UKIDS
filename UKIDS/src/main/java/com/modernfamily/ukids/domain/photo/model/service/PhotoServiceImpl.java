@@ -98,7 +98,7 @@ public class PhotoServiceImpl implements PhotoService {
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
 
         Pageable pageable = PageRequest.of(--page, size);
-        Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumId(albumId, pageable);
+        Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumIdOrderByCreateTimeDesc(albumId, pageable);
 
         List<Photo> photoList = photoPage.getContent();
         List<PhotoListResponseDto> responseDtoList = new ArrayList<>();

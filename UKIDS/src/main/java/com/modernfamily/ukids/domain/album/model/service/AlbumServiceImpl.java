@@ -92,7 +92,7 @@ public class AlbumServiceImpl implements AlbumService {
         Family family = familyMemberValidator.checkUserInFamilyMember(familyId).getFamily();
 
         Pageable pageable = PageRequest.of(--page, size);
-        Page<Album> albumPage = albumRepository.findAllByFamily_FamilyId(familyId, pageable);
+        Page<Album> albumPage = albumRepository.findAllByFamily_FamilyIdOrderByDateDesc(familyId, pageable);
 
         List<Album> albumList = albumPage.getContent();
         List<FamilyAlbumListResponseDto> responseDtoList = new ArrayList<>();
