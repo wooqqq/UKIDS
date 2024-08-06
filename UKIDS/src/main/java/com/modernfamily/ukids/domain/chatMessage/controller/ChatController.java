@@ -22,9 +22,20 @@ public class ChatController {
     public void message(ChatMessage message) {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             chatRoomRepository.enterChatRoom(message.getRoomId());
-            message.setMessage(message.getSender() + " 님이 입장하셨습니다.");
+//            message.setMessage(message.getSender() + " 님이 입장하셨습니다.");
+        } else {
+            // WebSocket에 발행된 메시지를 redis로 발행한다
+            redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
         }
-        // WebSocket에 발행된 메시지를 redis로 발행한다
-        redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
+    }
+
+    /**
+     * websocket "/pub/chat/leave"로 들어오는 채팅방 나가기 메시징을 처리한다.
+     */
+    @MessageMapping("/chat/leave")
+    public void leave(ChatMessage message) {
+        if (ChatMessage.MessageType.EXIT.equals(message.getType())) {
+            chatRoomRepository.exitChatRoom(message.getRoomId());
+        }
     }
 }

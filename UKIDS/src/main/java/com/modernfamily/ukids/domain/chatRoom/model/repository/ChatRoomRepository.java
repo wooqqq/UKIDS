@@ -70,6 +70,17 @@ public class ChatRoomRepository {
         }
     }
 
+    /**
+     * 채팅방 나가기 : Redis에서 해당 채팅방의 topic을 제거한다.
+     */
+    public void exitChatRoom(Long roomId) {
+        ChannelTopic topic = topics.get(roomId.toString());
+        if (topic != null) {
+            redisMessageListener.removeMessageListener(redisSubscriber, topic);
+            topics.remove(roomId.toString());
+        }
+    }
+
     public ChannelTopic getTopic(Long roomId) {
         return topics.get(roomId.toString());
     }

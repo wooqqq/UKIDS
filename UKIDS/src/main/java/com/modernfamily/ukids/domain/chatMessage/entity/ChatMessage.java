@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ChatMessage {
 
     public enum MessageType {
-        ENTER, TALK
+        ENTER, TALK, EXIT
     }
 
     private MessageType type;
