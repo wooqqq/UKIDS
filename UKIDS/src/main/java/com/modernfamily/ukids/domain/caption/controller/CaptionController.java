@@ -40,4 +40,10 @@ public class CaptionController {
 
         return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_CAPTION.getMessage());
     }
+
+    @GetMapping("{/id}")
+    public ResponseEntity<Map<String, Object>> getCaption(@RequestParam("id") Long captionId) {
+
+        return responseUtil.createResponse(HttpMethodCode.GET, captionService.getCaption(captionId));
+    }
 }
