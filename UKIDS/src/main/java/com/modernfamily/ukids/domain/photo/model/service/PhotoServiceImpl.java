@@ -5,7 +5,9 @@ import com.amazonaws.services.s3.model.*;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
 import com.modernfamily.ukids.domain.album.model.service.AlbumService;
+import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
+import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.photo.dto.request.PhotoSaveRequestDto;
 import com.modernfamily.ukids.domain.photo.dto.response.PhotoInfoResponseDto;
@@ -14,6 +16,7 @@ import com.modernfamily.ukids.domain.photo.dto.response.PhotoListResponseDto;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
 import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
+import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +43,12 @@ public class PhotoServiceImpl implements PhotoService {
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
-    private final AlbumService albumService;
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
     private final AmazonS3Client amazonS3Client;
     private final FamilyMemberRepository familyMemberRepository;
+    private final FamilyMapper familyMapper;
+    private final UserMapper userMapper;
 
     @Transactional
     public void savePhoto(PhotoSaveRequestDto requestDto) throws IOException {
@@ -130,16 +134,22 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findByPhotoId(photoId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
-        checkFamilyMember(photo.getAlbum().getFamily().getFamilyId());
+        Family family = checkFamilyMember(photo.getAlbum().getFamily().getFamilyId());
 
-        return PhotoInfoResponseDto.createResponseDto(photo);
+        FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
+
+        return PhotoInfoResponseDto.createResponseDto(photo, familyResponseDto);
     }
 
     public PhotoListPagenationResponseDto getPhotoList(int size, int page, Long albumId) {
         Album album = albumRepository.findByAlbumId(albumId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
-        checkFamilyMember(album.getFamily().getFamilyId());
+        Family family = checkFamilyMember(album.getFamily().getFamilyId());
+
+        FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
 
         Pageable pageable = PageRequest.of(--page, size);
         Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumId(albumId, pageable);
@@ -152,7 +162,8 @@ public class PhotoServiceImpl implements PhotoService {
         }
 
         PhotoListPagenationResponseDto pagenationResponseDto =
-                PhotoListPagenationResponseDto.createResponseDto(photoPage.getNumberOfElements(), photoPage.getNumber()+1, photoPage.getTotalPages(), album, responseDtoList);
+                PhotoListPagenationResponseDto.createResponseDto
+                        (photoPage.getNumberOfElements(), photoPage.getNumber()+1, photoPage.getTotalPages(), album, responseDtoList, familyResponseDto);
 
         return pagenationResponseDto;
     }

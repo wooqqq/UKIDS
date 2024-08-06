@@ -6,6 +6,7 @@ import com.modernfamily.ukids.domain.schedule.message.SuccessMessage;
 import com.modernfamily.ukids.domain.schedule.model.service.ScheduleService;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
 import com.modernfamily.ukids.global.util.HttpResponseUtil;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,11 @@ public class ScheduleController {
         scheduleService.deleteSchedule(scheduleId);
 
         return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_SCHDULE);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getScheduleInfo(@PathVariable("id") Long scheduleId) {
+        return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleInfo(scheduleId));
     }
 
 }
