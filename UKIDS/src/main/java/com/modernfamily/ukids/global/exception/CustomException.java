@@ -40,6 +40,8 @@ public enum CustomException {
     NOT_SAME_WRITER_EXCEPTION(400, "NotFoundWriterException", "사용자와 작성자가 일치하지 않습니다."),
     NOT_PERMISSION_GROWTHRECORD_EXCEPTION(400, "NotPermissionGrowthRecordException", "20세 미만 자녀에게 허가되지 않았습니다."),
 
+    FAIL_TO_CONVERT_FILE_EXCEPTION(400, "FailToConvertFileException", "파일 변환에 실패했습니다."),
+    NOT_FOUND_PHOTO_EXCEPTION(400, "NotFoundPhotoException", "해당 사진이 존재하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
