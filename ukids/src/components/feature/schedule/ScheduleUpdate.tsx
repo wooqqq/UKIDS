@@ -1,22 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import BlueButton from '../../common/BlueButton';
 import WhiteButton from '../../common/WhiteButton';
 
 const ScheduleUpdate = () => {
-  const nav = useNavigate();
-  // 목록 이동 버튼 이벤트
-  const onClickListButton = () => {
-    nav('/schedule/list');
-  };
-  // 일정 상세 버튼 이벤트 (등록 완료 대체ㄴ)
-  const onClickDetailButton = () => {
-    nav('/schedule/detail/:scheduleId');
-  };
   return (
     <div>
       <section className="flex justify-between">
-        <WhiteButton name="목록" onClick={onClickListButton} />
-        <BlueButton name="등록" onClick={onClickDetailButton} />
+        <WhiteButton name="목록" path="/schedule/list" />
+        <BlueButton name="등록" path="/schedule/detail/:scheduleId" />
       </section>
       <section>
         <div>

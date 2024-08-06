@@ -6,10 +6,6 @@ import '../../common/common.css';
 const ScheduleList = () => {
   const { selectedDate, eventData } = useScheduleStore();
   const nav = useNavigate();
-  const onClickScheduleButton = () => {
-    //  스케줄 페이지로 이동
-    nav('/schedule');
-  };
   const onClickCreateButton = () => {
     //  스케줄 등록 페이지로 이동
     nav('/schedule/new');
@@ -17,7 +13,7 @@ const ScheduleList = () => {
   return (
     <div className="schedule-box">
       <section className="flex justify-between">
-        <WhiteButton name="이전" onClick={onClickScheduleButton} />
+        <WhiteButton name="이전" path="/schedule" />
         <button className="plus-btn" onClick={onClickCreateButton}>
           +
         </button>
