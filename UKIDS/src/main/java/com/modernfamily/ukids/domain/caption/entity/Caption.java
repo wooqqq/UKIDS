@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "is_delete = false")
 public class Caption extends BaseTimeEntity {
 
     @Id
@@ -34,6 +36,7 @@ public class Caption extends BaseTimeEntity {
     }
 
     public static Caption createCaption(String content, Photo photo) {
+
         return new Caption(content, false, photo);
     }
 }

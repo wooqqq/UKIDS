@@ -26,21 +26,21 @@ public class ScheduleController {
     public ResponseEntity<Map<String, Object>> createSchedule(@RequestBody ScheduleCreateRequestDto requestDto) {
         scheduleService.createSchedule(requestDto);
 
-        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_SCHDULE);
+        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_SCHDULE.getMessage());
     }
 
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateSchedule(@RequestBody ScheduleUpdateRequestDto requestDto) {
         scheduleService.updateSchedule(requestDto);
 
-        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_UPDATE_SCHDULE);
+        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_UPDATE_SCHDULE.getMessage());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deleteSchedule(@PathVariable("id") Long scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
 
-        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_SCHDULE);
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_SCHDULE.getMessage());
     }
 
     @GetMapping("/{id}")
