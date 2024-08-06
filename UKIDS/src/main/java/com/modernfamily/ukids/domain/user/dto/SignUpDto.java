@@ -13,6 +13,7 @@ public class SignUpDto {
     private String phone;
     private String birthDate;
     private String profileImage;
+    private Role role;
 
 
 }
