@@ -1,8 +1,5 @@
 package com.modernfamily.ukids.domain.pictureDiary.model.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
@@ -14,12 +11,11 @@ import com.modernfamily.ukids.domain.pictureDiary.entity.PictureDiary;
 import com.modernfamily.ukids.domain.pictureDiary.mapper.PictureDiaryMapper;
 import com.modernfamily.ukids.domain.pictureDiary.model.repository.CustomPictureDiaryRepository;
 import com.modernfamily.ukids.domain.pictureDiary.model.repository.PictureDiaryRepository;
-import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
-import com.modernfamily.ukids.global.fileUpload.FileUpload;
+import com.modernfamily.ukids.global.s3.S3Manager;
+import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,13 +37,8 @@ public class PictureDiaryServiceImpl implements PictureDiaryService{
     private final PictureDiaryMapper pictureDiaryMapper;
 
     private final FamilyRepository familyRepository;
-    private final FamilyMemberRepository familyMemberRepository;
-    private final AmazonS3Client amazonS3Client;
-    private final FileUpload fileUpload;
-
-
-    @Value("${aws.s3.bucket.name}")
-    private String bucketName;
+    private final S3Manager s3Manager;
+    private final FamilyMemberValidator familyMemberValidator;
 
 
     @Override
@@ -56,15 +47,13 @@ public class PictureDiaryServiceImpl implements PictureDiaryService{
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
         // 추후 familyId와 현재 로그인 정보를 확인해서 가족방에 속해있는지 확인
-        String id = CustomUserDetails.contextGetUserId();
-        familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, pictureDiaryRequestDto.getFamilyId())
-                        .orElseThrow(() -> new ExceptionResponse(CustomException.APPROVAL_FAMILYMEMBER_EXCEPTION));
+        familyMemberValidator.checkUserInFamilyMember(pictureDiaryRequestDto.getFamilyId());
 
         Map<String, Object> uploadParam = null;
         if(pictureDiaryRequestDto.getMultipartFile() != null){
             try{
                 String path = "pictureDiary";
-                uploadParam = fileUpload.uploadFile(pictureDiaryRequestDto.getMultipartFile(), path);
+                uploadParam = s3Manager.uploadFile(pictureDiaryRequestDto.getMultipartFile(), path);
             }
             catch(IOException e){
                 throw new RuntimeException(e);
@@ -137,15 +126,9 @@ public class PictureDiaryServiceImpl implements PictureDiaryService{
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PICTUREDIARY_EXCEPTION));
 
         // 추후 가족방에 속한 사람인지 검사
-        String id = CustomUserDetails.contextGetUserId();
-        familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, pictureDiary.getFamily().getFamilyId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.APPROVAL_FAMILYMEMBER_EXCEPTION));
+        familyMemberValidator.checkUserInFamilyMember(pictureDiary.getFamily().getFamilyId());
 
-        try {
-            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, pictureDiary.getImageS3Name()));
-        } catch (AmazonS3Exception e) {
-            throw new IOException("Error deleting photo ", e);
-        }
+        s3Manager.deleteFile(pictureDiary.getImageS3Name());
 
         customPictureDiaryRepository.deletePictureDiary(pictureDiaryId);
     }
@@ -156,24 +139,18 @@ public class PictureDiaryServiceImpl implements PictureDiaryService{
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PICTUREDIARY_EXCEPTION));
 
         // 추후 가족방에 속한 사람인지 검사
-        String id = CustomUserDetails.contextGetUserId();
-        familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, pictureDiaryUpdateDto.getFamilyId())
-                        .orElseThrow(() -> new ExceptionResponse(CustomException.APPROVAL_FAMILYMEMBER_EXCEPTION));
+        familyMemberValidator.checkUserInFamilyMember(pictureDiaryUpdateDto.getFamilyId());
 
         Map<String, Object> uploadParam = null;
         if(pictureDiaryUpdateDto.getMultipartFile() != null) {
             try {
                 String path = "pictureDiary";
-                uploadParam = fileUpload.uploadFile(pictureDiaryUpdateDto.getMultipartFile(), path);
+                uploadParam = s3Manager.uploadFile(pictureDiaryUpdateDto.getMultipartFile(), path);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            try {
-                amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, pictureDiaryUpdateDto.getImageS3Name()));
-            } catch (AmazonS3Exception e) {
-                throw new IOException("Error deleting photo ", e);
-            }
+            s3Manager.deleteFile(pictureDiaryUpdateDto.getImageS3Name());
 
             pictureDiaryUpdateDto.setImageName(uploadParam.get("originalName").toString());
             pictureDiaryUpdateDto.setImageS3Name(uploadParam.get("s3FileName").toString());

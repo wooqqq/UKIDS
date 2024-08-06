@@ -1,12 +1,12 @@
-package com.modernfamily.ukids.global.fileUpload;
+package com.modernfamily.ukids.global.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
-import jakarta.persistence.Convert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +24,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class FileUpload {
+public class S3Manager {
 
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
     private final AmazonS3Client amazonS3Client;
+
+    public void deleteFile(String s3FileName) throws IOException {
+        try {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, s3FileName));
+        } catch (AmazonS3Exception e) {
+            throw new IOException("Error deleting photo ", e);
+        }
+    }
 
     public Map<String, Object> uploadFile(MultipartFile multipartFile, String path) throws IOException {
         Map<String, Object> uploadParam = new HashMap<>();
