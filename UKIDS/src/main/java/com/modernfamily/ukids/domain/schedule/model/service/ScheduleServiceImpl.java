@@ -4,6 +4,7 @@ import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleCreateRequestDto;
+import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.modernfamily.ukids.domain.schedule.entity.Schedule;
 import com.modernfamily.ukids.domain.schedule.model.repository.ScheduleRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
@@ -25,9 +26,40 @@ public class ScheduleServiceImpl implements ScheduleService {
     public void createSchedule(ScheduleCreateRequestDto requestDto) {
         Family family = checkFamilyMember(requestDto.getFamilyId());
 
-        Schedule schedule = Schedule.createSchedule(requestDto, family);
+        Schedule schedule = Schedule.createSchedule(requestDto.getTitle(), requestDto.getContent(), requestDto.getPlace(),
+                requestDto.getStartTime(), requestDto.getEndTime() ,family);
 
         scheduleRepository.save(schedule);
+    }
+
+    @Transactional
+    public void updateSchedule(ScheduleUpdateRequestDto requestDto) {
+        Family family = checkFamilyMember(requestDto.getFamilyId());
+
+        Schedule existSchedule = scheduleRepository.findByScheduleId(requestDto.getScheduleId())
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_SCHEDULE_EXCEPTION));
+
+        if(!existSchedule.getFamily().getFamilyId().equals(requestDto.getFamilyId()))
+            throw new ExceptionResponse(CustomException.NOT_MATCHED_SCHEDULE_FAMILY);
+
+        Schedule schedule = Schedule.createSchedule(requestDto.getTitle(), requestDto.getContent(), requestDto.getPlace(),
+                requestDto.getStartTime(), requestDto.getEndTime() ,family);
+
+        schedule.updateSchedule(requestDto.getScheduleId());
+
+        scheduleRepository.save(schedule);
+    }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId) {
+        Schedule existSchedule = scheduleRepository.findByScheduleId(scheduleId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_SCHEDULE_EXCEPTION));
+
+        checkFamilyMember(existSchedule.getFamily().getFamilyId());
+
+        existSchedule.deleteSchedule();
+
+        scheduleRepository.save(existSchedule);
     }
 
 

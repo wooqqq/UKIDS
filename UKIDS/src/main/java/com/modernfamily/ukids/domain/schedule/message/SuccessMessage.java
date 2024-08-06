@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessMessage {
     
-    SUCCESS_CREATE_SCHDULE("일정 등록 성공");
-    
+    SUCCESS_CREATE_SCHDULE("일정 등록 성공"),
+    SUCCESS_UPDATE_SCHDULE("일정 수정 성공"),
+    SUCCESS_DELETE_SCHDULE("일정 삭제 성공");
+
     private String message;
 
 }
