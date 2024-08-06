@@ -31,10 +31,15 @@ public enum CustomException {
     NOT_SAME_FAMILYMEMBER_USER_EXCEPTION(400, "NotSameFamilyMemberUserException", "가족구성원과 사용자가 일치하지 않습니다."),
     APPROVAL_FAMILYMEMBER_EXCEPTION(400, "ApprovalFamilyMemberException", "이미 승인된 인원입니다."),
     NOT_APPROVAL_FAMILYMEMBER_EXCEPTION(400, "NotApprovalFamilyMemberException", "가족 구성원이 아닙니다."),
-
     // 앨범
     DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
     NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
+    // 자녀성장일지
+    NOT_FOUND_GROWTHFOLDER_EXCEPTION(400, "NotFoundGrowthFolderException", "자녀 성장일지 폴더가 존재하지 않습니다."),
+    NOT_FOUND_GROWTHRECORD_EXCEPTION(400, "NotFoundGrowthRecordException", "자녀 성장일지가 존재하지 않습니다."),
+    NOT_SAME_WRITER_EXCEPTION(400, "NotFoundWriterException", "사용자와 작성자가 일치하지 않습니다."),
+    NOT_PERMISSION_GROWTHRECORD_EXCEPTION(400, "NotPermissionGrowthRecordException", "20세 미만 자녀에게 허가되지 않았습니다."),
+
     FAIL_TO_CONVERT_FILE_EXCEPTION(400, "FailToConvertFileException", "파일 변환에 실패했습니다."),
     NOT_FOUND_PHOTO_EXCEPTION(400, "NotFoundPhotoException", "해당 사진이 존재하지 않습니다."),
 
