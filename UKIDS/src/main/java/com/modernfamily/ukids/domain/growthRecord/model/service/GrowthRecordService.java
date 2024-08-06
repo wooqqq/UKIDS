@@ -1,10 +1,7 @@
 package com.modernfamily.ukids.domain.growthRecord.model.service;
 
 import com.modernfamily.ukids.domain.growthFolder.dto.GrowthFolderPaginationDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordPaginationDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordRequestDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordResponseDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordUpdateDto;
+import com.modernfamily.ukids.domain.growthRecord.dto.*;
 
 import java.util.List;
 
@@ -13,7 +10,7 @@ public interface GrowthRecordService {
 
     void updateGrowthRecord(GrowthRecordUpdateDto growthRecordUpdate);
 
-    GrowthRecordResponseDto getGrowthRecord(Long recordId);
+    GrowthRecordResponseDto getGrowthRecord(GrowthRecordDetailDto growthRecordDetailDto);
 
     GrowthRecordPaginationDto getGrowthRecords(Long folderId, int size, int page);
 

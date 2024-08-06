@@ -1,11 +1,11 @@
 package com.modernfamily.ukids.domain.growthRecord.model.service;
 
+import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
+import com.modernfamily.ukids.domain.familyMember.entity.FamilyRole;
+import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.growthFolder.dto.GrowthFolderPaginationDto;
 import com.modernfamily.ukids.domain.growthFolder.model.repository.GrowthFolderRepository;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordPaginationDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordRequestDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordResponseDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordUpdateDto;
+import com.modernfamily.ukids.domain.growthRecord.dto.*;
 import com.modernfamily.ukids.domain.growthRecord.entity.GrowthRecord;
 import com.modernfamily.ukids.domain.growthRecord.mapper.GrowthRecordMapper;
 import com.modernfamily.ukids.domain.growthRecord.model.repository.GrowthRecordRepository;
@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
 
     @PersistenceContext
     private final EntityManager entityManager;
+    private final FamilyMemberRepository familyMemberRepository;
 
     @Override
     public void createGrowthRecord(GrowthRecordRequestDto growthRecordRequestDto) {
@@ -71,11 +73,21 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
     }
 
     @Override
-    public GrowthRecordResponseDto getGrowthRecord(Long recordId) {
-        GrowthRecord growthRecord = growthRecordRepository.findByRecordId(recordId)
+    public GrowthRecordResponseDto getGrowthRecord(GrowthRecordDetailDto growthRecordDetailDto) {
+        GrowthRecord growthRecord = growthRecordRepository.findByRecordId(growthRecordDetailDto.getRecordId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHRECORD_EXCEPTION));
 
+        String id = CustomUserDetails.contextGetUserId();
+        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, growthRecordDetailDto.getFamilyId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.APPROVAL_FAMILYMEMBER_EXCEPTION));
 
+        if(familyMember.getRole().equals(FamilyRole.ROLE_CHILD)){
+            int currentYear = LocalDate.now().getYear();
+            int birthYear = Integer.parseInt(familyMember.getUser().getBirthDate().substring(0, 4));
+            if(currentYear - birthYear + 1 < 20){
+                throw new ExceptionResponse(CustomException.NOT_PERMISSION_GROWTHRECORD_EXCEPTION);
+            }
+        }
 
         return growthRecordMapper.toGrowthRecordResponseDto(growthRecord);
     }

@@ -1,9 +1,6 @@
 package com.modernfamily.ukids.domain.growthRecord.controller;
 
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordPaginationDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordRequestDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordResponseDto;
-import com.modernfamily.ukids.domain.growthRecord.dto.GrowthRecordUpdateDto;
+import com.modernfamily.ukids.domain.growthRecord.dto.*;
 import com.modernfamily.ukids.domain.growthRecord.message.SuccessMessage;
 import com.modernfamily.ukids.domain.growthRecord.model.service.GrowthRecordService;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
@@ -40,9 +37,10 @@ public class GrowthRecordController {
         return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_UPDATE_GROWTHRECORD.getMessage());
     }
 
-    @GetMapping("/{recordId}")
-    public ResponseEntity<Map<String,Object>> getGrowthRecord(@PathVariable("recordId") Long recordId){
-        GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.getGrowthRecord(recordId);
+    @GetMapping
+    public ResponseEntity<Map<String,Object>> getGrowthRecord(@RequestBody GrowthRecordDetailDto growthRecordDetailDto){
+        System.out.println(growthRecordDetailDto.toString());
+        GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.getGrowthRecord(growthRecordDetailDto);
 
         return httpResponseUtil.createResponse(HttpMethodCode.GET, growthRecordResponseDto);
     }
