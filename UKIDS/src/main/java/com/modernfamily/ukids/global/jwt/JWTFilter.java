@@ -21,22 +21,21 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String path = request.getRequestURI();
-        if (path.startsWith("/chat/room")) {
+//        String path = request.getRequestURI();
+//        if (path.startsWith("/chat/room")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+
+        String authorization = request.getHeader("Authorization");
+
+        if(authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String authorization = request.getHeader("Authorization");
-        if(authorization == null || !authorization.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            System.out.println("JWTFilter 에서 문제 생김");
-            throw new ExceptionResponse(CustomException.NOT_VALID_JWT_EXCEPTION);
-        }
-
         // Bearer 부분 제거 토큰 획득
         String token = authorization.replace("Bearer ", "");
-
         if(jwtUtil.isExpired(token)){
             filterChain.doFilter(request, response);
 

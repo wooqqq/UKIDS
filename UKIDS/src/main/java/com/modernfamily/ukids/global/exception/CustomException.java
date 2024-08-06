@@ -15,10 +15,30 @@ public enum CustomException {
     DUPLICATED_NUMBER_EXCEPTION(400,"DuplicatedNumberException","가입된 전화번호가 존재합니다."),
     DUPLICATED_ID_EXCEPTION(400,"DuplicatedIDException","가입된 아이디가 존재합니다."),
     NOT_FOUND_LETTER_EXCEPTION(400, "NotFoundLetterException", "편지가 존재하지 않습니다."),
-    NOT_FOUND_FAMILY_EXCEPTION(400, "NotFoundFamilyException", "가족이 존재하지 않습니다."),
     NOT_FOUND_AVAILABLE_PORT(400, "NotFoundAvailablePort", "사용 가능한 포트 번호가 존재하지 않습니다."),
 
     DUPLICATED_EMAIL_EXCEPTION(400,"DuplicatedEmailException","가입된 이메일이 존재합니다."),
+    NOT_FOUND_SESSION_EXCEPTION(400,"NotFoundSessionException","세션 ID가 존재하지 않습니다."),
+
+
+    // 가족방
+    NOT_FOUND_FAMILY_EXCEPTION(400, "NotFoundFamilyException", "가족방이 존재하지 않습니다."),
+    INPUT_FAMILY_EXCEPTION(400, "InputFamilyException", "가족방 입력이 잘못되었습니다."),
+    NOSUCH_ALGORITHM_EXCEPTION(400, "NoSuchAlgorithmException", "가족방 고유코드 생성이 실패했습니다."),
+    NOT_SAME_REPRESENTATIVE_EXCEPTION(400, "NotSameRepresentativeException", "사용자와 대표자가 일치하지 않습니다."),
+    NOT_SAME_PASSWORD_EXCEPTION(400, "NotSamePasswordException", "가족방 비밀번호가 일치하지 않습니다."),
+
+    // 가족 구성원
+    NOT_FOUND_FAMILYMEMBER_EXCEPTION(400, "NotFoundFamilyMemberException", "가족구성원이 존재하지 않습니다."),
+    NOT_SAME_FAMILYMEMBER_USER_EXCEPTION(400, "NotSameFamilyMemberUserException", "가족구성원과 사용자가 일치하지 않습니다."),
+    APPROVAL_FAMILYMEMBER_EXCEPTION(400, "ApprovalFamilyMemberException", "이미 승인된 인원입니다."),
+    NOT_APPROVAL_FAMILYMEMBER_EXCEPTION(400, "NotApprovalFamilyMemberException", "가족 구성원이 아닙니다."),
+
+    // 앨범
+    DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
+    NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
+    FAIL_TO_CONVERT_FILE_EXCEPTION(400, "FailToConvertFileException", "파일 변환에 실패했습니다."),
+    NOT_FOUND_PHOTO_EXCEPTION(400, "NotFoundPhotoException", "해당 사진이 존재하지 않습니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),

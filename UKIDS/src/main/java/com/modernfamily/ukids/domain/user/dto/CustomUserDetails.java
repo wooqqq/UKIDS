@@ -2,6 +2,7 @@ package com.modernfamily.ukids.domain.user.dto;
 
 import com.modernfamily.ukids.domain.user.entity.Role;
 import com.modernfamily.ukids.domain.user.entity.User;
+import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,6 @@ import java.util.List;
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -88,4 +88,5 @@ public class CustomUserDetails implements UserDetails {
         return SecurityContextHolder.getContext()
                 .getAuthentication().getName();
     }
+
 }

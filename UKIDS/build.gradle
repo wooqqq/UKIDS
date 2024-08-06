@@ -36,7 +36,6 @@ dependencies {
 
 	//web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -56,8 +55,11 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	//valid
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 	//dev-tools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	//mysql
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -83,11 +85,17 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 //	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
-    // redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// OpenVidu Java Client 의존성
+	implementation 'io.openvidu:openvidu-java-client:2.30.0'
 
+	//s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation "com.amazonaws:aws-java-sdk-s3:1.12.395"
+
+    //jackson
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
+    //slf4j
 	implementation 'org.slf4j:slf4j-api'
 }
 

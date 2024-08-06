@@ -1,9 +1,6 @@
 package com.modernfamily.ukids.domain.user.model.service;
 
-import com.modernfamily.ukids.domain.user.dto.PasswordCheckDto;
-import com.modernfamily.ukids.domain.user.dto.SignUpDto;
-import com.modernfamily.ukids.domain.user.dto.UserDto;
-import com.modernfamily.ukids.domain.user.dto.UserOtherDto;
+import com.modernfamily.ukids.domain.user.dto.*;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
@@ -63,7 +60,8 @@ public class UserServIceImpl implements UserService{
 
     @Override
     public UserDto getUser(Long userId) {
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         if(user == null){
             throw new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION);
@@ -76,7 +74,8 @@ public class UserServIceImpl implements UserService{
     public boolean pwCheck(PasswordCheckDto userDto) {
         String id = userDto.getId();
 
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         return bCryptPasswordEncoder.matches(userDto.getPassword(), user.getPassword());
     }
@@ -85,7 +84,8 @@ public class UserServIceImpl implements UserService{
     @Override
     public UserOtherDto findByIdOther(String id) {
 
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         return userMapper.toUserOtherDto(user);
     }
