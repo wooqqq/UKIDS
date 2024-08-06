@@ -51,7 +51,6 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
 
-
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/login", "/", "/user/signup").permitAll()
                         .anyRequest().authenticated());
@@ -83,15 +82,15 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> {
-            web.ignoring()
-                    .requestMatchers(
-                            "/user/signup"
-                    );
-        };
+//        return (web) -> {
+//            web.ignoring()
+//                    .requestMatchers(
+//                            "/user/signup"
+//                    );
+//        };
         // chat 테스트 시 해당 코드로 테스트
-//        return (web) -> web
-//                .ignoring()
-//                .requestMatchers("/**");
+        return (web) -> web
+                .ignoring()
+                .requestMatchers("/**");
     }
 }

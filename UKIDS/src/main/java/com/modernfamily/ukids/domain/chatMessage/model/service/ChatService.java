@@ -19,9 +19,7 @@ public class ChatService {
 
     public List<ChatMessage> getChatMessages(String roomId) throws Exception {
         String key = "chat:messages:" + roomId;
-        System.out.println("여기 ChatService key : " + key);
         List<Object> rawMessages = redisTemplate.opsForList().range(key, 0, -1);
-        System.out.println("여기는 ChatService : " + rawMessages);
         return rawMessages.stream()
                 .map(message -> {
                     try {
