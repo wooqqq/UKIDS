@@ -1,7 +1,8 @@
 package com.modernfamily.ukids.domain.caption.model.service;
 
 
-import com.modernfamily.ukids.domain.caption.dto.request.CreateCaptionRequestDto;
+import com.modernfamily.ukids.domain.caption.dto.request.CaptionCreateRequestDto;
+import com.modernfamily.ukids.domain.caption.dto.request.CaptionUpdateRequestDto;
 import com.modernfamily.ukids.domain.caption.entity.Caption;
 import com.modernfamily.ukids.domain.caption.model.repository.CaptionRepository;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
@@ -21,12 +22,25 @@ public class CaptionServiceImpl implements CaptionService {
     private final CaptionRepository captionRepository;
 
     @Transactional
-    public void createCaption(CreateCaptionRequestDto requestDto) {
+    public void createCaption(CaptionCreateRequestDto requestDto) {
         Photo photo = photoRepository.findByPhotoId(requestDto.getPhotoId())
                         .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
 
         Caption caption = Caption.createCaption(requestDto.getContent(), photo);
+        captionRepository.save(caption);
+    }
+
+    @Transactional
+    public void updateCaption(CaptionUpdateRequestDto requestDto) {
+        Photo photo = photoRepository.findByPhotoId(requestDto.getPhotoId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
+
+        Caption caption = captionRepository.findByCaptionId(requestDto.getCaptionId())
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_CAPTION_EXCEPTION));
+
+        caption.updateCaption(requestDto.getContent());
+
         captionRepository.save(caption);
     }
 

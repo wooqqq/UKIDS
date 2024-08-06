@@ -43,7 +43,9 @@ public enum CustomException {
     // 앨범, 사진, 캡션
     DUPLICATED_ALBUM_EXCEPTION(400, "DuplicatedAlbumException", "해당 날짜에 앨범이 이미 존재합니다."),
     NOT_FOUND_ALBUM_EXCEPTION(400, "NotFoundAlbumException", "해당 앨범이 존재하지 않습니다."),
-
+    NOT_FOUND_CAPTION_EXCEPTION(400, "NotFoundCaptionException", "해당 캡션이 존재하지 않습니다."),
+    
+    
     // 자녀성장일지
     NOT_FOUND_GROWTHFOLDER_EXCEPTION(400, "NotFoundGrowthFolderException", "자녀 성장일지 폴더가 존재하지 않습니다."),
     NOT_FOUND_GROWTHRECORD_EXCEPTION(400, "NotFoundGrowthRecordException", "자녀 성장일지가 존재하지 않습니다."),

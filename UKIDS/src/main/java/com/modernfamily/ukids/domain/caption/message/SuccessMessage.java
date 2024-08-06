@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessMessage {
     
-    SUCCESS_CREATE_CAPTION("캡션 생성 완료");
-    
+    SUCCESS_CREATE_CAPTION("캡션 생성 완료"),
+    SUCCESS_UPDATE_CAPTION("캡션 수정 완료");
+
     private String message;
 }

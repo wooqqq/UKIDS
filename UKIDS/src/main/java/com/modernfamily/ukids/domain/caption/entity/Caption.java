@@ -39,5 +39,13 @@ public class Caption extends BaseTimeEntity {
 
         return new Caption(content, false, photo);
     }
+
+    public void updateCaption(String content){
+        this.content = content;
+    }
+
+    public void deleteCaption(){
+        this.isDelete = true;
+    }
 }
 
