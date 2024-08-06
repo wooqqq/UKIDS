@@ -33,12 +33,4 @@ public class ChatRoom implements Serializable {
         return chatRoom;
     }
 
-//    @Builder
-//    public ChatRoom(Long chatRoomId, String chatRoomName, Long familyId, Family family) {
-//        this.chatRoomId = chatRoomId;
-//        this.chatRoomName = chatRoomName;
-//        this.familyId = familyId;
-//        this.family = family;
-//    }
-
 }

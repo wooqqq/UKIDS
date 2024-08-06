@@ -89,16 +89,9 @@ public class SecurityConfig {
                             "/user/signup"
                     );
         };
+        // chat 테스트 시 해당 코드로 테스트
 //        return (web) -> web
 //                .ignoring()
-//                .requestMatchers(
-//                        "/login",
-//                        "/user/signup",
-//                        "/ws/chat",
-//                        "/ws-stomp",
-//                        "/chat/room",
-//                        "/resources/**"
-//                );
 //                .requestMatchers("/**");
     }
 }

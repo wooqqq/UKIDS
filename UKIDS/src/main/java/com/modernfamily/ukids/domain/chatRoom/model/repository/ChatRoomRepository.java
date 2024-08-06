@@ -50,7 +50,7 @@ public class ChatRoomRepository {
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash 에 저장한다.
      */
     public ChatRoom createChatRoom(Long familyId) {
-        Family family = familyRepository.findById(familyId)
+        Family family = familyRepository.findByFamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
         ChatRoom chatRoom = ChatRoom.create(familyId, family.getName(), familyId, family);
