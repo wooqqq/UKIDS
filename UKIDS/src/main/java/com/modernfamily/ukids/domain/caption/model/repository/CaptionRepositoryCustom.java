@@ -8,13 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface CaptionRepository extends JpaRepository<Caption, Long>, CaptionRepositoryCustom {
-    Optional<Caption> findByCaptionId(Long captionId);
-
-    @Override
+public interface CaptionRepositoryCustom {
     long deleteAllByAlbum(Album album);
 
-    @Override
     long deleteAllByPhoto(Photo photo);
 }
