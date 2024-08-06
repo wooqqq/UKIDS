@@ -24,8 +24,7 @@ public class PictureDiaryController {
     private final HttpResponseUtil httpResponseUtil;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createPictureDiary(@RequestBody PictureDiaryRequestDto pictureDiaryRequestDto){
-        System.out.println(pictureDiaryRequestDto);
+    public ResponseEntity<Map<String, Object>> createPictureDiary(@ModelAttribute PictureDiaryRequestDto pictureDiaryRequestDto){
         pictureDiaryService.createPictureDiary(pictureDiaryRequestDto);
 
         return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_PICTUREDIARY.getMessage());

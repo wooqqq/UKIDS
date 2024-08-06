@@ -10,6 +10,7 @@ import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.service.FamilyService;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
+import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
@@ -33,7 +34,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final AlbumRepository albumRepository;
     private final FamilyMemberRepository familyMemberRepository;
-    private final FamilyService familyService;
+    private final PhotoRepository photoRepository;
 
     @Transactional
     public void createAlbum(AlbumCreateRequestDto requestDto) {
@@ -108,6 +109,8 @@ public class AlbumServiceImpl implements AlbumService {
                 new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
         checkFamilyMember(album.getFamily().getFamilyId());
+
+        photoRepository.deleteAllByAlbum(album);
 
         album.deleteAlbum();
         albumRepository.save(album);

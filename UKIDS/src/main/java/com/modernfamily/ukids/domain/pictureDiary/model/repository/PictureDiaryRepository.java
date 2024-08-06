@@ -13,8 +13,8 @@ public interface PictureDiaryRepository extends JpaRepository<PictureDiary, Long
     Optional<PictureDiary> findByPictureDiaryId(Long pictureDiaryId);
 
     // 날짜별로 조회
-    Page<PictureDiary> findAllByDateAndFamily_FamilyId(LocalDate date, Long familyId, Pageable pageable);
+    Page<PictureDiary> findAllByDateAndFamily_FamilyIdAndIsDeleteFalse(LocalDate date, Long familyId, Pageable pageable);
 
     // 날짜 상관없이 전체 조회
-    Page<PictureDiary> findAllByFamily_FamilyId(Long familyId, Pageable pageable);
+    Page<PictureDiary> findAllByFamily_FamilyIdAndIsDeleteFalse(Long familyId, Pageable pageable);
 }
