@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class GrowthRecordController {
     private final HttpResponseUtil httpResponseUtil;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createGrowthRecord(@RequestBody GrowthRecordRequestDto growthRecordRequestDto){
+    public ResponseEntity<Map<String, Object>> createGrowthRecord(@ModelAttribute GrowthRecordRequestDto growthRecordRequestDto){
 
         growthRecordService.createGrowthRecord(growthRecordRequestDto);
 
@@ -29,8 +30,8 @@ public class GrowthRecordController {
     }
 
     @PutMapping("/{recordId}")
-    public ResponseEntity<Map<String, Object>> updateGrowthRecord(@RequestBody GrowthRecordUpdateDto growthRecordUpdateDto,
-                                                                  @PathVariable("recordId") Long recordId){
+    public ResponseEntity<Map<String, Object>> updateGrowthRecord(@ModelAttribute GrowthRecordUpdateDto growthRecordUpdateDto,
+                                                                  @PathVariable("recordId") Long recordId) throws IOException{
         growthRecordUpdateDto.setRecordId(recordId);
         growthRecordService.updateGrowthRecord(growthRecordUpdateDto);
 
@@ -55,7 +56,7 @@ public class GrowthRecordController {
     }
 
     @DeleteMapping("/{recordId}")
-    public ResponseEntity<Map<String,Object>> deleteGrowthRecord(@PathVariable("recordId") Long recordId){
+    public ResponseEntity<Map<String,Object>> deleteGrowthRecord(@PathVariable("recordId") Long recordId) throws IOException {
         growthRecordService.deleteGrowthRecord(recordId);
 
         return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_GROWTHRECORD);

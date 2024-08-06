@@ -19,7 +19,7 @@ public class GrowthRecord extends BaseTimeEntity {
     }
 
     @Builder
-    public GrowthRecord(Long recordId, User user, GrowthFolder folder, String title, String content, LocalDate date, String imageUrl, String imageName, boolean isDelete) {
+    public GrowthRecord(Long recordId, User user, GrowthFolder folder, String title, String content, LocalDate date, String imageUrl, String imageName, String imageS3Name, boolean isDelete) {
         this.recordId = recordId;
         this.user = user;
         this.folder = folder;
@@ -28,8 +28,10 @@ public class GrowthRecord extends BaseTimeEntity {
         this.date = date;
         this.imageUrl = imageUrl;
         this.imageName = imageName;
+        this.imageS3Name = imageS3Name;
         this.isDelete = isDelete;
     }
+
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recordId;
@@ -47,10 +49,12 @@ public class GrowthRecord extends BaseTimeEntity {
     @Column(length = 3000, nullable = false)
     private String content;
     private LocalDate date;
-    @Column(length = 255, nullable = true)
+    @Column(length = 2048, nullable = true)
     private String imageUrl;
     @Column(length = 255, nullable = true)
     private String imageName;
+    @Column(name="image_s3_name", length = 2048, nullable = true)
+    private String imageS3Name;
 
     @ColumnDefault("false")
     @Column(columnDefinition = "TINYINT(1)")

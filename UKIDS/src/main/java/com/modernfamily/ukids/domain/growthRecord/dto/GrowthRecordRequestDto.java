@@ -1,6 +1,8 @@
 package com.modernfamily.ukids.domain.growthRecord.dto;
 
+import jakarta.persistence.Column;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -12,4 +14,8 @@ public class GrowthRecordRequestDto {
     private String childName;
     private String content;
     private LocalDate date;
+    private String imageUrl;
+    private String imageName;
+    private String imageS3Name;
+    MultipartFile multipartFile;
 }

@@ -30,9 +30,11 @@ public interface GrowthRecordRepository extends JpaRepository<GrowthRecord, Long
             "gr.date = :#{#growthRecord.date}, " +
             "gr.imageName = :#{#growthRecord.imageName}, " +
             "gr.imageUrl = :#{#growthRecord.imageUrl}, " +
+            "gr.imageS3Name = :#{#growthRecord.imageS3Name}, " +
             "gr.updateTime = now() " +
             "where gr.recordId = :#{#growthRecord.recordId} ")
     void updateGrowthRecord(@Param("growthRecord") GrowthRecord growthRecord);
+
 
     @Modifying
     @Transactional
