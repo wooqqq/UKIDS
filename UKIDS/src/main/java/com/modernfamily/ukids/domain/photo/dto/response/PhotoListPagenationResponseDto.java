@@ -2,6 +2,8 @@ package com.modernfamily.ukids.domain.photo.dto.response;
 
 import com.modernfamily.ukids.domain.album.dto.response.AlbumInfoResponseDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
+import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
+import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,12 +31,12 @@ public class PhotoListPagenationResponseDto {
         this.photoList = photoList;
     }
 
-    public static PhotoListPagenationResponseDto createResponseDto(int size, int currentPage, int totalPage, Album album, List<PhotoListResponseDto> photoList) {
+    public static PhotoListPagenationResponseDto createResponseDto(int size, int currentPage, int totalPage, Album album, List<PhotoListResponseDto> photoList, FamilyResponseDto familyResponseDto) {
         return PhotoListPagenationResponseDto.builder()
                 .size(size)
                 .currentPage(currentPage)
                 .totalPage(totalPage)
-                .album(AlbumInfoResponseDto.createAlbumInfoResponseDto(album))
+                .album(AlbumInfoResponseDto.createAlbumInfoResponseDto(album, familyResponseDto))
                 .photoList(photoList)
                 .build();
     }
