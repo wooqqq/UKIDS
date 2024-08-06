@@ -40,7 +40,6 @@ public class GrowthRecordController {
 
     @GetMapping
     public ResponseEntity<Map<String,Object>> getGrowthRecord(@RequestBody GrowthRecordDetailDto growthRecordDetailDto){
-        System.out.println(growthRecordDetailDto.toString());
         GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.getGrowthRecord(growthRecordDetailDto);
 
         return httpResponseUtil.createResponse(HttpMethodCode.GET, growthRecordResponseDto);

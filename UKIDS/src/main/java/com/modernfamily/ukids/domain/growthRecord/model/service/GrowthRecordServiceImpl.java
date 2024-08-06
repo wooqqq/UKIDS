@@ -1,8 +1,5 @@
 package com.modernfamily.ukids.domain.growthRecord.model.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyRole;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
@@ -12,7 +9,6 @@ import com.modernfamily.ukids.domain.growthRecord.dto.*;
 import com.modernfamily.ukids.domain.growthRecord.entity.GrowthRecord;
 import com.modernfamily.ukids.domain.growthRecord.mapper.GrowthRecordMapper;
 import com.modernfamily.ukids.domain.growthRecord.model.repository.GrowthRecordRepository;
-import com.modernfamily.ukids.domain.photo.model.service.PhotoServiceImpl;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
@@ -20,10 +16,7 @@ import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import com.modernfamily.ukids.global.s3.S3Manager;
 import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,9 +37,6 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
     private final GrowthRecordMapper growthRecordMapper;
     private final UserRepository userRepository;
     private final GrowthFolderRepository growthFolderRepository;
-    @PersistenceContext
-    private final EntityManager entityManager;
-    private final FamilyMemberRepository familyMemberRepository;
     private final S3Manager s3Manager;
     private final FamilyMemberValidator familyMemberValidator;
 
