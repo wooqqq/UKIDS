@@ -14,6 +14,7 @@ import com.modernfamily.ukids.domain.growthFolder.model.repository.GrowthFolderR
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
@@ -25,26 +26,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GrowthFolderServiceImpl implements GrowthFolderService {
     private final GrowthFolderRepository growthFolderRepository;
-    private final FamilyRepository familyRepository;
     private final GrowthFolderMapper growthFolderMapper;
     private final FamilyMemberRepository familyMemberRepository;
+    private final FamilyMemberValidator familyMemberValidator;
 
     @Override
     public void createGrowthFolder(GrowthFolderRequestDto growthFolderRequestDto) {
-        Family family = familyRepository.findByFamilyId(growthFolderRequestDto.getFamilyId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
-        GrowthFolder growthFolder = growthFolderRepository.save(growthFolderMapper.toGrowthFolderRequestEntity(growthFolderRequestDto));
+        familyMemberValidator.checkUserInFamilyMember(growthFolderRequestDto.getFamilyId());
 
-
-        growthFolderMapper.toGrowthFolderResponseDto(growthFolder);
+        growthFolderRepository.save(growthFolderMapper.toGrowthFolderRequestEntity(growthFolderRequestDto));
     }
 
     @Override
     public GrowthFolderPaginationDto getGrowthFolders(Long familyId, int size, int page) {
-        Family family = familyRepository.findByFamilyId(familyId)
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
-
+        familyMemberValidator.checkUserInFamilyMember(familyId);
 
         Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC, "createTime"));
         Page<GrowthFolder> growthFolderPage = growthFolderRepository.findAllByFamily_FamilyId(familyId, pageable);
@@ -77,13 +73,7 @@ public class GrowthFolderServiceImpl implements GrowthFolderService {
                         .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHFOLDER_EXCEPTION));
 
         // FamilyMember에 승인된 유저인지 조회
-        String id = CustomUserDetails.contextGetUserId();
-        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, growthFolder.getFamily().getFamilyId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
-
-        if(!familyMember.isApproval())
-            throw new ExceptionResponse(CustomException.NOT_APPROVAL_FAMILYMEMBER_EXCEPTION);
-
+        familyMemberValidator.checkUserInFamilyMember(growthFolder.getFamily().getFamilyId());
 
         growthFolderRepository.updateGrowthFolder(growthFolderMapper.toGrowthFolderUpdateEntity(growthFolderUpdateRequestDto));
     }
@@ -95,13 +85,7 @@ public class GrowthFolderServiceImpl implements GrowthFolderService {
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHFOLDER_EXCEPTION));
 
         // FamilyMember에 승인된 유저인지 조회
-        String id = CustomUserDetails.contextGetUserId();
-        Family family = growthFolder.getFamily();
-        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, family.getFamilyId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
-
-        if(!familyMember.isApproval())
-            throw new ExceptionResponse(CustomException.NOT_APPROVAL_FAMILYMEMBER_EXCEPTION);
+        familyMemberValidator.checkUserInFamilyMember(growthFolder.getFamily().getFamilyId());
 
         // 삭제 update
         growthFolderRepository.deleteGrowthFolder(folderId);

@@ -16,6 +16,7 @@ import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,13 +33,13 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final FamilyMemberRepository familyMemberRepository;
+    private final FamilyMemberValidator familyMemberValidator;
     private final FamilyMapper familyMapper;
     private final UserMapper userMapper;
 
     @Transactional
     public void createSchedule(ScheduleCreateRequestDto requestDto) {
-        Family family = checkFamilyMember(requestDto.getFamilyId());
+        Family family = familyMemberValidator.checkUserInFamilyMember(requestDto.getFamilyId()).getFamily();
 
         Schedule schedule = Schedule.createSchedule(requestDto.getTitle(), requestDto.getContent(), requestDto.getPlace(),
                 requestDto.getStartTime(), requestDto.getEndTime() ,family);
@@ -48,7 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public void updateSchedule(ScheduleUpdateRequestDto requestDto) {
-        Family family = checkFamilyMember(requestDto.getFamilyId());
+        Family family = familyMemberValidator.checkUserInFamilyMember(requestDto.getFamilyId()).getFamily();
 
         Schedule existSchedule = scheduleRepository.findByScheduleId(requestDto.getScheduleId())
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_SCHEDULE_EXCEPTION));
@@ -69,7 +70,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule existSchedule = scheduleRepository.findByScheduleId(scheduleId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_SCHEDULE_EXCEPTION));
 
-        checkFamilyMember(existSchedule.getFamily().getFamilyId());
+        familyMemberValidator.checkUserInFamilyMember(existSchedule.getFamily().getFamilyId());
 
         existSchedule.deleteSchedule();
 
@@ -80,7 +81,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule existSchedule = scheduleRepository.findByScheduleId(scheduleId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_SCHEDULE_EXCEPTION));
 
-        Family family = checkFamilyMember(existSchedule.getFamily().getFamilyId());
+        Family family = familyMemberValidator.checkUserInFamilyMember(existSchedule.getFamily().getFamilyId()).getFamily();
 
         FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
@@ -89,7 +90,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     public ScheduleListResponseDto getScheduleList(Long familyId, LocalDate date) {
-        Family family = checkFamilyMember(familyId);
+        Family family = familyMemberValidator.checkUserInFamilyMember(familyId).getFamily();
 
         List<Schedule> schedules =  scheduleRepository.findAllByFamilyIdAndDate(family, date);
 
@@ -104,17 +105,5 @@ public class ScheduleServiceImpl implements ScheduleService {
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
 
         return ScheduleListResponseDto.createResponseDto(scheduleDtoList, familyResponseDto);
-    }
-
-    private Family checkFamilyMember(Long familyId){
-        String userId = CustomUserDetails.contextGetUserId();
-
-        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
-
-        if(!familyMember.isApproval())
-            throw new ExceptionResponse(CustomException.NOT_APPROVAL_FAMILYMEMBER_EXCEPTION);
-
-        return familyMember.getFamily();
     }
 }

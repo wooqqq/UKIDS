@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyRole;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
+import com.modernfamily.ukids.domain.growthFolder.entity.GrowthFolder;
 import com.modernfamily.ukids.domain.growthFolder.model.repository.GrowthFolderRepository;
 import com.modernfamily.ukids.domain.growthRecord.dto.*;
 import com.modernfamily.ukids.domain.growthRecord.entity.GrowthRecord;
@@ -18,6 +19,7 @@ import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import com.modernfamily.ukids.global.s3.S3Manager;
+import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +48,14 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
     private final EntityManager entityManager;
     private final FamilyMemberRepository familyMemberRepository;
     private final S3Manager s3Manager;
+    private final FamilyMemberValidator familyMemberValidator;
 
     @Override
     public void createGrowthRecord(GrowthRecordRequestDto growthRecordRequestDto) {
-        growthFolderRepository.findByFolderId(growthRecordRequestDto.getFolderId())
+       GrowthFolder growthFolder = growthFolderRepository.findByFolderId(growthRecordRequestDto.getFolderId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHFOLDER_EXCEPTION));
+
+       familyMemberValidator.checkUserInFamilyMember(growthFolder.getFamily().getFamilyId());
 
         String id = CustomUserDetails.contextGetUserId();
         User user = userRepository.findById(id)
@@ -119,9 +124,7 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
         GrowthRecord growthRecord = growthRecordRepository.findByRecordId(growthRecordDetailDto.getRecordId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHRECORD_EXCEPTION));
 
-        String id = CustomUserDetails.contextGetUserId();
-        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(id, growthRecordDetailDto.getFamilyId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.APPROVAL_FAMILYMEMBER_EXCEPTION));
+        FamilyMember familyMember = familyMemberValidator.checkUserInFamilyMember(growthRecordDetailDto.getFamilyId());
 
         if(familyMember.getRole().equals(FamilyRole.ROLE_CHILD)){
             int currentYear = LocalDate.now().getYear();
@@ -136,8 +139,10 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
 
     @Override
     public GrowthRecordPaginationDto getGrowthRecords(Long folderId, int size, int page) {
-        growthFolderRepository.findByFolderId(folderId)
+        GrowthFolder growthFolder = growthFolderRepository.findByFolderId(folderId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHFOLDER_EXCEPTION));
+
+        familyMemberValidator.checkUserInFamilyMember(growthFolder.getFamily().getFamilyId());
 
         Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC, "date"));
         Page<GrowthRecord> growthRecordPage = growthRecordRepository.findAllByFolder_FolderIdAndIsDeleteFalse(folderId, pageable);

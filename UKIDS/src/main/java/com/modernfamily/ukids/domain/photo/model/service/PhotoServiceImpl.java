@@ -1,37 +1,29 @@
 package com.modernfamily.ukids.domain.photo.model.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.*;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
-import com.modernfamily.ukids.domain.album.model.service.AlbumService;
 import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
-import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.photo.dto.request.PhotoSaveRequestDto;
 import com.modernfamily.ukids.domain.photo.dto.response.PhotoInfoResponseDto;
 import com.modernfamily.ukids.domain.photo.dto.response.PhotoListPagenationResponseDto;
 import com.modernfamily.ukids.domain.photo.dto.response.PhotoListResponseDto;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
 import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
-import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import com.modernfamily.ukids.global.s3.S3Manager;
+import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -44,14 +36,14 @@ public class PhotoServiceImpl implements PhotoService {
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
     private final S3Manager s3Manager;
-    private final FamilyMemberRepository familyMemberRepository;
+    private final FamilyMemberValidator familyMemberValidator;
     private final FamilyMapper familyMapper;
     private final UserMapper userMapper;
 
     @Transactional
     public void savePhoto(PhotoSaveRequestDto requestDto) throws IOException {
 
-        Family family = checkFamilyMember(requestDto.getFamilyId());
+        Family family = familyMemberValidator.checkUserInFamilyMember(requestDto.getFamilyId()).getFamily();
 
         Album album = albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId())
                 .orElseGet(() -> {
@@ -76,7 +68,7 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findByPhotoId(photoId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
-        checkFamilyMember(photo.getAlbum().getFamily().getFamilyId());
+        familyMemberValidator.checkUserInFamilyMember(photo.getAlbum().getFamily().getFamilyId());
 
         s3Manager.deleteFile(photo.getPhotoS3Name());
 
@@ -88,7 +80,7 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = photoRepository.findByPhotoId(photoId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_PHOTO_EXCEPTION));
 
-        Family family = checkFamilyMember(photo.getAlbum().getFamily().getFamilyId());
+        Family family = familyMemberValidator.checkUserInFamilyMember(photo.getAlbum().getFamily().getFamilyId()).getFamily();
 
         FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
@@ -100,7 +92,7 @@ public class PhotoServiceImpl implements PhotoService {
         Album album = albumRepository.findByAlbumId(albumId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
-        Family family = checkFamilyMember(album.getFamily().getFamilyId());
+        Family family = familyMemberValidator.checkUserInFamilyMember(album.getFamily().getFamilyId()).getFamily();
 
         FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
@@ -120,14 +112,5 @@ public class PhotoServiceImpl implements PhotoService {
                         (photoPage.getNumberOfElements(), photoPage.getNumber()+1, photoPage.getTotalPages(), album, responseDtoList, familyResponseDto);
 
         return pagenationResponseDto;
-    }
-
-    private Family checkFamilyMember(Long familyId){
-        String userId = CustomUserDetails.contextGetUserId();
-
-        Family family = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId).orElseThrow(() ->
-                new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION)).getFamily();
-
-        return family;
     }
 }
