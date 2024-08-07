@@ -1,4 +1,6 @@
-const Footer = () => {
+import React from 'react';
+
+const Footer: React.FC = () => {
   return (
     <div className="flexcenter-row text-xs text-[#999999] items-center">
       <a href="#!" className="m-1">

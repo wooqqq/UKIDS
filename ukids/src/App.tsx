@@ -4,7 +4,9 @@ import Login from './pages/Login';
 import Join from './pages/Join';
 import Schedule from './pages/Schedule';
 import Letters from './pages/Letters';
-import Albums from './pages/Albums';
+import Albums from './components/feature/album/Albums';
+import AlbumDetail from './components/feature/album/AlbumDetail'; // 추가
+import UploadPhoto from './components/feature/album/UploadPhoto'; //추가
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
 import Game from './pages/Game';
@@ -69,6 +71,10 @@ const App = () => {
             <Route path="/schedule/*" element={<Schedule />} />
             <Route path="/letters" element={<Letters />} />
             <Route path="/albums" element={<Albums />} />
+            <Route path="/albums/:photoId" element={<AlbumDetail />} />{' '}
+            {/* 추가 */}
+            <Route path="/albums/upload" element={<UploadPhoto />} />{' '}
+            {/* 추가 */}
             <Route path="/paintdiary" element={<PaintingDiary />} />
             <Route path="/growthdiary" element={<GrowthDiary />} />
             <Route path="/chat" element={<FamilyChatting />} />
