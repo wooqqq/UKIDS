@@ -47,4 +47,11 @@ public class QuizQuestionController {
         return responseUtil.createResponse(HttpMethodCode.GET,
                 quizQuestionService.getQuizQuestion(quizQuestionId));
     }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getQuizQuestionListByUser(@RequestParam(value = "size", defaultValue = "5") int size,
+                                                                         @RequestParam(value = "page", defaultValue = "1") int page) {
+        return responseUtil.createResponse(HttpMethodCode.GET,
+                quizQuestionService.getQuizQuestionListByUser(size, page));
+    }
 }
