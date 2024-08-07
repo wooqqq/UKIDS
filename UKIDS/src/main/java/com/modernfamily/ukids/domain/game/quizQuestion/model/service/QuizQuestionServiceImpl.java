@@ -34,12 +34,17 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
 
     @Transactional
     public void updateQuizQuestion(QuizQuestionUpdateRequestDto requestDto) {
-//        String id = CustomUserDetails.contextGetUserId();
-//        User writer = userRepository.findById(id).orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
-//
-//        QuizQuestion quizQuestion = QuizQuestion.createQuizQuestion(requestDto.getQuestion(), requestDto.getAnswer(),
-//                requestDto.getQuizType(), writer);
-//
-//        quizQuestionRepository.save(quizQuestion);
+        String id = CustomUserDetails.contextGetUserId();
+        User writer = userRepository.findById(id).orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        quizQuestionRepository.findByQuizQuestionId(requestDto.getQuizQuestionId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_EXCEPTION));
+
+        QuizQuestion quizQuestion = QuizQuestion.createQuizQuestion(requestDto.getQuestion(), requestDto.getAnswer(),
+                requestDto.getQuizType(), writer);
+
+        quizQuestion.updateQuizQuestion(requestDto.getQuizQuestionId());
+
+        quizQuestionRepository.save(quizQuestion);
     }
 }
