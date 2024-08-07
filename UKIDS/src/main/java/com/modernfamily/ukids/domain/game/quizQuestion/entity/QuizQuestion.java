@@ -17,8 +17,8 @@ public class QuizQuestion extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quiz_id")
-    private Long quizId;
+    @Column(name = "quiz_question_id")
+    private Long quizQuestionId;
 
     @Column(name = "question", nullable = false)
     private String question;
@@ -58,7 +58,7 @@ public class QuizQuestion extends BaseTimeEntity {
     }
 
     public void updateQuizQuestion(Long quizQuestionId) {
-        this.quizId = quizQuestionId;
+        this.quizQuestionId = quizQuestionId;
     }
 
     public void deleteQuizQuestion() {

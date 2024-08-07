@@ -40,4 +40,11 @@ public class QuizQuestionController {
 
         return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_QUIZ_QUESTION.getMessage());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getQuizQuestion(@PathVariable("id") Long quizQuestionId) {
+
+        return responseUtil.createResponse(HttpMethodCode.GET,
+                quizQuestionService.getQuizQuestion(quizQuestionId));
+    }
 }

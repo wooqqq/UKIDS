@@ -11,15 +11,15 @@ import lombok.Getter;
 public class QuizQuestionCreateRequestDto {
 
     @NotNull
-    Long userId;
+    private Long userId;
 
     @NotBlank
-    String question;
+    private String question;
 
     @NotBlank
-    String answer;
+    private String answer;
 
     @NotBlank
-    QuizType quizType;
+    private QuizType quizType;
 
 }
