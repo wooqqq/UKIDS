@@ -21,6 +21,10 @@ public enum CustomException {
     // 편지
     NOT_FOUND_LETTER_EXCEPTION(400, "NotFoundLetterException", "편지가 존재하지 않습니다."),
 
+    // 나무
+    NOT_FOUND_TREE_EXCEPTION(400, "NotFoundTreeException", "나무가 존재하지 않습니다."),
+    ALREADY_COMPLETED_TREE_EXCEPTION(400, "AlreadyCompletedTreeException", "나무가 이미 완료된 상태입니다."),
+
     // 화상통화
     NOT_FOUND_SESSION_EXCEPTION(400,"NotFoundSessionException","세션 ID가 존재하지 않습니다."),
 
@@ -39,7 +43,7 @@ public enum CustomException {
 
     // 그림일기
     NOT_FOUND_PICTUREDIARY_EXCEPTION(400, "NotFoundPictureDiaryException", "그림일기가 존재하지 않습니다."),
-    
+
     // 앨범
 
     // 앨범, 사진, 캡션
