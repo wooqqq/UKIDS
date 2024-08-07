@@ -40,10 +40,6 @@ public class TreeServiceImpl implements TreeService {
         Tree tree = treeRepository.findByFamily_FamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
-        // 가족 id를 통해 찾은 나무가 isComplete == false인지 확인하는 작업 필요
-        if (tree.isComplete())
-            throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_TREE_EXCEPTION);
-
         return treeMapper.toResponseDto(tree);
     }
 
@@ -58,9 +54,14 @@ public class TreeServiceImpl implements TreeService {
         Long grownExp = tree.getExp() + treeDto.getPoint();
 
         // 성장 exp 가 최대치를 넘는지 안넘는지 체크
-        if (grownExp >= 1000)
+        if (grownExp >= 1000) {
             tree.setIsComplete(true);
-        tree.setExp(grownExp);
+
+            TreeCreateRequestDto newTreeDto = new TreeCreateRequestDto(tree.getFamily().getFamilyId());
+            createTree(newTreeDto);
+        } else {
+            tree.setExp(grownExp);
+        }
 
         return treeRepository.save(tree);
     }
