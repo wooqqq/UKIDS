@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.tree.controller;
 
-import com.modernfamily.ukids.domain.tree.dto.TreeDto;
+import com.modernfamily.ukids.domain.tree.dto.request.TreeCreateRequestDto;
+import com.modernfamily.ukids.domain.tree.dto.request.TreeUpdateRequestDto;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.model.service.TreeService;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
@@ -18,8 +19,8 @@ public class TreeController {
     private final TreeService treeService;
 
     @PostMapping
-    public ResponseEntity<?> createTree(@RequestBody TreeDto treeDto) {
-        Tree savedTree = treeService.save(treeDto);
+    public ResponseEntity<?> createTree(@RequestBody TreeCreateRequestDto treeDto) {
+        Tree savedTree = treeService.createTree(treeDto);
         return responseUtil.createResponse(HttpMethodCode.POST, savedTree);
     }
 
@@ -30,7 +31,7 @@ public class TreeController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateTreeExp(@RequestBody TreeDto treeDto) {
+    public ResponseEntity<?> updateTreeExp(@RequestBody TreeUpdateRequestDto treeDto) {
         Tree grownTree = treeService.updateTree(treeDto);
         return responseUtil.createResponse(HttpMethodCode.PUT, grownTree);
     }

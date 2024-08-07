@@ -6,7 +6,6 @@ import com.modernfamily.ukids.domain.caption.dto.request.CaptionUpdateRequestDto
 import com.modernfamily.ukids.domain.caption.dto.response.CaptionInfoResponseDto;
 import com.modernfamily.ukids.domain.caption.entity.Caption;
 import com.modernfamily.ukids.domain.caption.model.repository.CaptionRepository;
-import com.modernfamily.ukids.domain.photo.dto.response.PhotoInfoResponseDto;
 import com.modernfamily.ukids.domain.photo.entity.Photo;
 import com.modernfamily.ukids.domain.photo.model.repository.PhotoRepository;
 import com.modernfamily.ukids.global.exception.CustomException;

@@ -1,6 +1,6 @@
 package com.modernfamily.ukids.domain.tree.mapper;
 
-import com.modernfamily.ukids.domain.tree.dto.TreeDto;
+import com.modernfamily.ukids.domain.tree.dto.request.TreeCreateRequestDto;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface TreeMapper {
     TreeMapper INSTANCE = Mappers.getMapper(TreeMapper.class);
 
-    TreeDto toDto(Tree tree);
+    TreeCreateRequestDto toDto(Tree tree);
 
-    Tree toEntity(TreeDto treeDto);
+    Tree toEntity(TreeCreateRequestDto treeDto);
 }

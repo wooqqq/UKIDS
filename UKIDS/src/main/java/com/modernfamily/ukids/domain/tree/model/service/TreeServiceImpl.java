@@ -2,7 +2,8 @@ package com.modernfamily.ukids.domain.tree.model.service;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
-import com.modernfamily.ukids.domain.tree.dto.TreeDto;
+import com.modernfamily.ukids.domain.tree.dto.request.TreeCreateRequestDto;
+import com.modernfamily.ukids.domain.tree.dto.request.TreeUpdateRequestDto;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.mapper.TreeMapper;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
@@ -20,7 +21,7 @@ public class TreeServiceImpl implements TreeService {
     private final TreeMapper treeMapper;
 
     @Override
-    public Tree save(TreeDto treeDto) {
+    public Tree createTree(TreeCreateRequestDto treeDto) {
         // familyId로 Family 엔티티 조회
         Family family = familyRepository.findByFamilyId(treeDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
@@ -34,12 +35,8 @@ public class TreeServiceImpl implements TreeService {
     // 가족 id를 통한 현재 나무 조회
     @Override
     public Tree findByFamilyId(Long familyId) {
-        // familyId로 Family 엔티티 조회
-        Family family = familyRepository.findById(familyId)
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
-
-        // family로 Tree 엔티티 조회
-        Tree tree = treeRepository.findByFamily(family)
+        // familyId로 Tree 엔티티 조회
+        Tree tree = treeRepository.findByFamily_FamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
         // 가족 id를 통해 찾은 나무가 isComplete == false인지 확인하는 작업 필요
@@ -51,13 +48,9 @@ public class TreeServiceImpl implements TreeService {
 
     // 가족 id를 통해 나무 경험치 업데이트
     @Override
-    public Tree updateTree(TreeDto treeDto) {
-        // familyId로 Family 엔티티 조회
-        Family family = familyRepository.findById(treeDto.getFamilyId())
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
-
-        // family로 Tree 엔티티 조회
-        Tree tree = treeRepository.findByFamily(family)
+    public Tree updateTree(TreeUpdateRequestDto treeDto) {
+        // familyId로 Tree 엔티티 조회
+        Tree tree = treeRepository.findByFamily_FamilyId(treeDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
         // tree가 이미 완성된 나무인지 확인
