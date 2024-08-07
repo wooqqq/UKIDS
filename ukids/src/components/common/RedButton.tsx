@@ -7,6 +7,8 @@ import discallIcon from '../../assets/subway_call-3.png';
 interface RedButtonProps {
   name: string;
   path: string;
+  className?: string;
+  type?: string;
 }
 
 const RedButton = (props: RedButtonProps) => {
