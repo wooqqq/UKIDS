@@ -6,10 +6,10 @@ import callmynameImg from '../assets/game_callmyname.png';
 const Game = () => {
   const nav = useNavigate();
   const onQuizClick = () => {
-    nav('/game/quiz');
+    nav('/quiz');
   };
   const onCallMyNameClick = () => {
-    nav('/game/callMyName');
+    nav('/callMyName');
   };
 
   return (
@@ -24,7 +24,7 @@ const Game = () => {
       <button onClick={onCallMyNameClick}>
         <img
           src={callmynameImg}
-          alt="QuizButton"
+          alt="CallMyNameButton"
           className="half-feature-box hover:border-solid border-8 border-[#9F6AD5]"
         />
       </button>

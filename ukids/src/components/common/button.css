@@ -2,7 +2,7 @@
 
 .common-btn {
   display: flex;
-  width: 78px;
+  /* width: 78px; */
   padding: 5px 25px;
   justify-content: center;
   align-items: center;
