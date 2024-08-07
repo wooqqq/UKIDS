@@ -2,7 +2,8 @@
 
 .common-btn {
   display: flex;
-  /* width: 78px; */
+  /* width: auto; 수정. 글자크기에 맞게 변하도록 */
+  width: auto;
   padding: 5px 25px;
   justify-content: center;
   align-items: center;
@@ -10,7 +11,7 @@
   border-radius: 5rem;
   opacity: var(--sds-size-stroke-border);
   box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.25);
-  color: #fff;
+  color: black(0, 0%, 4%);
   text-align: center;
   font-size: 16px;
   font-weight: 600;
