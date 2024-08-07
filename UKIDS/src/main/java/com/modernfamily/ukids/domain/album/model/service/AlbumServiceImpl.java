@@ -7,6 +7,7 @@ import com.modernfamily.ukids.domain.album.dto.request.AlbumUpdateRequestDto;
 import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumPagenationResponseDto;
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
+import com.modernfamily.ukids.domain.caption.model.repository.CaptionRepository;
 import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
@@ -36,6 +37,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final AlbumRepository albumRepository;
     private final FamilyMemberValidator familyMemberValidator;
     private final PhotoRepository photoRepository;
+    private final CaptionRepository captionRepository;
     private final FamilyMapper familyMapper;
     private final UserMapper userMapper;
 
@@ -119,6 +121,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         familyMemberValidator.checkUserInFamilyMember(album.getFamily().getFamilyId());
 
+        // captionRepository.deleteAllByAlbum(album); // 추후 기능 구현 예정
         photoRepository.deleteAllByAlbum(album);
 
         album.deleteAlbum();

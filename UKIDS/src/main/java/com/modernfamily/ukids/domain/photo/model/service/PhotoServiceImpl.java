@@ -2,6 +2,7 @@ package com.modernfamily.ukids.domain.photo.model.service;
 
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
+import com.modernfamily.ukids.domain.caption.model.repository.CaptionRepository;
 import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
@@ -34,6 +35,7 @@ import java.util.*;
 public class PhotoServiceImpl implements PhotoService {
 
     private final PhotoRepository photoRepository;
+    private final CaptionRepository captionRepository;
     private final AlbumRepository albumRepository;
     private final S3Manager s3Manager;
     private final FamilyMemberValidator familyMemberValidator;
@@ -72,6 +74,7 @@ public class PhotoServiceImpl implements PhotoService {
 
         s3Manager.deleteFile(photo.getPhotoS3Name());
 
+        captionRepository.deleteAllByPhoto(photo);
         photo.deletePhoto();
         photoRepository.save(photo);
     }

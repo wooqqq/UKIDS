@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "is_delete_caption = false")
 public class Caption extends BaseTimeEntity {
 
     @Id
@@ -20,10 +22,10 @@ public class Caption extends BaseTimeEntity {
     @Column(name="content", nullable = false, length = 255)
     private String content;
 
-    @Column(name = "is_delete", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "is_delete_caption", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDelete;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "photo_id")
     private Photo photo;
 
@@ -34,7 +36,16 @@ public class Caption extends BaseTimeEntity {
     }
 
     public static Caption createCaption(String content, Photo photo) {
+
         return new Caption(content, false, photo);
+    }
+
+    public void updateCaption(String content){
+        this.content = content;
+    }
+
+    public void deleteCaption(){
+        this.isDelete = true;
     }
 }
 
