@@ -2,6 +2,7 @@ package com.modernfamily.ukids.domain.photo.model.service;
 
 import com.modernfamily.ukids.domain.album.entity.Album;
 import com.modernfamily.ukids.domain.album.model.repository.AlbumRepository;
+import com.modernfamily.ukids.domain.caption.entity.Caption;
 import com.modernfamily.ukids.domain.caption.model.repository.CaptionRepository;
 import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
@@ -63,6 +64,9 @@ public class PhotoServiceImpl implements PhotoService {
         Photo photo = Photo.createPhoto(uploadParam, album);
 
         photoRepository.save(photo);
+
+        String caption = requestDto.getCaption() == null? "" : requestDto.getCaption();
+        captionRepository.save(Caption.createCaption(caption, photo));
     }
 
     @Transactional
@@ -88,7 +92,11 @@ public class PhotoServiceImpl implements PhotoService {
         FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
 
-        return PhotoInfoResponseDto.createResponseDto(photo, familyResponseDto);
+        String caption = captionRepository.findByPhoto_PhotoId(photoId)
+                .map(Caption::getContent)
+                .orElse("");
+
+        return PhotoInfoResponseDto.createResponseDto(photo, familyResponseDto, caption);
     }
 
     public PhotoListPagenationResponseDto getPhotoList(int size, int page, Long albumId) {
@@ -101,13 +109,14 @@ public class PhotoServiceImpl implements PhotoService {
         familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
 
         Pageable pageable = PageRequest.of(--page, size);
-        Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumIdOrderByCreateTimeDesc(albumId, pageable);
+//        Page<Photo> photoPage = photoRepository.findAllByAlbum_AlbumIdOrderByCreateTimeDesc(albumId, pageable);
+        Page<Caption> photoPage = captionRepository.findAllByPhoto_Album_AlbumIdOrderByCreateTimeDesc(albumId, pageable);
 
-        List<Photo> photoList = photoPage.getContent();
+        List<Caption> photoList = photoPage.getContent();
         List<PhotoListResponseDto> responseDtoList = new ArrayList<>();
         log.info("Album List size : {}", photoList.size());
-        for (Photo photo : photoList) {
-            responseDtoList.add(PhotoListResponseDto.createResponseDto(photo));
+        for (Caption caption : photoList) {
+            responseDtoList.add(PhotoListResponseDto.createResponseDto(caption));
         }
 
         PhotoListPagenationResponseDto pagenationResponseDto =
