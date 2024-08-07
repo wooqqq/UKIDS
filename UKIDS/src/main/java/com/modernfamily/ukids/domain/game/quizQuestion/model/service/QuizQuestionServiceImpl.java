@@ -111,7 +111,7 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
         return pagenationResponseDto;
     }
 
-    public List<QuizQuestionResponseDto> chooseQuizQuestion(Long userId ,long count) {
+    public List<QuizQuestionResponseDto> chooseRandomQuizQuestion(Long userId ,long count) {
         User writer = userRepository.findById(userId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
