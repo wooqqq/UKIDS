@@ -102,7 +102,8 @@ public class SecurityConfig {
         return (web) -> {
             web.ignoring()
                     .requestMatchers(
-                            "/user/signup"
+                            "/user/signup",
+                            "/webrtc/**"
                     );
         };
         // chat 테스트 시 해당 코드로 테스트
