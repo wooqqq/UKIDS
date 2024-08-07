@@ -2,7 +2,6 @@ package com.modernfamily.ukids.domain.chatRoom.controller;
 
 import com.modernfamily.ukids.domain.chatMessage.entity.ChatMessage;
 import com.modernfamily.ukids.domain.chatRoom.entity.ChatRoom;
-import com.modernfamily.ukids.domain.chatRoom.model.repository.ChatRoomRepository;
 import com.modernfamily.ukids.domain.chatMessage.model.service.ChatService;
 import com.modernfamily.ukids.domain.chatRoom.model.service.ChatRoomService;
 import com.modernfamily.ukids.domain.family.entity.Family;
@@ -19,7 +18,6 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomService chatRoomService;
     private final ChatService chatService;
 
@@ -45,25 +43,25 @@ public class ChatRoomController {
     }
 
     // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable("roomId") Long roomId) {
+    @GetMapping("/room/enter/{id}")
+    public String roomDetail(Model model, @PathVariable("id") Long familyId) {
         // 로그인한 유저가 해당 roomId(familyId)의 멤버인지 확인하는 코드
-        Family family = chatRoomService.validateFamilyMember(roomId);
+        Family family = chatRoomService.validateFamilyMember(familyId);
 
         model.addAttribute("roomId", family.getFamilyId());
         return "/chat/roomdetail";
     }
 
     // 특정 채팅방 조회
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/room/{id}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable("roomId") Long roomId) {
+    public ChatRoom roomInfo(@PathVariable("id") Long roomId) {
         return chatRoomService.findRoomByRoomId(roomId);
     }
 
-    @RequestMapping(value = "/room/{roomId}/messages", method = RequestMethod.GET)
+    @RequestMapping(value = "/room/{id}/messages", method = RequestMethod.GET)
     @ResponseBody
-    public List<ChatMessage> getChatMessages(@PathVariable("roomId") Long roomId) {
+    public List<ChatMessage> getChatMessages(@PathVariable("id") Long roomId) {
         try {
             return chatService.getChatMessages(roomId.toString());
         } catch (Exception e) {
