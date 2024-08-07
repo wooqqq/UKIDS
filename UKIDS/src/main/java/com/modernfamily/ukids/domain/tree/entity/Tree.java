@@ -4,7 +4,6 @@ import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -26,9 +25,6 @@ public class Tree extends BaseTimeEntity {
     @ColumnDefault("false")
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isComplete;
-
-    @OneToMany(mappedBy = "tree")
-    private List<Letter> letters;
 
     @ManyToOne
     @JoinColumn(name = "tree_type_id")

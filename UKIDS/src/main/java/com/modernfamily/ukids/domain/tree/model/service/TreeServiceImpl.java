@@ -8,20 +8,16 @@ import com.modernfamily.ukids.domain.tree.mapper.TreeMapper;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class TreeServiceImpl implements TreeService {
 
-    private TreeRepository treeRepository;
-    private FamilyRepository familyRepository;
-    private TreeMapper treeMapper;
-
-    public TreeServiceImpl(TreeRepository treeRepository, FamilyRepository familyRepository, TreeMapper treeMapper) {
-        this.treeRepository = treeRepository;
-        this.familyRepository = familyRepository;
-        this.treeMapper = treeMapper;
-    }
+    private final TreeRepository treeRepository;
+    private final FamilyRepository familyRepository;
+    private final TreeMapper treeMapper;
 
     @Override
     public Tree save(TreeDto treeDto) {
