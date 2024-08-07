@@ -34,6 +34,9 @@ public class WebrtcServiceImpl implements WebrtcService{
 
     @Override
     public String createConnection(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException{
+
+        openvidu.fetch();
+
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
             throw new ExceptionResponse(CustomException.NOT_FOUND_SESSION_EXCEPTION);

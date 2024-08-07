@@ -8,6 +8,8 @@ build/
 resources
 application.properties
 docker-compose.yml
+*.png
+*.jpg
 
 src/main/generated
 

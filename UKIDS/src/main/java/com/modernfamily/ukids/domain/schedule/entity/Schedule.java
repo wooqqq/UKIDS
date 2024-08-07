@@ -7,12 +7,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "is_delete = false")
 public class Schedule extends BaseTimeEntity {
 
     @Id
@@ -53,7 +55,7 @@ public class Schedule extends BaseTimeEntity {
         this.family = family;
     }
 
-    public static Schedule createSchedule(String title, String content, String place, LocalDateTime startTime, LocalDateTime endTime, boolean isDelete, Family family) {
+    public static Schedule createSchedule(String title, String content, String place, LocalDateTime startTime, LocalDateTime endTime, Family family) {
         return Schedule.builder()
                 .title(title)
                 .content(content)
@@ -63,6 +65,14 @@ public class Schedule extends BaseTimeEntity {
                 .isDelete(false)
                 .family(family)
                 .build();
+    }
+
+    public void updateSchedule(Long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public void deleteSchedule() {
+        this.isDelete = true;
     }
 
 }
