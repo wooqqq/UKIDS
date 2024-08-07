@@ -15,6 +15,8 @@ import Notfound from './pages/Notfound';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/common/Sidebar';
+import Main from './pages/Main';
+import { ProtectedRoute, PublicRoute } from './components/error/ProtectedRoute';
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전)
 // 1-1. FamilyHome "/:familyId" : 로그인 후 메인 페이지
@@ -39,10 +41,15 @@ const App = () => {
 
   // 로그인 안한 로그인, 회원가입, 홈, 가족방 생성/찾기는 사이드바X
   const hideSidebar =
-    location.pathname === '/login' || location.pathname === '/join';
+    location.pathname === '/' ||
+    location.pathname === '/login' ||
+    location.pathname === '/join';
 
+  // flex css 제거
   const removeFlexClass =
-    location.pathname === '/login' || location.pathname === '/join';
+    location.pathname === '/' ||
+    location.pathname === '/login' ||
+    location.pathname === '/join';
 
   return (
     <div className="">
@@ -50,19 +57,26 @@ const App = () => {
       <div className={removeFlexClass ? '' : 'flex justify-between'}>
         {!hideSidebar && <Sidebar />}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/Join" element={<Join />} />
-          <Route path="/schedule/*" element={<Schedule />} />
-          <Route path="/letters" element={<Letters />} />
-          <Route path="/albums" element={<Albums />} />
-          <Route path="/paintdiary" element={<PaintingDiary />} />
-          <Route path="/growthdiary" element={<GrowthDiary />} />
-          <Route path="/chat" element={<FamilyChatting />} />
-          <Route path="/chat/call" element={<FamilyVideoCall />} />
-          <Route path="/game" element={<Game />} />
-          <Route path="/setting" element={<Setting />} />
-          <Route path="*" element={<Notfound />} />
+          {/* 로그인 했으면 진입 금지 */}
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Join />} />
+          </Route>
+          {/* 로그인 안했으면 진입 금지 */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/main" element={<Main />} />
+            <Route path="/schedule/*" element={<Schedule />} />
+            <Route path="/letters" element={<Letters />} />
+            <Route path="/albums" element={<Albums />} />
+            <Route path="/paintdiary" element={<PaintingDiary />} />
+            <Route path="/growthdiary" element={<GrowthDiary />} />
+            <Route path="/chat" element={<FamilyChatting />} />
+            <Route path="/chat/call" element={<FamilyVideoCall />} />
+            <Route path="/game" element={<Game />} />
+            <Route path="/setting" element={<Setting />} />
+            <Route path="*" element={<Notfound />} />
+          </Route>
         </Routes>
       </div>
       <Footer />

@@ -16,6 +16,13 @@
   font-weight: 600;
 }
 
+.login-btn {
+  width: 100% !important;
+  padding: 13px 0;
+  border-radius: 5px !important;
+  font-size: 25px;
+}
+
 /* 긍정(등록, 편지쓰기, 보내기, 답장하기, 완료 등) */
 .blue-btn {
   background: #36d5f1;

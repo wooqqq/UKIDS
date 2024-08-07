@@ -205,7 +205,8 @@ http://scripts.sil.org/OFL
   }
 
   html {
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
+    font-weight: 400;
     font-size: 1rem;
   }
 }

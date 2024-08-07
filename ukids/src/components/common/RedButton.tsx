@@ -6,6 +6,8 @@ import './button.css';
 interface RedButtonProps {
   name: string;
   path: string;
+  className?: string;
+  type?: string;
 }
 
 const RedButton = (props: RedButtonProps) => {

@@ -5,6 +5,8 @@ import './button.css';
 interface BlueButtonProps {
   name: string;
   path: string;
+  className?: string;
+  type?: string;
 }
 
 const BlueButton = (props: BlueButtonProps) => {
@@ -18,6 +20,12 @@ const BlueButton = (props: BlueButtonProps) => {
     return (
       <button onClick={handleClick} className="common-btn green-btn">
         <img src="/assets/subway_call-2.png" alt="call-icon" />
+        {props.name}
+      </button>
+    );
+  } else if (props.name == '로그인' || props.name == '가입하기') {
+    return (
+      <button onClick={handleClick} className="common-btn blue-btn login-btn">
         {props.name}
       </button>
     );
