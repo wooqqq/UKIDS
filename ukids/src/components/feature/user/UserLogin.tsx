@@ -7,38 +7,35 @@ import '../../common/common.css';
 import BlueButton from '../../common/BlueButton';
 
 const UserLogin = () => {
-  const [username, setUsername] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const setToken = useAuthStore((state) => state.setToken);
   const nav = useNavigate();
+
+  // const onClickInputButton = () => {};
 
   const hadleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
     try {
-      // // FormData 객체 생성
-      // const formData = new FormData();
-      // formData.append('username', username);
-      // formData.append('password', password);
-
       // 로그인 API 요청
       const response = await axios.post(
-        'https://i11b306.p.ssafy.io/api/login',
+        'https://i11b306.p.ssafy.io/api/user/login',
         {
-          id: username,
+          id: id,
           password: password,
         },
       );
 
-      const { token } = response.data;
+      const { result } = response.data;
 
-      setToken(token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setToken(result);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${result}`;
 
       nav('/main'); // 로그인 후 리디렉션할 페이지
     } catch (error) {
       console.error('로그인 실패:', error);
-      console.log('id :' + username, 'pw: ' + password);
+      console.error('id :' + id, 'pw: ' + password);
       alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.');
     }
   };
@@ -51,8 +48,8 @@ const UserLogin = () => {
             <input
               type="text"
               placeholder="아이디"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={id}
+              onChange={(e) => setId(e.target.value)}
               required
               className="login-id-box px-5 font-semibold text-[#555555]"
             />

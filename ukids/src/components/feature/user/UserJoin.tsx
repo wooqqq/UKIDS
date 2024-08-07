@@ -27,6 +27,9 @@ const UserJoin = () => {
       // 알림창 말고...
       // 입력창 빨갛게. 하단에 빨간 텍스트로 경고 문구
       // 가입 비활성화 => 는 그냥 return으로 막았으니 됐음.
+      // 정규표현식 test사용
+      //const haslatt = [/^0-9].test(password) -> true false
+      //
       return;
     }
 
