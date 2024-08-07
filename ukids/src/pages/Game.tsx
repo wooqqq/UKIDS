@@ -1,5 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
-import GameSelect from '../components/feature/game/GameSelect';
+
 import '../components/feature/game/Game.css';
 
 const Game = () => {
