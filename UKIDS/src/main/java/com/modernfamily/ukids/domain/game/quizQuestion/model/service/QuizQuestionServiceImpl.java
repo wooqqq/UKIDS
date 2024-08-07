@@ -103,8 +103,28 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
 
         QuizQuestionListPagenationResponseDto pagenationResponseDto = QuizQuestionListPagenationResponseDto
                 .createResponseDto(quizQuestionsPage.getNumberOfElements(), quizQuestionsPage.getNumber()+1,
-                        quizQuestionsPage.getTotalPages(), responseDtoList, userMapper.toUserDto(writer));
+                        quizQuestionsPage.getTotalPages(), quizQuestionsPage.getTotalElements(), responseDtoList, userMapper.toUserDto(writer));
 
         return pagenationResponseDto;
     }
+
+    public List<QuizQuestionResponseDto> chooseQuizQuestion(Long userId ,long count) {
+        User writer = userRepository.findById(userId)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        long existCount = quizQuestionRepository.countByWriter_UserId(writer.getUserId());
+        if(existCount < count)
+            throw new ExceptionResponse(CustomException.NOT_ENOUGH_QUIZ_QUESTION_EXCEPTION);
+
+        List<QuizQuestion> quizQuestions = quizQuestionRepository.findRandomQuizQuestionsByUSer(count, writer.getUserId());
+        List<QuizQuestionResponseDto> responseDtoList = new ArrayList<>();
+
+        for (QuizQuestion quizQuestion : quizQuestions) {
+            responseDtoList.add(QuizQuestionResponseDto.createResponseDto(quizQuestion, userMapper.toUserDto(writer)));
+        }
+
+        return responseDtoList;
+    }
+
+
 }
