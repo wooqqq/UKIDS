@@ -1,23 +1,30 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import useStore from '../stores/userStore';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+import useUserStore from '../stores/userStore';
 
 import ChattingBox from '../components/feature/chatting/ChattingBox';
 import BlueButton from '../components/common/BlueButton';
 import FamilyMemberList from '../components/feature/family/FamilyMemberList';
 
 interface Message {
-  messageId: string;
+  messageId: number;
   content: string;
-  user_id: string;
-  isDelete: boolean;
+  user_id: number;
+  is_delete: boolean;
+  create_time: string;
+  update_time: string;
 }
 
 const FamilyChatting = () => {
-  const { ukidsURL, chatRoomId } = useStore();
+  const { userToken } = useUserStore();
+  // user store에서 저장할 수 있을 때 가져오기. 지금은 임시로 1 지정
+  const chatRoomId = 1;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [stompClient, setStompClient] = useState<Client | null>(null);
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,15 +39,26 @@ const FamilyChatting = () => {
   };
 
   // 메세지 서버로 전송
-  const sendhMessagesToBack = async () => {
+  const sendMessages = async () => {
     try {
       axios
-        .post<Message[]>(`${ukidsURL}/message`, {
-          chatRoomId,
-          content: message,
-        })
+        .post(
+          `/api/message`,
+          {
+            chatRoomId,
+            content: message,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
+          },
+        )
         .then((response) => {
-          setMessages(response.data);
+          setMessages(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error.message);
         });
     } catch (error: any) {
       console.log(error.message);
@@ -50,30 +68,42 @@ const FamilyChatting = () => {
   // 전송버튼 누를 때
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!message) return;
+    if (message.trim() === '') return;
 
     // 메세지 전송되고 화면 갱신
-    setMessages([
-      { messageId: '', content: message, user_id: 'userId', isDelete: false },
+    setMessages((messages) => [
+      {
+        messageId: 0,
+        content: message,
+        user_id: 0,
+        is_delete: false,
+        create_time: '',
+        update_time: '',
+      },
       ...messages,
     ]);
 
     //서버로 메세지 전송
-    sendhMessagesToBack();
+    sendMessages();
 
     setMessage('');
     scrollToBottom();
   };
 
-  // 처음 입장 시 저장된 메세지들을 불러오고 스크롤 맨 밑으로
+  // 처음 입장 시
+  // 본인한테 맞는 가족방으로 입장
+  // 가족방에 저장된 메세지들을 불러오고 스크롤 맨 밑으로
   useEffect(() => {
+    // 본인한테 맞는 가족방으로 입장
+
+    // 저장된 메세지 불러오기
     axios
-      .get<Message[]>(`${ukidsURL}/message/${chatRoomId}`)
+      .get(`/api/message/${chatRoomId}`)
       .then((response) => {
-        const messageList = response.data;
+        const messageList = response.data.result;
 
         setMessages(
-          messageList.filter((message) => {
+          messageList.filter((message: any) => {
             return !message.isDelete;
           }),
         );
@@ -103,12 +133,12 @@ const FamilyChatting = () => {
               <div
                 key={storedMessage.messageId}
                 className={
-                  storedMessage.user_id === 'userId' ? 'self-end' : 'self-start'
+                  storedMessage.user_id === 0 ? 'self-end' : 'self-start'
                 }
               >
                 <ChattingBox
                   message={storedMessage.content}
-                  isSender={storedMessage.user_id === 'userId'}
+                  isSender={storedMessage.user_id === 0}
                 />
               </div>
             ))}
