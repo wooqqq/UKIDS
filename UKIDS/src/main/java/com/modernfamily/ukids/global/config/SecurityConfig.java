@@ -3,6 +3,7 @@ package com.modernfamily.ukids.global.config;
 import com.modernfamily.ukids.global.jwt.JWTFilter;
 import com.modernfamily.ukids.global.jwt.JWTUtil;
 import com.modernfamily.ukids.global.jwt.LoginFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -44,6 +46,22 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.cors((corsCustomizer -> corsCustomizer.configurationSource(request -> {
+
+            CorsConfiguration configuration = new CorsConfiguration();
+
+            configuration.setAllowedOrigins(Collections.singletonList("*"));
+            configuration.setAllowedMethods(Collections.singletonList("*"));
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedHeaders(Collections.singletonList("*"));
+            configuration.setMaxAge(3600L);
+
+            configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+            return configuration;
+        })));
+
         // jwt 방식은 stateless이기 때문에 csrf에 딱히 방어하지 않아도 된다.
         http.csrf(AbstractHttpConfigurer::disable);
 
@@ -51,11 +69,9 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
 
-
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/login", "/", "/user/signup").permitAll()
                         .anyRequest().authenticated());
-
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         // 등록할 필터와 어디에 등록할 것인지
@@ -89,5 +105,9 @@ public class SecurityConfig {
                             "/user/signup"
                     );
         };
+        // chat 테스트 시 해당 코드로 테스트
+//        return (web) -> web
+//                .ignoring()
+//                .requestMatchers("/**");
     }
 }

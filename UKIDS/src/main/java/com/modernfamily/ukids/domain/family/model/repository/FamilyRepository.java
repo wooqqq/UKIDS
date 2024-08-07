@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface FamilyRepository extends JpaRepository<Family, Long> {
-
     public Optional<Family> findByFamilyId(Long familyId);
 
     public boolean existsByCode(String code);

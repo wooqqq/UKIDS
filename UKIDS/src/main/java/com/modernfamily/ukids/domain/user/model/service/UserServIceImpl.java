@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.user.model.service;
 
 import com.modernfamily.ukids.domain.user.dto.*;
+import com.modernfamily.ukids.domain.user.entity.Role;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserServIceImpl implements UserService{
         }
 
         signUpDto.setPassword(bCryptPasswordEncoder.encode(signUpDto.getPassword()));
-
+        signUpDto.setRole(Role.ROLE_USER);
         User user = userMapper.toSignUpEntity(signUpDto);
 
         userRepository.save(user);

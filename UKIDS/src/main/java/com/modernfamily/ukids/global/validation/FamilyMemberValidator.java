@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.global.validation;
 
-import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
