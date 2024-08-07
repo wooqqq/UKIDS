@@ -33,4 +33,11 @@ public class QuizQuestionController {
 
         return responseUtil.createResponse(HttpMethodCode.PUT, SuccessMessage.SUCCESS_UPDATE_QUIZ_QUESTION.getMessage());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteQuizQuestion(@PathVariable("id") Long quizQuestionId) {
+        quizQuestionService.deleteQuizQuestion(quizQuestionId);
+
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_QUIZ_QUESTION.getMessage());
+    }
 }

@@ -6,6 +6,5 @@ import com.modernfamily.ukids.domain.game.quizQuestion.dto.request.QuizQuestionU
 public interface QuizQuestionService {
     void createQuizQuestion(QuizQuestionCreateRequestDto requestDto);
     void updateQuizQuestion(QuizQuestionUpdateRequestDto requestDto);
-//    void createQuizQuestion(QuizQuestionCreateRequestDto requestDto);
-//    void createQuizQuestion(QuizQuestionCreateRequestDto requestDto);
+    void deleteQuizQuestion(Long quizQuestionId);
 }

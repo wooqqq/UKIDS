@@ -47,4 +47,17 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
 
         quizQuestionRepository.save(quizQuestion);
     }
+
+    @Transactional
+    public void deleteQuizQuestion(Long quizQuestionId) {
+        String id = CustomUserDetails.contextGetUserId();
+        User writer = userRepository.findById(id).orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        QuizQuestion quizQuestion = quizQuestionRepository.findByQuizQuestionId(quizQuestionId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_EXCEPTION));
+
+        quizQuestion.deleteQuizQuestion();
+
+        quizQuestionRepository.save(quizQuestion);
+    }
 }
