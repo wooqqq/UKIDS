@@ -1,19 +1,17 @@
 package com.modernfamily.ukids.domain.game.quizQuestion.entity;
 
-import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Quiz extends BaseTimeEntity {
+public class QuizQuestion extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +30,24 @@ public class Quiz extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User writerId;
+    private User writer;
+
+
+    @Builder
+    private QuizQuestion(String question, String answer, QuizType quizType, User writer) {
+        this.question = question;
+        this.answer = answer;
+        this.quizType = quizType;
+        this.writer = writer;
+    }
+
+    public static QuizQuestion createQuizQuestion(String question, String answer, QuizType quizType, User writer) {
+        return QuizQuestion.builder()
+                .question(question)
+                .answer(answer)
+                .quizType(quizType)
+                .writer(writer)
+                .build();
+    }
 
 }
