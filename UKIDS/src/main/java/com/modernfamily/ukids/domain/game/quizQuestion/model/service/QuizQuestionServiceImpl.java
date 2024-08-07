@@ -53,8 +53,11 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
         String id = CustomUserDetails.contextGetUserId();
         User writer = userRepository.findById(id).orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
-        quizQuestionRepository.findByQuizQuestionId(requestDto.getQuizQuestionId())
+        QuizQuestion existQuizQuestion = quizQuestionRepository.findByQuizQuestionId(requestDto.getQuizQuestionId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_EXCEPTION));
+
+        if(writer.getUserId() != existQuizQuestion.getWriter().getUserId())
+            throw new ExceptionResponse(CustomException.ACCESS_DENIEND_EXCEPTION);
 
         QuizQuestion quizQuestion = QuizQuestion.createQuizQuestion(requestDto.getQuestion(), requestDto.getAnswer(),
                 requestDto.getQuizType(), writer);

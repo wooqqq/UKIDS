@@ -12,10 +12,7 @@ public class QuizQuestionUpdateRequestDto {
 
     @NotNull
     private Long quizQuestionId;
-
-    @NotNull
-    private Long userId;
-
+    
     @NotBlank
     private String question;
 

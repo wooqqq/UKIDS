@@ -10,9 +10,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class QuizQuestionCreateRequestDto {
 
-    @NotNull
-    private Long userId;
-
     @NotBlank
     private String question;
 
