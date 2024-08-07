@@ -24,4 +24,5 @@ public class PhotoSaveRequestDto {
     @NotNull
     MultipartFile multipartFile;
 
+    String caption;
 }
