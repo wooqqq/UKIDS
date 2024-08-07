@@ -70,7 +70,8 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/login", "/", "/user/signup").permitAll()
+                .requestMatchers("/login", "/", "/user/signup", "/user/login",
+                        "/user/id/*", "/user/email", "/user/phone").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);

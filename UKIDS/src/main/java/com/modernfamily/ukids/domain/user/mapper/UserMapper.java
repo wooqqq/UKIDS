@@ -20,4 +20,6 @@ public interface UserMapper {
     UserDto toUserDto(User user);
 
     UserFamilyDto toUserFamilyDto(User user);
+
+    User toUserUpdateEntity(UserUpdateDto dto);
 }
