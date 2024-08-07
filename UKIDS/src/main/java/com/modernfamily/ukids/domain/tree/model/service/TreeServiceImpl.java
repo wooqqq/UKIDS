@@ -54,10 +54,6 @@ public class TreeServiceImpl implements TreeService {
         Tree tree = treeRepository.findByFamily_FamilyId(treeDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
-        // tree가 이미 완성된 나무인지 확인
-        if (tree.isComplete())
-            throw new ExceptionResponse(CustomException.ALREADY_COMPLETED_TREE_EXCEPTION);
-
         // point를 exp에 저장
         Long grownExp = tree.getExp() + treeDto.getPoint();
 
