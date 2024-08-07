@@ -1,31 +1,36 @@
 package com.modernfamily.ukids.domain.user.controller;
 
-import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
-import com.modernfamily.ukids.domain.user.dto.PasswordCheckDto;
-import com.modernfamily.ukids.domain.user.dto.SignUpDto;
-import com.modernfamily.ukids.domain.user.dto.UserDto;
+import com.modernfamily.ukids.domain.user.dto.*;
 import com.modernfamily.ukids.domain.user.message.SuccessMessage;
 import com.modernfamily.ukids.domain.user.model.service.UserService;
 import com.modernfamily.ukids.global.jwt.JWTUtil;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
 import com.modernfamily.ukids.global.util.HttpResponseUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 
-@Controller
+@RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final HttpResponseUtil responseUtil;
     private final UserService userService;
     private final JWTUtil jwtUtil;
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserLoginDto userLoginDto) {
+        log.info(userLoginDto.toString());
+        String token = userService.login(userLoginDto);
+
+        return responseUtil.createResponse(HttpMethodCode.POST, token);
+    }
 
     // 회원가입
     @PostMapping("/signup")
@@ -42,7 +47,6 @@ public class UserController {
 
         return responseUtil.createResponse(HttpMethodCode.GET, userDto);
     }
-
     // id 중복검사
     @GetMapping("/id/{id}")
     public ResponseEntity<Map<String, Object>> idExist(@PathVariable("id") String id){
@@ -52,30 +56,29 @@ public class UserController {
         if(idCheck)
             return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_ID_EXIST.getMessage());
 
-        return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_ID_NON_EXIST.getMessage());
+        return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_ID_NOT_EXIST.getMessage());
     }
 
     // 이메일 중복검사
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Map<String, Object>> emailExist(@PathVariable("email") String email){
-        System.out.println("email: " + email);
+    @GetMapping("/email")
+    public ResponseEntity<Map<String, Object>> emailExist(@RequestParam("email") String email){
         boolean emailCheck = userService.emailExist(email);
 
         if(emailCheck)
             return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_EMAIL_EXIST.getMessage());
 
-        return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_EMAIL_NON_EXIST.getMessage());
+        return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_EMAIL_NOT_EXIST.getMessage());
     }
 
     // 전화번호 중복검사
-    @GetMapping("/phone/{phone}")
-    public ResponseEntity<Map<String, Object>> phoneExist(@PathVariable("phone") String phone){
+    @GetMapping("/phone")
+    public ResponseEntity<Map<String, Object>> phoneExist(@RequestParam("phone") String phone){
         boolean phoneCheck = userService.phoneExist(phone);
 
         if(phoneCheck)
             return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_PHONE_EXIST.getMessage());
 
-        return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_PHONE_NON_EXIST.getMessage());
+        return responseUtil.createResponse(HttpMethodCode.GET, SuccessMessage.SUCCESS_PHONE_NOT_EXIST.getMessage());
     }
 
     // 회원 수정 시 비밀번호 체크
@@ -86,13 +89,15 @@ public class UserController {
         boolean pwCheck = userService.pwCheck(userDto);
 
         if(pwCheck)
-            return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_PASSWORD_SAME);
+            return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_PASSWORD_SAME.getMessage());
 
-        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_PASSWORD_DISCORD);
+        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_PASSWORD_DISCORD.getMessage());
     }
 
-//    @PutMapping("/user")
-//    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserDto userDto){
-//
-//    }
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserUpdateDto userUpdateDto){
+        String token = userService.updateUser(userUpdateDto);
+
+        return responseUtil.createResponse(HttpMethodCode.PUT, token);
+    }
 }
