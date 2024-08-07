@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import useStore from '../stores/userStore';
+import useUserStore from '../stores/userStore';
 
 import ChattingBox from '../components/feature/chatting/ChattingBox';
 import BlueButton from '../components/common/BlueButton';
@@ -14,7 +14,7 @@ interface Message {
 }
 
 const FamilyChatting = () => {
-  const { ukidsURL, chatRoomId } = useStore();
+  const { ukidsURL, chatRoomId, loginToken } = useUserStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -32,15 +32,26 @@ const FamilyChatting = () => {
   };
 
   // 메세지 서버로 전송
-  const sendhMessagesToBack = async () => {
+  const sendMessagesToBack = async () => {
     try {
       axios
-        .post<Message[]>(`${ukidsURL}/message`, {
-          chatRoomId,
-          content: message,
-        })
+        .post<Message[]>(
+          `${ukidsURL}/message`,
+          {
+            chatRoomId,
+            content: message,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${loginToken}`,
+            },
+          },
+        )
         .then((response) => {
           setMessages(response.data);
+        })
+        .catch((error) => {
+          console.log(error.message);
         });
     } catch (error: any) {
       console.log(error.message);
@@ -59,14 +70,24 @@ const FamilyChatting = () => {
     ]);
 
     //서버로 메세지 전송
-    sendhMessagesToBack();
+    sendMessagesToBack();
 
     setMessage('');
     scrollToBottom();
   };
 
-  // 처음 입장 시 저장된 메세지들을 불러오고 스크롤 맨 밑으로
+  // 처음 입장 시
+  // 본인한테 맞는 가족방으로 입장
+  // 가족방에 저장된 메세지들을 불러오고 스크롤 맨 밑으로
   useEffect(() => {
+    //   // 가족방 입장
+    //   function(roomId) {
+    //     // 로그인한 유저의 가족 id 를 roomId로 넣어줘야 함
+    //     localStorage.setItem('wschat.roomId', roomId);
+    //     location.href = "/api/chat/room/enter/" + roomId;
+    // }
+
+    // 저장된 메세지 불러오기
     axios
       .get<Message[]>(`${ukidsURL}/message/${chatRoomId}`)
       .then((response) => {

@@ -6,6 +6,8 @@ interface Store {
   loading: boolean;
   error: string | null;
 
+  loginToken: string;
+
   familyId: string;
   chatRoomId: string;
   setfamilyId: () => void;
@@ -14,10 +16,12 @@ interface Store {
 
 const ukidsURL = `https://i11b306.p.ssafy.io`;
 
-const useStore = create<Store>((set) => ({
+const useUserStore = create<Store>((set) => ({
   ukidsURL: ukidsURL,
   loading: false,
   error: null,
+
+  loginToken: '',
 
   familyId: '',
   chatRoomId: '',
@@ -41,4 +45,4 @@ const useStore = create<Store>((set) => ({
   },
 }));
 
-export default useStore;
+export default useUserStore;
