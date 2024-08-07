@@ -1,18 +1,17 @@
 package com.modernfamily.ukids.domain.tree.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
-import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.List;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@Where(clause = "is_complete = false")
 public class Tree extends BaseTimeEntity {
 
     @Id
