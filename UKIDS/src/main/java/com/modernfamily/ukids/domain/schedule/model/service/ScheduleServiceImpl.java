@@ -3,8 +3,6 @@ package com.modernfamily.ukids.domain.schedule.model.service;
 import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.mapper.FamilyMapper;
-import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
-import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleCreateRequestDto;
 import com.modernfamily.ukids.domain.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.modernfamily.ukids.domain.schedule.dto.response.ScheduleInfoResponseDto;
@@ -12,7 +10,6 @@ import com.modernfamily.ukids.domain.schedule.dto.response.ScheduleListResponseD
 import com.modernfamily.ukids.domain.schedule.dto.response.ScheduleShortInfoResponseDto;
 import com.modernfamily.ukids.domain.schedule.entity.Schedule;
 import com.modernfamily.ukids.domain.schedule.model.repository.ScheduleRepository;
-import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;

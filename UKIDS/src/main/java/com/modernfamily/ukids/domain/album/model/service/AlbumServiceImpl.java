@@ -121,7 +121,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         familyMemberValidator.checkUserInFamilyMember(album.getFamily().getFamilyId());
 
-        captionRepository.deleteAllByAlbum(album);
+        // captionRepository.deleteAllByAlbum(album); // 추후 기능 구현 예정
         photoRepository.deleteAllByAlbum(album);
 
         album.deleteAlbum();

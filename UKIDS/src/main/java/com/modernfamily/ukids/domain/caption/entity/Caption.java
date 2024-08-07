@@ -25,7 +25,7 @@ public class Caption extends BaseTimeEntity {
     @Column(name = "is_delete_caption", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDelete;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "photo_id")
     private Photo photo;
 
