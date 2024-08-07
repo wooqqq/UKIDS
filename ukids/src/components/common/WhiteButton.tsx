@@ -4,6 +4,8 @@ import './button.css';
 interface WhiteButtonProps {
   name: string;
   path: string;
+  className?: string;
+  type?: string;
 }
 
 const WhiteButton = (props: WhiteButtonProps) => {

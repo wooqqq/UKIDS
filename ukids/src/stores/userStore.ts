@@ -18,7 +18,7 @@ const ukidsURL = `https://i11b306.p.ssafy.io`;
 // 로그인 구현 시 추가
 const userToken = '';
 
-const useStore = create<Store>((set) => ({
+const useUserStore = create<Store>((set) => ({
   ukidsURL: ukidsURL,
   loading: false,
   error: null,
@@ -69,4 +69,4 @@ const useStore = create<Store>((set) => ({
   },
 }));
 
-export default useStore;
+export default useUserStore;

@@ -4,6 +4,8 @@ import './button.css';
 interface GrayButtonProps {
   name: string;
   path: string;
+  className?: string;
+  type?: string;
 }
 
 const GrayButton = (props: GrayButtonProps) => {

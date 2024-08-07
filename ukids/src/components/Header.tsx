@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import ProfileBtn from './common/ProfileButton';
 import logo from '../assets/logo.png';
+import { LoginBtn } from '../components/error/ProtectedRoute';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Header = () => {
       </button>
       {/* 로그인이 안되었으면 로그인/회원가입 버튼*/}
       {/* 로그인 완료 시 프로필 버튼 */}
+      <LoginBtn />
       <ProfileBtn name="이삼성" hasFamily={true} isManager={true} />
     </div>
   );
