@@ -69,6 +69,10 @@ public enum CustomException {
     NOT_FOUND_SCHEDULE_EXCEPTION(400, "NotFoundScheduleException", "해당 일정이 존재하지 않습니다."),
     NOT_MATCHED_SCHEDULE_FAMILY(400, "NotMatchedScheduleFamilyException", "일정을 등록한 가족과 현재 가족방이 일치하지 않습니다."),
 
+    // 게임 관련
+    NOT_FOUND_QUIZ_EXCEPTION(400, "NotFoundQuizException", "해당 퀴즈가 존재하지 않습니다."),
+    NOT_ENOUGH_QUIZ_QUESTION_EXCEPTION(400, "NotEnoughQuizQuestionException", "준비된 퀴즈 개수가 부족합니다."),
+
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),
     NOT_VALID_JWT_EXCEPTION(401,"NotValidJwtException","토큰이 유효하지 않습니다."),
