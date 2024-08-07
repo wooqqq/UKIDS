@@ -119,7 +119,7 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
         if(existCount < count)
             throw new ExceptionResponse(CustomException.NOT_ENOUGH_QUIZ_QUESTION_EXCEPTION);
 
-        List<QuizQuestion> quizQuestions = quizQuestionRepository.findRandomQuizQuestionsByUSer(count, writer.getUserId());
+        List<QuizQuestion> quizQuestions = quizQuestionRepository.findRandomQuizQuestionsByUser(count, writer.getUserId());
         List<QuizQuestionResponseDto> responseDtoList = new ArrayList<>();
 
         for (QuizQuestion quizQuestion : quizQuestions) {
