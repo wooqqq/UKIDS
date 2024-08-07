@@ -32,7 +32,7 @@ public class CaptionServiceImpl implements CaptionService {
 
         Optional<Caption> existCaption = captionRepository.findByPhoto_PhotoId(photo.getPhotoId());
 
-        if(existCaption.isPresent())
+        if(existCaption.isPresent() && !existCaption.get().getContent().isBlank() )
             throw new ExceptionResponse(CustomException.DUPLICATED_CAPTION_EXCEPTION);
 
         Caption caption = Caption.createCaption(requestDto.getContent(), photo);

@@ -1,12 +1,13 @@
 package com.modernfamily.ukids.domain.user.model.service;
 
-import com.modernfamily.ukids.domain.user.dto.PasswordCheckDto;
-import com.modernfamily.ukids.domain.user.dto.SignUpDto;
-import com.modernfamily.ukids.domain.user.dto.UserDto;
-import com.modernfamily.ukids.domain.user.dto.UserOtherDto;
+import com.modernfamily.ukids.domain.user.dto.*;
 import com.modernfamily.ukids.domain.user.entity.User;
 
 public interface UserService {
+
+    String login(UserLoginDto userLoginDto);
+
+    String updateUser(UserUpdateDto userUpdateDto);
 
     void signUp(SignUpDto signUpDto);
 
