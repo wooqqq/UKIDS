@@ -61,6 +61,13 @@ const App = () => {
       <div className={removeFlexClass ? '' : 'flex justify-between'}>
         {!hideSidebar && <Sidebar />}
         <Routes>
+          {/* 로그인 했으면 진입 금지 */}
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Join />} />
+          </Route>
+          {/* 로그인 안했으면 진입 금지 */}
           <Route path="/" element={<Home />} />
           <Route path="/schedule/*" element={<Schedule />}></Route>
           <Route path="/letters" element={<Letters />} />

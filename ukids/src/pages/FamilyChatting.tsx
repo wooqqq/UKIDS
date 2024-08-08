@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import { Client } from '@stomp/stompjs';
+import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import useUserStore from '../stores/userStore';
 
@@ -39,29 +39,16 @@ const FamilyChatting = () => {
   };
 
   // 메세지 서버로 전송
-  const sendMessages = async () => {
-    try {
-      axios
-        .post(
-          `/api/message`,
-          {
-            chatRoomId,
-            content: message,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${userToken}`,
-            },
-          },
-        )
-        .then((response) => {
-          setMessages(response.data.result);
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-    } catch (error: any) {
-      console.log(error.message);
+  const sendMessages = () => {
+    if (stompClient && stompClient.connected) {
+      const chatMessage = {
+        chatRoomId,
+        content: message,
+      };
+      stompClient.publish({
+        destination: `/app/chat/${chatRoomId}`,
+        body: JSON.stringify(chatMessage),
+      });
     }
   };
 
@@ -98,7 +85,7 @@ const FamilyChatting = () => {
 
     // 저장된 메세지 불러오기
     axios
-      .get(`/api/message/${chatRoomId}`)
+      .get(`/api/chat/room/${chatRoomId}`)
       .then((response) => {
         const messageList = response.data.result;
 
@@ -113,6 +100,43 @@ const FamilyChatting = () => {
       .catch((error) => {
         console.error('메세지 가져오기 실패:', error);
       });
+
+    // 웹소켓 설정
+    const socket = new SockJS('/ws');
+    const client = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.onConnect = () => {
+      client.subscribe(`/topic/chat/${chatRoomId}`, (message: IMessage) => {
+        const receivedMessage: Message = JSON.parse(message.body);
+        setMessages((prevMessages) => [receivedMessage, ...prevMessages]);
+      });
+
+      setStompClient(client);
+    };
+
+    client.onStompError = (frame) => {
+      console.error('STOMP Error:', frame.headers['message']);
+      console.error('Details:', frame.body);
+    };
+
+    client.activate();
+
+    return () => {
+      if (client) {
+        client.deactivate();
+      }
+    };
   }, []);
 
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
