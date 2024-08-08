@@ -86,10 +86,28 @@ public class ScheduleServiceImpl implements ScheduleService {
         return ScheduleInfoResponseDto.createResponseDto(existSchedule, familyResponseDto);
     }
 
-    public ScheduleListResponseDto getScheduleList(Long familyId, LocalDate date) {
+    public ScheduleListResponseDto getScheduleListByDate(Long familyId, LocalDate date) {
         Family family = familyMemberValidator.checkUserInFamilyMember(familyId).getFamily();
 
         List<Schedule> schedules =  scheduleRepository.findAllByFamilyIdAndDate(family, date);
+
+        log.info("schedules : {}", schedules.size());
+
+        List<ScheduleShortInfoResponseDto> scheduleDtoList = new ArrayList();
+        for(Schedule schedule : schedules){
+            scheduleDtoList.add(ScheduleShortInfoResponseDto.createResponseDto(schedule));
+        }
+
+        FamilyResponseDto familyResponseDto = familyMapper.toFamilyResponseDto(family);
+        familyResponseDto.setUserFamilyDto(userMapper.toUserFamilyDto(family.getUser()));
+
+        return ScheduleListResponseDto.createResponseDto(scheduleDtoList, familyResponseDto);
+    }
+
+    public ScheduleListResponseDto getScheduleListByMonth(Long familyId, int month) {
+        Family family = familyMemberValidator.checkUserInFamilyMember(familyId).getFamily();
+
+        List<Schedule> schedules =  scheduleRepository.findAllByFamilyIdAndMonth(family, month);
 
         log.info("schedules : {}", schedules.size());
 

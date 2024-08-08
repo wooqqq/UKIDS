@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.modernfamily.ukids.global.baseTimeEntity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends BaseTimeEntity {
 
     public User() {
