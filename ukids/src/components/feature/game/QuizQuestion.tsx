@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './games.css';
+import './gamebutton.css';
 
 const QuizQuestion = () => {
   const [text, setText] = useState('');

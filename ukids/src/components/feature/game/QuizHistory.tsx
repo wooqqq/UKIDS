@@ -1,4 +1,4 @@
-import './games.css';
+import './gamebutton.css';
 
 const QuizHistory = () => {
   return (

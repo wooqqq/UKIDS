@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import GameButton from '../../common/GameButton';
-import './games.css';
-import useUserStore from '../../../stores/userStore';
+import './gamebutton.css';
+import { useAuthStore } from '../../../stores/authStore';
 
 const QuizQnA = () => {
-  const { ukidsURL, chatRoomId } = useUserStore();
+  const { ukidsURL, chatRoomId } = useAuthStore();
   const [num, setNum] = useState(0);
   const [questionList, setQuestionList] = useState([]);
 
