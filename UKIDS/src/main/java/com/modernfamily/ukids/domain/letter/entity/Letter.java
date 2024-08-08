@@ -75,16 +75,4 @@ public class Letter extends BaseTimeEntity {
     public void deleteLetter() {
         this.isDelete = true;
     }
-
-    // Mapper 로 이동시키기
-//    public LetterDto toDto() {
-//        return LetterDto.builder()
-//                .content(this.content)
-//                .tree(this.tree)
-//                .fromUser(this.fromUser)
-//                .toUser(this.toUser)
-//                .isDelete(this.isDelete)
-//                .isOpen(this.isOpen)
-//                .build();
-//    }
 }

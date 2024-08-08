@@ -2,6 +2,7 @@ package com.modernfamily.ukids.domain.tree.model.service;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
+import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
 import com.modernfamily.ukids.domain.tree.dto.request.TreeCreateRequestDto;
 import com.modernfamily.ukids.domain.tree.dto.request.TreeUpdateRequestDto;
 import com.modernfamily.ukids.domain.tree.dto.response.TreeInfoResponseDto;
@@ -19,6 +20,7 @@ public class TreeServiceImpl implements TreeService {
 
     private final TreeRepository treeRepository;
     private final FamilyRepository familyRepository;
+    private final LetterRepository letterRepository;
     private final TreeMapper treeMapper;
 
     @Override
@@ -56,6 +58,9 @@ public class TreeServiceImpl implements TreeService {
         // 성장 exp 가 최대치를 넘는지 안넘는지 체크
         if (grownExp >= 1000) {
             tree.setIsComplete(true);
+
+            // Tree 가 완성된 경우 관련된 모든 편지의 isOpen을 true로 업데이트
+            letterRepository.updateLettersOpenStatusByTree(tree);
 
             TreeCreateRequestDto newTreeDto = new TreeCreateRequestDto(tree.getFamily().getFamilyId());
             createTree(newTreeDto);
