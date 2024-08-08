@@ -82,7 +82,7 @@ const FamilyChatting = () => {
   useEffect(() => {
     console.log(decodedToken);
     console.log(token);
-    console.log(token.substring(7));
+    console.log(token?.substring(7));
     // 방 연결
 
     // 웹소켓 설정
@@ -91,7 +91,7 @@ const FamilyChatting = () => {
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
-        Authorization: `Bearer ${token.substring(7)}`,
+        Authorization: `Bearer ${token?.substring(7)}`,
       },
       debug: (str) => {
         console.log('웹소켓 디버그: ' + str);

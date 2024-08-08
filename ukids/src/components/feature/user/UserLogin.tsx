@@ -13,8 +13,6 @@ const UserLogin = () => {
   const setToken = useAuthStore((state) => state.setToken);
   const nav = useNavigate();
 
-  // const onClickInputButton = () => {};
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
@@ -26,18 +24,17 @@ const UserLogin = () => {
       });
 
       const { result } = response.data;
-      const { userId } = result;
-      console.log(userId);
+      const token = result;
+      // console.log(userId);
 
-      setToken(result); // 로그인 성공하여 토큰 저장
-      api.defaults.headers.common['Authorization'] = `Bearer ${result}`; // 새로운 토큰 설정
+      if (token) {
+        setToken(token); // 로그인 성공하여 토큰 저장
+        api.defaults.headers.common['Authorization'] = `Bearer ${result}`; // 새로운 토큰 설정
 
-      // const userResponse = await api.get(`/user/${userId}`);
-      // const userData = userResponse.data.result;
-
-      // localStorage.setItem('name', userData.name);
-
-      nav('/main'); // 로그인 후 리디렉션할 페이지
+        nav('/main'); // 로그인 후 리디렉션할 페이지
+      } else {
+        throw new Error('토큰이 응답에 포함되어 있지 않습니다.');
+      }
     } catch (error) {
       console.error('로그인 실패:', error);
       alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.' + error);

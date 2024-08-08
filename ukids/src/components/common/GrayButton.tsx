@@ -19,7 +19,7 @@ const GrayButton = (props: GrayButtonProps) => {
 
   const onClickLogoutButton = () => {
     localStorage.removeItem('token');
-    setToken('');
+    setToken(null);
     nav(props.path);
   };
 
