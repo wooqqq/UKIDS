@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ScheduleRepositoryCustom {
     List<Schedule> findAllByFamilyIdAndDate(Family family, LocalDate date);
+    List<Schedule> findAllByFamilyIdAndMonth(Family family, int month);
 }
