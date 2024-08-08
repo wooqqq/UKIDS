@@ -86,48 +86,66 @@ public class QuizService {
     }
 
     // 퀴즈 개수 설정
-    public QuizRoom saveQuizCounts(Long familyId, long counts) {
+    public Map<String, Object> saveQuizCounts(Long familyId, long counts) {
         familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
 
         quizRoomRespository.saveQuizCount(counts, quizRooms.get(familyId));
 
-        return quizRooms.get(familyId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("quizCount", quizRooms.get(familyId).getQuizCount());
+
+        return response;
     }
-    
+
     // 퀴즈 생성 가능 개수 반환
-    public long getQuizCounts(Long familyId) {
+    public Map<String, Object> getQuizCounts(Long familyId) {
         familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
 
-        return quizRooms.get(familyId).getQuizCount();
+        Map<String, Object> response = new HashMap<>();
+        response.put("quizCount", quizRooms.get(familyId).getQuizCount());
+
+        return response;
     }
 
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성
-    public boolean isReadyGameStart(Long familyId) {
+    public Map<String, Object> isReadyGameStart(Long familyId) {
         User participate = familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
 
         quizRoomRespository.clickReady(participate.getUserId(), quizRooms.get(familyId));
 
+        Map<String, Object> response = new HashMap<>();
+        boolean isState = true;
+
         // 참가자 모두 준비 안됨
         if(!quizRoomRespository.checkReady(quizRooms.get(familyId)))
-            return false;
+            isState = false;
 
         quizRoomRespository.generateQuiz(quizRooms.get(familyId));
         quizRoomRespository.startGame(quizRooms.get(familyId));
-        return true;
+
+        response.put("gameStart", isState);
+        return response;
     }
 
     // 질문 반환 -> 반환 끝나면 게임 종료
     public QuizQuestionRandomResponseDto getQuizQuestion(Long familyId) {
         familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
 
-        return quizRepository.getQuizQuestion(quizRooms.get(familyId));
+        QuizQuestionRandomResponseDto quizQuestion = quizRepository.getQuizQuestion(quizRooms.get(familyId));
+        if(quizQuestion == null)
+            endGame(familyId);
+
+        return quizQuestion;
     }
 
     // 정답 확인
-    public String checkQuizAnswer(Long familyId, String inputAnswer) {
+    public Map<String, Object> checkQuizAnswer(Long familyId, String inputAnswer) {
         User participate = familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
 
-        return quizRepository.checkAnswer(quizRooms.get(familyId), participate.getUserId(), inputAnswer);
+        Map<String, Object> response = new HashMap<>();
+        response.put("answer", quizRepository.checkAnswer(quizRooms.get(familyId), participate.getUserId(), inputAnswer));
+
+        return response;
     }
 
     // 게임 종료 -> DB 저장
