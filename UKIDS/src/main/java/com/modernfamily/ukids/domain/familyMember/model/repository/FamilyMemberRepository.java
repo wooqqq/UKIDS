@@ -38,4 +38,6 @@ public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long
     void setFamilyMemberRole(@Param("dto") FamilyMemberRoleDto familyMemberRoleDto);
 
     Optional<FamilyMember> findByUser_IdAndFamily_FamilyId(String id, Long familyId);
+
+    List<FamilyMember> findByUser_IdAndIsApprovalTrue(String id);
 }

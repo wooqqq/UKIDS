@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -53,7 +56,7 @@ public class FamilyServiceImpl implements FamilyService{
     }
 
     @Override
-    public void createFamily(FamilyRequestDto familyRequestDto){
+    public Long createFamily(FamilyRequestDto familyRequestDto){
         while(true) {
             String uuid = UUID.randomUUID().toString();
             byte[] uuidBytes = uuid.getBytes(StandardCharsets.UTF_8);
@@ -62,7 +65,7 @@ public class FamilyServiceImpl implements FamilyService{
             try {
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
                 hashBytes = messageDigest.digest(uuidBytes);
-            }catch (Exception e) {
+            }catch (NoSuchAlgorithmException e) {
                 throw new ExceptionResponse(CustomException.NOSUCH_ALGORITHM_EXCEPTION);
             }
             StringBuilder sb = new StringBuilder();
@@ -75,6 +78,7 @@ public class FamilyServiceImpl implements FamilyService{
             }
         }
 
+
         try{
             String id = CustomUserDetails.contextGetUserId();
             UserOtherDto userDto = userService.findByIdOther(id);
@@ -84,7 +88,7 @@ public class FamilyServiceImpl implements FamilyService{
 
             Family family = familyMapper.toFamilyRequestEntity(familyRequestDto);
 
-            familyRepository.save(family);
+            Family newFamilyInfo = familyRepository.save(family);
 
             // 가족방 생성 시 생성자(대표자) 추가
             FamilyMemberRepresentativeDto familyMemberRepresentativeDto = new FamilyMemberRepresentativeDto();
@@ -93,6 +97,8 @@ public class FamilyServiceImpl implements FamilyService{
             familyMemberRepresentativeDto.setRole(FamilyRole.ROLE_NONE);
             FamilyMember familyMember = familyMemberMapper.toFamilyMemberRepresentativeEntity(familyMemberRepresentativeDto);
             familyMemberRepository.save(familyMember);
+
+            return newFamilyInfo.getFamilyId();
         } catch (Exception e){
             throw new ExceptionResponse(CustomException.INPUT_FAMILY_EXCEPTION);
         }
@@ -160,6 +166,22 @@ public class FamilyServiceImpl implements FamilyService{
         
         // 가족 구성원 > 1 이면 삭제 불가
         customFamilyRepository.deleteFamily(familyPasswordDto);
+    }
+
+    @Override
+    public List<FamilyListResponseDto> getFamilies() {
+        String id = CustomUserDetails.contextGetUserId();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        List<FamilyMember> familyMembers = familyMemberRepository.findByUser_IdAndIsApprovalTrue(id);
+        List<Family> families = new ArrayList<>();
+        for(FamilyMember familyMember : familyMembers){
+            families.add(familyMember.getFamily());
+        }
+
+
+        return familyMapper.toFamilyResponseDtoList(families);
     }
 
 }
