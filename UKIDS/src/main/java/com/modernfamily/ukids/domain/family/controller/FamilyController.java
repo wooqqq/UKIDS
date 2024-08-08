@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -31,16 +33,28 @@ public class FamilyController {
         return responseUtil.createResponse(HttpMethodCode.GET, familyResponseDto);
     }
 
+    // 로그인 한 유저가 속한(승인된) 가족방 리스트
+    @GetMapping("/all")
+    public ResponseEntity<Map<String, Object>> getFamilies(){
+        List<FamilyListResponseDto> familyListResponseDtos = familyService.getFamilies();
+
+        return responseUtil.createResponse(HttpMethodCode.GET, familyListResponseDtos);
+    }
+
     // 가족방 생성
     @PostMapping
     public ResponseEntity<Map<String,Object>> createFamily(@RequestBody FamilyRequestDto familyRequestDto){
+        Long familyId = null;
         try {
-            familyService.createFamily(familyRequestDto);
+            familyId = familyService.createFamily(familyRequestDto);
+
         } catch (NoSuchAlgorithmException e) {
             throw new ExceptionResponse(CustomException.NOSUCH_ALGORITHM_EXCEPTION);
         }
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("familyId", familyId);
+        return responseUtil.createResponse(HttpMethodCode.POST, responseMap);
 
-        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_FAMILY);
     }
 
     // 고유코드로 가족방 찾기
