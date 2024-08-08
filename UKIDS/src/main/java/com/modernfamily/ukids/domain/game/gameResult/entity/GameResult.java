@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.game.gameResult.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
+import com.modernfamily.ukids.domain.game.gameResult.dto.GameResultSaveDto;
 import com.modernfamily.ukids.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -56,14 +58,13 @@ public class GameResult {
         this.family = family;
     }
 
-    public static GameResult createGameResult(GameType gameType, long correctCounts, long totalCounts, long rank,
-                                              LocalDate date, User participant, Family family) {
+    public static GameResult createGameResult(GameResultSaveDto gameResultSaveDto, User participant, Family family) {
         return GameResult.builder()
-                .gameType(gameType)
-                .correctCounts(correctCounts)
-                .totalCounts(totalCounts)
-                .rank(rank)
-                .date(date)
+                .gameType(gameResultSaveDto.getGameType())
+                .correctCounts(gameResultSaveDto.getCorrectCounts())
+                .totalCounts(gameResultSaveDto.getTotalCounts())
+                .rank(gameResultSaveDto.getRank())
+                .date(gameResultSaveDto.getDate())
                 .participant(participant)
                 .family(family)
                 .build();
