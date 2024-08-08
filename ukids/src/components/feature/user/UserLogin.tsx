@@ -39,10 +39,15 @@ const UserLogin = () => {
       alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.');
     }
   };
+
+  const onClickJoinButton = () => {
+    nav('/join');
+  };
+
   return (
     <>
       {/* 로그인 박스 */}
-      <div className="login-feature-box">
+      <div className="common-feature-box p-[50px]">
         <form onSubmit={hadleLogin}>
           <div>
             <input
@@ -70,11 +75,13 @@ const UserLogin = () => {
           </div>
         </form>
         <div className="flex items-center mt-4 justify-center">
-          <button className="join-find-btn">아이디 찾기</button>
+          {/* <button className="join-find-btn">아이디 찾기</button>
           <div className="dash-box mx-2"></div>
           <button className="join-find-btn">비밀번호 찾기</button>
-          <div className="dash-box mx-2"></div>
-          <button className="join-find-btn">회원가입</button>
+          <div className="dash-box mx-2"></div> */}
+          <button className="join-find-btn" onClick={onClickJoinButton}>
+            회원가입
+          </button>
         </div>
       </div>
     </>

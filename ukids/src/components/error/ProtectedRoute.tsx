@@ -1,6 +1,6 @@
+import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-import { useEffect } from 'react';
 
 // 로그인 안한 상태에서 진입금지인 곳 만들기
 const ProtectedRoute = () => {
@@ -29,20 +29,4 @@ const PublicRoute = () => {
   return <Outlet />; // 로그인 안했을 때만 Outlet 렌더링
 };
 
-const LoginBtn = () => {
-  const token = useAuthStore((state) => state.token);
-
-  useEffect(() => {
-    if (token) {
-      // console.log('gg');
-    }
-  }, [token]);
-  return (
-    <div>
-      <button>로그인</button>
-      <button>회원가입</button>
-    </div>
-  );
-};
-
-export { ProtectedRoute, PublicRoute, LoginBtn };
+export { ProtectedRoute, PublicRoute };

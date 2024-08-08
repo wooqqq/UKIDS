@@ -30,9 +30,10 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  padding: 1rem 12rem;
+  padding: 1rem 11rem;
   max-height: 100%;
   overflow: hidden;
+  width: 1440px;
 }
 
 /* 기능 박스 수정*/
@@ -57,6 +58,15 @@ body {
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
   /* padding: 30px 15px; */
+}
+
+/* 기능박스 (사이즈, padding값 빠진 것!) */
+.common-feature-box {
+  flex-shrink: 0;
+  border-radius: 30px;
+  opacity: var(--sds-size-stroke-border);
+  background: #fff;
+  box-shadow: 0px 3px 7px 0px rgba(153, 153, 153, 0.25);
 }
 
 @layer base {

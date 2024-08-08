@@ -58,7 +58,11 @@ const App = () => {
   return (
     <div className="">
       <Header />
-      <div className={removeFlexClass ? '' : 'flex justify-between'}>
+      <div
+        className={
+          removeFlexClass ? 'h-[600px]' : 'h-[600px] flex justify-between'
+        }
+      >
         {!hideSidebar && <Sidebar />}
         <Routes>
           {/* 로그인 했으면 진입 금지 */}

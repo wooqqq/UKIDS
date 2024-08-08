@@ -178,10 +178,9 @@
   filter: drop-shadow(0px 0px 7px rgba(153, 153, 153, 0.25));
 }
 
-
 /* 앨범 표시 사진이미지 크기 고정 */
 .image-fixed-size {
-  width: 140px;  /* 고정 너비 */
+  width: 140px; /* 고정 너비 */
   height: 125px; /* 고정 높이 */
   object-fit: cover; /* 이미지 비율 유지하면서 영역 채우기 */
 }
@@ -237,8 +236,6 @@
   z-index: 1000; /* 다른 요소들 위에 위치하도록 */
 }
 
-
-
 .upload-form {
   width: 100%;
   display: flex;
@@ -246,9 +243,9 @@
   align-items: center;
 }
 
-.upload-form input[type="text"],
+.upload-form input[type='text'],
 .upload-form .react-datepicker-wrapper,
-.upload-form input[type="file"] {
+.upload-form input[type='file'] {
   margin-top: 16px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -282,3 +279,22 @@
   object-fit: cover;
 }
 
+/* 가족 유대감 나무 관련 */
+.tree-info-box {
+  width: 400px;
+  height: 100px;
+  flex-shrink: 0;
+  z-index: 10;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  align-content: center;
+  color: #555;
+  font-weight: 600;
+  font-size: 18px;
+  box-shadow: 0px 4px 5px rgba(142, 142, 142, 0.25);
+  border-radius: 20px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
