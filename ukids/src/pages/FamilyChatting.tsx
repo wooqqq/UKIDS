@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import useUserStore from '../stores/userStore';
+import { useAuthStore } from '../stores/authStore';
 
 import ChattingBox from '../components/feature/chatting/ChattingBox';
 import BlueButton from '../components/common/BlueButton';
@@ -18,7 +18,7 @@ interface Message {
 }
 
 const FamilyChatting = () => {
-  const { userToken } = useUserStore();
+  const { token } = useAuthStore();
   // user store에서 저장할 수 있을 때 가져오기. 지금은 임시로 1 지정
   const chatRoomId = 1;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -42,11 +42,13 @@ const FamilyChatting = () => {
   const sendMessages = () => {
     if (stompClient && stompClient.connected) {
       const chatMessage = {
-        chatRoomId,
-        content: message,
+        type: 'TALK',
+        roomId: chatRoomId,
+        sender: user_id,
+        message,
       };
       stompClient.publish({
-        destination: `/app/chat/${chatRoomId}`,
+        destination: `/pub/chat/message`,
         body: JSON.stringify(chatMessage),
       });
     }
@@ -78,11 +80,8 @@ const FamilyChatting = () => {
   };
 
   // 처음 입장 시
-  // 본인한테 맞는 가족방으로 입장
   // 가족방에 저장된 메세지들을 불러오고 스크롤 맨 밑으로
   useEffect(() => {
-    // 본인한테 맞는 가족방으로 입장
-
     // 저장된 메세지 불러오기
     axios
       .get(`/api/chat/room/${chatRoomId}`)
@@ -106,7 +105,7 @@ const FamilyChatting = () => {
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${token}`,
       },
       debug: function (str) {
         console.log(str);
