@@ -42,10 +42,11 @@ public class WebrtcServiceImpl implements WebrtcService{
     }
 
     @Override
-    public String createConnection(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException{
+    public String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException{
 
         openvidu.fetch();
 
+        String sessionId = getWebrtcByFamilyId(familyId).getSessionId();
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
             throw new ExceptionResponse(CustomException.NOT_FOUND_SESSION_EXCEPTION);
@@ -67,8 +68,7 @@ public class WebrtcServiceImpl implements WebrtcService{
     }
 
     @Override
-    public WebrtcResponseDto getWebrtcByFamilyId(Map<String, Long> payload) {
-        Long familyId = payload.get("familyId");
+    public WebrtcResponseDto getWebrtcByFamilyId(Long familyId) {
         Webrtc webrtc = webrtcRepository.findByFamily_FamilyId(familyId).get();
 
         return WebrtcResponseDto.createResponseDto(webrtc);

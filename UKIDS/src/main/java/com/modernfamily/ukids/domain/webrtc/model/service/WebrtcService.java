@@ -9,7 +9,7 @@ import java.util.Map;
 public interface WebrtcService {
     void init();
     String initializeSessions(Map<String, Object> sessionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
-    String createConnection(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
+    String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
     void createWebrtcChatRoom(String sessionId, Long familyId);
-    WebrtcResponseDto getWebrtcByFamilyId(Map<String, Long> payload);
+    WebrtcResponseDto getWebrtcByFamilyId(Long familyId);
 }

@@ -36,20 +36,14 @@ public class WebrtcController {
         return responseUtil.createResponse(HttpMethodCode.POST, sessionId);
     }
 
-    @PostMapping("/{sessionId}")
-    public ResponseEntity<?> createConnection(@PathVariable("sessionId") String sessionId,
+    @PostMapping("/{familyId}")
+    public ResponseEntity<?> createConnection(@PathVariable("familyId") Long familyId,
                                               @RequestBody(required = false) Map<String, Object> connectionProperties)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-        String token = webrtcService.createConnection(sessionId, connectionProperties);
+        String token = webrtcService.createConnection(familyId, connectionProperties);
 
         return responseUtil.createResponse(HttpMethodCode.POST, token);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getSessionIdByFamily(@RequestBody Map<String, Long> payload) {
-        String sessionId = webrtcService.getWebrtcByFamilyId(payload).getSessionId();
-
-        return responseUtil.createResponse(HttpMethodCode.GET, sessionId);
-    }
 }
