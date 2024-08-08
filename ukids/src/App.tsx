@@ -84,6 +84,31 @@ const App = () => {
           <Route path="/callmyname/*" element={<CallMyName />}></Route>
           <Route path="/setting" element={<Setting />} />
           <Route path="*" element={<Notfound />} />
+          {/* 로그인 했으면 진입 금지 */}
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Join />} />
+          </Route>
+          {/* 로그인 안했으면 진입 금지 */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/main" element={<Main />} />
+            <Route path="/schedule/*" element={<Schedule />}></Route>
+            <Route path="/letters" element={<Letters />} />
+            <Route path="/albums" element={<Albums />} />
+            {/* 앨범 중첩 라우팅 */}
+            <Route path="/albums/:photoId" element={<AlbumDetail />} />
+            <Route path="/albums/upload" element={<UploadPhoto />} />
+            <Route path="/paintdiary" element={<PaintingDiary />} />
+            <Route path="/growthdiary" element={<GrowthDiary />} />
+            <Route path="/chat" element={<FamilyChatting />} />
+            <Route path="/chat/call" element={<FamilyVideoCall />} />
+            <Route path="/game" element={<GameSelect />}></Route>
+            <Route path="/quiz/*" element={<Quiz />}></Route>
+            <Route path="/callmyname/*" element={<CallMyName />}></Route>
+            <Route path="/setting" element={<Setting />} />
+            <Route path="*" element={<Notfound />} />
+          </Route>
         </Routes>
       </div>
       <Footer />
