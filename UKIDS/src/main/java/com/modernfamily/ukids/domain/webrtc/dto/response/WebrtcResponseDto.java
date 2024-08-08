@@ -10,7 +10,7 @@ public class WebrtcResponseDto {
 
     private Long familyId;
 
-    public WebrtcResponseDto(String sessionId, Long familyId) {
+    private WebrtcResponseDto(String sessionId, Long familyId) {
         this.sessionId = sessionId;
         this.familyId = familyId;
     }
