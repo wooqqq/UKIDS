@@ -25,11 +25,11 @@ public class Tree extends BaseTimeEntity {
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isComplete;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tree_type_id")
     private TreeType treeType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id")
     private Family family;
 

@@ -21,15 +21,15 @@ public class Letter extends BaseTimeEntity {
     @Column(nullable = false, length = 3000)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tree_id", nullable = false)
     private Tree tree;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_id", referencedColumnName = "user_id", nullable = false)
     private User fromUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_id", referencedColumnName = "user_id", nullable = false)
     private User toUser;
 
