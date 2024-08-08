@@ -1,28 +1,46 @@
 package com.modernfamily.ukids.domain.letter.model.service;
 
-import com.modernfamily.ukids.domain.letter.dto.LetterDto;
+import com.modernfamily.ukids.domain.letter.dto.request.LetterCreateRequestDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
+import com.modernfamily.ukids.domain.letter.mapper.LetterMapper;
 import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
+import com.modernfamily.ukids.domain.tree.entity.Tree;
+import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
+import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.entity.User;
+import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
+import com.modernfamily.ukids.global.exception.CustomException;
+import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class LetterServiceImpl implements LetterService {
 
-    private LetterRepository letterRepository;
-
-    public LetterServiceImpl(LetterRepository letterRepository) {
-        this.letterRepository = letterRepository;
-    }
+    private final LetterRepository letterRepository;
+    private final TreeRepository treeRepository;
+    private final UserRepository userRepository;
+    private final LetterMapper letterMapper;
 
     @Override
-    public Letter save(LetterDto letterDto) {
-        Letter letter = letterDto.toEntity();
-        return letterRepository.save(letter);
+    public Letter createLetter(LetterCreateRequestDto letterDto) {
+        String id = CustomUserDetails.contextGetUserId();
+        User fromUser = userRepository.findById(id)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        User toUser = userRepository.findByUserId(letterDto.getToUserId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        Tree tree = treeRepository.findByFamily_FamilyId(letterDto.getFamilyId())
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
+
+        Letter createdLetter = Letter.createLetter(letterDto.getContent(), tree, fromUser, toUser);
+
+        return letterRepository.save(createdLetter);
     }
 
     // 로그인한 사용자가 toUser(수신인)인 경우

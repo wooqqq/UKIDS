@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.letter.controller;
 
 import com.modernfamily.ukids.domain.letter.dto.LetterDto;
+import com.modernfamily.ukids.domain.letter.dto.request.LetterCreateRequestDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.domain.letter.message.SuccessMessage;
 import com.modernfamily.ukids.domain.letter.model.service.LetterService;
@@ -26,9 +27,9 @@ public class LetterController {
 
     // 편지 작성
     @PostMapping("")
-    public ResponseEntity<?> write(@RequestBody LetterDto letterDto) {
+    public ResponseEntity<?> write(@RequestBody LetterCreateRequestDto letterDto) {
         // 유효성 검사 필요
-        Letter savedLetter = letterService.save(letterDto);
+        Letter savedLetter = letterService.createLetter(letterDto);
 
         return responseUtil.createResponse(HttpMethodCode.POST, savedLetter);
     }
