@@ -71,7 +71,10 @@ public enum CustomException {
 
     // 게임 관련
     NOT_FOUND_QUIZ_EXCEPTION(400, "NotFoundQuizException", "해당 퀴즈가 존재하지 않습니다."),
+    NOT_FOUND_QUIZ_GAME_EXCEPTION(400, "NotFoundQuizGameException", "해당 퀴즈 게임이 존재하지 않습니다."),
+    NOT_FOUND_QUIZ_USER_EXCEPTION(400, "NotFoundQuizUserException", "게임에 해당 유저가 존재하지 않습니다."),
     NOT_ENOUGH_QUIZ_QUESTION_EXCEPTION(400, "NotEnoughQuizQuestionException", "준비된 퀴즈 개수가 부족합니다."),
+    ALREADY_PLAYING_EXCEPTION(400, "AlreadyPlayingException", "이미 게임이 진행 중입니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),

@@ -17,17 +17,8 @@ public class QuizRoomRespository {
     private final QuizQuestionService quizQuestionService;
 
     // 게임방 만들기
-    public QuizRoom createGameRoom(Long familyId, GameType gameType, String sessionId){
-        return QuizRoom.createQuizRoom(familyId, gameType, sessionId);
-    }
-
-    // 게임방이 존재하는지 판별
-    public boolean isPresentQuizRoom(Long familyId, Map<String, QuizRoom> quizRooms){
-        for(QuizRoom room : quizRooms.values()){
-            if(room.getFamilyId().equals(familyId))
-                return true;
-        }
-        return false;
+    public QuizRoom createGameRoom(GameType gameType, String sessionId){
+        return QuizRoom.createQuizRoom(gameType, sessionId);
     }
 
     // 유저 참여
@@ -86,10 +77,4 @@ public class QuizRoomRespository {
             );
         }
     }
-
-    // 퀴즈 개수 조회
-    public long getQuizCount(QuizRoom quizRoom){
-        return quizRoom.getQuizCount();
-    }
-    
 }

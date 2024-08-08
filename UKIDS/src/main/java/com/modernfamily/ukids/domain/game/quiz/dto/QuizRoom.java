@@ -11,24 +11,22 @@ import java.util.List;
 
 @Getter
 public class QuizRoom {
-    private Long familyId;
     private GameType gameType;
-    private String SessionId;
+    private String sessionId;
     private Long quizCount;
     private boolean isStart;
     private Long numberOfParticipants;
     private Long maxQuestionCounts;
-    private Long currentQuestionIndex;
+    private int currentQuestionIndex;
     private HashMap<Long, Participate> participantList;
     private List<QuizQuestionRandomResponseDto> randomQuizQuestionList;
 
     @Builder
-    private QuizRoom(Long familyId, GameType gameType, String sessionId ,Long quizCount, boolean isStart,
-                     Long numberOfParticipants, Long maxQuestionCounts, Long currentQuestionIndex,
+    private QuizRoom(GameType gameType, String sessionId ,Long quizCount, boolean isStart,
+                     Long numberOfParticipants, Long maxQuestionCounts, int currentQuestionIndex,
                      HashMap<Long, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
-        this.familyId = familyId;
         this.gameType = gameType;
-        this.SessionId = sessionId;
+        this.sessionId = sessionId;
         this.quizCount = quizCount;
         this.isStart = isStart;
         this.numberOfParticipants = numberOfParticipants;
@@ -38,16 +36,15 @@ public class QuizRoom {
         this.randomQuizQuestionList = randomQuizQuestionList;
     }
 
-    public static QuizRoom createQuizRoom(Long familyId, GameType gameType, String sessionId){
+    public static QuizRoom createQuizRoom(GameType gameType, String sessionId){
         return QuizRoom.builder()
-                .familyId(familyId)
                 .gameType(gameType)
                 .sessionId(sessionId)
                 .quizCount(0L)
                 .isStart(false)
                 .numberOfParticipants(0L)
                 .maxQuestionCounts(0L)
-                .currentQuestionIndex(0L)
+                .currentQuestionIndex(-1)
                 .participantList(new HashMap<Long, Participate>())
                 .randomQuizQuestionList(null)
                 .build();
@@ -84,10 +81,12 @@ public class QuizRoom {
         this.randomQuizQuestionList.addAll(randomQuizQuestionList);
     }
 
-    public long increaseCurrentQuestionIndex(){
-        if(randomQuizQuestionList.size() == ++this.currentQuestionIndex)
-            this.currentQuestionIndex = -1L;
-        return this.currentQuestionIndex;
+    public boolean increaseCurrentQuestionIndex(){
+        if(randomQuizQuestionList.size()-1 == this.currentQuestionIndex)
+            return false;
+
+        this.currentQuestionIndex++;
+        return true;
     }
 
 }
