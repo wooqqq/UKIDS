@@ -4,9 +4,9 @@ import { jwtDecode } from 'jwt-decode';
 
 // 타입스크립트 타입 설정...
 interface AuthState {
-  token: string | null;
+  token: string;
   decodedToken: any;
-  setToken: (token: string | null) => void;
+  setToken: (token: string) => void;
 
   ukidsURL: string;
   loading: boolean;
@@ -23,7 +23,7 @@ const ukidsURL = `https://i11b306.p.ssafy.io`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   // 로그인 시 토큰 설정 됨
-  token: null,
+  token: '',
   decodedToken: null,
   // 토큰이 있는 경우 디코딩하여 상태에 저장
   setToken: (token) => {
@@ -32,6 +32,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       try {
         const decoded = jwtDecode(token);
         set({ decodedToken: decoded });
+        localStorage.setItem('user', JSON.stringify(decoded));
       } catch (error) {
         console.error('Token decoding failed', error);
         set({ decodedToken: null });
@@ -66,15 +67,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         },
       );
       set({
-        familyId: Number.parseInt(response.data.familyId),
+        familyId: Number.parseInt(response.data),
         loading: false,
       });
+
+      // 채팅방 ID 생성
+      get().setChatRoomId;
     } catch (error: any) {
       set({ error: error.message });
     }
   },
 
-  // 가족방 생성 시 채팅방 ID 얻어오기
+  // 가족방 생성 시 가족 ID로 채팅방 ID 얻어오기
   chatRoomId: NaN,
   setChatRoomId: (familyId) => async () => {
     set({ loading: true, error: null });
