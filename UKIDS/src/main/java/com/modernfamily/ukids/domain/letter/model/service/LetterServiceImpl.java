@@ -5,7 +5,6 @@ import com.modernfamily.ukids.domain.letter.dto.response.LetterListPagenationRes
 import com.modernfamily.ukids.domain.letter.dto.response.LetterListResponseDto;
 import com.modernfamily.ukids.domain.letter.dto.response.LetterResponseDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
-import com.modernfamily.ukids.domain.letter.mapper.LetterMapper;
 import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
@@ -31,7 +30,6 @@ public class LetterServiceImpl implements LetterService {
     private final LetterRepository letterRepository;
     private final TreeRepository treeRepository;
     private final UserRepository userRepository;
-    private final LetterMapper letterMapper;
     private final UserMapper userMapper;
 
     @Override
@@ -130,7 +128,7 @@ public class LetterServiceImpl implements LetterService {
         // letter의 isRead가 false이면 true로 변경
         if (!letter.isRead()) letter.readLetter();
 
-        return letterMapper.toResponseDto(letter);
+        return LetterResponseDto.createResponseDto(letter);
     }
 
 }

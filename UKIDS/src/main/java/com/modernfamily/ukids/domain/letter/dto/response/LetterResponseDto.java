@@ -1,8 +1,10 @@
 package com.modernfamily.ukids.domain.letter.dto.response;
 
-import com.modernfamily.ukids.domain.tree.dto.response.TreeInfoResponseDto;
-import com.modernfamily.ukids.domain.user.dto.UserDto;
+import com.modernfamily.ukids.domain.letter.entity.Letter;
+import lombok.Builder;
 import lombok.Getter;
+
+import java.time.format.DateTimeFormatter;
 
 @Getter
 public class LetterResponseDto {
@@ -11,14 +13,33 @@ public class LetterResponseDto {
 
     private String content;
 
-    private TreeInfoResponseDto tree;
+    private String familyName;
 
-    private UserDto fromUser;
+    private String fromUsername;
 
-    private UserDto toUser;
+    private String toUsername;
 
-    private boolean isOpen;
+    private String createDate;
 
-    private boolean isRead;
 
+    @Builder
+    private LetterResponseDto(Long letterId, String content, String familyName, String fromUsername, String toUsername, String createDate) {
+        this.letterId = letterId;
+        this.content = content;
+        this.familyName = familyName;
+        this.fromUsername = fromUsername;
+        this.toUsername = toUsername;
+        this.createDate = createDate;
+    }
+
+    public static LetterResponseDto createResponseDto(Letter letter) {
+        return LetterResponseDto.builder()
+                .letterId(letter.getLetterId())
+                .content(letter.getContent())
+                .familyName(letter.getTree().getFamily().getName())
+                .fromUsername(letter.getFromUser().getName())
+                .toUsername(letter.getToUser().getName())
+                .createDate(letter.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .build();
+    }
 }
