@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class WebrtcServiceImpl implements WebrtcService{
+public class WebrtcServiceImpl implements WebrtcService {
 
     @Value("${webrtc.openvidu.url}")
     private String OPENVIDU_URL;
@@ -29,7 +29,7 @@ public class WebrtcServiceImpl implements WebrtcService{
     private final FamilyRepository familyRepository;
 
     @Override
-    public void init(){
+    public void init() {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
@@ -42,7 +42,7 @@ public class WebrtcServiceImpl implements WebrtcService{
     }
 
     @Override
-    public String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException{
+    public String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
 
         openvidu.fetch();
 
@@ -62,7 +62,7 @@ public class WebrtcServiceImpl implements WebrtcService{
         Family family = familyRepository.findByFamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
-        Webrtc webrtc = Webrtc.createWebrtc(sessionId, family);
+        Webrtc webrtc = new Webrtc(sessionId, family);
 
         webrtcRepository.save(webrtc);
     }
@@ -71,6 +71,6 @@ public class WebrtcServiceImpl implements WebrtcService{
     public WebrtcResponseDto getWebrtcByFamilyId(Long familyId) {
         Webrtc webrtc = webrtcRepository.findByFamily_FamilyId(familyId).get();
 
-        return WebrtcResponseDto.createResponseDto(webrtc);
+        return WebrtcResponseDto.from(webrtc);
     }
 }
