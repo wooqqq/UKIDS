@@ -23,7 +23,7 @@ const Header = () => {
       {/* 로그인이 안되었으면 로그인/회원가입 버튼*/}
       {/* 로그인 완료 시 프로필 버튼 */}
       <LoginBtn />
-      <ProfileBtn name="이삼성" hasFamily={true} isManager={true} />
+      <ProfileBtn name="이삼성" hasFamily={false} isManager={true} />
     </div>
   );
 };
