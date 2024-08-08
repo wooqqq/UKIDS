@@ -70,7 +70,7 @@ public class QuizController {
     }
 
     // 정답 확인
-    @MessageMapping("/enter/{id}")
+    @MessageMapping("/answer/{id}")
     @SendTo("/topic/game/{id}")
     public Map<String, Object> checkQuizAnswer(@PathVariable("id") Long familyId,
                                              @RequestParam("inputAnswer")String inputAnswer) {
