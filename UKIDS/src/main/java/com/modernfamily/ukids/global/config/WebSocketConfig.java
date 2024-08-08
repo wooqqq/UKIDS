@@ -12,8 +12,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-stomp")
-                .setAllowedOriginPatterns("*");
-                // .withSockJS();
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 
     // 메모리 기반의 Simple Message Broker 활성화
