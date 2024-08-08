@@ -3899,6 +3899,11 @@ smart-buffer@^4.2.0:
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
 
+socketjs-client@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/socketjs-client/-/socketjs-client-1.0.2.tgz#b2a2eb41da3b84bdfa6f4beb50285c63877845b4"
+  integrity sha512-Os70jwxkpQ4CFqchdlHCLNt+xc+34K5h3INCoI5w04y3mN7UvKDJn4ozXkCQHfeKPuire0SAcyo3YFLr1KgJXw==
+
 sockjs-client@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/sockjs-client/-/sockjs-client-1.6.1.tgz#350b8eda42d6d52ddc030c39943364c11dcad806"
