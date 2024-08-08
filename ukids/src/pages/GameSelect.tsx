@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../components/feature/game/game.css';
+import '../components/feature/game/games.css';
 import quizImg from '../assets/game_quiz.png';
 import callmynameImg from '../assets/game_callmyname.png';
 

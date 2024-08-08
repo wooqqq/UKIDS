@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import GameButton from '../../common/GameButton';
-import './game.css';
+import './games.css';
 import useUserStore from '../../../stores/userStore';
 
 const QuizQnA = () => {

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import './game.css';
+import './games.css';
 
 const QuizMain = () => {
   const nav = useNavigate();
