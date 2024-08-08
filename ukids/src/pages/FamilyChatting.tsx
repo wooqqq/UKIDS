@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Client, IMessage } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import { useAuthStore } from '../stores/authStore';
 
 import ChattingBox from '../components/feature/chatting/ChattingBox';
@@ -19,8 +18,8 @@ interface Message {
 
 const FamilyChatting = () => {
   const { ukidsURL, token, decodedToken } = useAuthStore();
-  const chatRoomId = 1234; // 임시로 1234 설정
-  const familyId = 1234; // 임시로 1234 설정
+  const chatRoomId = 1; // 임시로 1 설정
+  // const familyId = 1; // 임시로 1 설정
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
