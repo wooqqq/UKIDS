@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,6 +28,19 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                 .where(qSchedule.family.eq(family)
                         .and(qSchedule.startTime.lt(endOfDay))
                         .and(qSchedule.endTime.ne(startOfDay)))
+                .fetch();
+    }
+
+    @Override
+    public List<Schedule> findAllByFamilyIdAndMonth(Family family, int month){
+        YearMonth yearMonth = YearMonth.of(LocalDateTime.now().getYear(), month);
+        LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        return jpaQueryFactory.selectFrom(qSchedule)
+                .where(qSchedule.family.eq(family)
+                        .and(qSchedule.startTime.between(startOfMonth, endOfMonth)
+                        .or(qSchedule.endTime.between(startOfMonth, endOfMonth))))
                 .fetch();
     }
 

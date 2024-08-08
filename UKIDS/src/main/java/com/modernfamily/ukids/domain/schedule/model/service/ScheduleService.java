@@ -16,6 +16,8 @@ public interface ScheduleService {
 
     ScheduleInfoResponseDto getScheduleInfo(Long scheduleId);
 
-    ScheduleListResponseDto getScheduleList(Long familyId, LocalDate date);
+    ScheduleListResponseDto getScheduleListByDate(Long familyId, LocalDate date);
+
+    ScheduleListResponseDto getScheduleListByMonth(Long familyId, int month);
 
 }
