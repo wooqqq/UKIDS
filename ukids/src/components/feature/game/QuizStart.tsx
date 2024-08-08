@@ -1,4 +1,4 @@
-import './game.css';
+import './gamebutton.css';
 
 const QuizQnA = () => {
   const questionNum = 1;
