@@ -48,10 +48,16 @@ public class ScheduleController {
         return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleInfo(scheduleId));
     }
 
-    @GetMapping("/all/{id}")
-    public ResponseEntity<Map<String, Object>> getScheduleInfo(@PathVariable("id") Long familyId,
+    @GetMapping("/date/{id}")
+    public ResponseEntity<Map<String, Object>> getScheduleInfoByDate(@PathVariable("id") Long familyId,
                                                                @RequestParam("date") LocalDate date) {
-        return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleList(familyId, date));
+        return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleListByDate(familyId, date));
+    }
+
+    @GetMapping("/month/{id}")
+    public ResponseEntity<Map<String, Object>> getScheduleInfo(@PathVariable("id") Long familyId,
+                                                               @RequestParam("month") int month) {
+        return responseUtil.createResponse(HttpMethodCode.GET, scheduleService.getScheduleListByMonth(familyId, month));
     }
 
 }
