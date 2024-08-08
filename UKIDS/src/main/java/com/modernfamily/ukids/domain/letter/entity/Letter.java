@@ -62,8 +62,8 @@ public class Letter extends BaseTimeEntity {
                 .build();
     }
 
-    public void setIsDelete(boolean isDelete) {
-        this.isDelete = isDelete;
+    public void deleteLetter() {
+        this.isDelete = true;
     }
 
     // Mapper 로 이동시키기

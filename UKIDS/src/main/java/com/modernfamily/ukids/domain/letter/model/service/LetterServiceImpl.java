@@ -27,7 +27,7 @@ public class LetterServiceImpl implements LetterService {
     private final LetterMapper letterMapper;
 
     @Override
-    public Letter createLetter(LetterCreateRequestDto letterDto) {
+    public void createLetter(LetterCreateRequestDto letterDto) {
         String id = CustomUserDetails.contextGetUserId();
         User fromUser = userRepository.findById(id)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
@@ -40,7 +40,21 @@ public class LetterServiceImpl implements LetterService {
 
         Letter createdLetter = Letter.createLetter(letterDto.getContent(), tree, fromUser, toUser);
 
-        return letterRepository.save(createdLetter);
+        letterRepository.save(createdLetter);
+    }
+
+    @Override
+    public void deleteByLetterId(Long letterId) {
+        String id = CustomUserDetails.contextGetUserId();
+        User fromUser = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        Letter letter = letterRepository.findByLetterId(letterId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_LETTER_EXCEPTION));
+
+        letter.deleteLetter();
+
+        letterRepository.save(letter);
     }
 
     // 로그인한 사용자가 toUser(수신인)인 경우
@@ -61,14 +75,4 @@ public class LetterServiceImpl implements LetterService {
         return letterRepository.findByLetterId(letterId);
     }
 
-    // 편지 삭제 (논리적 삭제)
-    @Override
-    public void deleteByLetterId(Long letterId) {
-        Optional<Letter> optionalLetter = letterRepository.findByLetterId(letterId);
-        if (optionalLetter.isPresent()) {
-            Letter letter = optionalLetter.get();
-            letter.setIsDelete(true);
-            letterRepository.save(letter);
-        }
-    }
 }

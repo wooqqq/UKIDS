@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface LetterService {
     // 편지 생성
-    Letter createLetter(LetterCreateRequestDto letterDto);
+    void createLetter(LetterCreateRequestDto letterDto);
 
     // 로그인한 사용자가 toUser(수신인)인 경우
     List<Letter> findByToUser(User toUserId);

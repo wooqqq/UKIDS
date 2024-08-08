@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,16 +23,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LetterController {
 
-    private final HttpResponseUtil responseUtil;
     private final LetterService letterService;
+    private final HttpResponseUtil responseUtil;
 
     // 편지 작성
-    @PostMapping("")
-    public ResponseEntity<?> write(@RequestBody LetterCreateRequestDto letterDto) {
-        // 유효성 검사 필요
-        Letter savedLetter = letterService.createLetter(letterDto);
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> createLetter(@RequestBody LetterCreateRequestDto letterDto) {
+        letterService.createLetter(letterDto);
 
-        return responseUtil.createResponse(HttpMethodCode.POST, savedLetter);
+        return responseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_CREATE_LETTER.getMessage());
+    }
+
+    // 편지 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteLetter(@PathVariable("id") Long letterId) {
+        letterService.deleteByLetterId(letterId);
+
+        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_LETTER.getMessage());
     }
 
     // 요청 사용자 id가 받은 편지 리스트 조회
@@ -67,14 +75,6 @@ public class LetterController {
         } else {
             throw new ExceptionResponse(CustomException.NOT_FOUND_LETTER_EXCEPTION);
         }
-    }
-
-    // 편지 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLetter(@PathVariable("id") Long letterId) {
-        letterService.deleteByLetterId(letterId);
-
-        return responseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_LETTER.getMessage());
     }
 
     // 타임캡슐 오픈하여 편지 상태(isOpen)를 true로 변경
