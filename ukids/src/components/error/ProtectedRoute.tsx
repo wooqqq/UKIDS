@@ -34,7 +34,7 @@ const LoginBtn = () => {
 
   useEffect(() => {
     if (token) {
-      console.log('gg');
+      // console.log('gg');
     }
   }, [token]);
   return (

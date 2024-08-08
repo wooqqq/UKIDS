@@ -8,7 +8,7 @@ import ChattingBox from '../components/feature/chatting/ChattingBox';
 import BlueButton from '../components/common/BlueButton';
 import FamilyMemberList from '../components/feature/family/FamilyMemberList';
 
-interface Messages {
+interface Message {
   messageId: number;
   content: string;
   user_id: number;
@@ -19,11 +19,11 @@ interface Messages {
 
 const FamilyChatting = () => {
   const { ukidsURL, token, decodedToken } = useAuthStore();
-  // user store에서 저장할 수 있을 때 가져오기. 지금은 임시로 1 지정
-  const chatRoomId = 1;
+  const chatRoomId = 1234; // 임시로 1234 설정
+  const familyId = 1234; // 임시로 1234 설정
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<Messages[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [stompClient, setStompClient] = useState<Client | null>(null);
 
   // 사용자가 입력하는 메세지 내용 인지
@@ -39,48 +39,45 @@ const FamilyChatting = () => {
   };
 
   // 메세지 서버로 전송
-  const sendMessages = () => {
-    if (stompClient && stompClient.connected) {
+  const sendMessage = () => {
+    if (stompClient && stompClient.connected && message.trim() !== '') {
       const chatMessage = {
         type: 'TALK',
         roomId: chatRoomId,
         sender: decodedToken.userId,
         message,
       };
+
       stompClient.publish({
         destination: `${ukidsURL}/pub/chat/message`,
         body: JSON.stringify(chatMessage),
       });
+
+      // 전송 후 상태 업데이트
+      setMessages((prevMessages) => [
+        {
+          messageId: Date.now(), // 메시지 ID를 현재 시간으로 임시 설정
+          content: message,
+          user_id: decodedToken.userId,
+          is_delete: false,
+          create_time: new Date().toISOString(),
+          update_time: new Date().toISOString(),
+        },
+        ...prevMessages,
+      ]);
+
+      setMessage('');
+      scrollToBottom();
     }
   };
 
   // 전송버튼 누를 때
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (message.trim() === '') return;
-
-    // 메세지 전송되고 화면 갱신
-    setMessages((messages) => [
-      {
-        messageId: 0,
-        content: message,
-        user_id: 0,
-        is_delete: false,
-        create_time: '',
-        update_time: '',
-      },
-      ...messages,
-    ]);
-
-    //서버로 메세지 전송
-    sendMessages();
-
-    setMessage('');
-    scrollToBottom();
+    sendMessage();
   };
 
   // 처음 입장 시
-  // 가족방에 저장된 메세지들을 불러오고 스크롤 맨 밑으로
   useEffect(() => {
     // 가족방 입장
 
@@ -88,16 +85,7 @@ const FamilyChatting = () => {
     axios
       .get(`${ukidsURL}/api/chat/room/${chatRoomId}/messages`)
       .then((response) => {
-        setMessages(
-          response.data.map((msg: any) => {
-            timestamp: new Date().toISOString(),
-            type: msg.type,
-            isSender: msg.type === 'ENTER' ? '[알림]' : msg.sender,
-            message: msg.message,
-            createTime: msg.createTime
-          }),
-        );
-
+        setMessages(response.data);
         scrollToBottom();
       })
       .catch((error) => {
@@ -105,13 +93,13 @@ const FamilyChatting = () => {
       });
 
     // 웹소켓 설정
-    const socket = new SockJS('/ws');
+    const socket = new WebSocket(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
-      debug: function (str) {
+      debug: (str) => {
         console.log(str);
       },
       reconnectDelay: 5000,
@@ -123,7 +111,7 @@ const FamilyChatting = () => {
       client.subscribe(
         `${ukidsURL}/topic/chat/${chatRoomId}`,
         (message: IMessage) => {
-          const receivedMessage: Messages = JSON.parse(message.body);
+          const receivedMessage: Message = JSON.parse(message.body);
           setMessages((prevMessages) => [receivedMessage, ...prevMessages]);
         },
       );
@@ -143,7 +131,7 @@ const FamilyChatting = () => {
         client.deactivate();
       }
     };
-  }, []);
+  }, [ukidsURL, token, chatRoomId, decodedToken.userId]);
 
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
   useEffect(() => {
@@ -163,12 +151,14 @@ const FamilyChatting = () => {
               <div
                 key={storedMessage.messageId}
                 className={
-                  storedMessage.user_id === 0 ? 'self-end' : 'self-start'
+                  storedMessage.user_id === decodedToken.userId
+                    ? 'self-end'
+                    : 'self-start'
                 }
               >
                 <ChattingBox
                   message={storedMessage.content}
-                  isSender={storedMessage.user_id === 0}
+                  isSender={storedMessage.user_id === decodedToken.userId}
                 />
               </div>
             ))}
