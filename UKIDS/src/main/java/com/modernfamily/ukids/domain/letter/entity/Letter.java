@@ -41,14 +41,19 @@ public class Letter extends BaseTimeEntity {
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isOpen;
 
+    @ColumnDefault("false")
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    private boolean isRead;
+
     @Builder
-    private Letter(String content, Tree tree, User fromUser, User toUser, boolean isDelete, boolean isOpen) {
+    private Letter(String content, Tree tree, User fromUser, User toUser, boolean isDelete, boolean isOpen, boolean isRead) {
         this.content = content;
         this.tree = tree;
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.isDelete = isDelete;
         this.isOpen = isOpen;
+        this.isRead = isRead;
     }
 
     public static Letter createLetter(String content, Tree tree, User fromUser, User toUser) {
@@ -59,7 +64,12 @@ public class Letter extends BaseTimeEntity {
                 .toUser(toUser)
                 .isDelete(false)
                 .isOpen(false)
+                .isRead(false)
                 .build();
+    }
+
+    public void readLetter() {
+        this.isRead = true;
     }
 
     public void deleteLetter() {

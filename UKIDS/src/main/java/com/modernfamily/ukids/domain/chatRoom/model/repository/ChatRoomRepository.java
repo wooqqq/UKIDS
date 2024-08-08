@@ -54,6 +54,9 @@ public class ChatRoomRepository {
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
         ChatRoom chatRoom = ChatRoom.create(familyId, family.getName(), familyId, family);
+        System.out.println("ChatRoomRepository : " + familyId);
+        System.out.println("ChatRoomRepository : " + family.getName());
+
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getChatRoomId().toString(), chatRoom);
         return chatRoom;
     }

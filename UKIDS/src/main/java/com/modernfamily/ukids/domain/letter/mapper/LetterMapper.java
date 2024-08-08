@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.letter.mapper;
 
 import com.modernfamily.ukids.domain.letter.dto.request.LetterCreateRequestDto;
+import com.modernfamily.ukids.domain.letter.dto.response.LetterResponseDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,4 +13,6 @@ public interface LetterMapper {
     LetterMapper INSTANCE = Mappers.getMapper(LetterMapper.class);
 
     Letter toCreateEntity(LetterCreateRequestDto letterDto);
+
+    LetterResponseDto toResponseDto(Letter letter);
 }

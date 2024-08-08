@@ -1,7 +1,5 @@
 package com.modernfamily.ukids.domain.game.quizQuestion.dto.response;
 
-import com.modernfamily.ukids.domain.game.quizQuestion.entity.QuizQuestion;
-import com.modernfamily.ukids.domain.game.quizQuestion.entity.QuizType;
 import com.modernfamily.ukids.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
