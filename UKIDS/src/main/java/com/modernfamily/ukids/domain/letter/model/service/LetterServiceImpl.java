@@ -44,7 +44,7 @@ public class LetterServiceImpl implements LetterService {
     }
 
     @Override
-    public void deleteByLetterId(Long letterId) {
+    public void deleteLetter(Long letterId) {
         String id = CustomUserDetails.contextGetUserId();
         User fromUser = userRepository.findById(id)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
