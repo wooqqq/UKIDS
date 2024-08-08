@@ -3,10 +3,10 @@ import axios from 'axios';
 
 import GameButton from '../../common/GameButton';
 import './game.css';
-import useUserStore from '../../../stores/userStore';
+import { useAuthStore } from '../../../stores/authStore';
 
 const QuizQnA = () => {
-  const { ukidsURL, chatRoomId } = useUserStore();
+  const { ukidsURL, chatRoomId } = useAuthStore();
   const [num, setNum] = useState(0);
   const [questionList, setQuestionList] = useState([]);
 

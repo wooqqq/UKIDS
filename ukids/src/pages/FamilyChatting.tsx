@@ -8,7 +8,7 @@ import ChattingBox from '../components/feature/chatting/ChattingBox';
 import BlueButton from '../components/common/BlueButton';
 import FamilyMemberList from '../components/feature/family/FamilyMemberList';
 
-interface Message {
+interface Messages {
   messageId: number;
   content: string;
   user_id: number;
@@ -18,12 +18,12 @@ interface Message {
 }
 
 const FamilyChatting = () => {
-  const { token } = useAuthStore();
+  const { ukidsURL, token, decodedToken } = useAuthStore();
   // user store에서 저장할 수 있을 때 가져오기. 지금은 임시로 1 지정
   const chatRoomId = 1;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Messages[]>([]);
   const [stompClient, setStompClient] = useState<Client | null>(null);
 
   // 사용자가 입력하는 메세지 내용 인지
@@ -44,11 +44,11 @@ const FamilyChatting = () => {
       const chatMessage = {
         type: 'TALK',
         roomId: chatRoomId,
-        sender: user_id,
+        sender: decodedToken.userId,
         message,
       };
       stompClient.publish({
-        destination: `/pub/chat/message`,
+        destination: `${ukidsURL}/pub/chat/message`,
         body: JSON.stringify(chatMessage),
       });
     }
@@ -82,15 +82,19 @@ const FamilyChatting = () => {
   // 처음 입장 시
   // 가족방에 저장된 메세지들을 불러오고 스크롤 맨 밑으로
   useEffect(() => {
+    // 가족방 입장
+
     // 저장된 메세지 불러오기
     axios
-      .get(`/api/chat/room/${chatRoomId}`)
+      .get(`${ukidsURL}/api/chat/room/${chatRoomId}/messages`)
       .then((response) => {
-        const messageList = response.data.result;
-
         setMessages(
-          messageList.filter((message: any) => {
-            return !message.isDelete;
+          response.data.map((msg: any) => {
+            timestamp: new Date().toISOString(),
+            type: msg.type,
+            isSender: msg.type === 'ENTER' ? '[알림]' : msg.sender,
+            message: msg.message,
+            createTime: msg.createTime
           }),
         );
 
@@ -116,10 +120,13 @@ const FamilyChatting = () => {
     });
 
     client.onConnect = () => {
-      client.subscribe(`/topic/chat/${chatRoomId}`, (message: IMessage) => {
-        const receivedMessage: Message = JSON.parse(message.body);
-        setMessages((prevMessages) => [receivedMessage, ...prevMessages]);
-      });
+      client.subscribe(
+        `${ukidsURL}/topic/chat/${chatRoomId}`,
+        (message: IMessage) => {
+          const receivedMessage: Messages = JSON.parse(message.body);
+          setMessages((prevMessages) => [receivedMessage, ...prevMessages]);
+        },
+      );
 
       setStompClient(client);
     };
