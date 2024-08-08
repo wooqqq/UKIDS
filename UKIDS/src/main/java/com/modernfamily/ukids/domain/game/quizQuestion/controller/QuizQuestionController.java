@@ -61,4 +61,11 @@ public class QuizQuestionController {
         return responseUtil.createResponse(HttpMethodCode.GET,
                 quizQuestionService.chooseRandomQuizQuestion(userId, count));
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Map<String, Object>> getCountQuizQuestionByUser() {
+        return responseUtil.createResponse(HttpMethodCode.GET,
+                quizQuestionService.getCountQuizQuestionByUser());
+    }
+
 }

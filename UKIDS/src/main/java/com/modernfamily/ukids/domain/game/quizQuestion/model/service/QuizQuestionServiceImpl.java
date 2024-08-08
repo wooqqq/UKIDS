@@ -118,6 +118,14 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
         return pagenationResponseDto;
     }
 
+    public long getCountQuizQuestionByUser() {
+        String id = CustomUserDetails.contextGetUserId();
+        User writer = userRepository.findById(id)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        return quizQuestionRepository.countByWriter_UserId(writer.getUserId());
+    }
+
     public List<QuizQuestionRandomResponseDto> chooseRandomQuizQuestion(Long userId , long count) {
         User writer = userRepository.findById(userId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));

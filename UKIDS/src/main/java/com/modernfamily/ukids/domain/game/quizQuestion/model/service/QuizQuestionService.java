@@ -15,4 +15,5 @@ public interface QuizQuestionService {
     QuizQuestionResponseDto getQuizQuestion(Long quizQuestionId);
     QuizQuestionListPagenationResponseDto getQuizQuestionListByUser(int size, int page);
     List<QuizQuestionRandomResponseDto> chooseRandomQuizQuestion(Long userId , long count);
+    long getCountQuizQuestionByUser();
 }
