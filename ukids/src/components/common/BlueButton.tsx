@@ -11,10 +11,10 @@ interface BlueButtonProps {
 }
 
 const BlueButton = (props: BlueButtonProps) => {
-  const navigate = useNavigate();
+  const nav = useNavigate();
 
   const handleClick = () => {
-    navigate(props.path);
+    nav(props.path);
   };
 
   if (props.name == '연결하기') {
@@ -24,7 +24,7 @@ const BlueButton = (props: BlueButtonProps) => {
         {props.name}
       </button>
     );
-  } else if (props.name == '로그인' || props.name == '가입하기') {
+  } else if (props.name == '로그인' || props.name == '회원가입') {
     return (
       <button onClick={handleClick} className="common-btn blue-btn login-btn">
         {props.name}

@@ -7,10 +7,25 @@ import { useScheduleStore } from '../../../stores/scheduleStore'; // zustand를 
 import { useEffect } from 'react'; // React의 useEffect 훅
 import './schedule.css'; // CSS 스타일 파일
 
-export default function Calendar() {
+interface CalendarBoxProps {
+  onDateClick?: () => void;
+  height?: string;
+}
+
+export default function CalendarBox({
+  onDateClick,
+  height = '550px',
+}: CalendarBoxProps) {
   // zustand store에서 상태와 상태 업데이트 함수 가져오기
   const { events, setEvents, setSelectedDate, setEventData } =
     useScheduleStore();
+
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
+    const day = date.getDate();
+    return `${year}년 ${month}월 ${day}일`;
+  };
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 호출되는 비동기 함수
@@ -24,16 +39,18 @@ export default function Calendar() {
         setEvents(data); // 상태 업데이트 (이벤트 데이터를 store에 저장)
 
         // 오늘 날짜 설정
-        const today = new Date().toISOString().split('T')[0];
-        setSelectedDate(today);
+        const today = new Date();
+        const formattedToday = formatDate(today); // 오늘 날짜 포맷팅
+        setSelectedDate(formattedToday);
 
         // 오늘 날짜의 이벤트 필터링
+        const todayISOString = today.toISOString().split('T')[0];
         const todayEvents = data.filter((event: any) => {
           const eventStart = new Date(event.start).toISOString().split('T')[0];
           const eventEnd = new Date(event.end || event.start)
             .toISOString()
             .split('T')[0];
-          return today >= eventStart && today <= eventEnd;
+          return todayISOString >= eventStart && todayISOString <= eventEnd;
         });
 
         setEventData(todayEvents.length > 0 ? todayEvents : null); // 필터링된 이벤트를 store에 저장
@@ -47,8 +64,9 @@ export default function Calendar() {
 
   // 클릭한 날짜에 해당하는 이벤트를 찾아서 설정하는 함수
   const handleDateClick = (info: DateClickArg) => {
-    const dateStr = info.dateStr; // 클릭한 날짜를 문자열로 가져옴
-    setSelectedDate(dateStr); // 선택된 날짜를 store에 저장
+    const date = new Date(info.dateStr); // 클릭한 날짜를 문자열로 가져옴
+    const formattedToday = formatDate(date); // 오늘 날짜 포맷팅
+    setSelectedDate(formattedToday);
 
     // 클릭한 날짜에 해당하는 이벤트를 필터링
     const eventData = events.filter((event) => {
@@ -56,10 +74,12 @@ export default function Calendar() {
       const eventEnd = new Date(event.end || event.start)
         .toISOString()
         .split('T')[0];
-      return dateStr >= eventStart && dateStr <= eventEnd;
+      return info.dateStr >= eventStart && info.dateStr <= eventEnd;
     });
 
     setEventData(eventData.length > 0 ? eventData : null); // 필터링된 이벤트를 store에 저장
+
+    if (onDateClick) onDateClick();
   };
 
   // 일정 이벤트
@@ -103,12 +123,13 @@ export default function Calendar() {
         firstDay={0} // 주의 시작 요일을 일요일(0)로 설정
         weekends={true} // 주말을 표시
         fixedWeekCount={false} // 고정된 주 수를 사용하지 않음
-        height={'33rem'} // 캘린더의 높이 설정
+        height={height} // 캘린더의 높이 설정 - 여기에서 height props 사용
         customButtons={{
           createButton: {
             text: '일정 추가하기',
           },
         }}
+        selectable={true} // 날짜 선택 기능 활성화
         headerToolbar={{
           start: 'title', // 툴바의 시작 부분에 제목 표시
           end: 'today, prev,next', // 툴바의 끝 부분에 이전/다음 버튼 표시

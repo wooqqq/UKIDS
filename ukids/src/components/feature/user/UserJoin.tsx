@@ -61,8 +61,8 @@ const UserJoin = () => {
   return (
     <>
       {/* 회원가입 박스 */}
-      <div className="join-feature-box">
-        <div className="title-style text-center text-[2rem] mb-3">회원가입</div>
+      <div className="common-feature-box w-[1000px] h-[620px] p-[40px]">
+        {/* <div className="title-style text-center text-[2rem] mb-3">회원가입</div> */}
         <form onSubmit={handleJoin} className="join-form">
           {/* <label htmlFor="id">아이디</label> */}
           <input
@@ -129,7 +129,7 @@ const UserJoin = () => {
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             className="input-box px-5 font-semibold text-[#555555]"
           />
-          <BlueButton name="가입하기" type="submit" path="" />
+          <BlueButton name="회원가입" type="submit" path="" />
         </form>
       </div>
     </>

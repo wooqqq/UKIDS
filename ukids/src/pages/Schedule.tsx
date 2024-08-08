@@ -10,10 +10,10 @@ import '../components/feature/schedule/schedule.css';
 const Schedule = () => {
   return (
     <>
-      <div className="half-feature-box">
+      <div className="half-feature-box p-[20px] schedule-page">
         <CalendarBox />
       </div>
-      <div className="half-feature-box items-center">
+      <div className="half-feature-box items-center p-[20px]">
         <Routes>
           <Route path="" element={<ScheduleBox />} />
           <Route path="list/year-month-day" element={<ScheduleList />} />
