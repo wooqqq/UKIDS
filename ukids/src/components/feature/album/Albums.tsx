@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../common/common.css';
+import BlueButton from '../../common/BlueButton';
 
 interface Photo {
   imgSrc: string;
@@ -9,7 +10,7 @@ interface Photo {
 
 interface Post {
   date: string;
-  title: string; // 앨범 제목 추가
+  title: string;
   photos: Photo[];
 }
 
@@ -22,43 +23,44 @@ const Albums: React.FC = () => {
     setPosts(storedPosts);
   }, []);
 
-  const handleUploadClick = () => {
-    navigate('/albums/upload');
-  };
-
   return (
-    <div className="feature-box w-[911px] flex flex-col p-[10px] bg-[#fff] rounded-[20px]">
-      <div className="header flex items-center justify-between mb-10">
-        <h1>사진 앨범</h1>
-        <button
-          className="common-btn"
-          onClick={handleUploadClick}
-        >
-          등록
-        </button>
-      </div>
-      <div className="feature-box-content w-full flex flex-col items-center justify-center gap-[31px] py-[21px] px-[19px]">
-        {posts.length === 0 ? (
-          <div>사진을 등록하세요</div>
-        ) : (
-          <div className="albums-container">
-            {posts.map((post, index) => (
-              post.photos && post.photos.length > 0 && (
-                <div key={index} className="album-item">
-                  <Link to={`/albums/${index}`}>
-                    <div className="relative">
-                      <img src={post.photos[0].imgSrc} alt={`Image ${index + 1}`} />
-                    </div>
-                    <div className="album-item-date">{post.date}</div>
-                    <div className="album-item-title">{post.title}</div> {/* 앨범 제목 표시 */}
-                    {/* <div className="album-item-text">{post.photos[0].text}</div> */}
-                  </Link>
-                </div>
-              )
-            ))}
+    <div className="relative w-[911px] h-[576px]">
+      {/* {posts.length} */}
+      {posts.length === 24 ? (
+        <div className="absolute left-0 top-0 w-[911px] h-[576px] shadow-[0_0_15px_rgba(153,153,153,0.25)] rounded-xl">
+
+          <div className="absolute left-0 right-0 top-0 bottom-0 bg-[#fff] rounded-[20px]"></div>
+          <div className="absolute left-[764px] top-[23px]">
+            <BlueButton name="만들기" path="/albums/upload" />
           </div>
-        )}
-      </div>
+          <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">앨범</div>
+          <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center">
+            아직 앨범이 없어요!<br/>앨범을 만들러 가볼까요?
+          </div>
+        </div>
+      ) : (
+        <div className="feature-box w-full h-full flex flex-col p-[10px] bg-[#fff] rounded-[20px] overflow-hidden">
+          <div className="header flex items-center justify-between mb-10">
+            <h1>사진 앨범</h1>
+            <button className="common-btn" onClick={() => navigate('/albums/upload')}>
+              등록
+            </button>
+          </div>
+          <div className="feature-box-content w-full flex flex-col items-center justify-center gap-[31px] py-[21px] px-[19px]">
+            <div className="albums-container">
+              {posts.map((post, index) => (
+                post.photos && post.photos.length > 0 && (
+                  <Link key={index} to={`/albums/${index}`} className="album-item">
+                    <img src={post.photos[0].imgSrc} alt={`Image ${index + 1}`} />
+                    <div className="album-item-date">{post.date}</div>
+                    <div className="album-item-title">{post.title}</div>
+                  </Link>
+                )
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

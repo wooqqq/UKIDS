@@ -19,6 +19,6 @@ const PaintingDiary = () => {
         </Routes>
     </div>
   );
-};
+}
 
 export default PaintingDiary;
