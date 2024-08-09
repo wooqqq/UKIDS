@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useVideoCallStore } from '../../../stores/videoCallStore';
 // import { useAuthStore } from '../../../stores/authStore';
-import Session from './Session';
 import { jwtDecode } from 'jwt-decode';
+import Session from './Session';
+import './session.css';
 
 interface JwtPayload {
   name: string;
