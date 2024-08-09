@@ -123,7 +123,8 @@ public class FamilyMemberServiceImpl implements FamilyMemberService{
 
         // 자진 탈퇴 시 탈퇴하려는 user와 로그인 한 유저의 일치 여부
         if(type == 0) {
-            if (familyMember.getUser().getId().equals(id)) {
+            System.out.println(familyMember.getUser().getId());
+            if (!familyMember.getUser().getId().equals(id)) {
                 throw new ExceptionResponse(CustomException.NOT_SAME_FAMILYMEMBER_USER_EXCEPTION);
             }
         }

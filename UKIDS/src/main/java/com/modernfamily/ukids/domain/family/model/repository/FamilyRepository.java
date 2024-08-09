@@ -8,11 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface FamilyRepository extends JpaRepository<Family, Long> {
-    public Optional<Family> findByFamilyId(Long familyId);
+    Optional<Family> findByFamilyId(Long familyId);
 
-    public boolean existsByCode(String code);
+    boolean existsByCode(String code);
 
-    public Optional<Family> findByCode(String code);
+    Optional<Family> findByCode(String code);
 
-    public void deleteByFamilyId(Long familyId);
 }

@@ -23,6 +23,7 @@ public enum CustomException {
 
     // 편지
     NOT_FOUND_LETTER_EXCEPTION(400, "NotFoundLetterException", "편지가 존재하지 않습니다."),
+    NO_AUTH_OF_LETTER_EXCEPTION(400, "NoAuthOfLetterException", "로그인 사용자에게 권한이 없는 편지입니다."),
 
     // 나무
     NOT_FOUND_TREE_EXCEPTION(400, "NotFoundTreeException", "나무가 존재하지 않습니다."),

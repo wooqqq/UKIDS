@@ -1,14 +1,11 @@
 package com.modernfamily.ukids.domain.family.mapper;
 
-import com.modernfamily.ukids.domain.family.dto.FamilyRequestDto;
-import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
-import com.modernfamily.ukids.domain.family.dto.FamilySearchResponseDto;
-import com.modernfamily.ukids.domain.family.dto.FamilyUpdateDto;
+import com.modernfamily.ukids.domain.family.dto.*;
 import com.modernfamily.ukids.domain.family.entity.Family;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FamilyMapper {
@@ -26,5 +23,10 @@ public interface FamilyMapper {
     @Mapping(source = "user", target = "userFamilyDto")
     FamilySearchResponseDto toFamilySearchDto(Family family);
 
+    @Mapping(source = "user.userId", target = "representative")
+    @Named("familyList")
+    FamilyListResponseDto toFamilyListResponseDto(Family family);
 
+    @IterableMapping(qualifiedByName = "familyList")
+    List<FamilyListResponseDto> toFamilyResponseDtoList(List<Family> families);
 }
