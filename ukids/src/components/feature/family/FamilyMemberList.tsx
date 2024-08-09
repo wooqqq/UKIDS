@@ -1,6 +1,11 @@
 // 가족방, 게임에 사용할 참여가족 리스트 오른쪽 사이드에 위치할 예정
 import { useEffect, useState } from 'react';
+import callIcon from '../../../assets/subway_call-2.png';
+import discallIcon from '../../../assets/subway_call-3.png';
+import { useCommonStore } from '../../../stores/commonStore';
+
 import BlueButton from '../../common/BlueButton';
+import { useNavigate } from 'react-router-dom';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;
@@ -10,10 +15,22 @@ const number = 4;
 
 const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
   const [onlineFamilyNum, setOnlineFamilyNum] = useState(0);
+  const { isChatting, setIsChatting } = useCommonStore();
+  const nav = useNavigate();
+
+  const handleClickCallBtn = () => {
+    setIsChatting(!isChatting);
+    isChatting ? nav('/chat') : nav('./call');
+  };
 
   useEffect(() => {
+    setIsChatting(false);
+  }, []);
+
+  // 온라인인 가족 확인 후 숫자 변경
+  useEffect(() => {
     setOnlineFamilyNum(number);
-  }, [onlineFamilyNum]);
+  }, [number]);
 
   return (
     <>
@@ -33,13 +50,17 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
           <div className="flex-none m-2">
             {/* 통화버튼 */}
             <div className="mb-2">
-              <BlueButton name="연결하기" path="/chat/call" />
-              {/* 나중에 통화방 전환시 사용 */}
-              {/* {isChatting ? (
-              <BlueButton name="연결하기" path="/chat/call" />
-            ) : (
-              <RedButton name="연결끊기" path="/chat" />
-            )} */}
+              {/* 채팅방/통화방 전환 */}
+              <button
+                onClick={handleClickCallBtn}
+                className={`common-btn ${isChatting ? 'red-btn' : 'green-btn'}`}
+              >
+                <img
+                  src={isChatting ? discallIcon : callIcon}
+                  alt="call-icon"
+                />
+                {isChatting ? '연결끊기' : '연결하기'}
+              </button>
             </div>
             {/* 카메라, 마이크 버튼 */}
             <div className="flex space-x-2">

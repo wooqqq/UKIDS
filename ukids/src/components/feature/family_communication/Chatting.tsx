@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Client, IMessage } from '@stomp/stompjs';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../../../stores/authStore';
 
-import ChattingBox from '../components/feature/chatting/ChattingBox';
-import BlueButton from '../components/common/BlueButton';
-import FamilyMemberList from '../components/feature/family/FamilyMemberList';
+import ChattingBox from '../chatting/ChattingBox';
+import BlueButton from '../../common/BlueButton';
 import SockJS from 'sockjs-client';
 
 interface Message {
@@ -82,7 +81,7 @@ const FamilyChatting = () => {
   useEffect(() => {
     console.log(decodedToken);
     console.log(token);
-    console.log(token.substring(7));
+    console.log(token?.substring(7));
     // 방 연결
 
     // 웹소켓 설정
@@ -91,7 +90,7 @@ const FamilyChatting = () => {
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
-        Authorization: `Bearer ${token.substring(7)}`,
+        Authorization: `Bearer ${token?.substring(7)}`,
       },
       debug: (str) => {
         console.log('웹소켓 디버그: ' + str);
@@ -150,9 +149,9 @@ const FamilyChatting = () => {
   }, [messages]);
 
   return (
-    <div className="feature-box flex h-full">
+    <div className="w-3/4">
       {/* 좌측 영역 */}
-      <div className="flex flex-col w-3/4 p-2">
+      <div className="flex flex-col p-2 h-full">
         {/* 채팅 컨테이너 (메시지 + 입력창) */}
         <div className="flex flex-col h-full">
           {/* 메시지 영역 */}
@@ -189,9 +188,6 @@ const FamilyChatting = () => {
           </div>
         </div>
       </div>
-
-      {/* 우측 영역 */}
-      <FamilyMemberList isChattingRoom={true} />
     </div>
   );
 };

@@ -154,7 +154,7 @@ function VideoCall() {
   };
 
   return (
-    <div>
+    <div className='w-3/4'>
       <h1 className="text-2xl">가족통화</h1>
       {session ? (
         <>
