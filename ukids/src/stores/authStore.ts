@@ -22,9 +22,11 @@ interface AuthState {
 const ukidsURL = `https://i11b306.p.ssafy.io`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
-  // 로그인 시 토큰 설정 됨
-  token: null,
-  decodedToken: null,
+  // 초기 토큰 값: localStorage에서 불러옴
+  token: localStorage.getItem('token'),
+  decodedToken: localStorage.getItem('token')
+    ? jwtDecode(localStorage.getItem('token')!)
+    : null,
   // 토큰이 있는 경우 디코딩하여 상태에 저장
   setToken: (token) => {
     // 상태 업데이트
