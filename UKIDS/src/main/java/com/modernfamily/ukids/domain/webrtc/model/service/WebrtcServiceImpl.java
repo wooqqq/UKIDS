@@ -7,6 +7,7 @@ import com.modernfamily.ukids.domain.webrtc.entity.Webrtc;
 import com.modernfamily.ukids.domain.webrtc.model.repository.WebrtcRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
+import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,7 @@ public class WebrtcServiceImpl implements WebrtcService {
     private OpenVidu openvidu;
     private final WebrtcRepository webrtcRepository;
     private final FamilyRepository familyRepository;
+    private final FamilyMemberValidator familyMemberValidator;
 
     @Override
     public void init() {
@@ -43,10 +45,17 @@ public class WebrtcServiceImpl implements WebrtcService {
 
     @Override
     public String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
+        familyMemberValidator.checkUserInFamilyMember(familyId);
+        
+        String sessionId = getWebrtcByFamilyId(familyId).getSessionId();
+        return getToken(sessionId, connectionProperties);
+    }
+
+
+    public String getToken(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
 
         openvidu.fetch();
 
-        String sessionId = getWebrtcByFamilyId(familyId).getSessionId();
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {
             throw new ExceptionResponse(CustomException.NOT_FOUND_SESSION_EXCEPTION);
@@ -69,6 +78,7 @@ public class WebrtcServiceImpl implements WebrtcService {
 
     @Override
     public WebrtcResponseDto getWebrtcByFamilyId(Long familyId) {
+        familyMemberValidator.checkUserInFamilyMember(familyId);
         Webrtc webrtc = webrtcRepository.findByFamily_FamilyId(familyId).get();
 
         return WebrtcResponseDto.from(webrtc);
