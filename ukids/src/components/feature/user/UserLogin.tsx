@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../../util/api'; // 생성한 axios 인스턴스
 import { useAuthStore } from '../../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import './user.css';
@@ -12,31 +13,31 @@ const UserLogin = () => {
   const setToken = useAuthStore((state) => state.setToken);
   const nav = useNavigate();
 
-  // const onClickInputButton = () => {};
-
-  const hadleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
     try {
       // 로그인 API 요청
-      const response = await axios.post(
-        'https://i11b306.p.ssafy.io/api/user/login',
-        {
-          id: id,
-          password: password,
-        },
-      );
+      const response = await api.post('/user/login', {
+        id: id,
+        password: password,
+      });
 
       const { result } = response.data;
+      const token = result;
+      // console.log(userId);
 
-      setToken(result);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${result}`;
+      if (token) {
+        setToken(token); // 로그인 성공하여 토큰 저장
+        api.defaults.headers.common['Authorization'] = `Bearer ${result}`; // 새로운 토큰 설정
 
-      nav('/main'); // 로그인 후 리디렉션할 페이지
+        nav('/main'); // 로그인 후 리디렉션할 페이지
+      } else {
+        throw new Error('토큰이 응답에 포함되어 있지 않습니다.');
+      }
     } catch (error) {
       console.error('로그인 실패:', error);
-      console.error('id :' + id, 'pw: ' + password);
-      alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.');
+      alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.' + error);
     }
   };
 
@@ -48,7 +49,7 @@ const UserLogin = () => {
     <>
       {/* 로그인 박스 */}
       <div className="common-feature-box p-[50px]">
-        <form onSubmit={hadleLogin}>
+        <form onSubmit={handleLogin}>
           <div>
             <input
               type="text"
