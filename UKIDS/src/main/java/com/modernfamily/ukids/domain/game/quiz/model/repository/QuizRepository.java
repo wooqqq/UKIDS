@@ -20,7 +20,7 @@ public class QuizRepository {
     }
 
     // 퀴즈 정답 확인
-    public String checkAnswer(QuizRoom quizRoom, Long userId, String inputAnswer){
+    public String checkAnswer(QuizRoom quizRoom, String userId, String inputAnswer){
         String answer = quizRoom.getRandomQuizQuestionList().get(quizRoom.getCurrentQuestionIndex()).getAnswer();
 
         if(inputAnswer.equals(answer))
@@ -33,14 +33,14 @@ public class QuizRepository {
     // 게임 종료 및 퀴즈 결과 저장
     public List<GameResultSaveDto> endGame(Long familyId, QuizRoom quizRoom){
 
-        List<Map.Entry<Long, Participate>> entryList = new ArrayList<>(quizRoom.getParticipantList().entrySet());
-        entryList.sort(Comparator.comparing((Map.Entry<Long, Participate> entry) -> entry.getValue().getHit()).reversed());
+        List<Map.Entry<String, Participate>> entryList = new ArrayList<>(quizRoom.getParticipantList().entrySet());
+        entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getHit()).reversed());
 
         long totalCounts = quizRoom.getParticipantList().size() * quizRoom.getQuizCount();
         long prevCounts = 0;
         long rank = 1L;
         List<GameResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
-        for(Map.Entry<Long, Participate> entry : entryList){
+        for(Map.Entry<String, Participate> entry : entryList){
             if(prevCounts == entry.getValue().getHit())
                 rank--;
             gameResultSaveDtoList.add(GameResultSaveDto.createGameResultDto(quizRoom.getGameType(), entry.getValue().getHit(),

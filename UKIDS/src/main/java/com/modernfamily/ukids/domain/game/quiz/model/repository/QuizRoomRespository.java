@@ -22,13 +22,13 @@ public class QuizRoomRespository {
     }
 
     // 유저 참여
-    public void enterGame(Long userId, QuizRoom quizRoom){
+    public void enterGame(String userId, QuizRoom quizRoom){
         long maxCounts = quizQuestionService.getCountQuizQuestionByUser();
         quizRoom.enterParticipate(userId, Participate.createParticipate(maxCounts));
     }
 
     // 게임 중복 참여 여부 판별
-    public boolean isExistUser(Long userId, QuizRoom quizRoom){
+    public boolean isExistUser(String userId, QuizRoom quizRoom){
         if(quizRoom.getParticipantList().containsKey(userId))
             return true;
 
@@ -36,7 +36,7 @@ public class QuizRoomRespository {
     }
 
     // 유저 퇴장
-    public void exitGame(Long userId, QuizRoom quizRoom){
+    public void exitGame(String userId, QuizRoom quizRoom){
         quizRoom.exitParticipate(userId);
     }
 
@@ -54,7 +54,7 @@ public class QuizRoomRespository {
     }
 
     // 참가자 준비 버튼 클릭
-    public void clickReady(Long userId, QuizRoom quizRoom){
+    public void clickReady(String userId, QuizRoom quizRoom){
         quizRoom.getParticipantList().get(userId).clickReady();
     }
 
@@ -71,7 +71,7 @@ public class QuizRoomRespository {
     // 퀴즈 생성
     public void generateQuiz(QuizRoom quizRoom){
         long quizCounts = quizRoom.getQuizCount();
-        for(Map.Entry<Long, Participate> entrySet : quizRoom.getParticipantList().entrySet()){
+        for(Map.Entry<String, Participate> entrySet : quizRoom.getParticipantList().entrySet()){
             quizRoom.generateRandomQuizQuestion(
                     quizQuestionService.chooseRandomQuizQuestion(entrySet.getKey(), quizCounts)
             );

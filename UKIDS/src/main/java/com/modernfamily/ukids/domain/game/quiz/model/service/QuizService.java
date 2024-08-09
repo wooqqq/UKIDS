@@ -5,7 +5,6 @@ import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRepository;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRoomRespository;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
-import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
@@ -16,6 +15,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,16 +37,15 @@ public class QuizService {
 
     // 게임방 생성 -> 있으면 참여, 없으면 생성 + 중복 참여인지 검사 + 유저 참여
     // + webrtc 세션 생성 + connection 반환
-    public Map<String, Object> enterQuizRoom(Long familyId, GameType gameType) throws OpenViduJavaClientException, OpenViduHttpException {
-        User participate = familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
-
+    public Map<String, Object> enterQuizRoom(Long familyId, GameType gameType, Principal principal) throws OpenViduJavaClientException, OpenViduHttpException {
+        String userId = principal.getName();
         if(!quizRooms.containsKey(familyId)){
             String sessionId = webrtcService.initializeSessions(null);
             quizRoomRespository.createGameRoom(gameType, sessionId);
         }
 
         // 참여자 목록에 있어
-        if(quizRoomRespository.isExistUser(participate.getUserId(), quizRooms.get(familyId)))
+        if(quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.DUPLICATED_ID_EXCEPTION);
 
         // 이미 게임 진행 중
@@ -57,7 +56,7 @@ public class QuizService {
         response.put("id", familyId);
         response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
 
-        quizRoomRespository.enterGame(participate.getUserId(), quizRooms.get(familyId));
+        quizRoomRespository.enterGame(userId, quizRooms.get(familyId));
 
         response.put("gameRoomInfo", quizRooms.get(familyId));
 
@@ -66,28 +65,26 @@ public class QuizService {
 
 
     // 유저 퇴장
-    public void exitQuizRoom(Long familyId) {
-        User participate = familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
+    public void exitQuizRoom(Long familyId, Principal principal) {
+        String userId = principal.getName();
 
-        if(!quizRooms.containsKey(familyId))
-            throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_GAME_EXCEPTION);
+        isExistFamilyGame(familyId);
 
-        if(!quizRoomRespository.isExistUser(participate.getUserId(), quizRooms.get(familyId)))
+        if(!quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_USER_EXCEPTION);
 
-        quizRoomRespository.exitGame(participate.getUserId(), quizRooms.get(familyId));
+        quizRoomRespository.exitGame(userId, quizRooms.get(familyId));
     }
 
     // 게임방 정보 반환
     public QuizRoom getQuizRoom(Long familyId) {
-        familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
 
         return quizRooms.get(familyId);
     }
 
     // 퀴즈 개수 설정
     public Map<String, Object> saveQuizCounts(Long familyId, long counts) {
-        familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
+        isExistFamilyGame(familyId);
 
         quizRoomRespository.saveQuizCount(counts, quizRooms.get(familyId));
 
@@ -99,7 +96,7 @@ public class QuizService {
 
     // 퀴즈 생성 가능 개수 반환
     public Map<String, Object> getQuizCounts(Long familyId) {
-        familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
+        isExistFamilyGame(familyId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("quizCount", quizRooms.get(familyId).getQuizCount());
@@ -108,10 +105,11 @@ public class QuizService {
     }
 
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성
-    public Map<String, Object> isReadyGameStart(Long familyId) {
-        User participate = familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
+    public Map<String, Object> isReadyGameStart(Long familyId, Principal principal) {
+        String userId = principal.getName();
+        isExistFamilyGame(familyId);
 
-        quizRoomRespository.clickReady(participate.getUserId(), quizRooms.get(familyId));
+        quizRoomRespository.clickReady(userId, quizRooms.get(familyId));
 
         Map<String, Object> response = new HashMap<>();
         boolean isState = true;
@@ -129,9 +127,9 @@ public class QuizService {
 
     // 질문 반환 -> 반환 끝나면 게임 종료
     public QuizQuestionRandomResponseDto getQuizQuestion(Long familyId) {
-        familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
-
+        isExistFamilyGame(familyId);
         QuizQuestionRandomResponseDto quizQuestion = quizRepository.getQuizQuestion(quizRooms.get(familyId));
+
         if(quizQuestion == null)
             endGame(familyId);
 
@@ -139,11 +137,12 @@ public class QuizService {
     }
 
     // 정답 확인
-    public Map<String, Object> checkQuizAnswer(Long familyId, String inputAnswer) {
-        User participate = familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
+    public Map<String, Object> checkQuizAnswer(Long familyId, String inputAnswer, Principal principal) {
+        String userId = principal.getName();
+        isExistFamilyGame(familyId);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("answer", quizRepository.checkAnswer(quizRooms.get(familyId), participate.getUserId(), inputAnswer));
+        response.put("answer", quizRepository.checkAnswer(quizRooms.get(familyId), userId, inputAnswer));
 
         return response;
     }
@@ -154,5 +153,10 @@ public class QuizService {
 
         quizRepository.endGame(familyId, quizRooms.get(familyId));
         quizRooms.remove(familyId);
+    }
+
+    private void isExistFamilyGame(Long familyId) {
+        if(!quizRooms.containsKey(familyId))
+            throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_GAME_EXCEPTION);
     }
 }

@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.game.gameResult.model.service;
 
-import com.modernfamily.ukids.domain.family.model.repository.FamilyRepository;
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.game.gameResult.dto.GameResultSaveDto;
@@ -27,7 +26,7 @@ public class GameResultServiceImpl implements GameResultService {
         List<GameResult> gameResultList = new ArrayList<>();
 
         for (GameResultSaveDto gameResultSaveDto : gameResultSaveDtoList) {
-            FamilyMember familyMember = familyMemberRepository.findByUser_UserIdAndFamily_FamilyId
+            FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId
                     (gameResultSaveDto.getParticipantId(), gameResultSaveDto.getFamilyId())
                     .orElseThrow(()->new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
             gameResultList.add(GameResult.createGameResult(gameResultSaveDto, familyMember.getUser(), familyMember.getFamily()));

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,15 +30,16 @@ public class QuizController {
     @MessageMapping("/quiz/enter/{id}")
     @SendTo("/topic/quiz/{id}")
     public Map<String, Object> enterQuizRoom(@PathVariable("id") Long familyId,
-                                             @RequestParam("gameType")GameType gameType)
+                                             @RequestParam("gameType")GameType gameType,
+                                             Principal principal)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        return quizService.enterQuizRoom(familyId, gameType);
+        return quizService.enterQuizRoom(familyId, gameType, principal);
     }
 
     // 유저 퇴장
     @MessageMapping("/quiz/exit/{id}")
-    public void exitQuizRoom(@PathVariable("id") Long familyId) {
-        quizService.exitQuizRoom(familyId);
+    public void exitQuizRoom(@PathVariable("id") Long familyId, Principal principal) {
+        quizService.exitQuizRoom(familyId, principal);
     }
 
     // 게임방 정보 반환
@@ -58,8 +60,8 @@ public class QuizController {
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성 => boolean return
     @MessageMapping("/quiz/ready/{id}")
     @SendTo("/topic/quiz/{id}")
-    public Map<String, Object> isReadyGameStart(@PathVariable("id") Long familyId) {
-        return quizService.isReadyGameStart(familyId);
+    public Map<String, Object> isReadyGameStart(@PathVariable("id") Long familyId, Principal principal) {
+        return quizService.isReadyGameStart(familyId, principal);
     }
 
     // 질문 가져오기 -> 반환 끝나면 게임 종료 -> QuizQuestionRandomResponseDto or null (이건 게임 종료)
@@ -73,7 +75,8 @@ public class QuizController {
     @MessageMapping("/quiz/answer/{id}")
     @SendTo("/topic/quiz/{id}")
     public Map<String, Object> checkQuizAnswer(@PathVariable("id") Long familyId,
-                                             @RequestParam("inputAnswer")String inputAnswer) {
-        return quizService.checkQuizAnswer(familyId, inputAnswer);
+                                             @RequestParam("inputAnswer")String inputAnswer,
+                                               Principal principal) {
+        return quizService.checkQuizAnswer(familyId, inputAnswer, principal);
     }
 }

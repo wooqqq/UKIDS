@@ -40,5 +40,4 @@ public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long
     Optional<FamilyMember> findByUser_IdAndFamily_FamilyId(String id, Long familyId);
 
     List<FamilyMember> findByUser_IdAndIsApprovalTrue(String id);
-    Optional<FamilyMember> findByUser_UserIdAndFamily_FamilyId(Long userId, Long familyId);
 }

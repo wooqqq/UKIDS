@@ -18,13 +18,13 @@ public class QuizRoom {
     private Long numberOfParticipants;
     private Long maxQuestionCounts;
     private int currentQuestionIndex;
-    private HashMap<Long, Participate> participantList;
+    private HashMap<String, Participate> participantList;
     private List<QuizQuestionRandomResponseDto> randomQuizQuestionList;
 
     @Builder
     private QuizRoom(GameType gameType, String sessionId ,Long quizCount, boolean isStart,
                      Long numberOfParticipants, Long maxQuestionCounts, int currentQuestionIndex,
-                     HashMap<Long, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
+                     HashMap<String, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
         this.gameType = gameType;
         this.sessionId = sessionId;
         this.quizCount = quizCount;
@@ -45,7 +45,7 @@ public class QuizRoom {
                 .numberOfParticipants(0L)
                 .maxQuestionCounts(0L)
                 .currentQuestionIndex(-1)
-                .participantList(new HashMap<Long, Participate>())
+                .participantList(new HashMap<String, Participate>())
                 .randomQuizQuestionList(null)
                 .build();
 
@@ -59,13 +59,13 @@ public class QuizRoom {
         this.isStart = true;
     }
 
-    public void enterParticipate(Long userId, Participate participant){
+    public void enterParticipate(String userId, Participate participant){
         participantList.put(userId, participant);
         maxQuestionCounts = Math.min(maxQuestionCounts, participant.getMaxQuestion());
         ++this.numberOfParticipants;
     }
 
-    public void exitParticipate(Long userId){
+    public void exitParticipate(String userId){
         long exitQuestionCount = participantList.get(userId).getMaxQuestion();
         participantList.remove(userId);
 

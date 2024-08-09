@@ -22,13 +22,13 @@ public class GameResultSaveDto {
 
     private LocalDate date;
 
-    private Long participantId;
+    private String participantId;
 
     private Long familyId;
 
     @Builder
     private GameResultSaveDto(GameType gameType, long correctCounts, long totalCounts, long rank,
-                             LocalDate date, Long participantId, Long familyId) {
+                             LocalDate date, String participantId, Long familyId) {
         this.gameType = gameType;
         this.correctCounts = correctCounts;
         this.totalCounts = totalCounts;
@@ -39,7 +39,7 @@ public class GameResultSaveDto {
     }
 
     public static GameResultSaveDto createGameResultDto(GameType gameType, long correctCounts, long totalCounts,
-                                                        long rank, Long participantId, Long familyId) {
+                                                        long rank, String participantId, Long familyId) {
         return GameResultSaveDto.builder()
                 .gameType(gameType)
                 .correctCounts(correctCounts)
