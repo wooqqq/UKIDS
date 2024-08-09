@@ -7,13 +7,18 @@ interface BlueButtonProps {
   path: string;
   className?: string;
   type?: string;
+  onClick?: () => void; // onClick 타입 정의 추가
 }
 
 const BlueButton = (props: BlueButtonProps) => {
-  const nav = useNavigate();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    nav(props.path);
+    if (props.onClick) {
+      props.onClick(); // onClick 함수 호출
+    } else {
+      navigate(props.path);
+    }
   };
 
   if (props.name == '로그인' || props.name == '회원가입') {
