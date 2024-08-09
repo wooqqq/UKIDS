@@ -1,0 +1,66 @@
+import { useState } from "react";
+import '@components/feature/pictureDiary/diaryItem.css'
+import axios from "axios";
+import { useAuthStore } from "../../../stores/authStore";
+
+interface Diary{
+    familyId: number;
+    file: File | null,
+    content: string;
+    date: string;
+}
+
+export const PictureDiaryCreate = () => {
+
+    const [diary, setDiary] = useState<Diary>({
+        familyId: 11,
+        file: null,         // File은 null로 초기화
+        content: '',
+        date: '',
+    });
+
+    const {token} = useAuthStore();
+
+    const createDiary = () => {
+        const formData = new FormData();
+        console.log("file: ", diary.file);
+        if(diary.file)
+            formData.append('multipartFile', diary.file);
+        formData.append('date', diary.date);
+        formData.append('content', diary.content);
+        formData.append(`familyId`, `${diary.familyId}`);
+
+        const url = `http://localhost:8080/api/picture-diary`;
+
+        const {data} = axios.post(url, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        console.log(data);
+    }
+
+    const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files?.item(0))
+            setDiary({...diary, 'file' : e.target.files?.item(0)});
+    }
+
+
+    return (
+        <div>
+            <div>
+                <input type="date" value={diary.date} onChange={(e) => setDiary({...diary, 'date' : e.target.value})}/>
+            </div>
+            <div className="image-box">
+                <label className="input-file-box" htmlFor="fileUpload"><span>+</span></label>
+                <input className="hidden" id="fileUpload" type="file" accept="image/*" onChange={changeImage}/>
+            </div>
+            <div>
+                <textarea className="input-content" value={diary?.content} onChange={(e) => setDiary({...diary, 'content' : e.target.value})}></textarea>
+            </div>
+
+            <button onClick={createDiary}>등록</button>
+        </div>
+    )
+}

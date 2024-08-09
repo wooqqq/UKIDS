@@ -20,7 +20,8 @@ const UserLogin = () => {
     try {
       // 로그인 API 요청
       const response = await axios.post(
-        'https://i11b306.p.ssafy.io/api/user/login',
+        // 'https://i11b306.p.ssafy.io/api/user/login',
+        'http://localhost:8080/api/user/login',
         {
           id: id,
           password: password,
