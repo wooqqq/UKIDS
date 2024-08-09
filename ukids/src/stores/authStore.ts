@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../util/api';
 import { jwtDecode } from 'jwt-decode';
 
 // 타입스크립트 타입 설정...
@@ -8,7 +9,6 @@ interface AuthState {
   decodedToken: any;
   setToken: (token: string | null) => void;
 
-  ukidsURL: string;
   loading: boolean;
   error: string | null;
 
@@ -19,7 +19,8 @@ interface AuthState {
   setChatRoomId: (familyId: number) => void;
 }
 
-const ukidsURL = `https://i11b306.p.ssafy.io`;
+// const ukidsURL = `https://i11b306.p.ssafy.io`;
+// api 인스턴스 생성함 (api.ts)
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   // 초기 토큰 값: localStorage에서 불러옴
@@ -50,7 +51,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   // 기본 값들
-  ukidsURL: ukidsURL,
   loading: false,
   error: null,
 
@@ -61,22 +61,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   setfamilyId: (name, password) => async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.post(
-        `${ukidsURL}/api/family`,
-        {
-          name,
-          password,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${get().token}`,
-          },
-        },
-      );
+      const response = await api.post(`/family`, {
+        name,
+        password,
+      });
       set({
         familyId: Number.parseInt(response.data),
         loading: false,
       });
+      // header 지웠음! api 인스턴스에서 기본적으로 헤더를 포함하도록 설정함.
 
       // 채팅방 ID 생성
       get().setChatRoomId;
@@ -90,7 +83,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   setChatRoomId: (familyId) => async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.post(`${ukidsURL}/api/chat/room`, {
+      const response = await api.post(`/chat/room`, {
         familyId,
       });
       set({
