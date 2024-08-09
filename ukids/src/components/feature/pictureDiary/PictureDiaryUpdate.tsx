@@ -41,21 +41,26 @@ export const PictureDiaryUpdate = () => {
 
     const updateDiary = async () => {
         const formData = new FormData();
-        if(diary.file)
+        if(diary.file){
             formData.append('multipartFile', diary.file);
-        formData.append('pictureDiaryId', diary.pictureDiaryId.toString());
-        formData.append('familyId', diary.familyId.toString());
-        formData.append('date', diary.date);
-        formData.append('content', diary.content);
-        const url = `http://localhost:8080/api/picture-diary`;
+            formData.append('pictureDiaryId', diary.pictureDiaryId.toString());
+            formData.append('familyId', diary.familyId.toString());
+            formData.append('date', diary.date);
+            formData.append('content', diary.content);
+            const url = `/picture-diary`;
 
-        const {data} = await axios.put(url, formData, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+            const {data} = await api.put(url, formData, {
+                headers: {
+                    "Content-Type": undefined
+                }
+            })
 
-        console.log(data);
+            console.log(data);
+        }
+
+        else{
+            alert('그림 또는 사진을 넣어주세요.');
+        }
     }
 
     const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
