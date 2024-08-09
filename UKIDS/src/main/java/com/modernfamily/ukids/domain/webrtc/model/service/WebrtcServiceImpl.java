@@ -45,7 +45,8 @@ public class WebrtcServiceImpl implements WebrtcService {
 
     @Override
     public String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
-
+        familyMemberValidator.checkUserInFamilyMember(familyId);
+        
         String sessionId = getWebrtcByFamilyId(familyId).getSessionId();
         return getToken(sessionId, connectionProperties);
     }
@@ -77,6 +78,7 @@ public class WebrtcServiceImpl implements WebrtcService {
 
     @Override
     public WebrtcResponseDto getWebrtcByFamilyId(Long familyId) {
+        familyMemberValidator.checkUserInFamilyMember(familyId);
         Webrtc webrtc = webrtcRepository.findByFamily_FamilyId(familyId).get();
 
         return WebrtcResponseDto.from(webrtc);
