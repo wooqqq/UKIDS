@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../../util/api';
 import './user.css';
 import '../../common/common.css';
 import BlueButton from '../../common/BlueButton';
@@ -35,18 +36,15 @@ const UserJoin = () => {
 
     try {
       // 회원가입 API 요청
-      const response = await axios.post(
-        'https://i11b306.p.ssafy.io/api/user/signup',
-        {
-          id: form.id,
-          password: form.password,
-          name: form.name,
-          birthDate: form.birthDate,
-          email: form.email,
-          phone: form.phone,
-          role: 'ROLE_USER',
-        },
-      );
+      const response = await api.post('/user/signup', {
+        id: form.id,
+        password: form.password,
+        name: form.name,
+        birthDate: form.birthDate,
+        email: form.email,
+        phone: form.phone,
+        role: 'ROLE_USER',
+      });
       // 성공적으로 회원가입 시 처리
       if (response.data.code === 201) {
         alert(response.data.result); // '회원 생성 완료' 메시지 표시
@@ -54,7 +52,7 @@ const UserJoin = () => {
       }
     } catch (error) {
       console.error('회원가입 실패:', error);
-      alert('회원가입에 실패했습니다.');
+      alert('회원가입에 실패했습니다.' + error);
     }
   };
 

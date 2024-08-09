@@ -21,6 +21,7 @@ import Footer from './components/Footer';
 import Sidebar from './components/common/Sidebar';
 import Main from './pages/Main';
 import { ProtectedRoute, PublicRoute } from './components/error/ProtectedRoute';
+import { useEffect } from 'react';
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전)
 // 1-1. FamilyHome "/:familyId" : 로그인 후 메인 페이지
@@ -55,6 +56,17 @@ const App = () => {
     location.pathname === '/login' ||
     location.pathname === '/join';
 
+  // 배경색 변경 (회색 그라데이션)
+  useEffect(() => {
+    if (
+      location.pathname === '/' ||
+      location.pathname === '/login' ||
+      location.pathname === '/join'
+    ) {
+      document.body.style.backgroundColor = '#fff';
+    }
+  }, [location.pathname]);
+
   return (
     <div className="">
       <Header />
@@ -65,29 +77,6 @@ const App = () => {
       >
         {!hideSidebar && <Sidebar />}
         <Routes>
-          {/* 로그인 했으면 진입 금지 */}
-          <Route element={<PublicRoute />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
-          </Route>
-          {/* 로그인 안했으면 진입 금지 */}
-          <Route path="/" element={<Home />} />
-          <Route path="/schedule/*" element={<Schedule />}></Route>
-          <Route path="/letters" element={<Letters />} />
-          <Route path="/albums" element={<Albums />} />
-          <Route path="/albums/:photoId" element={<AlbumDetail />} />{' '}
-          {/* 추가 */}
-          <Route path="/albums/upload" element={<UploadPhoto />} /> {/* 추가 */}
-          <Route path="/paintdiary" element={<PaintingDiary />} />
-          <Route path="/growthdiary" element={<GrowthDiary />} />
-          <Route path="/chat" element={<FamilyChatting />} />
-          <Route path="/chat/call" element={<FamilyVideoCall />} />
-          <Route path="/game" element={<GameSelect />}></Route>
-          <Route path="/quiz/*" element={<Quiz />}></Route>
-          <Route path="/callmyname/*" element={<CallMyName />}></Route>
-          <Route path="/setting" element={<Setting />} />
-          <Route path="*" element={<Notfound />} />
           {/* 로그인 했으면 진입 금지 */}
           <Route element={<PublicRoute />}>
             <Route path="/" element={<Home />} />
