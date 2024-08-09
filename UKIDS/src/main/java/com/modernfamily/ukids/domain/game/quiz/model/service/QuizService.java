@@ -8,7 +8,6 @@ import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestion
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
-import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import jakarta.annotation.PostConstruct;

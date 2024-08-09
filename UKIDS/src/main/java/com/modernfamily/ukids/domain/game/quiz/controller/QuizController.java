@@ -4,9 +4,6 @@ import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.service.QuizService;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
-import com.modernfamily.ukids.domain.user.entity.User;
-import com.modernfamily.ukids.global.exception.CustomException;
-import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -30,7 +26,7 @@ public class QuizController {
     @MessageMapping("/quiz/enter/{id}")
     @SendTo("/topic/quiz/{id}")
     public Map<String, Object> enterQuizRoom(@PathVariable("id") Long familyId,
-                                             @RequestParam("gameType")GameType gameType,
+                                             @RequestParam("gameType") GameType gameType,
                                              Principal principal)
             throws OpenViduJavaClientException, OpenViduHttpException {
         return quizService.enterQuizRoom(familyId, gameType, principal);
