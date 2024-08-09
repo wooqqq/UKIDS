@@ -27,19 +27,23 @@ public class WebrtcController {
     }
 
     @PostMapping
-    public ResponseEntity<?> initializeSessions(@RequestBody(required = false) Map<String, Object> sessionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<?> initializeSessions(@RequestBody(required = false) Map<String, Object> sessionProperties,
+                                                @RequestParam("familyId") Long familyId) throws OpenViduJavaClientException, OpenViduHttpException {
         String sessionId = webrtcService.initializeSessions(sessionProperties);
+
+        webrtcService.createWebrtcChatRoom(sessionId, familyId);
 
         return responseUtil.createResponse(HttpMethodCode.POST, sessionId);
     }
 
-    @PostMapping("/{sessionId}")
-    public ResponseEntity<?> createConnection(@PathVariable("sessionId") String sessionId,
+    @PostMapping("/{familyId}")
+    public ResponseEntity<?> createConnection(@PathVariable("familyId") Long familyId,
                                               @RequestBody(required = false) Map<String, Object> connectionProperties)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-        String token = webrtcService.createConnection(sessionId, connectionProperties);
+        String token = webrtcService.createConnection(familyId, connectionProperties);
 
         return responseUtil.createResponse(HttpMethodCode.POST, token);
     }
+
 }
