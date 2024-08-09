@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <div className="flexcenter-row text-xs text-[#999999] items-center">
+    <div className="flexcenter-row text-xs text-[#999999] items-center mt-6">
       <a href="#!" className="m-1">
         이용약관
       </a>

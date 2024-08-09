@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../stores/authStore';
 import './button.css';
 
 interface GrayButtonProps {
@@ -9,15 +10,25 @@ interface GrayButtonProps {
 }
 
 const GrayButton = (props: GrayButtonProps) => {
-  const navigate = useNavigate();
+  const nav = useNavigate();
+  const setToken = useAuthStore((state) => state.setToken);
 
   const handleClick = () => {
-    navigate(props.path);
+    nav(props.path);
+  };
+
+  const onClickLogoutButton = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+    nav(props.path);
   };
 
   if (props.name == '로그아웃') {
     return (
-      <button onClick={handleClick} className="rounded-md gray-btn common-btn">
+      <button
+        onClick={onClickLogoutButton}
+        className="rounded-md gray-btn common-btn"
+      >
         {props.name}
       </button>
     );

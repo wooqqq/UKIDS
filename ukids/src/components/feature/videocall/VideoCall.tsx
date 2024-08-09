@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import Form from './Form';
 import Session from './Session';
-import useStore from '../../../stores/userStore';
+import { useAuthStore } from '../../../stores/authStore';
 
 function VideoCall() {
   const [session, setSession] = useState<OVSession | ''>('');
@@ -24,7 +24,7 @@ function VideoCall() {
   const [isVideoEnabled, setIsVideoEnabled] = useState<boolean>(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
-  const { ukidsURL } = useStore();
+  const { ukidsURL } = useAuthStore();
 
   const leaveSession = useCallback(() => {
     if (session) session.disconnect();
