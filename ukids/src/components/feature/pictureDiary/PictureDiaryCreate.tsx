@@ -1,7 +1,7 @@
 import { useState } from "react";
 import '@components/feature/pictureDiary/diaryItem.css'
-import axios from "axios";
-import { useAuthStore } from "../../../stores/authStore";
+import api from "@/util/api.ts"
+import apiForm from "@/util/api.ts"
 
 interface Diary{
     familyId: number;
@@ -19,26 +19,24 @@ export const PictureDiaryCreate = () => {
         date: '',
     });
 
-    const {token} = useAuthStore();
 
-    const createDiary = () => {
+    const createDiary = async () => {
         const formData = new FormData();
-        console.log("file: ", diary.file);
         if(diary.file)
             formData.append('multipartFile', diary.file);
         formData.append('date', diary.date);
         formData.append('content', diary.content);
         formData.append(`familyId`, `${diary.familyId}`);
 
-        const url = `http://localhost:8080/api/picture-diary`;
-
-        const {data} = axios.post(url, formData, {
+        const url = `/picture-diary`;
+        const {data} = await api.post(url, formData, {
             headers: {
-                Authorization: `Bearer ${token}`
+                "Content-Type": undefined
             }
-        })
+        });
 
         console.log(data);
+
     }
 
     const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {

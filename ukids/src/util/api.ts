@@ -6,7 +6,8 @@ const token = localStorage.getItem('token');
 
 // axios 인스턴스 생성
 const api = axios.create({
-  baseURL: 'https://i11b306.p.ssafy.io/api',
+  // baseURL: 'https://i11b306.p.ssafy.io/api',
+  baseURL: 'http://localhost:8080/api',
   headers: {
     Authorization: token ? `Bearer ${token}` : '', // 초기화 시점에 토큰이 있으면 설정
     'Content-Type': 'application/json',

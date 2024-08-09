@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAuthStore } from '../../../stores/authStore';
 import { Link } from "react-router-dom";
 import { Modal } from "@components/feature/modal/Modal.tsx";
+import api from "@/util/api.ts"
 
 import '@components/feature/modal/modal.css'
 
@@ -21,7 +22,6 @@ export const PictureDiaryDetail = () => {
 
     const [diary, setDiary] = useState<Diary>();
     const [modalState, setModalState] = useState<boolean>(false);
-    const {token} = useAuthStore();
     const content = "그림일기 삭제";
 
     const onModalOpen = () => {
@@ -29,12 +29,8 @@ export const PictureDiaryDetail = () => {
     }
 
     const getDiary = async () => {
-        const url = `http://localhost:8080/api/picture-diary/details/${pictureDiaryId}`
-        const {data} = await axios.get(url, {
-            headers : {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const url = `/picture-diary/details/${pictureDiaryId}`
+        const {data} = await api.get(url);
         if(data.code === 201){
             console.log(data.result);
         }
@@ -44,13 +40,9 @@ export const PictureDiaryDetail = () => {
     }
 
     const deleteDiary = async () => {
-        const url = `http://localhost:8080/api/picture-diary/${useParams}`;
+        const url = `/picture-diary/${pictureDiaryId}`;
 
-        const {data} = await axios.delete(url, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const {data} = await api.delete(url)
 
         console.log(data);
 

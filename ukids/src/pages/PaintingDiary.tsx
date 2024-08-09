@@ -3,10 +3,8 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { PictureDiaryDetail } from "../components/feature/pictureDiary/PictureDiaryDetail";
 import { PictureDiaryCreate } from "../components/feature/pictureDiary/PictureDiaryCreate";
 import { PictureDiaryUpdate } from "../components/feature/pictureDiary/PictureDiaryUpdate";
-import useUserStore from "../stores/userStore";
 
 const PaintingDiary = () => {
-  const {loginToken} = useUserStore();
 
   return (
     <div className="feature-box">

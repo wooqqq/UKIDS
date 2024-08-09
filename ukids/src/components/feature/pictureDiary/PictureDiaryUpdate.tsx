@@ -3,6 +3,7 @@ import '@components/feature/pictureDiary/diaryItem.css'
 import axios from "axios";
 import { useAuthStore } from "../../../stores/authStore";
 import { useParams } from "react-router-dom";
+import api from "@/util/api.ts"
 
 interface Diary{
     pictureDiaryId: number,
@@ -25,8 +26,8 @@ export const PictureDiaryUpdate = () => {
     const {token} = useAuthStore();
 
     const getDiary = async () => {
-        const url = `http://localhost:8080/api/picture-diary/details/${pictureDiaryId}`;
-        const {data} = await axios.get(url, {
+        const url = `/picture-diary/details/${pictureDiaryId}`;
+        const {data} = await api.get(url, {
             headers : {
                 Authorization: `Bearer ${token}`
             }

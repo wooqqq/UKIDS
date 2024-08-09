@@ -1,6 +1,7 @@
-import axios from "axios";
 import { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/authStore";
+import api from "@/util/api.ts"
 
 interface ModalProps {
     content: string;
@@ -10,6 +11,7 @@ interface ModalProps {
 }
 
 export const Modal = ({content, modalState, setModalState, deleteElement}: ModalProps) => {
+    const navigate = useNavigate();
     const modalRef = useRef<HTMLDivElement>(null);
     const {token} = useAuthStore();
     
@@ -41,21 +43,31 @@ export const Modal = ({content, modalState, setModalState, deleteElement}: Modal
     if (!modalState) return null;
 
     const checkPassword = async () => {
-        const url = "http://localhost:8080/api/family/pwCheck";
+        const url = "/family/pwcheck";
         const config = {
             familyId : 11,
             password
         }
 
-        const {data} = await axios.post(url, config, {
+        const {data} = await api.post(url, config, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
+        if(data.result == "SUCCESS_PASSWORD_DISCORD"){
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+        else {
+            if(confirm("삭제하시겠습니까?")){
+                deleteElement();
+                navigate('/paintdiary');
+            }
+        }
+        console.log(data);
     }
 
     return (
-        <div className="modal-overlay" onClick={onOverlayClick}>
+        <div className="modal-overlay">
             <div className="modal-top-container">
                 <div className="modal-container">
                     <div className="modal-header">
