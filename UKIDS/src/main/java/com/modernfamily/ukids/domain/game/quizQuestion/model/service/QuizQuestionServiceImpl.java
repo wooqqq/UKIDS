@@ -1,24 +1,27 @@
 package com.modernfamily.ukids.domain.game.quizQuestion.model.service;
 
-import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumListResponseDto;
-import com.modernfamily.ukids.domain.album.dto.response.FamilyAlbumPagenationResponseDto;
-import com.modernfamily.ukids.domain.album.entity.Album;
-import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
-import com.modernfamily.ukids.domain.family.entity.Family;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.modernfamily.ukids.domain.game.chatgpt.service.ChatgptService;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.request.QuizQuestionCreateRequestDto;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.request.QuizQuestionUpdateRequestDto;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionListPagenationResponseDto;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionListResponseDto;
+import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionResponseDto;
 import com.modernfamily.ukids.domain.game.quizQuestion.entity.QuizQuestion;
+import com.modernfamily.ukids.domain.game.quizQuestion.entity.QuizType;
 import com.modernfamily.ukids.domain.game.quizQuestion.model.repository.QuizQuestionRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
 import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
+import com.modernfamily.ukids.global.config.ChatgptConfig;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,14 +31,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class QuizQuestionServiceImpl implements QuizQuestionService {
 
     private final UserRepository userRepository;
     private final QuizQuestionRepository quizQuestionRepository;
     private final UserMapper userMapper;
+    private final ChatgptService chatgptService;
+
 
     @Transactional
     public void createQuizQuestion(QuizQuestionCreateRequestDto requestDto) {
@@ -111,7 +118,15 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
         return pagenationResponseDto;
     }
 
-    public List<QuizQuestionResponseDto> chooseRandomQuizQuestion(Long userId ,long count) {
+    public long getCountQuizQuestionByUser() {
+        String id = CustomUserDetails.contextGetUserId();
+        User writer = userRepository.findById(id)
+                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        return quizQuestionRepository.countByWriter_UserId(writer.getUserId());
+    }
+
+    public List<QuizQuestionRandomResponseDto> chooseRandomQuizQuestion(String userId , long count) {
         User writer = userRepository.findById(userId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
@@ -120,14 +135,21 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
             throw new ExceptionResponse(CustomException.NOT_ENOUGH_QUIZ_QUESTION_EXCEPTION);
 
         List<QuizQuestion> quizQuestions = quizQuestionRepository.findRandomQuizQuestionsByUser(count, writer.getUserId());
-        List<QuizQuestionResponseDto> responseDtoList = new ArrayList<>();
+        List<QuizQuestionRandomResponseDto> responseDtoList = new ArrayList<>();
 
         for (QuizQuestion quizQuestion : quizQuestions) {
-            responseDtoList.add(QuizQuestionResponseDto.createResponseDto(quizQuestion, userMapper.toUserDto(writer)));
+            List<String> wrongAnswer = null;
+
+            if(quizQuestion.getQuizType() == QuizType.MULTIPLE_CHOICE){
+                String prompt = quizQuestion.getQuestion() + " 에 대한 답변이 " + quizQuestion.getAnswer() + "인데, 답변과 비슷한 2개 보기를 줘.";
+                wrongAnswer = chatgptService.runPrompt(prompt);
+            }
+            responseDtoList.add(QuizQuestionRandomResponseDto.createResponseDto(quizQuestion, userMapper.toUserDto(writer), wrongAnswer));
         }
 
         return responseDtoList;
     }
+
 
 
 }
