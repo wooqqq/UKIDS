@@ -56,7 +56,7 @@ public class QuizQuestionController {
     }
 
     @GetMapping("/random/{id}")
-    public ResponseEntity<Map<String, Object>> getQuizQuestionListByUser(@PathVariable("id") Long userId,
+    public ResponseEntity<Map<String, Object>> getQuizQuestionListByUser(@PathVariable("id") String userId,
                                                                          @RequestParam("count") long count) {
         return responseUtil.createResponse(HttpMethodCode.GET,
                 quizQuestionService.chooseRandomQuizQuestion(userId, count));

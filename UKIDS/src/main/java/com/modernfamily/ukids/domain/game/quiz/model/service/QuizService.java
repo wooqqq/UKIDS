@@ -27,7 +27,6 @@ public class QuizService {
     private Map<Long, QuizRoom> quizRooms;
     private final QuizRepository quizRepository;
     private final QuizRoomRespository quizRoomRespository;
-    private final FamilyMemberValidator familyMemberValidator;
     private final WebrtcService webrtcService;
 
     @PostConstruct
@@ -149,8 +148,6 @@ public class QuizService {
 
     // 게임 종료 -> DB 저장
     public void endGame(Long familyId) {
-        familyMemberValidator.checkUserInFamilyMember(familyId).getUser();
-
         quizRepository.endGame(familyId, quizRooms.get(familyId));
         quizRooms.remove(familyId);
     }
