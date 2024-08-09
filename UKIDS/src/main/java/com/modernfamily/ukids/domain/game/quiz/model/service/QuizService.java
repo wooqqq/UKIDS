@@ -55,7 +55,7 @@ public class QuizService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("id", familyId);
-        response.put("webrtcConnection", webrtcService.createConnection(quizRooms.get(familyId).getSessionId(), null));
+        response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
 
         quizRoomRespository.enterGame(participate.getUserId(), quizRooms.get(familyId));
 

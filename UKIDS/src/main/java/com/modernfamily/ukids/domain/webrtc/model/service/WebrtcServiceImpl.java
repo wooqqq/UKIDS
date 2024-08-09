@@ -51,7 +51,7 @@ public class WebrtcServiceImpl implements WebrtcService {
         return getToken(sessionId, connectionProperties);
     }
 
-
+    @Override
     public String getToken(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException {
 
         openvidu.fetch();

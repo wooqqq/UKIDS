@@ -12,4 +12,5 @@ public interface WebrtcService {
     String createConnection(Long familyId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
     void createWebrtcChatRoom(String sessionId, Long familyId);
     WebrtcResponseDto getWebrtcByFamilyId(Long familyId);
+    String getToken(String sessionId, Map<String, Object> connectionProperties) throws OpenViduJavaClientException, OpenViduHttpException;
 }
