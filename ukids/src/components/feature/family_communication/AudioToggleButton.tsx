@@ -6,7 +6,10 @@ const AudioToggleButton: React.FC = () => {
   const { isAudioEnabled, toggleAudio } = useVideoCallStore();
 
   return (
-    <button onClick={toggleAudio} className="flex justify-center items-center">
+    <button
+      onClick={toggleAudio}
+      className="flex justify-center items-center w-[60px] h-[60px] bg-white rounded-full shadow"
+    >
       <img
         src={mic}
         alt={isAudioEnabled ? 'on' : 'off'}

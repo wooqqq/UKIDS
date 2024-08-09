@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import callIcon from '../../../assets/subway_call-2.png';
 import discallIcon from '../../../assets/subway_call-3.png';
-import { useCommonStore } from '../../../stores/commonStore';
 
-import BlueButton from '../../common/BlueButton';
 import { useNavigate } from 'react-router-dom';
+import { useVideoCallStore } from '../../../stores/videoCallStore';
+import VideoToggleButton from '../family_communication/VideoToggleButton';
+import AudioToggleButton from '../family_communication/AudioToggleButton';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;
@@ -15,12 +16,17 @@ const number = 4;
 
 const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
   const [onlineFamilyNum, setOnlineFamilyNum] = useState(0);
-  const { isChatting, setIsChatting } = useCommonStore();
+  const { isChatting, setIsChatting, leaveSession } = useVideoCallStore();
   const nav = useNavigate();
 
   const handleClickCallBtn = () => {
     setIsChatting(!isChatting);
-    isChatting ? nav('/chat') : nav('./call');
+    if (isChatting) {
+      leaveSession();
+      nav('/chat');
+    } else {
+      nav('./call');
+    }
   };
 
   useEffect(() => {
@@ -49,7 +55,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
         {isChattingRoom ? (
           <div className="flex-none m-2">
             {/* 통화버튼 */}
-            <div className="mb-2">
+            <div className="flex justify-center mb-2">
               {/* 채팅방/통화방 전환 */}
               <button
                 onClick={handleClickCallBtn}
@@ -63,9 +69,9 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
               </button>
             </div>
             {/* 카메라, 마이크 버튼 */}
-            <div className="flex space-x-2">
-              <BlueButton name="카메라" path="#" />
-              <BlueButton name="마이크" path="#" />
+            <div className="flex justify-evenly">
+              <VideoToggleButton />
+              <AudioToggleButton />
             </div>
           </div>
         ) : null}

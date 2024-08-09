@@ -14,13 +14,11 @@ interface VideoCallStore {
   publisher: { publisher: Publisher; name: string } | null; // 퍼블리셔(발행자) 정보를 저장하는 상태
   isVideoEnabled: boolean; // 비디오가 활성화 되었는지 여부를 저장하는 상태
   isAudioEnabled: boolean; // 오디오가 활성화 되었는지 여부를 저장하는 상태
-  sessionId: string; // 현재 세션 ID를 저장하는 상태
   userName: string; // 사용자 이름을 저장하는 상태
   isChatting: boolean; // 채팅 중인지 여부를 저장하는 상태
   setIsChatting: (value: boolean) => void; // 채팅 상태를 설정하는 함수
-  joinSession: (sessionId: string, userName: string) => Promise<void>; // 세션에 참여하는 함수
+  joinSession: (familyId: number, userName: string) => Promise<void>; // 세션에 참여하는 함수
   leaveSession: () => void; // 세션에서 나가는 함수
-  setSessionId: (sessionId: string) => void; // 세션 ID를 설정하는 함수
   setUserName: (userName: string) => void; // 사용자 이름을 설정하는 함수
   toggleVideo: () => void; // 비디오 상태를 토글하는 함수
   toggleAudio: () => void; // 오디오 상태를 토글하는 함수
@@ -28,19 +26,19 @@ interface VideoCallStore {
 
 // 상태 관리를 위한 zustand 스토어 생성
 export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
-  session: null, // 초기값 null
-  OV: null, // 초기값 null
-  subscribers: [], // 초기값 빈 배열
-  publisher: null, // 초기값 null
-  isVideoEnabled: false, // 초기값 false
-  isAudioEnabled: false, // 초기값 false
-  sessionId: '', // 초기값 빈 문자열
-  userName: '', // 초기값 빈 문자열
-  isChatting: false, // 초기값 false
-  setIsChatting: (value) => set(() => ({ isChatting: value })), // isChatting 상태 설정
+  session: null,
+  OV: null,
+  subscribers: [],
+  publisher: null,
+  isVideoEnabled: false,
+  isAudioEnabled: false,
+  sessionId: '',
+  userName: '',
+  isChatting: false,
+  setIsChatting: (value) => set(() => ({ isChatting: value })),
 
   // 세션에 참여하는 함수
-  joinSession: async (sessionId, userName) => {
+  joinSession: async (familyId, userName) => {
     const OV = new OpenVidu(); // 새로운 OpenVidu 인스턴스 생성
     set({ OV });
 
@@ -70,22 +68,22 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
     });
 
     try {
-      const token = await getToken(sessionId); // 세션에 접속하기 위한 토큰을 가져옴
+      const token = await getToken(familyId); // 세션에 접속하기 위한 토큰을 가져옴
       await session.connect(token, { clientData: userName }); // 세션에 연결
 
       // 퍼블리셔 초기화
       const publisher = OV.initPublisher(undefined, {
-        audioSource: undefined, // 사용자가 직접 설정한 오디오 소스 사용
-        videoSource: undefined, // 사용자가 직접 설정한 비디오 소스 사용
-        publishAudio: get().isAudioEnabled, // 현재 오디오 상태
-        publishVideo: get().isVideoEnabled, // 현재 비디오 상태
+        audioSource: undefined,
+        videoSource: undefined,
+        publishAudio: get().isAudioEnabled,
+        publishVideo: get().isVideoEnabled,
         mirror: false, // 거울 효과를 사용하지 않음
       });
 
       session.publish(publisher); // 세션에 퍼블리셔 추가
       set({ publisher: { publisher, name: userName } }); // 퍼블리셔 상태 설정
     } catch (error) {
-      console.error('Failed to join the session:', error); // 에러 발생 시 로그 출력
+      console.error('Failed to join the session:', error);
     }
   },
 
@@ -105,7 +103,6 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
     });
   },
 
-  // 비디오 상태를 토글하는 함수
   toggleVideo: () => {
     set((state) => {
       if (state.publisher) {
@@ -117,7 +114,6 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
     });
   },
 
-  // 오디오 상태를 토글하는 함수
   toggleAudio: () => {
     set((state) => {
       if (state.publisher) {
@@ -129,33 +125,39 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
     });
   },
 
-  // 세션 ID 설정
-  setSessionId: (sessionId: string) => set(() => ({ sessionId })),
-
   // 사용자 이름 설정
   setUserName: (userName: string) => set(() => ({ userName })),
 }));
 
 // 세션에 접속하기 위한 토큰을 가져오는 함수
-async function getToken(sessionId: string): Promise<string> {
+async function getToken(familyId: number): Promise<string> {
   try {
-    console.log(`sessionIds: ${sessionId}`);
-    const token = await createToken(sessionId); // 토큰 생성 함수 호출
+    console.log(`familyId: ${familyId}`);
+    const token = await createToken(familyId); // 토큰 생성 함수 호출
     console.log(`token: ${token}`);
     return token;
   } catch (error) {
+    console.error('Failed to get token:', error); // 에러 로그 추가
     throw new Error('Failed to get token.');
   }
 }
 
 // 서버에서 토큰을 생성하는 함수
-const createToken = (familyId: string): Promise<string> => {
+const createToken = (familyId: number): Promise<string> => {
   return new Promise((resolve, reject) => {
     api
-      .post(`/webrtc/${familyId}`, {}) // 서버 API 호출
+      .post(`/webrtc/${familyId}`) // 서버 API 호출
       .then((response) => {
-        resolve((response.data as { result: string }).result); // 응답에서 토큰 추출
+        console.log('API Response:', response.data); // 응답 데이터 확인
+        if (response.data && response.data.result) {
+          resolve(response.data.result); // 응답에서 토큰 추출
+        } else {
+          reject(new Error('Invalid API response format'));
+        }
       })
-      .catch((error) => reject(error)); // 에러 처리
+      .catch((error) => {
+        console.error('API Error:', error); // 에러 로그 추가
+        reject(error); // 에러 처리
+      });
   });
 };

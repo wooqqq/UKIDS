@@ -6,7 +6,10 @@ const VideoToggleButton: React.FC = () => {
   const { isVideoEnabled, toggleVideo } = useVideoCallStore();
 
   return (
-    <button onClick={toggleVideo} className="flex justify-center items-center">
+    <button
+      onClick={toggleVideo}
+      className="flex justify-center items-center w-[60px] h-[60px] bg-white rounded-full shadow"
+    >
       <img
         src={cam}
         alt={isVideoEnabled ? 'on' : 'off'}

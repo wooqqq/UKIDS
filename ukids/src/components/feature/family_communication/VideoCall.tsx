@@ -1,182 +1,54 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  OpenVidu,
-  Session as OVSession,
-  Publisher,
-  Subscriber,
-} from 'openvidu-browser';
-import axios from 'axios';
-import Form from './Form';
+import { useEffect } from 'react';
+import { useVideoCallStore } from '../../../stores/videoCallStore';
+// import { useAuthStore } from '../../../stores/authStore';
 import Session from './Session';
-import { useAuthStore } from '../../../stores/authStore';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  name: string;
+}
 
 function VideoCall() {
-  const [session, setSession] = useState<OVSession | ''>('');
-  const [sessionId, setSessionId] = useState<string>('');
-  const [subscribers, setSubscribers] = useState<
-    { subscriber: Subscriber; name: string }[]
-  >([]);
-  const [publisher, setPublisher] = useState<{
-    publisher: Publisher;
-    name: string;
-  } | null>(null);
-  const [OV, setOV] = useState<OpenVidu | null>(null);
-  const [isVideoEnabled, setIsVideoEnabled] = useState<boolean>(false);
-  const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>('');
-  const { ukidsURL } = useAuthStore();
+  const {
+    subscribers,
+    publisher,
+    userName,
+    leaveSession,
+    joinSession,
+    setUserName,
+  } = useVideoCallStore();
+  // const { familyId } = useAuthStore(); // 실제 가족 ID 사용처
+  const familyId = 5; // 테스트용 가족 ID 고정값
 
-  const leaveSession = useCallback(() => {
-    if (session) session.disconnect();
-    setOV(null);
-    setSession('');
-    setSessionId('');
-    setSubscribers([]);
-    setPublisher(null);
-    setIsVideoEnabled(false);
-    setIsAudioEnabled(false);
-  }, [session]);
-
-  const joinSession = () => {
-    const OVs = new OpenVidu();
-    setOV(OVs);
-    const newSession = OVs.initSession();
-    setSession(newSession);
-
-    newSession.on('streamDestroyed', (event) => {
-      setSubscribers((prevSubscribers) =>
-        prevSubscribers.filter(
-          (subscriber) =>
-            subscriber.subscriber.stream.streamId !== event.stream.streamId,
-        ),
-      );
-    });
-
-    newSession.on('streamCreated', (event) => {
-      const newSubscriber = newSession.subscribe(event.stream, '');
-      const userData = JSON.parse(
-        event.stream.connection.data.split('%/%')[0],
-      ).clientData;
-      setSubscribers((prevSubscribers) => [
-        ...prevSubscribers,
-        { subscriber: newSubscriber, name: userData },
-      ]);
-    });
-  };
+  const nameOfUser = jwtDecode<JwtPayload>(localStorage.getItem('token')!).name;
+  console.log('유저이름: ' + nameOfUser);
 
   useEffect(() => {
     window.addEventListener('beforeunload', leaveSession);
+
     return () => {
       window.removeEventListener('beforeunload', leaveSession);
     };
   }, [leaveSession]);
 
-  const sessionIdChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSessionId(event.target.value);
-  };
-
-  const userNameChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setUserName(event.target.value);
-  };
-
-  const createSession = async () => {
-    try {
-      const response = await axios.post(`${ukidsURL}/api/webrtc`, {});
-      console.log('SessionId Created!: ', response.data);
-    } catch (error) {
-      throw new Error('Failed to create session.');
-    }
-  };
-
   useEffect(() => {
-    if (session === '' || !OV || sessionId === '') return;
-
-    const createToken = (sessionIds: string): Promise<string> => {
-      return new Promise((resolve, reject) => {
-        axios
-          .post(`${ukidsURL}/api/webrtc/${sessionIds}`, {})
-          .then((response) => {
-            resolve((response.data as { result: string }).result);
-          })
-          .catch((error) => reject(error));
-      });
-    };
-
-    const getToken = async (): Promise<string> => {
+    setUserName(nameOfUser);
+    // 토큰 생성 및 세션에 연결하는 함수 호출
+    const connectSession = async () => {
       try {
-        console.log(`sessionIds: ${sessionId}`);
-        const token = await createToken(sessionId);
-        console.log(`token: ${token}`);
-        return token;
+        await joinSession(familyId, userName);
+        console.log('Successfully joined the session.');
       } catch (error) {
-        throw new Error('Failed to get token.');
+        console.error('Error joining the session:', error);
       }
     };
 
-    getToken()
-      .then((token) => {
-        session
-          .connect(token, { clientData: userName })
-          .then(() => {
-            const publishers = OV.initPublisher(undefined, {
-              audioSource: undefined,
-              videoSource: undefined,
-              publishAudio: false,
-              publishVideo: false,
-              mirror: false,
-            });
-            setPublisher({ publisher: publishers, name: '나' });
-            session.publish(publishers).catch(() => {});
-          })
-          .catch(() => {});
-      })
-      .catch(() => {});
-  }, [session, OV, sessionId, userName]);
-
-  const toggleVideo = () => {
-    if (publisher) {
-      const newState = !isVideoEnabled;
-      publisher.publisher.publishVideo(newState);
-      setIsVideoEnabled(newState);
-    }
-  };
-
-  const toggleAudio = () => {
-    if (publisher) {
-      const newState = !isAudioEnabled;
-      publisher.publisher.publishAudio(newState);
-      setIsAudioEnabled(newState);
-    }
-  };
+    connectSession();
+  }, []);
 
   return (
-    <div className='w-3/4'>
-      <h1 className="text-2xl">가족통화</h1>
-      {session ? (
-        <>
-          <Session publisher={publisher} subscribers={subscribers} />
-          <button onClick={leaveSession}>돌아가기</button>
-          <button onClick={toggleVideo}>
-            {isVideoEnabled ? '비디오 끄기' : '비디오 켜기'}
-          </button>
-          <button onClick={toggleAudio}>
-            {isAudioEnabled ? '음소거' : '음소거 해제'}
-          </button>
-        </>
-      ) : (
-        <Form
-          joinSession={joinSession}
-          createSession={createSession}
-          sessionId={sessionId}
-          sessionIdChangeHandler={sessionIdChangeHandler}
-          userName={userName}
-          userNameChangeHandler={userNameChangeHandler}
-        />
-      )}
+    <div className="w-3/4">
+      <Session publisher={publisher} subscribers={subscribers} />
     </div>
   );
 }
