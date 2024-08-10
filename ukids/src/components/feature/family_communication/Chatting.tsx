@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Client, IMessage } from '@stomp/stompjs';
-import { jwtDecode } from 'jwt-decode';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../../../stores/authStore';
 
-import ChattingBox from '../components/feature/chatting/ChattingBox';
-import BlueButton from '../components/common/BlueButton';
-import FamilyMemberList from '../components/feature/family/FamilyMemberList';
+import ChattingBox from '../chatting/ChattingBox';
+import BlueButton from '../../common/BlueButton';
 import SockJS from 'sockjs-client';
 
 interface Message {
@@ -18,23 +16,14 @@ interface Message {
   update_time: string;
 }
 
-// JWT 토큰 디코딩 타입 정의
-interface DecodedToken {
-  userId: number;
-  // 필요한 다른 필드들 추가
-}
-
 const FamilyChatting = () => {
-  const { ukidsURL, token } = useAuthStore();
+  const { ukidsURL, token, decodedToken } = useAuthStore();
   const chatRoomId = 1;
   // const familyId = 1;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [stompClient, setStompClient] = useState<Client | null>(null);
-
-  // 디코딩된 토큰 정보 가져오기
-  const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -160,9 +149,9 @@ const FamilyChatting = () => {
   }, [messages]);
 
   return (
-    <div className="feature-box flex h-full">
+    <div className="w-3/4">
       {/* 좌측 영역 */}
-      <div className="flex flex-col w-3/4 p-2">
+      <div className="flex flex-col p-2 h-full">
         {/* 채팅 컨테이너 (메시지 + 입력창) */}
         <div className="flex flex-col h-full">
           {/* 메시지 영역 */}
@@ -199,9 +188,6 @@ const FamilyChatting = () => {
           </div>
         </div>
       </div>
-
-      {/* 우측 영역 */}
-      <FamilyMemberList isChattingRoom={true} />
     </div>
   );
 };

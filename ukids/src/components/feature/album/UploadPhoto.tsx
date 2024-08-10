@@ -1,165 +1,258 @@
-import React, { useState } from 'react'; // useState 훅 : 함수형 컴포넌트의 상태 관리
-
-import { useNavigate } from 'react-router-dom'; // useNavigate 훅 : 페이지를 이동
-
-import QuillEditor from './QuillEditor';
-// 로컬의 QuillEditor 컴포넌트를 가져옵니다.
-// QuillEditor 텍스트 에디터. 사용자가 입력한 HTML 형식의 텍스트를 처리
-
-import parse from 'html-react-parser';
-// html-react-parser 라이브러리에서 parse 함수 가져오기
-// parse 함수 : HTML 문자열 -> React 요소로 변환
-
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import BlueButton from '../../common/BlueButton';
+import WhiteButton from '../../common/WhiteButton';
 import DatePicker from 'react-datepicker';
-// react-datepicker 라이브러리에서 DatePicker 컴포넌트를 가져오기
-// DatePicker : 날짜 선택 기능 제공
-
 import 'react-datepicker/dist/react-datepicker.css';
-// react-datepicker의 기본 CSS 파일을 가져와서 DatePicker 컴포넌트의 스타일을 적용합니다.
+import { useNavigate } from 'react-router-dom';
 
-import './UploadPhoto.css'; 
-// CSS 파일 임포트
-
-
-// Photo 인터페이스 정의: imgSrc, text
 interface Photo {
   imgSrc: string;
   text: string;
 }
 
-// UploadPhoto 컴포넌트 정의
-// 사진, 현재 이미지, 설명, 앨범 제목, 날짜
+const UploadPhoto = () => {
+  const [title, setTitle] = useState(''); // 제목
+  const [albumDate, setAlbumDate] = useState(new Date()); // 날짜
 
+  const [photos, setPhotos] = useState<Photo[]>([]); // 사진
+  const [caption, setCaption] = useState(''); // 캡션
+  const [isEditingCaption, setIsEditingCaption] = useState(false); // 캡션 편집
+  // const [captionSaved, setCaptionSaved] = useState(false);
 
-const UploadPhoto: React.FC = () => {
+  const [familyId, setFamilyId] = useState<string | null>(null); // 가족 ID
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // 선택된 파일
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate(); // 페이지 이동을 위한 navigate 함수
 
+  useEffect(() => {
+    // 로그인 상태를 확인하고 사용자 정보를 가져오는 로직
+    const fetchUserInfo = async () => {
+      try {
+        // 예시: 사용자 정보를 가져오는 API 호출
+        const response = await axios.get('/api/user/info');
+        setFamilyId(response.data.familyId);
+      } catch (error) {
+        console.error('Failed to fetch user info', error);
+        // 로그인 페이지로 리디렉션 또는 오류 처리
 
-  const [photos, setPhotos] = useState<Photo[]>([]);
-    // 사용자가 추가한 모든 이미지와 설명을 저장.  (Photo 인터페이스대로)
-    //  "사진 추가" 버튼을 클릭하면, currentImage와 currentDescription의 값으로 업데이트.
-  
-  
-  const [currentImage, setCurrentImage] = useState<string | null>(null);
-    // 사용자가 이미지 파일 선택기를 통해 선택한 이미지를 임시로 저장하고
-    // 이 이미지를 photos 배열에 추가하고 null로 초기화
-    // 새 이미지 선택 시 마다 업데이트
+        // 사용되지 않는 변수들 사용하기 위해 임시로 작성한 코드
+        setPhotos((prev) => {
+          if (isEditingCaption) {
+            console.log('임시로 작성된 코드입니다.');
+          }
+          return prev;
+        });
+      }
+    };
 
+    fetchUserInfo();
+  }, []);
 
-  const [currentDescription, setCurrentDescription] = useState<string>('');
-    // 각 사진의 설명 (캡션)
-  
-
-  const [albumTitle, setAlbumTitle] = useState<string>('');
-    // 각 사진의 제목
-
-  const [albumDate, setAlbumDate] = useState<Date | null>(new Date());
-    // 앨범 날짜 (초기값: 현재 날짜)
-
-  const navigate = useNavigate();
-    // 페이지 이동을 위한 useNavigate 훅 
-
-
-  // 이미지 선택 시 호출되는 함수
-   // 사용자가 이미지 파일을 선택할 때 호출, 선택한 이미지를 브라우저에서 미리볼 수 있도록 함
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const newImage = URL.createObjectURL(event.target.files[0]); // 임시 URL 생성
-      setCurrentImage(newImage);
-      // setCurrentImage 함수 :  currentImage 상태를 업데이트합니다.
-      // newImage 변수에 저장된 파일의 URL -> currentImage 상태에 저장
+      setSelectedFile(event.target.files[0]);
     }
   };
 
-  // "사진 추가" 버튼 클릭 시 호출되는 함수
-  const handleAddPhoto = () => {
-    if (currentImage && currentDescription) {
-      setPhotos([...photos, { imgSrc: currentImage, text: currentDescription }]); // 선택 이미지, 설명 -> photos 배열에 추가
-      setCurrentImage(null); // currentImage 상태 null 초기화
-      setCurrentDescription(''); // currentDescription 상태 초기화
+  const handleFileClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
-  // 폼 제출(업로드) 시 호출되는 함수
-  const handleUpload = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // 폼 제출 기본 동작 방지
+  const handleCaptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newCaption = event.target.value;
+    if (newCaption.length > 20) {
+      alert('글자는 최대 20자까지 입니다');
+    } else {
+      setCaption(newCaption);
+    }
+  };
 
-    // 제목이 없을 경우 경고 메시지 표시
-    if (!albumTitle) {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleCaptionSave();
+    }
+  };
+
+  const handleCaptionSave = () => {
+    setIsEditingCaption(false);
+  };
+
+  const handleCaptionEditClick = () => {
+    setIsEditingCaption(true);
+  };
+
+  // 최종 등록 (수정하기)
+  const handleSubmit = async () => {
+    if (!title) {
       alert('제목을 입력해주세요!');
       return;
     }
 
-    // 날짜가 없을 경우 경고 메시지 표시
-    if (!albumDate) {
-      alert('날짜를 선택해 주세요!');
-      return;
+    try {
+      // 앨범 생성 API 호출
+      const albumResponse = await axios.post(
+        'https://i11b306.p.ssafy.io/api/album',
+        {
+          familyId: familyId as string,
+          title: title,
+          date: albumDate.toISOString().split('T')[0],
+        },
+      );
+
+      // navigate로 albums 페이지로 이동 시, photos 상태 전달
+      navigate('/albums', {
+        state: {
+          albumId: albumResponse.data.albumId,
+          title,
+          date: albumDate.toISOString().split('T')[0],
+          photos,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to create album', error);
     }
-
-    // 사진이 없을 경우 경고 메시지 표시
-    if (photos.length === 0) {
-      alert('최소한 한 장의 사진을 업로드해주세요!');
-      return;
-    }
-    
-
-    // 새로운 게시물 객체 생성
-    const newPost = {
-      date: albumDate.toISOString().split('T')[0], // 날짜를 ISO 형식으로 변환하여 저장
-      title: albumTitle,
-      photos,
-    };
-
-    // 기존 게시물을 로컬 스토리지에서 가져와 업데이트한 후 다시 저장
-    const storedPosts = JSON.parse(localStorage.getItem('posts') || '[]');
-    const updatedPosts = [...storedPosts, newPost];
-     // 기존 게시물 배열(storedPosts)에 새로운 게시물(newPost)을 추가합니다.
-    localStorage.setItem('posts', JSON.stringify(updatedPosts));
-
-    navigate('/albums'); // 업로드 후 앨범 페이지로 이동
   };
 
   return (
-    <div className="feature-box">
-  
-      <form onSubmit={handleUpload} className="upload-form">
-        {/* 앨범 제목 입력 필드 */}
-        <input
-          type="text"
-          placeholder="앨범 제목을 입력하세요"
-          value={albumTitle}
-          onChange={(e) => setAlbumTitle(e.target.value)}
-        />
-        {/* 앨범 날짜 선택 필드 */}
-        <DatePicker
-          selected={albumDate}
-          onChange={(date: Date | null) => setAlbumDate(date)}
-          dateFormat="yyyy/MM/dd"
-          placeholderText="앨범 날짜를 선택하세요"
-        />
-        {/* 이미지 파일 선택 필드 */}
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {/* 설명 입력 필드 (QuillEditor 사용) */}
-        <QuillEditor value={currentDescription} onChange={setCurrentDescription} />
-        {/* 사진 추가 버튼 */}
-        <button type="button" onClick={handleAddPhoto} className="common-btn mt-10">
-          사진 추가
-        </button>
-        {/* 업로드 버튼 */}
-        <button type="submit" className="common-btn mt-10">
-          업로드
-        </button>
-      </form>
-      <div className="uploaded-photos-container">
-        {/* 업로드된 사진과 설명 목록 */}
-        {photos.map((photo, index) => (
-          <div key={index} className="uploaded-photo">
-            <img src={photo.imgSrc} alt={`Upload ${index + 1}`} />
-            <div>{parse(photo.text)}</div> {/* HTML로 파싱하여 렌더링 */}
-
+    <div className="feature-box relative w-[911px] h-[576px] overflow-x-hidden overflow-y-hidden">
+      {/* 상단 고정 영역 */}
+      <div className=" left-88 top-37 w-[911px] h-[150px] bg-[#fff] z-50">
+        <div className="absolute left-0 top-0 w-[911px] h-[150px] bg-[#fff] rounded-[20px] "></div>
+        <div className="absolute left-[94px] top-[20px] w-[726px] h-[50px] border-[solid] border-#ddd border">
+          {/* 제목 입력  */}
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="제목을 입력하세요"
+            className="absolute -translate-y-1/2 left-[-10px] top-1/2 w-[750px] form-control"
+            style={{
+              fontSize: '20px', // 폰트 크기
+              fontWeight: '400', // 폰트 진하기
+              color: 'black', // 텍스트 색상
+              textAlign: 'center', // 텍스트 중앙 정렬
+              borderRadius: '0', // 둥근 모서리 제거
+              border: 'none', // 테두리 제거
+              borderBottom: '2px solid #ddd', // 아래 테두리 추가
+              paddingBottom: '10px', // 아래쪽 패딩 추가
+              backgroundColor: 'transparent', // 배경색 투명
+              outline: 'none', // 입력 상자 제거
+            }}
+          />
+        </div>
+        <div className="absolute -translate-x-1/2 left-1/2 top-[77px] w-[701px] h-[30px]">
+          <WhiteButton
+            name="목록"
+            path="/albums"
+            className="absolute left-0 top-0 w-[80px] h-[30px]"
+          />
+          <div className="absolute left-1/2 top-0 transform -translate-x-1/2">
+            <DatePicker
+              selected={albumDate}
+              onChange={(date: Date | null) => {
+                if (date) {
+                  setAlbumDate(date);
+                }
+              }}
+              dateFormat="yyyy/MM/dd"
+              className="text-center w-full"
+            />
           </div>
-        ))}
+        </div>
+        <div className="absolute translate-x-[45%] left-1/2 top-[77px] w-[701px] h-[30px]">
+          <BlueButton
+            name="등록"
+            path="/albums"
+            className="submit-btn"
+            onClick={handleSubmit}
+          />
+        </div>
+      </div>
+
+      {/* 이하 여백 */}
+      <img
+        className="absolute left-[347px] top-[60px] overflow-hidden"
+        width="543"
+        height="494"
+        src="/src/assets/frame1.png"
+        alt="frame1"
+      />
+      <div className="absolute left-[78px] top-[154px] w-[302px] h-[358px]">
+        <div className="absolute left-[35px] top-[12px] w-[99px] h-[29px]">
+          <div
+            className="absolute left-[2px] top-[3px] w-[94px] h-[23px] bg-[#fff] rounded-[39px]"
+            style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+            onClick={handleFileClick}
+          >
+            <input
+              type="file"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+              className="hidden"
+            />
+            <div className="absolute left-[23px] top-[3px] text-[12px] font-['Adamina'] text-[#777] whitespace-nowrap cursor-pointer">
+              파일 찾기
+            </div>
+          </div>
+        </div>
+        <div className="absolute left-[187px] top-[312px] w-[99px] h-[29px]">
+          <div
+            className="absolute left-[23px] top-[6px] w-[67px] h-[23px] bg-[#fff] rounded-[39px]"
+            style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+          >
+            <div className="absolute left-[23px] top-[3px] text-[12px] font-['Adamina'] text-[#777]">
+              캡션등록
+            </div>
+          </div>
+        </div>
+        <div className="absolute left-[21px] top-[41px] w-[256px] flex flex-col items-end justify-start gap-[8px] py-[15px] px-[21px] overflow-hidden">
+          <div className="relative w-[214px] h-[204px] shrink-0 bg-[#fff] border-[1px] border-solid border-[#00000033] overflow-hidden">
+            {selectedFile ? (
+              <img
+                src={URL.createObjectURL(selectedFile)}
+                alt="Selected"
+                className="absolute left-[6px] top-[9px] w-[208px] h-[184px] object-cover"
+              />
+            ) : (
+              <div className="absolute left-[6px] top-[9px] w-[208px] h-[184px] text-[15px] font-['Inter'] text-[#000] text-center flex flex-col justify-center">
+                이미지를
+                <br />
+                업로드 업로드하세요.
+              </div>
+            )}
+          </div>
+          <div className="w-[213px] h-[26px] shrink-0 flex flex-col items-start justify-start bg-[#fff] border-[1px] border-solid border-[#00000066] rounded-md">
+            <div className="relative w-[190px] h-[24px] shrink-0 ">
+              <input
+                type="text"
+                value={caption}
+                onChange={handleCaptionChange}
+                onKeyDown={handleKeyDown}
+                placeholder="↳ 사진 캡션을 작성하세요."
+                onBlur={handleCaptionSave}
+                autoFocus
+                className="absolute inset-0 w-full h-full px-2 text-[14px] font-['Inter'] text-[#868585] text-center outline-none rounded-md"
+                maxLength={20}
+              />
+
+              <div className="absolute left-[180px] top-[-5px] w-[36px] h-[35px] flex flex-row items-center justify-start p-[0px]">
+                <img
+                  width="14"
+                  height="14"
+                  src="/src/assets/write.png"
+                  alt="write"
+                  onClick={handleCaptionEditClick}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
 export default UploadPhoto;

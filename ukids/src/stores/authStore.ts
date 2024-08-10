@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // 여기서 임포트 할때 default로 임포트
+import { jwtDecode } from 'jwt-decode';
 import api from '../util/api';
 
 // 타입스크립트 타입 설정...
@@ -18,7 +17,6 @@ interface AuthState {
   setToken: (token: string | null) => void;
 
   ukidsURL: string;
-  loading: boolean;
   error: string | null;
 
   // 회원정보조회
@@ -84,7 +82,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // 기본 값들
   ukidsURL: ukidsURL,
-  loading: false,
   error: null,
 
   /***** 회원 정보 관리 *****/
@@ -116,47 +113,31 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   /***** 각종 방 ID들 설정 *****/
 
-  // 가족방 생성 시 가족방 ID 얻어오기
+  // 가족방 생성 시 가족방 ID 얻어오고
+  // openvidu sessionId 생성 요청하기
+  // 가족 ID로 채팅방 ID 얻어오기
   familyId: NaN,
   setfamilyId: (name, password) => async () => {
-    set({ loading: true, error: null });
     try {
-      const response = await axios.post(
-        `${ukidsURL}/api/family`,
-        {
-          name,
-          password,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${get().token}`,
-          },
-        },
-      );
-      set({
-        familyId: Number.parseInt(response.data),
-        loading: false,
-      });
+      const response = await api.post(`/family`, { name, password });
+      const newFamilyId = Number.parseInt(response.data.familyId);
 
-      // 채팅방 ID 생성
-      get().setChatRoomId(get().familyId);
+      set({ familyId: newFamilyId });
+
+      await api.post(`/webrtc`, { familyId: newFamilyId });
+      await get().setChatRoomId(newFamilyId);
     } catch (error: any) {
       set({ error: error.message });
     }
   },
 
-  // 가족방 생성 시 가족 ID로 채팅방 ID 얻어오기
+  // 가족 ID로 채팅방 ID 얻어오기
   chatRoomId: NaN,
   setChatRoomId: (familyId) => async () => {
-    set({ loading: true, error: null });
+    set({ error: null });
     try {
-      const response = await axios.post(`${ukidsURL}/api/chat/room`, {
-        familyId,
-      });
-      set({
-        chatRoomId: Number.parseInt(response.data),
-        loading: false,
-      });
+      const response = await api.post(`/chat/room`, { familyId });
+      set({ chatRoomId: Number.parseInt(response.data.chatRoomId) });
     } catch (error: any) {
       set({ error: error.message });
     }
