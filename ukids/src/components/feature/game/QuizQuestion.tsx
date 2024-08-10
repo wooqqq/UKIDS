@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './gamepart.css';
 import GamePageHeader from './GamePageHeader';
+import api from '../../../util/api';
 
 const QuizQuestion = () => {
   const [question, setQuestion] = useState('');
@@ -35,16 +36,26 @@ const QuizQuestion = () => {
       return;
     }
 
-    if (selectedOption) {
-      console.log(`선택한 옵션: ${selectedOption}`);
-    } else {
-      console.log(`입력한 답변: ${answer}`);
-    }
+    const quizType = selectedOption ? 'OX' : 'MULTIPLE_CHOICE';
+
+    const data = {
+      question,
+      answer,
+      quizType,
+    };
 
     if (applyToAll) {
       // 가족방에 있는 사람들의 ID를 얻어와서 이 질문 등록 요청
     } else {
       // 내 질문만 업데이트 요청
+      api
+        .post('/quiz-question', data)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   };
 
