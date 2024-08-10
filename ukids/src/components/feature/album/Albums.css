@@ -7,6 +7,22 @@
     background: #fff;
     overflow-x: hidden; /* 가로 스크롤 방지 */
     overflow-y: hidden; /* 세로 스크롤 방지 */
+
+         /* 스크롤 바 디자인 추가 */
+         ::-webkit-scrollbar {
+            width: 6px; /* 스크롤 바의 너비 조절 */
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; /* 스크롤 바 트랙의 색상 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: darkgrey; /* 스크롤 바 썸의 색상 */
+            border-radius: 3px; /* 썸의 모서리를 둥글게 */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #b0b0b0; /* 썸 호버 시 색상 변경 */
+        }
+
   }
   
   .top-fixed-area {
@@ -17,43 +33,51 @@
     width: 100%;
     
   }
-  
   .album-container {
     position: relative;
     padding-top: 150px; /* 상단 고정 영역만큼의 패딩 */
-    
 }
-  
-
-
-  .albums-scrollable {
+.albums-scrollable {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 네 개의 칼럼 */
-    grid-gap: 20px; /* 칼럼과 행 사이의 간격 */
-    padding: 20px; /* 내부 패딩 */
-    margin: 0 20px; /* 외부 좌우 마진 */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 최소 너비를 250px로 증가 */
+    grid-gap: 40px; /* 칼럼과 행 사이의 간격 */
+    padding: 10px; /* 내부 패딩 */
+    margin: 0 10px; /* 외부 좌우 마진 */
     max-height: 426px; /* 스크롤 영역의 최대 높이 설정 */
     overflow-y: auto; /* 세로 스크롤 활성화 */
-  }
-  
-  .album-item {
+    overflow-x: hidden; /* 세로 스크롤 활성화 */
+
+}
+
+.album-item {
     display: flex;
+    width: 270px;
     flex-direction: column;
     align-items: center; /* 아이템들을 중앙에 배치 */
-    padding: 20px; /* 아이템 주변 패딩 */
+    padding: 20px; /* 아이템 주변 패딩 조절 */
     background-color: #fff; /* 배경색 */
     border-radius: 10px; /* 둥근 모서리 */
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-    
-  }
-  
-  .album-item img {
-    width: 100%; /* 이미지 너비를 아이템에 맞춤 */
-    height: auto; /* 높이 자동 조정 */
-  }
-  
-  .album-item-date, .album-item-title {
-    margin-top: 25px; /* 날짜와 제목 상단 마진 */
-    font-size: 15px;
 }
 
+.album-item:hover {
+    background-color: #f0eded; /* 마우스 호버 시 배경색을 진하게 변경 */
+}
+
+
+
+.album-item img {
+    width: 100%; /* 이미지 너비를 아이템에 맞춤 */
+    height: 220px; /* 높이 자동 조정 */
+}
+
+.album-item-date {
+    margin-top: 10px; /* 날짜와 제목 상단 마진 조절 */
+    font-size: 12px; /* 폰트 사이즈 조절 */
+}
+
+.album-item-title {
+    margin-top: 10px; /* 날짜와 제목 상단 마진 조절 */
+    font-size: 17px; /* 폰트 사이즈 조절 */
+    font-weight: bold; /* 텍스트를 볼드체로 설정 */
+}
