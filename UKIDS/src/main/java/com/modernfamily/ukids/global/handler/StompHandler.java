@@ -29,16 +29,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 
 import java.security.Key;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Order(Ordered.HIGHEST_PRECEDENCE + 99)  // Spring security보다 우선순위를 높여야 함
+//@Order(Ordered.HIGHEST_PRECEDENCE + 99)  // Spring security보다 우선순위를 높여야 함
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtConfig jwtConfig;
@@ -72,7 +74,14 @@ public class StompHandler implements ChannelInterceptor {
 
             String userId = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("id", String.class);
 
-            accessor.addNativeHeader("User", userId);
+            Principal userPrincipal = new Principal() {
+                @Override
+                public String getName() {
+                    return userId;
+                }
+            };
+
+            accessor.setUser(userPrincipal);
         }
 
         return message;
