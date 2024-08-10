@@ -26,15 +26,27 @@
 
 /* 게임 버튼 스타일 */
 .game-btn-common {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: 'ONE Mobile POP';
   font-size: 2rem;
   color: white;
+  padding: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
-/* 가족 퀴즈 긍정 */
-.game-btn-quiz {
-  rounded: full;
+/* 가족 퀴즈 노랑 */
+.game-btn-quiz-y {
+  border-radius: 100rem;
   background: #ffbf33;
+}
+
+/* 가족 퀴즈 회색 */
+.game-btn-quiz-g {
+  border-radius: 100rem;
+  background: #777777;
 }
 
 /* 콜마넴 긍정 */
