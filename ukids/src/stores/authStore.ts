@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { jwtDecode } from 'jwt-decode';
 import api from '../util/api';
 
 // 타입스크립트 타입 설정...
