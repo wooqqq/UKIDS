@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,16 +26,16 @@ public class QuizController {
     @MessageMapping("/quiz/enter/{id}")
     @SendTo("/topic/quiz/{id}")
     public Map<String, Object> enterQuizRoom(@PathVariable("id") Long familyId,
-                                             @Header("nativeHeaders") Object header)
+                                             SimpMessageHeaderAccessor headerAccessor)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        String userId = header.toString().split("User=\\[")[1].split("]")[0];
+        String userId = headerAccessor.getUser().getName();
         return quizService.enterQuizRoom(familyId, userId);
     }
 
     // 유저 퇴장
     @MessageMapping("/quiz/exit/{id}")
-    public void exitQuizRoom(@PathVariable("id") Long familyId, @Header("nativeHeaders") Object header) {
-        String userId = header.toString().split("User=\\[")[1].split("]")[0];
+    public void exitQuizRoom(@PathVariable("id") Long familyId, SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
         quizService.exitQuizRoom(familyId, userId);
     }
 
@@ -56,8 +57,8 @@ public class QuizController {
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성 => boolean return
     @MessageMapping("/quiz/ready/{id}")
     @SendTo("/topic/quiz/{id}")
-    public Map<String, Object> isReadyGameStart(@PathVariable("id") Long familyId, @Header("nativeHeaders") Object header) {
-        String userId = header.toString().split("User=\\[")[1].split("]")[0];
+    public Map<String, Object> isReadyGameStart(@PathVariable("id") Long familyId, SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
         return quizService.isReadyGameStart(familyId, userId);
     }
 
@@ -73,8 +74,8 @@ public class QuizController {
     @SendTo("/topic/quiz/{id}")
     public Map<String, Object> checkQuizAnswer(@PathVariable("id") Long familyId,
                                                @RequestParam("inputAnswer")String inputAnswer,
-                                               @Header("nativeHeaders") Object header) {
-        String userId = header.toString().split("User=\\[")[1].split("]")[0];
+                                               SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
         return quizService.checkQuizAnswer(familyId, inputAnswer, userId);
     }
 }
