@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
@@ -23,13 +24,13 @@ public class ChatController {
     private final RedisPublisher redisPublisher;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    @SendTo("/sub/chat/message/${roomId}")
-    public ChatMessage message(ChatMessage message, SimpMessageHeaderAccessor headerAccessor) {
+    public void message(ChatMessage message, SimpMessageHeaderAccessor headerAccessor) {
         String userId = headerAccessor.getUser().getName();
 
 
@@ -38,7 +39,7 @@ public class ChatController {
 
         if (existUser.isEmpty() || existUser == null) {
             log.info("########## exist user : {} ############", existUser);
-            return null;
+            return;
         }
 
         User loginUser = existUser.get();
@@ -57,7 +58,7 @@ public class ChatController {
             redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomId()), message);
         }
         Long roomId = message.getRoomId();
-        return message;
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 
     /**
