@@ -1,6 +1,6 @@
 package com.modernfamily.ukids.domain.game.quiz.model.repository;
 
-import com.modernfamily.ukids.domain.game.gameResult.dto.GameResultSaveDto;
+import com.modernfamily.ukids.domain.game.quizResult.dto.GameResultSaveDto;
 import com.modernfamily.ukids.domain.game.quiz.dto.Participate;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;

@@ -1,10 +1,9 @@
 package com.modernfamily.ukids.domain.game.quiz.dto;
 
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
+import com.modernfamily.ukids.domain.game.quizResult.entity.GameType;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.List;

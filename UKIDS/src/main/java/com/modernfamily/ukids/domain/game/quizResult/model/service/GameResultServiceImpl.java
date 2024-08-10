@@ -1,10 +1,10 @@
-package com.modernfamily.ukids.domain.game.gameResult.model.service;
+package com.modernfamily.ukids.domain.game.quizResult.model.service;
 
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
-import com.modernfamily.ukids.domain.game.gameResult.dto.GameResultSaveDto;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameResult;
-import com.modernfamily.ukids.domain.game.gameResult.model.repository.GameResultRepoitory;
+import com.modernfamily.ukids.domain.game.quizResult.dto.GameResultSaveDto;
+import com.modernfamily.ukids.domain.game.quizResult.entity.GameResult;
+import com.modernfamily.ukids.domain.game.quizResult.model.repository.GameResultRepoitory;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;

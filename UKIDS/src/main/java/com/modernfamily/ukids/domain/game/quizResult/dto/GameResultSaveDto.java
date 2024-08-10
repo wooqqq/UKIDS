@@ -1,7 +1,6 @@
-package com.modernfamily.ukids.domain.game.gameResult.dto;
+package com.modernfamily.ukids.domain.game.quizResult.dto;
 
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameResult;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
+import com.modernfamily.ukids.domain.game.quizResult.entity.GameType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

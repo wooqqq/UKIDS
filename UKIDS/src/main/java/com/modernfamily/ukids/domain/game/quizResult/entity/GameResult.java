@@ -1,7 +1,7 @@
-package com.modernfamily.ukids.domain.game.gameResult.entity;
+package com.modernfamily.ukids.domain.game.quizResult.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
-import com.modernfamily.ukids.domain.game.gameResult.dto.GameResultSaveDto;
+import com.modernfamily.ukids.domain.game.quizResult.dto.GameResultSaveDto;
 import com.modernfamily.ukids.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Getter
