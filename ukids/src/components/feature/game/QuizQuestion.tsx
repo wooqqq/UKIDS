@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './gamepart.css';
 import GamePageHeader from './GamePageHeader';
-import api from '../../../util/api';
+import api from '@/util/api';
 
 const QuizQuestion = () => {
   const [question, setQuestion] = useState('');
@@ -28,7 +28,6 @@ const QuizQuestion = () => {
 
   // 폼 제출 시 호출되는 함수
   const handleSubmit = (e: any) => {
-    console.log('제출');
     e.preventDefault();
 
     if (!question || (!answer && !selectedOption)) {
@@ -36,13 +35,24 @@ const QuizQuestion = () => {
       return;
     }
 
-    const quizType = selectedOption ? 'OX' : 'MULTIPLE_CHOICE';
+    let quizType = '';
+    let ans = '';
+
+    if (selectedOption) {
+      ans = selectedOption;
+      quizType = 'OX';
+    } else {
+      ans = answer;
+      quizType = 'MULTIPLE_CHOICE';
+    }
 
     const data = {
       question,
-      answer,
+      answer: ans,
       quizType,
     };
+
+    console.log(data);
 
     if (applyToAll) {
       // 가족방에 있는 사람들의 ID를 얻어와서 이 질문 등록 요청
@@ -50,10 +60,10 @@ const QuizQuestion = () => {
       // 내 질문만 업데이트 요청
       api
         .post('/quiz-question', data)
-        .then((response) => {
+        .then((response: any) => {
           console.log(response.data);
         })
-        .catch((e) => {
+        .catch((e: any) => {
           console.error(e);
         });
     }

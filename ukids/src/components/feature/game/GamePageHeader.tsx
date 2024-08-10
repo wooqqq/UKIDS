@@ -17,7 +17,7 @@ const GamePageHeader = ({ title }: GamePageHeader) => {
         {/* 좌측 상단 버튼 */}
         <div className="">
           <button
-            className="w-20 h-8 ml-8 bg-white rounded-[50px] shadow flex justify-center items-center gap-1 text-[#777777] font-medium text-sm"
+            className="w-20 h-8 ml-8 rounded-[50px] shadow flex justify-center items-center gap-1 text-[#777777] font-medium text-sm"
             onClick={onClick}
           >
             {`< 이전`}
