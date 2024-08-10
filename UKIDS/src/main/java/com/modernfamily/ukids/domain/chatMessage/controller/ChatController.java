@@ -9,6 +9,7 @@ import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
@@ -25,8 +26,8 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message) {
-        String userId = CustomUserDetails.contextGetUserId();
+    public void message(ChatMessage message, @Header("nativeHeaders") Object header) {
+        String userId = header.toString().split("User=\\[")[1].split("]")[0];
 
         User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
