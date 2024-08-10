@@ -1,0 +1,22 @@
+.input-content{
+    border: solid 1px black;
+    resize: none;
+}
+
+.image-box{
+    display: flex;
+    
+}
+
+.input-file-box{
+    border: 1px solid #FFEFCC;
+    text-align: center;
+    width: 450px;
+    height: 253.125px;
+    flex-shrink: 0;
+    fill: #FFF;
+    stroke-width: 3px;
+    stroke: #FFEFCC;
+    opacity: var(--sds-size-stroke-border);
+    filter: drop-shadow(0px 0px 7px rgba(153, 153, 153, 0.25)); 
+}

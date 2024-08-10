@@ -91,7 +91,7 @@ const App = () => {
             {/* 앨범 중첩 라우팅 */}
             <Route path="/albums/:photoId" element={<AlbumDetail />} />
             <Route path="/albums/upload" element={<UploadPhoto />} />
-            <Route path="/paintdiary" element={<PaintingDiary />} />
+            <Route path="/paintdiary/*" element={<PaintingDiary />} />
             <Route path="/growthdiary" element={<GrowthDiary />} />
             <Route path="/chat/*" element={<FamilyVideoCall />} />
             <Route path="/game" element={<GameSelect />}></Route>
