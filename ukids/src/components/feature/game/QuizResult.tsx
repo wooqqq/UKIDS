@@ -1,5 +1,5 @@
-import GameButton from '../../common/GameButton';
-import './gamebutton.css';
+import GameButton from './GameButton';
+import './gamepart.css';
 
 const QuizQnA = () => {
   return (

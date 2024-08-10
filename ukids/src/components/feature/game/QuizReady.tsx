@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import GameButton from '../../common/GameButton';
+import GameButton from './GameButton';
 import FamilyMemberList from '../family/FamilyMemberList';
-import '../../common/button.css';
+import './gamepart.css';
 
 const QuizReady = () => {
   const [isReady, setIsReady] = useState<boolean>(false);

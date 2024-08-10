@@ -23,3 +23,21 @@
   font-size: 56px;
   font-family: 'ONE-Mobile-POP';
 }
+
+/* 게임 버튼 스타일 */
+.game-btn-common {
+  font-family: 'ONE Mobile POP';
+  font-size: 2rem;
+  color: white;
+}
+
+/* 가족 퀴즈 긍정 */
+.game-btn-quiz {
+  rounded: full;
+  background: #ffbf33;
+}
+
+/* 콜마넴 긍정 */
+.game-btn-callmyname {
+  background: #9f6ad5;
+}

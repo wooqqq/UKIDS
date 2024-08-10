@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import './gamebutton.css';
+import './gamepart.css';
 
 const CallMyNameMain = () => {
   const nav = useNavigate();
