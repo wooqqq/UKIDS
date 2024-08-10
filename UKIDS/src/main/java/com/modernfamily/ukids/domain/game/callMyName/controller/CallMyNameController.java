@@ -1,7 +1,7 @@
-package com.modernfamily.ukids.domain.game.callmyname.controller;
+package com.modernfamily.ukids.domain.game.callMyName.controller;
 
-import com.modernfamily.ukids.domain.game.callmyname.dto.CallMyNameRoom;
-import com.modernfamily.ukids.domain.game.callmyname.model.service.CallMyNameServiceImpl;
+import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameServiceImpl;
 import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;

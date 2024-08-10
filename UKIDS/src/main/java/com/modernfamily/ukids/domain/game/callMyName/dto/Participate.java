@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.game.callmyname.dto;
+package com.modernfamily.ukids.domain.game.callMyName.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

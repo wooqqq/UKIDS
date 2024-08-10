@@ -1,8 +1,7 @@
-package com.modernfamily.ukids.domain.game.callmyname.dto;
+package com.modernfamily.ukids.domain.game.callMyName.dto;
 
-import com.modernfamily.ukids.domain.game.callmyname.entity.CallMyNameKeyword;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameKeyword;
 import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
-import com.querydsl.codegen.Keywords;
 import lombok.Builder;
 import lombok.Getter;
 

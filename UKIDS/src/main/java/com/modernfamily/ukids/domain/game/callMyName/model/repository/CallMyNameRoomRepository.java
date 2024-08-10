@@ -1,8 +1,8 @@
-package com.modernfamily.ukids.domain.game.callmyname.model.repository;
+package com.modernfamily.ukids.domain.game.callMyName.model.repository;
 
-import com.modernfamily.ukids.domain.game.callmyname.dto.CallMyNameRoom;
-import com.modernfamily.ukids.domain.game.callmyname.dto.Participate;
-import com.modernfamily.ukids.domain.game.callmyname.model.service.CallMyNameService;
+import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.dto.Participate;
+import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameService;
 import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

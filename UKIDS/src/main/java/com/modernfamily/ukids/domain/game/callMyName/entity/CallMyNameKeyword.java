@@ -1,4 +1,4 @@
-package com.modernfamily.ukids.domain.game.callmyname.entity;
+package com.modernfamily.ukids.domain.game.callMyName.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

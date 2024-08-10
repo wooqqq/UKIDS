@@ -1,8 +1,8 @@
-package com.modernfamily.ukids.domain.game.callmyname.model.service;
+package com.modernfamily.ukids.domain.game.callMyName.model.service;
 
-import com.modernfamily.ukids.domain.game.callmyname.dto.CallMyNameRoom;
-import com.modernfamily.ukids.domain.game.callmyname.model.repository.CallMyNameRepository;
-import com.modernfamily.ukids.domain.game.callmyname.model.repository.CallMyNameRoomRepository;
+import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRepository;
+import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRoomRepository;
 import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
