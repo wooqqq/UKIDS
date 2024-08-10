@@ -10,7 +10,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends BaseTimeEntity {
 
     public User() {
