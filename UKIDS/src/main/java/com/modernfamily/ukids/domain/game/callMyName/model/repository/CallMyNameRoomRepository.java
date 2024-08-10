@@ -3,7 +3,6 @@ package com.modernfamily.ukids.domain.game.callMyName.model.repository;
 import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
 import com.modernfamily.ukids.domain.game.callMyName.dto.Participate;
 import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameService;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +13,8 @@ public class CallMyNameRoomRepository {
     private final CallMyNameService callMyNameService;
 
     // 게임방 생성
-    public CallMyNameRoom createCallMyNameRoom(GameType gameType, String sessionId) {
-        return CallMyNameRoom.createCallMyNameRoom(gameType, sessionId);
+    public CallMyNameRoom createCallMyNameRoom(String sessionId) {
+        return CallMyNameRoom.createCallMyNameRoom(sessionId);
     }
 
     // 게임 참여

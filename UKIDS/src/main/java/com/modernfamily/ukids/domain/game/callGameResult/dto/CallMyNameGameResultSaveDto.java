@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.game.callGameResult.dto;
 
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,6 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class CallMyNameGameResultSaveDto {
-
-    private GameType gameType;
 
     private long correctRound;
 
@@ -26,9 +23,8 @@ public class CallMyNameGameResultSaveDto {
     private Long familyId;
 
     @Builder
-    private CallMyNameGameResultSaveDto(GameType gameType, long correctRound, String keyword, long rank,
+    private CallMyNameGameResultSaveDto(long correctRound, String keyword, long rank,
                               LocalDate date, String participantId, Long familyId) {
-        this.gameType = gameType;
         this.correctRound = correctRound;
         this.keyword = keyword;
         this.rank = rank;
@@ -37,10 +33,9 @@ public class CallMyNameGameResultSaveDto {
         this.familyId = familyId;
     }
 
-    public static CallMyNameGameResultSaveDto createGameResultDto(GameType gameType, long correctRound, String keyword,
+    public static CallMyNameGameResultSaveDto createGameResultDto(long correctRound, String keyword,
                                                         long rank, String participantId, Long familyId) {
         return CallMyNameGameResultSaveDto.builder()
-                .gameType(gameType)
                 .correctRound(correctRound)
                 .keyword(keyword)
                 .rank(rank)

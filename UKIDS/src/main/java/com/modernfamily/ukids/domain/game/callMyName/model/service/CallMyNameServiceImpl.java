@@ -3,7 +3,6 @@ package com.modernfamily.ukids.domain.game.callMyName.model.service;
 import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
 import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRepository;
 import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRoomRepository;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
@@ -34,12 +33,12 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     
     // 게임방 생성
     @Override
-    public Map<String, Object> enterCallMyNameRoom(Long familyId, GameType gameType, Principal principal)
+    public Map<String, Object> enterCallMyNameRoom(Long familyId, Principal principal)
             throws OpenViduJavaClientException, OpenViduHttpException {
         String userId = principal.getName();
         if (!callMyNameRooms.containsKey(familyId)) {
             String sessionId = webrtcService.initializeSessions(null);
-            callMyNameRoomRepository.createCallMyNameRoom(gameType, sessionId);
+            callMyNameRoomRepository.createCallMyNameRoom(sessionId);
         }
 
         if (callMyNameRoomRepository.isExistUser(userId, callMyNameRooms.get(familyId)))

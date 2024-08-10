@@ -1,7 +1,6 @@
 package com.modernfamily.ukids.domain.game.callMyName.dto;
 
 import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameKeyword;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +10,6 @@ import java.util.Map;
 
 @Getter
 public class CallMyNameRoom {
-    private GameType gameType;
     private String sessionId;
     private boolean isStart;
     private Long numberOfParticipants;
@@ -21,10 +19,9 @@ public class CallMyNameRoom {
     private Map<Long, CallMyNameKeyword> randomKeywordList;
 
     @Builder
-    private CallMyNameRoom(GameType gameType, String sessionId, boolean isStart,
+    private CallMyNameRoom(String sessionId, boolean isStart,
                            Long numberOfParticipants, Long turnCount, int currentTurnIndex,
                            HashMap<String, Participate> participantList, Map<Long, CallMyNameKeyword> randomKeywordList) {
-        this.gameType = gameType;
         this.sessionId = sessionId;
         this.isStart = isStart;
         this.numberOfParticipants = numberOfParticipants;
@@ -34,9 +31,8 @@ public class CallMyNameRoom {
         this.randomKeywordList = randomKeywordList;
     }
 
-    public static CallMyNameRoom createCallMyNameRoom(GameType gameType, String sessionId) {
+    public static CallMyNameRoom createCallMyNameRoom(String sessionId) {
         return CallMyNameRoom.builder()
-                .gameType(gameType)
                 .sessionId(sessionId)
                 .isStart(false)
                 .numberOfParticipants(0L)

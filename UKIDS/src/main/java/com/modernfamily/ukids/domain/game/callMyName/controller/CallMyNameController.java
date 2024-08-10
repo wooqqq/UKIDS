@@ -2,7 +2,6 @@ package com.modernfamily.ukids.domain.game.callMyName.controller;
 
 import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
 import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameService;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +24,9 @@ public class CallMyNameController {
     @MessageMapping("/call/enter/{id}")
     @SendTo("/topic/call/{id}")
     public Map<String, Object> enterCallMyNameRoom(@PathVariable("id") Long familyId,
-                                                   @RequestParam("gameType")GameType gameType,
                                                    Principal principal)
     throws OpenViduJavaClientException, OpenViduHttpException {
-        return callMyNameService.enterCallMyNameRoom(familyId, gameType, principal);
+        return callMyNameService.enterCallMyNameRoom(familyId, principal);
     }
 
     // 참가자 퇴장

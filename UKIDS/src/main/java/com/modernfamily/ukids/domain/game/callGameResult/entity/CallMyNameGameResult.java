@@ -2,7 +2,6 @@ package com.modernfamily.ukids.domain.game.callGameResult.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
 import com.modernfamily.ukids.domain.game.callGameResult.dto.CallMyNameGameResultSaveDto;
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import com.modernfamily.ukids.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,10 +17,6 @@ public class CallMyNameGameResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_result_id")
     private Long gameResultId;
-
-    @Column(name = "game_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private GameType gameType;
 
     @Column(name = "correct_round")
     private Long correctRound;
@@ -44,9 +39,8 @@ public class CallMyNameGameResult {
     private Family family;
 
     @Builder
-    private CallMyNameGameResult(GameType gameType, Long correctRound, String keyword, Long rank,
+    private CallMyNameGameResult(Long correctRound, String keyword, Long rank,
                        LocalDate date, User participant, Family family) {
-        this.gameType = gameType;
         this.correctRound = correctRound;
         this.keyword = keyword;
         this.rank = rank;
@@ -57,7 +51,6 @@ public class CallMyNameGameResult {
 
     public static CallMyNameGameResult createGameResult(CallMyNameGameResultSaveDto callMyNameGameResultSaveDto, User participant, Family family) {
         return CallMyNameGameResult.builder()
-                .gameType(callMyNameGameResultSaveDto.getGameType())
                 .correctRound(callMyNameGameResultSaveDto.getCorrectRound())
                 .keyword(callMyNameGameResultSaveDto.getKeyword())
                 .rank(callMyNameGameResultSaveDto.getRank())

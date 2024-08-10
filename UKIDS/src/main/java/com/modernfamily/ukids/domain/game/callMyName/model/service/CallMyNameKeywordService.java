@@ -33,7 +33,11 @@ public class CallMyNameKeywordService {
         // 해당 결과값이 List 에 잘 들어가는지 모르겠음
         List<String> chatgptAnswer = chatgptService.runPrompt(prompt);
 
-        return null;
+        for (String name : chatgptAnswer) {
+            keywords.add(new CallMyNameKeyword(keywordType, name));
+        }
+
+        return keywords;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.modernfamily.ukids.domain.game.callMyName.model.repository;
 
+import com.modernfamily.ukids.domain.game.callGameResult.dto.CallMyNameGameResultSaveDto;
 import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
 import com.modernfamily.ukids.domain.game.callMyName.dto.Participate;
-import com.modernfamily.ukids.domain.game.gameResult.dto.GameResultSaveDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -28,13 +28,13 @@ public class CallMyNameRepository {
 
     // 게임 종료 및 게임 결과 저장
     // 미완
-    public List<GameResultSaveDto> endGame(Long familyId, CallMyNameRoom callMyNameRoom) {
+    public List<CallMyNameGameResultSaveDto> endGame(Long familyId, CallMyNameRoom callMyNameRoom) {
 
         List<Map.Entry<String, Participate>> entryList = new ArrayList<>(callMyNameRoom.getParticipantList().entrySet());
         entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getTurn()));
 
         Long rank = 1L;
-        List<GameResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
+        List<CallMyNameGameResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
         for (Map.Entry<String, Participate> entry : entryList) {
             // GameResult 저정해야함
         }
