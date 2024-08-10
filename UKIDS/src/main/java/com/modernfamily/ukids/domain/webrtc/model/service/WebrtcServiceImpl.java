@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -56,10 +58,15 @@ public class WebrtcServiceImpl implements WebrtcService {
 
         openvidu.fetch();
 
-        Session session = openvidu.getActiveSession(sessionId);
-        if (session == null) {
-            throw new ExceptionResponse(CustomException.NOT_FOUND_SESSION_EXCEPTION);
-        }
+        List<Session> activeSessionList = openvidu.getActiveSessions();
+
+        Optional<Session> sessionOptional = activeSessionList.stream()
+                .filter(s -> s.getSessionId().equals(sessionId))
+                .findFirst();
+
+        Session session = sessionOptional.isPresent()? sessionOptional.get()
+                : openvidu.createSession(new SessionProperties.Builder().customSessionId(sessionId).build());
+
         ConnectionProperties properties = ConnectionProperties.fromJson(connectionProperties).build();
         Connection connection = session.createConnection(properties);
 
