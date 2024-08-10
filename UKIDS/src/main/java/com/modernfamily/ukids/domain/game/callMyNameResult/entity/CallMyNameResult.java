@@ -1,7 +1,7 @@
-package com.modernfamily.ukids.domain.game.callGameResult.entity;
+package com.modernfamily.ukids.domain.game.callMyNameResult.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
-import com.modernfamily.ukids.domain.game.callGameResult.dto.CallMyNameGameResultSaveDto;
+import com.modernfamily.ukids.domain.game.callMyNameResult.dto.CallMyNameResultSaveDto;
 import com.modernfamily.ukids.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CallMyNameGameResult {
+public class CallMyNameResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +39,8 @@ public class CallMyNameGameResult {
     private Family family;
 
     @Builder
-    private CallMyNameGameResult(Long correctRound, String keyword, Long rank,
-                       LocalDate date, User participant, Family family) {
+    private CallMyNameResult(Long correctRound, String keyword, Long rank,
+                             LocalDate date, User participant, Family family) {
         this.correctRound = correctRound;
         this.keyword = keyword;
         this.rank = rank;
@@ -49,12 +49,12 @@ public class CallMyNameGameResult {
         this.family = family;
     }
 
-    public static CallMyNameGameResult createGameResult(CallMyNameGameResultSaveDto callMyNameGameResultSaveDto, User participant, Family family) {
-        return CallMyNameGameResult.builder()
-                .correctRound(callMyNameGameResultSaveDto.getCorrectRound())
-                .keyword(callMyNameGameResultSaveDto.getKeyword())
-                .rank(callMyNameGameResultSaveDto.getRank())
-                .date(callMyNameGameResultSaveDto.getDate())
+    public static CallMyNameResult createResult(CallMyNameResultSaveDto callMyNameResultSaveDto, User participant, Family family) {
+        return CallMyNameResult.builder()
+                .correctRound(callMyNameResultSaveDto.getCorrectRound())
+                .keyword(callMyNameResultSaveDto.getKeyword())
+                .rank(callMyNameResultSaveDto.getRank())
+                .date(callMyNameResultSaveDto.getDate())
                 .participant(participant)
                 .family(family)
                 .build();
