@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.game.quiz.model.repository;
 
-import com.modernfamily.ukids.domain.game.quizResult.entity.GameType;
 import com.modernfamily.ukids.domain.game.quiz.dto.Participate;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quizQuestion.model.service.QuizQuestionService;
@@ -16,8 +15,8 @@ public class QuizRoomRespository {
     private final QuizQuestionService quizQuestionService;
 
     // 게임방 만들기
-    public QuizRoom createGameRoom(GameType gameType, String sessionId){
-        return QuizRoom.createQuizRoom(gameType, sessionId);
+    public QuizRoom createGameRoom(String sessionId){
+        return QuizRoom.createQuizRoom(sessionId);
     }
 
     // 유저 참여

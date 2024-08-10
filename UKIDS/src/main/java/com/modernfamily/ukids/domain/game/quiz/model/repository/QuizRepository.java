@@ -1,6 +1,6 @@
 package com.modernfamily.ukids.domain.game.quiz.model.repository;
 
-import com.modernfamily.ukids.domain.game.quizResult.dto.GameResultSaveDto;
+import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultSaveDto;
 import com.modernfamily.ukids.domain.game.quiz.dto.Participate;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
@@ -31,7 +31,7 @@ public class QuizRepository {
 
 
     // 게임 종료 및 퀴즈 결과 저장
-    public List<GameResultSaveDto> endGame(Long familyId, QuizRoom quizRoom){
+    public List<QuizResultSaveDto> endGame(Long familyId, QuizRoom quizRoom){
 
         List<Map.Entry<String, Participate>> entryList = new ArrayList<>(quizRoom.getParticipantList().entrySet());
         entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getHit()).reversed());
@@ -39,11 +39,11 @@ public class QuizRepository {
         long totalCounts = quizRoom.getParticipantList().size() * quizRoom.getQuizCount();
         long prevCounts = 0;
         long rank = 1L;
-        List<GameResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
+        List<QuizResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
         for(Map.Entry<String, Participate> entry : entryList){
             if(prevCounts == entry.getValue().getHit())
                 rank--;
-            gameResultSaveDtoList.add(GameResultSaveDto.createGameResultDto(quizRoom.getGameType(), entry.getValue().getHit(),
+            gameResultSaveDtoList.add(QuizResultSaveDto.createGameResultDto(entry.getValue().getHit(),
                     totalCounts, rank, entry.getKey(), familyId));
             prevCounts = entry.getValue().getHit();
             rank++;

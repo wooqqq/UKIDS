@@ -1,7 +1,7 @@
 package com.modernfamily.ukids.domain.game.quizResult.entity;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
-import com.modernfamily.ukids.domain.game.quizResult.dto.GameResultSaveDto;
+import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultSaveDto;
 import com.modernfamily.ukids.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,10 +20,6 @@ public class GameResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_result_id")
     private Long gameResultId;
-
-    @Column(name = "game_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private GameType gameType;
 
     @Column(name = "correct_counts")
     private long correctCounts;
@@ -46,9 +42,8 @@ public class GameResult {
     private Family family;
 
     @Builder
-    private GameResult(GameType gameType, long correctCounts, long totalCounts, long rank,
+    private GameResult(long correctCounts, long totalCounts, long rank,
                        LocalDate date, User participant, Family family) {
-        this.gameType = gameType;
         this.correctCounts = correctCounts;
         this.totalCounts = totalCounts;
         this.rank = rank;
@@ -57,9 +52,8 @@ public class GameResult {
         this.family = family;
     }
 
-    public static GameResult createGameResult(GameResultSaveDto gameResultSaveDto, User participant, Family family) {
+    public static GameResult createGameResult(QuizResultSaveDto gameResultSaveDto, User participant, Family family) {
         return GameResult.builder()
-                .gameType(gameResultSaveDto.getGameType())
                 .correctCounts(gameResultSaveDto.getCorrectCounts())
                 .totalCounts(gameResultSaveDto.getTotalCounts())
                 .rank(gameResultSaveDto.getRank())

@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.game.quizResult.dto;
 
-import com.modernfamily.ukids.domain.game.quizResult.entity.GameType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-public class GameResultSaveDto {
-
-    private GameType gameType;
+public class QuizResultSaveDto {
 
     private long correctCounts;
 
@@ -26,9 +23,8 @@ public class GameResultSaveDto {
     private Long familyId;
 
     @Builder
-    private GameResultSaveDto(GameType gameType, long correctCounts, long totalCounts, long rank,
-                             LocalDate date, String participantId, Long familyId) {
-        this.gameType = gameType;
+    private QuizResultSaveDto(long correctCounts, long totalCounts, long rank,
+                              LocalDate date, String participantId, Long familyId) {
         this.correctCounts = correctCounts;
         this.totalCounts = totalCounts;
         this.rank = rank;
@@ -37,10 +33,9 @@ public class GameResultSaveDto {
         this.familyId = familyId;
     }
 
-    public static GameResultSaveDto createGameResultDto(GameType gameType, long correctCounts, long totalCounts,
+    public static QuizResultSaveDto createGameResultDto(long correctCounts, long totalCounts,
                                                         long rank, String participantId, Long familyId) {
-        return GameResultSaveDto.builder()
-                .gameType(gameType)
+        return QuizResultSaveDto.builder()
                 .correctCounts(correctCounts)
                 .totalCounts(totalCounts)
                 .rank(rank)

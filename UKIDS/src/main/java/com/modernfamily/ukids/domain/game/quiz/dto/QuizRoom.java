@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.game.quiz.dto;
 
-import com.modernfamily.ukids.domain.game.quizResult.entity.GameType;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import java.util.List;
 
 @Getter
 public class QuizRoom {
-    private GameType gameType;
     private String sessionId;
     private Long quizCount;
     private boolean isStart;
@@ -21,10 +19,9 @@ public class QuizRoom {
     private List<QuizQuestionRandomResponseDto> randomQuizQuestionList;
 
     @Builder
-    private QuizRoom(GameType gameType, String sessionId ,Long quizCount, boolean isStart,
+    private QuizRoom(String sessionId ,Long quizCount, boolean isStart,
                      Long numberOfParticipants, Long maxQuestionCounts, int currentQuestionIndex,
                      HashMap<String, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
-        this.gameType = gameType;
         this.sessionId = sessionId;
         this.quizCount = quizCount;
         this.isStart = isStart;
@@ -35,9 +32,8 @@ public class QuizRoom {
         this.randomQuizQuestionList = randomQuizQuestionList;
     }
 
-    public static QuizRoom createQuizRoom(GameType gameType, String sessionId){
+    public static QuizRoom createQuizRoom(String sessionId){
         return QuizRoom.builder()
-                .gameType(gameType)
                 .sessionId(sessionId)
                 .quizCount(0L)
                 .isStart(false)
