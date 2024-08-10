@@ -8,14 +8,16 @@ import lombok.NoArgsConstructor;
 public class Participate {
     private Long turn;
     private boolean isReady;
+    private boolean isCorrect;
 
-    private Participate(Long turn, boolean isReady) {
+    private Participate(Long turn, boolean isReady, boolean isCorrect) {
         this.turn = turn;
         this.isReady = isReady;
+        this.isCorrect = isCorrect;
     }
 
     public static Participate createParticipate() {
-        return new Participate(0L, true);
+        return new Participate(0L, true, false);
     }
 
     public void wrongAnswer() {
@@ -24,6 +26,10 @@ public class Participate {
 
     public void clickReady() {
         this.isReady = !this.isReady;
+    }
+
+    public void correct() {
+        this.isCorrect = true;
     }
 
 }
