@@ -9,11 +9,11 @@
     }
   ],
   "compilerOptions": {
+    // ...
+    "typeRoots": ["./@types", "./node_modules/@types"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@stores/*": ["src/stores/*"]
+      "@/*": ["src/*"]
     }
   }
 }

@@ -6,6 +6,11 @@
   font-size: 1.2rem;
 }
 
+.big-title-style {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
 .dash-box {
   width: 1px;
   height: 13px;

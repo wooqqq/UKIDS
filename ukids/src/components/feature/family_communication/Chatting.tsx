@@ -36,6 +36,9 @@ const FamilyChatting = () => {
     jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
   );
 
+  // 디코딩된 토큰 정보 가져오기
+  const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
+
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
