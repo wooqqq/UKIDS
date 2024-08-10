@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "quiz_result")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuizResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_result_id")
-    private Long gameResultId;
+    @Column(name = "quiz_result_id")
+    private Long quizResultId;
 
     @Column(name = "correct_counts")
     private long correctCounts;
@@ -27,8 +28,8 @@ public class QuizResult {
     @Column(name = "total_counts")
     private long totalCounts;
 
-    @Column(name = "rank", nullable = false)
-    private long rank;
+    @Column(name = "ranking", nullable = false)
+    private long ranking;
 
     @Column(name = "date", columnDefinition = "DATE", nullable = false)
     private LocalDate date;
@@ -46,7 +47,7 @@ public class QuizResult {
                        LocalDate date, User participant, Family family) {
         this.correctCounts = correctCounts;
         this.totalCounts = totalCounts;
-        this.rank = rank;
+        this.ranking = rank;
         this.date = date;
         this.participant = participant;
         this.family = family;

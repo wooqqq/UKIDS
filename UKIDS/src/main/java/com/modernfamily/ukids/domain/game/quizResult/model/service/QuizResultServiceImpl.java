@@ -2,14 +2,11 @@ package com.modernfamily.ukids.domain.game.quizResult.model.service;
 
 import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
 import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
-import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionListPagenationResponseDto;
-import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionListResponseDto;
-import com.modernfamily.ukids.domain.game.quizQuestion.entity.QuizQuestion;
 import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultPaginationResponseDto;
 import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultResponseDto;
 import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultSaveDto;
 import com.modernfamily.ukids.domain.game.quizResult.entity.QuizResult;
-import com.modernfamily.ukids.domain.game.quizResult.model.repository.QuizResultRepoitory;
+import com.modernfamily.ukids.domain.game.quizResult.model.repository.QuizResultRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.domain.user.entity.User;
 import com.modernfamily.ukids.domain.user.mapper.UserMapper;
@@ -31,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuizResultServiceImpl implements QuizResultService {
 
-    private final QuizResultRepoitory quizResultRepoitory;
+    private final QuizResultRepository quizResultRepoitory;
     private final FamilyMemberRepository familyMemberRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;

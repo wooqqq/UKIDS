@@ -42,7 +42,7 @@ public class QuizResultResponseDto {
         return QuizResultResponseDto.builder()
                 .correctCounts(quizResult.getCorrectCounts())
                 .totalCounts(quizResult.getTotalCounts())
-                .rank(quizResult.getRank())
+                .rank(quizResult.getRanking())
                 .date(quizResult.getDate())
                 .familyId(quizResult.getFamily().getFamilyId())
                 .familyName(quizResult.getFamily().getName())
