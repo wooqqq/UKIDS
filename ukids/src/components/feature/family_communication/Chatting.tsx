@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import { Client, IMessage } from '@stomp/stompjs';
-import { useAuthStore } from '../../../stores/authStore';
 
 import ChattingBox from '../chatting/ChattingBox';
 import BlueButton from '../../common/BlueButton';
 import SockJS from 'sockjs-client';
+import { useAuthStore } from '@/stores/authStore';
+import api from '../../../util/api';
+import axios from 'axios';
 
 interface Message {
   messageId: number;
@@ -16,14 +18,22 @@ interface Message {
   update_time: string;
 }
 
+interface JwtPayload {
+  userId: string;
+}
+
 const FamilyChatting = () => {
-  const { ukidsURL, token, decodedToken } = useAuthStore();
+  const { ukidsURL, token } = useAuthStore();
   const chatRoomId = 1;
-  // const familyId = 1;
+  const familyId = 1;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [stompClient, setStompClient] = useState<Client | null>(null);
+
+  const userId = Number.parseInt(
+    jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
+  );
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,37 +47,48 @@ const FamilyChatting = () => {
     }
   };
 
-  // 메세지 서버로 전송
-  const sendMessage = () => {
-    console.log(stompClient);
+  // 메세지 전송
+  const sendMessage = async () => {
     if (stompClient && stompClient.connected && message.trim() !== '') {
-      const chatMessage = {
-        type: 'TALK',
-        roomId: chatRoomId,
-        sender: decodedToken.userId,
-        message,
-      };
+      try {
+        // 서버로 메시지 전송 (POST 요청)
+        const response = await axios.post(
+          `${ukidsURL}/ws/ws-stomp/pub/chat/message`,
+          JSON.stringify({
+            type: 'TALK',
+            roomId: chatRoomId,
+            sender: userId,
+            message,
+          }),
+          {
+            headers: {
+              Authorization: token,
+            },
+          },
+        );
 
-      stompClient.publish({
-        destination: `${ukidsURL}/pub/chat/message`,
-        body: JSON.stringify(chatMessage),
-      });
+        if (response.status !== 200) {
+          throw new Error('Failed to send message');
+        }
 
-      // 전송 후 상태 업데이트
-      setMessages((prevMessages) => [
-        {
-          messageId: Date.now(),
-          content: message,
-          user_id: decodedToken.userId,
-          is_delete: false,
-          create_time: new Date().toISOString(),
-          update_time: new Date().toISOString(),
-        },
-        ...prevMessages,
-      ]);
+        // 전송 후 상태 업데이트
+        setMessages((prevMessages) => [
+          {
+            messageId: Date.now(),
+            content: message,
+            user_id: userId,
+            is_delete: false,
+            create_time: new Date().toISOString(),
+            update_time: new Date().toISOString(),
+          },
+          ...prevMessages,
+        ]);
 
-      setMessage('');
-      scrollToBottom();
+        setMessage('');
+        scrollToBottom();
+      } catch (error) {
+        console.error('메세지 전송 오류:', error);
+      }
     }
   };
 
@@ -79,7 +100,7 @@ const FamilyChatting = () => {
 
   // 처음 입장 시
   useEffect(() => {
-    console.log(decodedToken);
+    console.log(userId);
     console.log(token);
     console.log(token?.substring(7));
     // 방 연결
@@ -100,6 +121,26 @@ const FamilyChatting = () => {
       heartbeatOutgoing: 4000,
     });
 
+    // 소켓 연결 후, 저장된 메세지 불러오기
+    api
+      .get(`/chat/room/${chatRoomId}/messages`)
+      .then((response) => {
+        setMessages(
+          response.data.map((msg: any) => ({
+            messageId: msg.messageId,
+            content: msg.message,
+            user_id: msg.userId,
+            is_delete: msg.is_delete,
+            create_time: msg.createTime,
+            update_time: msg.updateTime,
+          })),
+        );
+        scrollToBottom();
+      })
+      .catch((error) => {
+        console.error('메세지 가져오기 실패:', error);
+      });
+
     // 구독하기
     client.onConnect = (frame) => {
       console.log('WebSocket 연결이 열렸습니다.', frame);
@@ -115,17 +156,6 @@ const FamilyChatting = () => {
 
       // 웹소켓 클라이언트를 상태로 저장
       setStompClient(client);
-
-      // 소켓 연결 후, 저장된 메세지 불러오기
-      axios
-        .get(`${ukidsURL}/api/chat/room/${chatRoomId}/messages`)
-        .then((response) => {
-          setMessages(response.data);
-          scrollToBottom();
-        })
-        .catch((error) => {
-          console.error('메세지 가져오기 실패:', error);
-        });
     };
 
     client.onStompError = (frame) => {
@@ -157,21 +187,23 @@ const FamilyChatting = () => {
           {/* 메시지 영역 */}
           <div className="overflow-y-auto mb-1 flex flex-col-reverse h-full">
             <div ref={messagesEndRef} />
-            {messages.map((storedMessage) => (
-              <div
-                key={storedMessage.messageId}
-                className={
-                  storedMessage.user_id === decodedToken.userId
-                    ? 'self-end'
-                    : 'self-start'
-                }
-              >
-                <ChattingBox
-                  message={storedMessage.content}
-                  isSender={storedMessage.user_id === decodedToken.userId}
-                />
-              </div>
-            ))}
+            {messages.length === 0 ? (
+              <div>대화를 시작해보세요!</div>
+            ) : (
+              messages.map((storedMessage) => (
+                <div
+                  key={storedMessage.messageId}
+                  className={
+                    storedMessage.user_id === userId ? 'self-end' : 'self-start'
+                  }
+                >
+                  <ChattingBox
+                    message={storedMessage.content}
+                    isSender={storedMessage.user_id === userId}
+                  />
+                </div>
+              ))
+            )}
           </div>
 
           {/* 채팅입력 영역 */}

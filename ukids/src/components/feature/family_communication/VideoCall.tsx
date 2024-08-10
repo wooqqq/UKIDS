@@ -3,7 +3,7 @@ import { useVideoCallStore } from '../../../stores/videoCallStore';
 // import { useAuthStore } from '../../../stores/authStore';
 import { jwtDecode } from 'jwt-decode';
 import Session from './Session';
-import './session.css';
+import './sessions.css';
 
 interface JwtPayload {
   name: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Publisher, Subscriber } from 'openvidu-browser';
-import './session.css';
+import './sessions.css';
 
 interface SessionProps {
   publisher: { publisher: Publisher; name: string } | null;
