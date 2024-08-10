@@ -1,7 +1,6 @@
 // 가족채팅방 연결하기 이미지 추가
 import { useNavigate } from 'react-router-dom';
 import './button.css';
-import callIcon from '../../assets/subway_call-2.png';
 
 interface BlueButtonProps {
   name: string;
@@ -22,14 +21,7 @@ const BlueButton = (props: BlueButtonProps) => {
     }
   };
 
-  if (props.name == '연결하기') {
-    return (
-      <button onClick={handleClick} className="common-btn green-btn">
-        <img src={callIcon} alt="call-icon" />
-        {props.name}
-      </button>
-    );
-  } else if (props.name == '로그인' || props.name == '회원가입') {
+  if (props.name == '로그인' || props.name == '회원가입') {
     return (
       <button onClick={handleClick} className="common-btn blue-btn login-btn">
         {props.name}

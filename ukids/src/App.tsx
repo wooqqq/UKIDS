@@ -5,15 +5,14 @@ import Join from './pages/Join';
 import Schedule from './pages/Schedule';
 import Letters from './pages/Letters';
 import Albums from './components/feature/album/Albums';
-import AlbumDetail from './components/feature/album/AlbumDetail'; // 추가
-import UploadPhoto from './components/feature/album/UploadPhoto'; //추가
+import AlbumDetail from './components/feature/album/AlbumDetail';
+import UploadPhoto from './components/feature/album/UploadPhoto';
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
 import GameSelect from './pages/GameSelect';
 import Quiz from './pages/Quiz';
 import CallMyName from './pages/CallMyName';
-import FamilyChatting from './pages/FamilyChatting';
-import FamilyVideoCall from './pages/FamilyVideoCall';
+import FamilyVideoCall from './pages/FamilyCommunication';
 import Setting from './pages/Setting';
 import Notfound from './pages/Notfound';
 import Header from './components/Header';
@@ -94,11 +93,10 @@ const App = () => {
             <Route path="/albums/upload" element={<UploadPhoto />} />
             <Route path="/paintdiary/*" element={<PaintingDiary />} />
             <Route path="/growthdiary" element={<GrowthDiary />} />
-            <Route path="/chat" element={<FamilyChatting />} />
-            <Route path="/chat/call" element={<FamilyVideoCall />} />
+            <Route path="/chat/*" element={<FamilyVideoCall />} />
             <Route path="/game" element={<GameSelect />}></Route>
-            <Route path="/quiz/*" element={<Quiz />}></Route>
-            <Route path="/callmyname/*" element={<CallMyName />}></Route>
+            <Route path="/quiz/*" element={<Quiz />} />
+            <Route path="/callmyname/*" element={<CallMyName />} />
             <Route path="/setting" element={<Setting />} />
             <Route path="*" element={<Notfound />} />
           </Route>
