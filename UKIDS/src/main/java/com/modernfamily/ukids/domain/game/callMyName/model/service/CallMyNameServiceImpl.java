@@ -33,6 +33,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     }
     
     // 게임방 생성
+    @Override
     public Map<String, Object> enterCallMyNameRoom(Long familyId, GameType gameType, Principal principal)
             throws OpenViduJavaClientException, OpenViduHttpException {
         String userId = principal.getName();
@@ -59,6 +60,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     }
 
     // 참가자 퇴장
+    @Override
     public void exitCallMyNameRoom(Long familyId, Principal principal) {
         String userId = principal.getName();
 
@@ -71,6 +73,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     }
 
     // 게임방 정보 반환
+    @Override
     public CallMyNameRoom getCallMyNameRoom(Long familyId) {
 
         return callMyNameRooms.get(familyId);
@@ -79,6 +82,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     // 키워드 설정
 //    public Map<String, Object>
 
+    @Override
     public Map<String, Object> isReadyGameStart(Long familyId, Principal principal) {
         String userId = principal.getName();
         isExistFamilyGame(familyId);
@@ -103,6 +107,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     // 못맞힌 사람 한명이 남는다면 게임 종료
 
     // 정답 확인
+    @Override
     public Map<String, Object> checkAnswer(Long familyId, String inputAnswer, Principal principal) {
         String userId = principal.getName();
         isExistFamilyGame(familyId);
@@ -114,6 +119,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     }
 
     // 게임 종료
+    @Override
     public void endGame(Long familyId) {
         callMyNameRepository.endGame(familyId, callMyNameRooms.get(familyId));
         callMyNameRooms.remove(familyId);

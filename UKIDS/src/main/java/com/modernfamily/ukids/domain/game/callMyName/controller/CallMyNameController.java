@@ -1,7 +1,7 @@
 package com.modernfamily.ukids.domain.game.callMyName.controller;
 
 import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
-import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameServiceImpl;
+import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameService;
 import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -19,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CallMyNameController {
 
-    private final CallMyNameServiceImpl callMyNameService;
+    private final CallMyNameService callMyNameService;
 
     // 게임방 생성
     @MessageMapping("/call/enter/{id}")

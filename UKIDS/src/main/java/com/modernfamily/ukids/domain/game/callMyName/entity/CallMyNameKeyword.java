@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CallMyNameKeyword {
 
-    private Long id;
-
     private CallMyNameKeywordType category;
 
     private String word;
