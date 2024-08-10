@@ -71,7 +71,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/login", "/", "/user/signup", "/user/login",
-                        "/user/id/*", "/user/email", "/user/phone").permitAll()
+                        "/user/id/*", "/user/email", "/user/phone", "/ws-stomp/**").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
