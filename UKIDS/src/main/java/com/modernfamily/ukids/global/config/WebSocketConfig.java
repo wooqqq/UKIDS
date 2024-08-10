@@ -1,28 +1,18 @@
 package com.modernfamily.ukids.global.config;
 
 import com.modernfamily.ukids.global.handler.StompHandler;
-import com.modernfamily.ukids.global.jwt.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.*;
-import sun.misc.SignalHandler;
 
 @Configuration
 @EnableWebSocketMessageBroker // 메시지 브로커가 지원하는 WebSocket 메시지 처리를 활성화
 @RequiredArgsConstructor
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-//    @Value("${spring.jwt.secret}")
-//    private String secret;
 
     private final JwtConfig jwtConfig;
 
@@ -32,8 +22,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-stomp")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
-        registry.addEndpoint("/ws-stomp")
-                .setAllowedOriginPatterns("*");
     }
 
     // 메모리 기반의 Simple Message Broker 활성화
