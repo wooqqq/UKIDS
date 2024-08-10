@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Getter
-public class Family extends BaseTimeEntity implements Serializable {
+public class Family extends BaseTimeEntity {
 
     private static final long serialVersionUID = 1L;
 

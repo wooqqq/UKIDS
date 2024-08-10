@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.domain.chatRoom.entity;
 
+import com.modernfamily.ukids.domain.family.dto.FamilyResponseDto;
 import com.modernfamily.ukids.domain.family.entity.Family;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -8,7 +9,7 @@ import lombok.Getter;
 import java.io.Serializable;
 
 @Getter
-public class ChatRoom implements Serializable {
+public class ChatRoom {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,11 +21,11 @@ public class ChatRoom implements Serializable {
     private Long familyId;
 
     @OneToOne
-    private Family family;
+    private FamilyResponseDto family;
 
     public ChatRoom() {}
 
-    public static ChatRoom create(Long chatRoomId, String chatRoomName, Long familyId, Family family) {
+    public static ChatRoom create(Long chatRoomId, String chatRoomName, Long familyId, FamilyResponseDto family) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.chatRoomId = chatRoomId;
         chatRoom.chatRoomName = chatRoomName;
