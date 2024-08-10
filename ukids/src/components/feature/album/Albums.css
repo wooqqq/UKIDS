@@ -37,6 +37,8 @@
     position: relative;
     padding-top: 150px; /* 상단 고정 영역만큼의 패딩 */
 }
+
+
 .albums-scrollable {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 최소 너비를 250px로 증가 */

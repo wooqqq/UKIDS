@@ -1,0 +1,54 @@
+.preview-box {
+    position: absolute;
+    right: 90px;
+    top: 154px;
+    width: 430px;
+    height: 358px;
+    border: 2px solid #d1d5db; /* Tailwind의 gray-300 */
+    border-radius: 0.375rem; /* Tailwind의 rounded */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem; /* Tailwind의 p-4 */
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 400px;
+  }
+  
+  .photo-container {
+    width: 100px;  
+    margin-bottom: 1rem; 
+    margin-right: 1rem;
+    margin-left: 1rem;
+    box-sizing: border-box;
+    
+  }
+  
+  .photo-container:nth-child(3n) {
+    margin-right: 0; /* 세 번째 요소마다 오른쪽 마진 제거 */
+  }
+  
+  .photo-container img {
+    width: 100%;
+    height: 100px;
+    border-radius: 0.375rem; /* Tailwind의 rounded */
+  }
+  
+  .photo-container p {
+    margin-top: 0.5rem; /* Tailwind의 mt-2 */
+    font-size: 0.875rem; /* Tailwind의 text-sm */
+    color: #4b5563; /* Tailwind의 text-gray-700 */
+    text-align: center; /* 사진 캡션 중앙 정렬 */
+  }
+
+
+
+
+  .delete-icon {
+    position: absolute;
+    top: 0.25rem; /* 이미지의 오른쪽 위에 위치 */
+    right: 0.25rem; /* 이미지의 오른쪽 위에 위치 */
+    width: 1rem; /* 크기를 작게 설정 */
+    height: 10px; /* 크기를 작게 설정 */
+    cursor: pointer;
+    z-index: 10; /* 이미지 위에 표시되도록 설정 */
+  }
