@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GameResult {
+public class QuizResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class GameResult {
     private Family family;
 
     @Builder
-    private GameResult(long correctCounts, long totalCounts, long rank,
+    private QuizResult(long correctCounts, long totalCounts, long rank,
                        LocalDate date, User participant, Family family) {
         this.correctCounts = correctCounts;
         this.totalCounts = totalCounts;
@@ -52,8 +52,8 @@ public class GameResult {
         this.family = family;
     }
 
-    public static GameResult createGameResult(QuizResultSaveDto gameResultSaveDto, User participant, Family family) {
-        return GameResult.builder()
+    public static QuizResult createGameResult(QuizResultSaveDto gameResultSaveDto, User participant, Family family) {
+        return QuizResult.builder()
                 .correctCounts(gameResultSaveDto.getCorrectCounts())
                 .totalCounts(gameResultSaveDto.getTotalCounts())
                 .rank(gameResultSaveDto.getRank())

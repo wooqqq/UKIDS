@@ -18,14 +18,14 @@ public class QuizResultPaginationResponseDto {
 
     int totalPage;
 
-    int totalItems;
+    long totalItems;
 
     List<QuizResultResponseDto> quizResults;
 
     UserDto user;
 
     @Builder
-    private QuizResultPaginationResponseDto(int size, int currentPage, int totalPage, int totalItems,
+    private QuizResultPaginationResponseDto(int size, int currentPage, int totalPage, long totalItems,
                                             List<QuizResultResponseDto> quizResults, UserDto user) {
 
         this.size = size;
@@ -36,7 +36,7 @@ public class QuizResultPaginationResponseDto {
         this.user = user;
     }
 
-    public static QuizResultPaginationResponseDto createResponseDto(int size, int currentPage, int totalPage, int totalItems,
+    public static QuizResultPaginationResponseDto createResponseDto(int size, int currentPage, int totalPage, long totalItems,
                                                                     List<QuizResultResponseDto> quizResults, UserDto user) {
         return QuizResultPaginationResponseDto.builder()
                 .size(size)

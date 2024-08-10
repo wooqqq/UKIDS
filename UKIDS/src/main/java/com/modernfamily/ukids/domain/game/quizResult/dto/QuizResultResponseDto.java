@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.game.quizResult.dto;
 
 import com.modernfamily.ukids.domain.family.entity.Family;
+import com.modernfamily.ukids.domain.game.quizResult.entity.QuizResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,16 +38,15 @@ public class QuizResultResponseDto {
         this.familyRepresentative = familyRepresentative;
     }
 
-    public static QuizResultResponseDto createResponseDto(long correctCounts, long totalCounts,
-                                                            long rank, Family family) {
+    public static QuizResultResponseDto createResponseDto(QuizResult quizResult) {
         return QuizResultResponseDto.builder()
-                .correctCounts(correctCounts)
-                .totalCounts(totalCounts)
-                .rank(rank)
-                .date(LocalDate.now())
-                .familyId(family.getFamilyId())
-                .familyName(family.getName())
-                .familyRepresentative(family.getUser().getName())
+                .correctCounts(quizResult.getCorrectCounts())
+                .totalCounts(quizResult.getTotalCounts())
+                .rank(quizResult.getRank())
+                .date(quizResult.getDate())
+                .familyId(quizResult.getFamily().getFamilyId())
+                .familyName(quizResult.getFamily().getName())
+                .familyRepresentative(quizResult.getFamily().getUser().getName())
                 .build();
     }
 }
