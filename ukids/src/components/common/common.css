@@ -303,3 +303,9 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+.family-btn:hover,
+.family-btn:focus,
+.family-btn:active {
+  border: 10px solid rgba(54, 213, 241, 0.6);
+}

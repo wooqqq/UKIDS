@@ -27,7 +27,7 @@ const BlueButton = (props: BlueButtonProps) => {
         {props.name}
       </button>
     );
-  } else if (props.name == '만들기' || props.name == '가입신청') {
+  } else if (props.name == '방 만들기' || props.name == '가입신청') {
     return (
       <button onClick={handleClick} className="common-btn blue-btn big-btn">
         {props.name}
