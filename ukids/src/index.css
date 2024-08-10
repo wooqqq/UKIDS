@@ -33,7 +33,8 @@ body {
   padding: 1rem 11rem;
   max-height: 100%;
   overflow: hidden;
-  width: 1440px;
+  min-width: 1440px;
+  width: 100%;
 }
 
 /* 기능 박스 수정*/

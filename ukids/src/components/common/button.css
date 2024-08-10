@@ -24,6 +24,12 @@
   font-size: 25px;
 }
 
+.big-btn {
+  width: 40%;
+  padding: 15px 0;
+  font-size: 1.5rem;
+}
+
 /* 긍정(등록, 편지쓰기, 보내기, 답장하기, 완료 등) */
 .blue-btn {
   background: #36d5f1;
