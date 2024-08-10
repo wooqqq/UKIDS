@@ -1,6 +1,5 @@
 package com.modernfamily.ukids.domain.game.quiz.model.service;
 
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRepository;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRoomRespository;
@@ -8,14 +7,12 @@ import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestion
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
-import com.modernfamily.ukids.global.validation.FamilyMemberValidator;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,10 +33,10 @@ public class QuizService {
 
     // 게임방 생성 -> 있으면 참여, 없으면 생성 + 중복 참여인지 검사 + 유저 참여
     // + webrtc 세션 생성 + connection 반환
-    public Map<String, Object> enterQuizRoom(Long familyId, GameType gameType, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
         if(!quizRooms.containsKey(familyId)){
             String sessionId = webrtcService.initializeSessions(null);
-            quizRoomRespository.createGameRoom(gameType, sessionId);
+            quizRoomRespository.createGameRoom(sessionId);
         }
 
         // 참여자 목록에 있어

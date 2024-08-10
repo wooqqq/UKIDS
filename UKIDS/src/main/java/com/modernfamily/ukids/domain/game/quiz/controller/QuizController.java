@@ -1,26 +1,18 @@
 package com.modernfamily.ukids.domain.game.quiz.controller;
 
-import com.modernfamily.ukids.domain.game.gameResult.entity.GameType;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.service.QuizService;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
-import com.modernfamily.ukids.domain.user.entity.User;
-import com.modernfamily.ukids.global.exception.CustomException;
-import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.socket.messaging.SessionConnectEvent;
 
-import java.security.Principal;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -33,11 +25,10 @@ public class QuizController {
     @MessageMapping("/quiz/enter/{id}")
     @SendTo("/topic/quiz/{id}")
     public Map<String, Object> enterQuizRoom(@PathVariable("id") Long familyId,
-                                             @RequestParam("gameType")GameType gameType,
                                              @Header("nativeHeaders") Object header)
             throws OpenViduJavaClientException, OpenViduHttpException {
         String userId = header.toString().split("User=\\[")[1].split("]")[0];
-        return quizService.enterQuizRoom(familyId, gameType, userId);
+        return quizService.enterQuizRoom(familyId, userId);
     }
 
     // 유저 퇴장

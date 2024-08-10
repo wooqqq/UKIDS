@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/game/quiz-question")
+@RequestMapping("/quiz-question")
 @RequiredArgsConstructor
 public class QuizQuestionController {
 
