@@ -1,0 +1,59 @@
+.feature-box {
+    position: relative; /* 기본 위치 설정 */
+    width: 911px;
+    height: 576px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    background: #fff;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    overflow-y: hidden; /* 세로 스크롤 방지 */
+  }
+  
+  .top-fixed-area {
+    position: sticky; /* 상단에 고정 */
+    top: 0; /* 상단에서 0px의 위치 */
+    background-color: #fff;
+    z-index: 50; /* 다른 요소보다 앞에 위치 */
+    width: 100%;
+    
+  }
+  
+  .album-container {
+    position: relative;
+    padding-top: 150px; /* 상단 고정 영역만큼의 패딩 */
+    
+}
+  
+
+
+  .albums-scrollable {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 네 개의 칼럼 */
+    grid-gap: 20px; /* 칼럼과 행 사이의 간격 */
+    padding: 20px; /* 내부 패딩 */
+    margin: 0 20px; /* 외부 좌우 마진 */
+    max-height: 426px; /* 스크롤 영역의 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+  }
+  
+  .album-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 아이템들을 중앙에 배치 */
+    padding: 20px; /* 아이템 주변 패딩 */
+    background-color: #fff; /* 배경색 */
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    
+  }
+  
+  .album-item img {
+    width: 100%; /* 이미지 너비를 아이템에 맞춤 */
+    height: auto; /* 높이 자동 조정 */
+  }
+  
+  .album-item-date, .album-item-title {
+    margin-top: 25px; /* 날짜와 제목 상단 마진 */
+    font-size: 15px;
+}
+
