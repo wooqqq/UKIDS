@@ -1,6 +1,7 @@
 package com.modernfamily.ukids.domain.game.callMyName.dto;
 
 import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameKeyword;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameKeywordType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,20 +16,22 @@ public class CallMyNameRoom {
     private Long numberOfParticipants;
     private Long turnCount;
     private int currentTurnIndex;
-    private HashMap<String, Participate> participantList;
+    private CallMyNameKeywordType keywordType;
     private Map<Long, CallMyNameKeyword> randomKeywordList;
+    private HashMap<String, Participate> participantList;
 
     @Builder
     private CallMyNameRoom(String sessionId, boolean isStart,
-                           Long numberOfParticipants, Long turnCount, int currentTurnIndex,
-                           HashMap<String, Participate> participantList, Map<Long, CallMyNameKeyword> randomKeywordList) {
+                           Long numberOfParticipants, Long turnCount, int currentTurnIndex, CallMyNameKeywordType keywordType,
+                           Map<Long, CallMyNameKeyword> randomKeywordList, HashMap<String, Participate> participantList) {
         this.sessionId = sessionId;
         this.isStart = isStart;
         this.numberOfParticipants = numberOfParticipants;
         this.turnCount = turnCount;
         this.currentTurnIndex = currentTurnIndex;
-        this.participantList = participantList;
+        this.keywordType = keywordType;
         this.randomKeywordList = randomKeywordList;
+        this.participantList = participantList;
     }
 
     public static CallMyNameRoom createCallMyNameRoom(String sessionId) {
@@ -38,8 +41,9 @@ public class CallMyNameRoom {
                 .numberOfParticipants(0L)
                 .turnCount(0L)
                 .currentTurnIndex(-1)
-                .participantList(new HashMap<String, Participate>())
+                .keywordType(null)
                 .randomKeywordList(null)
+                .participantList(new HashMap<String, Participate>())
                 .build();
     }
 
@@ -54,6 +58,10 @@ public class CallMyNameRoom {
 
     public void exitParticipate(String userId) {
         participantList.remove(userId);
+    }
+
+    public void generateKeywordType(CallMyNameKeywordType keywordType) {
+        this.keywordType = keywordType;
     }
 
     public void generateRandomKeyword(List<CallMyNameKeyword> randomKeywords) {

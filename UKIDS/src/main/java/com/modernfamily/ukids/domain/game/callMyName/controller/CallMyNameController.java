@@ -7,11 +7,11 @@ import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.Map;
 
 @Controller
@@ -24,15 +24,17 @@ public class CallMyNameController {
     @MessageMapping("/call/enter/{id}")
     @SendTo("/topic/call/{id}")
     public Map<String, Object> enterCallMyNameRoom(@PathVariable("id") Long familyId,
-                                                   Principal principal)
+                                                   SimpMessageHeaderAccessor headerAccessor)
     throws OpenViduJavaClientException, OpenViduHttpException {
-        return callMyNameService.enterCallMyNameRoom(familyId, principal);
+        String userId = headerAccessor.getUser().getName();
+        return callMyNameService.enterCallMyNameRoom(familyId, userId);
     }
 
     // 참가자 퇴장
     @MessageMapping("/call/exit/{id}")
-    public void exitCallMyNameRoom(@PathVariable("id") Long familyId, Principal principal) {
-        callMyNameService.exitCallMyNameRoom(familyId, principal);
+    public void exitCallMyNameRoom(@PathVariable("id") Long familyId, SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
+        callMyNameService.exitCallMyNameRoom(familyId, userId);
     }
 
     // 게임방 정보 반환
@@ -42,30 +44,32 @@ public class CallMyNameController {
         return callMyNameService.getCallMyNameRoom(familyId);
     }
 
-    // 키워드 카테고리 설정
-    @MessageMapping("/call/keyword-category/{id}")
-    @SendTo("/topic/call/{id}")
-    public Map<String, Object> saveCategory(@PathVariable("id") Long familyId,
-                                            @RequestParam("category") String category) {
-        // 입력된 category와 CallMyNameKeywordType의 title 과 일치되는 것 찾기
-        return null;
-    }
-
     // 준비 클릭
     @MessageMapping("/call/ready/{id}")
     @SendTo("/topic/call/{id}")
-    public Map<String, Object> isReadyGameStart(@PathVariable("id") Long familyId, Principal principal) {
-        return callMyNameService.isReadyGameStart(familyId, principal);
+    public Map<String, Object> isReadyGameStart(@PathVariable("id") Long familyId, SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
+        return callMyNameService.isReadyGameStart(familyId, userId);
     }
 
-    // 키워드 가져오기
-    // CallMyNameKeywordResponseDto 생성 후 구현
+    // 키워드 타입(카테고리) 설정
+    // host만 가능
+    @MessageMapping("/call/keyword-type/{id}")
+    @SendTo("/topic/call/{id}")
+    public void saveCategory(@PathVariable("id") Long familyId,
+                                            @RequestParam("type") String type,
+                                            SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
+        // 입력된 category와 CallMyNameKeywordType의 title 과 일치되는 것 찾기
+        callMyNameService.getKeywordType(familyId, type, userId);
+    }
 
-//    @MessageMapping("/call/call-keyword/{id}")
-//    @SendTo("/topic/call/{id}")
-//    public CallMyNameKeywordResponseDto getCallMyNameKeyword(@PathVariable("id") Long familyId) {
-//        return callMyNameService.getCallMyNameKeyword(familyId);
-//    }
+    // 키워드 타입에 따른 키워드 할당
+    @MessageMapping("/call/keyword/{id}")
+    @SendTo("/topic/call/{id}")
+    public void assignKeyword(@PathVariable("id") Long familyId) {
+        callMyNameService.assignKeyword(familyId);
+    }
 
     // 질문하기
 
@@ -75,8 +79,9 @@ public class CallMyNameController {
     @SendTo("/topic/call/{id}")
     public Map<String, Object> checkAnswer(@PathVariable("id") Long familyId,
                                            @RequestParam("inputAnswer") String inputAnswer,
-                                           Principal principal) {
-        return callMyNameService.checkAnswer(familyId, inputAnswer, principal);
+                                           SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
+        return callMyNameService.checkAnswer(familyId, inputAnswer, userId);
     }
 
 }

@@ -4,21 +4,24 @@ import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
-import java.security.Principal;
 import java.util.Map;
 
 public interface CallMyNameService {
 
-    Map<String, Object> enterCallMyNameRoom(Long familyId, Principal principal)
+    Map<String, Object> enterCallMyNameRoom(Long familyId, String userId)
             throws OpenViduJavaClientException, OpenViduHttpException;
 
-    void exitCallMyNameRoom(Long familyId, Principal principal);
+    void exitCallMyNameRoom(Long familyId, String userId);
 
     CallMyNameRoom getCallMyNameRoom(Long familyId);
 
-    Map<String, Object> isReadyGameStart(Long familyId, Principal principal);
+    Map<String, Object> isReadyGameStart(Long familyId, String userId);
 
-    Map<String, Object> checkAnswer(Long familyId, String inputAnswer, Principal principal);
+    void getKeywordType(Long familyId, String type, String userId);
+
+    void assignKeyword(Long familyId);
+
+    Map<String, Object> checkAnswer(Long familyId, String inputAnswer, String userId);
 
     void endGame(Long familyId);
 

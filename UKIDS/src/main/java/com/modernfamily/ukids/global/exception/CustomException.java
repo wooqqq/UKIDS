@@ -78,6 +78,8 @@ public enum CustomException {
     ALREADY_PLAYING_EXCEPTION(400, "AlreadyPlayingException", "이미 게임이 진행 중입니다."),
     NOT_FOUND_CALL_MY_NAME_EXCEPTION(400, "NotFoundCallMyNameException", "해당 콜마이네임 게임이 존재하지 않습니다"),
     NOT_FOUND_KEYWORD_TYPE_EXCEPTION(400, "NotFoundKeywordTypeException", "해당 키워드 타입이 존재하지 않습니다."),
+    NOT_HOST_USER_EXCEPTION(400, "NotHostUserException", "해당 유저는 호스트가 아닙니다."),
+    NOT_ENOUGH_KEYWORDS_EXCEPTION(400, "NotEnoughKeywordsException", "키워드가 부족합니다."),
 
     //인증 에러 401
     EXPIRED_JWT_EXCEPTION(401,"ExpiredJwtException","토큰이 만료했습니다."),

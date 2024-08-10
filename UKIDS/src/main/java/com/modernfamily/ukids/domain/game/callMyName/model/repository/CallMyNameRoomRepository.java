@@ -18,8 +18,8 @@ public class CallMyNameRoomRepository {
     }
 
     // 게임 참여
-    public void enterGame(String userId, CallMyNameRoom callMyNameRoom) {
-        callMyNameRoom.enterParticipate(userId, Participate.createParticipate());
+    public void enterGame(String userId, boolean isHost, CallMyNameRoom callMyNameRoom) {
+        callMyNameRoom.enterParticipate(userId, Participate.createParticipate(isHost));
     }
 
     // 게임 중복 참여 여부 판별

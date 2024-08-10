@@ -1,6 +1,8 @@
 package com.modernfamily.ukids.domain.game.callMyName.model.service;
 
 import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.dto.Participate;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameKeywordType;
 import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRepository;
 import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRoomRepository;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
@@ -12,8 +14,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,6 +26,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     private Map<Long, CallMyNameRoom> callMyNameRooms;
     private final CallMyNameRepository callMyNameRepository;
     private final CallMyNameRoomRepository callMyNameRoomRepository;
+    private final CallMyNameKeywordService keywordService;
     private final WebrtcService webrtcService;
     
     @PostConstruct
@@ -33,9 +36,8 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     
     // 게임방 생성
     @Override
-    public Map<String, Object> enterCallMyNameRoom(Long familyId, Principal principal)
+    public Map<String, Object> enterCallMyNameRoom(Long familyId, String userId)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        String userId = principal.getName();
         if (!callMyNameRooms.containsKey(familyId)) {
             String sessionId = webrtcService.initializeSessions(null);
             callMyNameRoomRepository.createCallMyNameRoom(sessionId);
@@ -51,7 +53,11 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         response.put("id", familyId);
         response.put("webrtcConnection", webrtcService.getToken(callMyNameRooms.get(familyId).getSessionId(), null));
 
-        callMyNameRoomRepository.enterGame(userId, callMyNameRooms.get(familyId));
+        // 최초 입장하는 참가자일 시 host 권한 부여
+        boolean isHost = false;
+        if (callMyNameRooms.get(familyId).getParticipantList().isEmpty()) isHost = true;
+
+        callMyNameRoomRepository.enterGame(userId, isHost, callMyNameRooms.get(familyId));
 
         response.put("callMyNameRoomInfo", callMyNameRooms.get(familyId));
 
@@ -60,8 +66,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
 
     // 참가자 퇴장
     @Override
-    public void exitCallMyNameRoom(Long familyId, Principal principal) {
-        String userId = principal.getName();
+    public void exitCallMyNameRoom(Long familyId, String userId) {
 
         isExistFamilyGame(familyId);
 
@@ -78,12 +83,9 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         return callMyNameRooms.get(familyId);
     }
 
-    // 키워드 설정
-//    public Map<String, Object>
-
     @Override
-    public Map<String, Object> isReadyGameStart(Long familyId, Principal principal) {
-        String userId = principal.getName();
+    public Map<String, Object> isReadyGameStart(Long familyId, String userId) {
+
         isExistFamilyGame(familyId);
 
         callMyNameRoomRepository.clickReady(userId, callMyNameRooms.get(familyId));
@@ -95,11 +97,40 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         if (!callMyNameRoomRepository.checkReady(callMyNameRooms.get(familyId)))
             isState = false;
 
-        // 키워드 생성 추가해야함
         callMyNameRoomRepository.startGame(callMyNameRooms.get(familyId));
 
         response.put("gameStart", isState);
         return response;
+    }
+
+    // 키워드 타입(카테고리) 설정
+    // host만 가능
+    @Override
+    public void getKeywordType(Long familyId, String type, String userId) {
+        if (!callMyNameRooms.get(familyId).getParticipantList().get(userId).isHost())
+            throw new ExceptionResponse(CustomException.NOT_HOST_USER_EXCEPTION);
+
+        // String 타입인 keywordType을 통해 CallMyNameKeywordType 검색
+        CallMyNameKeywordType keywordType = CallMyNameKeywordType.findByTitle(type);
+
+        callMyNameRooms.get(familyId).generateKeywordType(keywordType);
+    }
+
+    // 게임 시작 후 키워드 정하기
+    @Override
+    public void assignKeyword(Long familyId) {
+        generateKeyword(familyId);
+
+        List<String> keywords = generateKeyword(familyId);
+        Map<String, Participate> participateList = callMyNameRooms.get(familyId).getParticipantList();
+
+        int index = 0;
+        for (Participate participate : participateList.values()) {
+            if (index < keywords.size()) {
+                participate.generateKeyword(keywords.get(index));
+                index++;
+            } else throw new ExceptionResponse(CustomException.NOT_ENOUGH_KEYWORDS_EXCEPTION);
+        }
     }
 
     // 게임 종료가 반환되는 메서드
@@ -107,8 +138,8 @@ public class CallMyNameServiceImpl implements CallMyNameService {
 
     // 정답 확인
     @Override
-    public Map<String, Object> checkAnswer(Long familyId, String inputAnswer, Principal principal) {
-        String userId = principal.getName();
+    public Map<String, Object> checkAnswer(Long familyId, String inputAnswer, String userId) {
+
         isExistFamilyGame(familyId);
 
         Map<String, Object> response = new HashMap<>();
@@ -129,5 +160,12 @@ public class CallMyNameServiceImpl implements CallMyNameService {
             throw new ExceptionResponse(CustomException.NOT_FOUND_CALL_MY_NAME_EXCEPTION);
     }
 
+    private List<String> generateKeyword(Long familyId) {
+
+        int participateSize = callMyNameRooms.get(familyId).getParticipantList().size();
+        String keywordType = callMyNameRooms.get(familyId).getKeywordType().getTitle();
+
+        return keywordService.generateCallMyNameKeyword(keywordType, participateSize);
+    }
 
 }
