@@ -26,10 +26,10 @@ const ScheduleList = () => {
     // 오늘 날짜에 해당하는 이벤트 필터링
     const todayStr = today.toLocaleDateString('sv-SE'); // 로컬 시간을 기준으로 날짜를 "YYYY-MM-DD" 형식으로 변환
     const todayEvents = events.filter((event) => {
-      const eventStart = new Date(event.start).toLocaleDateString('sv-SE');
-      const eventEnd = new Date(event.end || event.start).toLocaleDateString(
-        'sv-SE',
-      );
+      const eventStart = new Date(event.startTime).toLocaleDateString('sv-SE');
+      const eventEnd = new Date(
+        event.endTime || event.startTime,
+      ).toLocaleDateString('sv-SE');
       return todayStr >= eventStart && todayStr <= eventEnd;
     });
 
@@ -51,7 +51,8 @@ const ScheduleList = () => {
       </section>
       {selectedDate && (
         <div className="schedule-list">
-          <p>{selectedDate}</p> {/* 선택된 날짜를 출력 */}
+          <p className="title-style mt-3">{selectedDate}</p>{' '}
+          {/* 선택된 날짜를 출력 */}
           {eventData ? (
             eventData.map((event, index) => (
               <div key={index}>
@@ -64,7 +65,9 @@ const ScheduleList = () => {
               </div>
             ))
           ) : (
-            <p>해당 날짜에 이벤트가 없습니다.</p>
+            <p className="mt-2" style={{ color: '#999' }}>
+              해당 날짜에 일정이 없습니다.
+            </p>
           )}
         </div>
       )}

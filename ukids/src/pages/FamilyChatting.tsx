@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Client, IMessage } from '@stomp/stompjs';
+import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '../stores/authStore';
 
 import ChattingBox from '../components/feature/chatting/ChattingBox';
@@ -17,14 +18,23 @@ interface Message {
   update_time: string;
 }
 
+// JWT 토큰 디코딩 타입 정의
+interface DecodedToken {
+  userId: number;
+  // 필요한 다른 필드들 추가
+}
+
 const FamilyChatting = () => {
-  const { ukidsURL, token, decodedToken } = useAuthStore();
+  const { ukidsURL, token } = useAuthStore();
   const chatRoomId = 1;
   // const familyId = 1;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [stompClient, setStompClient] = useState<Client | null>(null);
+
+  // 디코딩된 토큰 정보 가져오기
+  const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

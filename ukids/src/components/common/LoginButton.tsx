@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
-const LoginBtn = () => {
+const LoginButton = () => {
   const nav = useNavigate();
   // 로그인페이지로 이동
   const handleLoginClick = () => {
@@ -20,10 +20,17 @@ const LoginBtn = () => {
   }, [token]);
   return (
     <div>
-      <button onClick={handleLoginClick}>로그인</button>
-      <button onClick={handleJoinClick}>회원가입</button>
+      <button
+        onClick={handleLoginClick}
+        className="text-[#777] mr-4 font-semibold"
+      >
+        로그인
+      </button>
+      <button onClick={handleJoinClick} className="text-[#777] font-semibold">
+        회원가입
+      </button>
     </div>
   );
 };
 
-export default LoginBtn;
+export default LoginButton;

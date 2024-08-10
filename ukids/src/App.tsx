@@ -20,6 +20,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/common/Sidebar';
 import Main from './pages/Main';
+import FamilyCreateFind from './pages/FamliyCreateFind';
 import { ProtectedRoute, PublicRoute } from './components/error/ProtectedRoute';
 import { useEffect } from 'react';
 
@@ -48,11 +49,13 @@ const App = () => {
   const hideSidebar =
     location.pathname === '/' ||
     location.pathname === '/login' ||
-    location.pathname === '/join';
+    location.pathname === '/join' ||
+    location.pathname.startsWith('/family');
 
   // flex css 제거
   const removeFlexClass =
     location.pathname === '/' ||
+    location.pathname === '/family' ||
     location.pathname === '/login' ||
     location.pathname === '/join';
 
@@ -85,6 +88,7 @@ const App = () => {
           </Route>
           {/* 로그인 안했으면 진입 금지 */}
           <Route element={<ProtectedRoute />}>
+            <Route path="/family/*" element={<FamilyCreateFind />} />
             <Route path="/main" element={<Main />} />
             <Route path="/schedule/*" element={<Schedule />}></Route>
             <Route path="/letters" element={<Letters />} />
@@ -99,7 +103,7 @@ const App = () => {
             <Route path="/game" element={<GameSelect />}></Route>
             <Route path="/quiz/*" element={<Quiz />}></Route>
             <Route path="/callmyname/*" element={<CallMyName />}></Route>
-            <Route path="/setting" element={<Setting />} />
+            <Route path="/setting/*" element={<Setting />} />
             <Route path="*" element={<Notfound />} />
           </Route>
         </Routes>
