@@ -60,7 +60,6 @@ export const Modal = ({content, modalState, setModalState, deleteElement}: Modal
         else {
             if(confirm("삭제하시겠습니까?")){
                 deleteElement();
-                navigate('/paintdiary');
             }
         }
         console.log(data);

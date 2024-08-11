@@ -9,6 +9,7 @@ import AlbumDetail from './components/feature/album/AlbumDetail'; // 추가
 import UploadPhoto from './components/feature/album/UploadPhoto'; //추가
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
+import GrowthFolder from './pages/GrowthFolder';
 import GameSelect from './pages/GameSelect';
 import Quiz from './pages/Quiz';
 import CallMyName from './pages/CallMyName';
@@ -93,7 +94,8 @@ const App = () => {
             <Route path="/albums/:photoId" element={<AlbumDetail />} />
             <Route path="/albums/upload" element={<UploadPhoto />} />
             <Route path="/paintdiary/*" element={<PaintingDiary />} />
-            <Route path="/growthdiary" element={<GrowthDiary />} />
+            <Route path="/growthdiary/*" element={<GrowthDiary />} />
+            <Route path="/growthfolder/*" element={<GrowthFolder />} />
             <Route path="/chat" element={<FamilyChatting />} />
             <Route path="/chat/call" element={<FamilyVideoCall />} />
             <Route path="/game" element={<GameSelect />}></Route>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import '@components/feature/pictureDiary/diaryItem.css'
 import api from "@/util/api.ts"
-import apiForm from "@/util/api.ts"
 
 interface Diary{
     familyId: number;

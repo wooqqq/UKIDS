@@ -23,7 +23,7 @@ const Sidebar = () => {
         <div className="sidebar-text">그림 일기</div>
       </Link>
       <Link
-        to={'/growthdiary'}
+        to={'/growthfolder'}
         className="cursor-pointer transition-transform duration-300 ease-in-out hover:scale-110"
       >
         <img width="70" height="95" src={growth} alt="성장 일지" />
