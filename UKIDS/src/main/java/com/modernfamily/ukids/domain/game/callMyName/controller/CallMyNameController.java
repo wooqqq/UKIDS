@@ -1,6 +1,6 @@
 package com.modernfamily.ukids.domain.game.callMyName.controller;
 
-import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameRoom;
 import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -25,7 +25,7 @@ public class CallMyNameController {
     @SendTo("/topic/call/{id}")
     public Map<String, Object> enterCallMyNameRoom(@PathVariable("id") Long familyId,
                                                    SimpMessageHeaderAccessor headerAccessor)
-    throws OpenViduJavaClientException, OpenViduHttpException {
+            throws OpenViduJavaClientException, OpenViduHttpException {
         String userId = headerAccessor.getUser().getName();
         return callMyNameService.enterCallMyNameRoom(familyId, userId);
     }
@@ -57,8 +57,8 @@ public class CallMyNameController {
     @MessageMapping("/call/keyword-type/{id}")
     @SendTo("/topic/call/{id}")
     public void saveCategory(@PathVariable("id") Long familyId,
-                                            @RequestParam("type") String type,
-                                            SimpMessageHeaderAccessor headerAccessor) {
+                             @RequestParam("type") String type,
+                             SimpMessageHeaderAccessor headerAccessor) {
         String userId = headerAccessor.getUser().getName();
         // 입력된 category와 CallMyNameKeywordType의 title 과 일치되는 것 찾기
         callMyNameService.getKeywordType(familyId, type, userId);
@@ -66,13 +66,26 @@ public class CallMyNameController {
 
     // 키워드 타입에 따른 키워드 할당
     @MessageMapping("/call/keyword/{id}")
-    @SendTo("/topic/call/{id}")
     public void assignKeyword(@PathVariable("id") Long familyId) {
+
         callMyNameService.assignKeyword(familyId);
     }
 
-    // 질문하기
+    // CallMyNameRoom의 currentTurn 반환
+    @MessageMapping("/call/current-turn/{id}")
+    @SendTo("/topic/call/{id}")
+    public Map<String, Object> getCurrentTurn(@PathVariable("id") Long familyId) {
 
+        return callMyNameService.getCurrentTurn(familyId);
+    }
+
+    // 질문하기
+    @MessageMapping("/call/question/{id}")
+//    @SendTo("/topic/call/{id}")
+    public void question(@PathVariable("id") Long familyId, SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
+        callMyNameService.question(familyId, userId);
+    }
 
     // 정답 확인
     @MessageMapping("/call/answer/{id}")

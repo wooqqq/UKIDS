@@ -1,7 +1,7 @@
 package com.modernfamily.ukids.domain.game.callMyName.model.service;
 
-import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
-import com.modernfamily.ukids.domain.game.callMyName.dto.Participate;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.entity.Participate;
 import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameKeywordType;
 import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRepository;
 import com.modernfamily.ukids.domain.game.callMyName.model.repository.CallMyNameRoomRepository;
@@ -14,6 +14,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,8 +134,50 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         }
     }
 
-    // 게임 종료가 반환되는 메서드
-    // 못맞힌 사람 한명이 남는다면 게임 종료
+    @Override
+    public Map<String, Object> getCurrentTurn(Long familyId) {
+        long current = callMyNameRooms.get(familyId).getCurrentTurn();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("currentTurn", current);
+
+        return response;
+    }
+
+    // 게임 진행
+    @Override
+    public void proceedTurn(Long familyId) {
+
+        CallMyNameRoom callMyNameRoom = callMyNameRooms.get(familyId);
+
+        // 게임 진행 불가한 상태라면 초기화
+        if (callMyNameRoom.getParticipantList().size() <= 1) {
+            endGame(familyId);
+        }
+
+        Map<String, Participate> participateList = callMyNameRoom.getParticipantList();
+
+        // 현재 턴을 결정
+        int currentTurn = callMyNameRoom.getCurrentTurn();
+        List<Participate> participantIdx = new ArrayList<>(participateList.values());
+
+        // 라운드 진행
+
+
+        // 게임 종료가 반환되는 메서드
+        // 못맞힌 사람 한명이 남는다면 게임 종료
+
+    }
+
+    // 질문
+    @Override
+    public void question(Long familyId, String userId) {
+        isExistFamilyGame(familyId);
+
+        callMyNameRooms.get(familyId).getParticipantList().get(userId).nextRound();
+        // 턴 넘어가기
+        callMyNameRooms.get(familyId).updateCurrentTurn();
+    }
 
     // 정답 확인
     @Override
@@ -145,6 +188,9 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         Map<String, Object> response = new HashMap<>();
         response.put("answer", callMyNameRepository.checkAnswer(callMyNameRooms.get(familyId), userId, inputAnswer));
 
+        // boolean 타입을 반환
+        // true: 정답
+        // false: 오답
         return response;
     }
 

@@ -1,6 +1,6 @@
 package com.modernfamily.ukids.domain.game.callMyName.model.service;
 
-import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameRoom;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
@@ -20,6 +20,12 @@ public interface CallMyNameService {
     void getKeywordType(Long familyId, String type, String userId);
 
     void assignKeyword(Long familyId);
+
+    Map<String, Object> getCurrentTurn(Long familyId);
+
+    void proceedTurn(Long familyId);
+
+    void question(Long familyId, String userId);
 
     Map<String, Object> checkAnswer(Long familyId, String inputAnswer, String userId);
 

@@ -1,8 +1,8 @@
 package com.modernfamily.ukids.domain.game.callMyName.model.repository;
 
 import com.modernfamily.ukids.domain.game.callMyNameResult.dto.CallMyNameResultSaveDto;
-import com.modernfamily.ukids.domain.game.callMyName.dto.CallMyNameRoom;
-import com.modernfamily.ukids.domain.game.callMyName.dto.Participate;
+import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameRoom;
+import com.modernfamily.ukids.domain.game.callMyName.entity.Participate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,17 +13,22 @@ import java.util.Map;
 @Repository
 public class CallMyNameRepository {
 
-    // 키워드 가져오기 및 출제
-
     // 키워드 정답 확인
-    public String checkAnswer(CallMyNameRoom callMyNameRoom, String userId, String inputAnswer) {
-//        String answer = callMyNameRoom.getRandomKeywordList().get();
-        String answer = "";
+    public boolean checkAnswer(CallMyNameRoom callMyNameRoom, String userId, String inputAnswer) {
+        Map<String, Participate> participateMap = callMyNameRoom.getParticipantList();
+        String answer = participateMap.get(userId).getKeyword();
 
-        if (inputAnswer.equals(answer))
-            callMyNameRoom.getParticipantList().get(userId).correct();
+        if (inputAnswer.equals(answer)) {
+            participateMap.get(userId).correct();
+            participateMap.remove(userId);
+        } else {
+            // 다음 라운드 진출
+            participateMap.get(userId).nextRound();
+            // 다음 턴 참가자 idx 업데이트
+            callMyNameRoom.updateCurrentTurn();
+        }
 
-        return answer;
+        return inputAnswer.equals(answer);
     }
 
     // 게임 종료 및 게임 결과 저장
@@ -31,7 +36,7 @@ public class CallMyNameRepository {
     public List<CallMyNameResultSaveDto> endGame(Long familyId, CallMyNameRoom callMyNameRoom) {
 
         List<Map.Entry<String, Participate>> entryList = new ArrayList<>(callMyNameRoom.getParticipantList().entrySet());
-        entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getTurn()));
+        entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getRound()));
 
         Long rank = 1L;
         List<CallMyNameResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
