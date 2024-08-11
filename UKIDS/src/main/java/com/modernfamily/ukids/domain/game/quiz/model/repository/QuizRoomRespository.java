@@ -1,8 +1,13 @@
 package com.modernfamily.ukids.domain.game.quiz.model.repository;
 
+import com.modernfamily.ukids.domain.familyMember.entity.FamilyMember;
+import com.modernfamily.ukids.domain.familyMember.model.repository.FamilyMemberRepository;
 import com.modernfamily.ukids.domain.game.quiz.dto.Participate;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quizQuestion.model.service.QuizQuestionService;
+import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
+import com.modernfamily.ukids.global.exception.CustomException;
+import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +18,7 @@ import java.util.Map;
 public class QuizRoomRespository {
 
     private final QuizQuestionService quizQuestionService;
+    private final FamilyMemberRepository familyMemberRepository;
 
     // 게임방 만들기
     public QuizRoom createGameRoom(String sessionId){
@@ -20,9 +26,12 @@ public class QuizRoomRespository {
     }
 
     // 유저 참여
-    public void enterGame(String userId, QuizRoom quizRoom){
+    public void enterGame(String userId, long familyId, QuizRoom quizRoom){
         long maxCounts = quizQuestionService.getCountQuizQuestionByUser();
-        quizRoom.enterParticipate(userId, Participate.createParticipate(maxCounts));
+        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
+        quizRoom.enterParticipate(userId, Participate.createParticipate(familyMember.getUser().getName(),
+                familyMember.getRole(), maxCounts));
     }
 
     // 게임 중복 참여 여부 판별
