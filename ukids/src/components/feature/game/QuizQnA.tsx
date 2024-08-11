@@ -6,8 +6,14 @@ import './gamepart.css';
 import writeAns from '@/assets/write_ans.png';
 import deleteAns from '@/assets/delete_ans.png';
 
+interface Question {
+  quizQuestionId: number;
+  question: string;
+  answer: string;
+  quizType: string;
+}
+
 const QuizQnA = () => {
-  const [num, setNum] = useState(0);
   const [questionList, setQuestionList] = useState([]);
   const nav = useNavigate();
 
@@ -15,15 +21,20 @@ const QuizQnA = () => {
     nav('../question');
   };
 
-  console.log(questionList);
+  const handleWriteAns = () => {};
+
+  const handleDeleteAns = (quizQuestionId: number) => {
+    api
+      .delete(`/quiz-question/${quizQuestionId}`)
+      .then(console.log('퀴즈 삭제 완료!'));
+  };
 
   // 처음 접속 시 질문 목록 불러오기 - 가족방, 유저에 따라 다를 것
   useEffect(() => {
     api
       .get(`/quiz-question`)
       .then((response: any) => {
-        console.log(response.data);
-        setQuestionList(response.data.QuizQuestions);
+        setQuestionList(response.data.results.QuizQuestions);
       })
       .catch((error: any) => {
         console.error(error);
@@ -47,29 +58,37 @@ const QuizQnA = () => {
                 <th>질문</th>
                 <th>답변</th>
               </tr>
-              {questionList.map(
-                (value: { question: string; answer: string }) => {
-                  setNum((prev) => prev + 1);
-
-                  return (
-                    <tr>
-                      <td>{num}</td>
-                      <td>{value.question}</td>
-                      <td>
-                        {value.answer !== '' ? value.answer : '답변없음'}
-                        {/* 퀴즈 상세 버튼 */}
-                        <button>
-                          <img src={writeAns} alt="write" />
-                        </button>
-                        {/* 삭제버튼 */}
-                        <button>
-                          <img src={deleteAns} alt="delete" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
+              {questionList.map((question: Question) => {
+                return (
+                  <tr>
+                    <td>{question.quizQuestionId}</td>
+                    <td>{question.question}</td>
+                    <td>
+                      {question.quizType}
+                      {question.answer
+                        ? '답변을 작성해주세요!'
+                        : question.answer}
+                      {/* 퀴즈 상세 버튼 */}
+                      {/* 질문 타입에 따라 답변 작성도 달라져야하는데... */}
+                      <button
+                        onClick={() => {
+                          handleWriteAns();
+                        }}
+                      >
+                        <img src={writeAns} alt="write" />
+                      </button>
+                      {/* 삭제버튼 */}
+                      <button
+                        onClick={() => {
+                          handleDeleteAns(question.quizQuestionId);
+                        }}
+                      >
+                        <img src={deleteAns} alt="delete" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </table>
           ) : (
             <div className="flex items-center text-3xl">
