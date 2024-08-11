@@ -116,7 +116,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // 가족방 생성 시 가족방 ID 얻어오고
   // openvidu sessionId 생성 요청하기
-  // 가족 ID로 채팅방 ID 얻어오기
+  // 가족 ID로 채팅방 ID 생성하기
   familyId: NaN,
   setfamilyId: (name, password) => async () => {
     try {
@@ -132,7 +132,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  // 가족 ID로 채팅방 ID 얻어오기
+  // 가족 ID로 채팅방 ID 생성하기
   chatRoomId: NaN,
   setChatRoomId: (familyId) => async () => {
     set({ error: null });

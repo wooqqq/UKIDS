@@ -9,7 +9,7 @@ const Game = () => {
     nav('/quiz');
   };
   const onCallMyNameClick = () => {
-    nav('/callMyName');
+    nav('/callmyname');
   };
 
   return (

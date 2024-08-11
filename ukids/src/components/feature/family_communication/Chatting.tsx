@@ -20,10 +20,11 @@ interface Message {
 interface JwtPayload {
   userId: string;
 }
-// interface DecodedToken {
-//   userId: number;
-//   // 필요한 다른 필드들 추가
-// }
+
+interface DecodedToken {
+  userId: number;
+  // 필요한 다른 필드들 추가
+}
 
 const FamilyChatting = () => {
   const { ukidsURL, token } = useAuthStore();
@@ -41,7 +42,8 @@ const FamilyChatting = () => {
   );
 
   // 디코딩된 토큰 정보 가져오기
-  // const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
+  const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
+  console.log(decodedToken);
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

@@ -24,7 +24,7 @@ const GamePageHeader = ({ title }: GamePageHeader) => {
           </button>
         </div>
         {/* 제목 */}
-        <div className="text-5xl">{title}</div>
+        <div className="text-5xl font-[ONE-Mobile-POP]">{title}</div>
         {/* 빈 div로 오른쪽 여백 맞추기 */}
         <div className="w-20 mr-8"> </div>
       </div>
