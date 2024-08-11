@@ -42,7 +42,7 @@ public class QuizController {
     // 게임방 정보 반환
     @MessageMapping("/quiz/info/{id}")
     @SendTo("/topic/quiz/{id}")
-    public QuizRoom getQuizRoom(@PathVariable("id") Long familyId) {
+    public Map<String, Object> getQuizRoom(@PathVariable("id") Long familyId) {
         return quizService.getQuizRoom(familyId);
     }
 
@@ -65,7 +65,7 @@ public class QuizController {
     // 질문 가져오기 -> 반환 끝나면 게임 종료 -> QuizQuestionRandomResponseDto or null (이건 게임 종료)
     @MessageMapping("/quiz/quiz-question/{id}")
     @SendTo("/topic/quiz/{id}")
-    public QuizQuestionRandomResponseDto getQuizQuestion(@PathVariable("id") Long familyId) {
+    public Map<String, Object> getQuizQuestion(@PathVariable("id") Long familyId) {
         return quizService.getQuizQuestion(familyId);
     }
 
