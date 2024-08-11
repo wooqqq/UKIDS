@@ -118,20 +118,20 @@ const QuizQnA = () => {
                               className="flex justify-center"
                             >
                               {question.quizType === 'OX' ? (
-                                <div className="">
+                                <div>
                                   <button
                                     type="button"
                                     onClick={() => setAnswer('O')}
-                                    className={`${
+                                    className={`quiz-O-btn ${
                                       answer === 'O' ? 'selected' : ''
-                                    } px-4 py-2`}
+                                    }`}
                                   >
                                     O
                                   </button>
                                   <button
                                     type="button"
                                     onClick={() => setAnswer('X')}
-                                    className={`${
+                                    className={`quiz-X-btn ${
                                       answer === 'X' ? 'selected' : ''
                                     }`}
                                   >

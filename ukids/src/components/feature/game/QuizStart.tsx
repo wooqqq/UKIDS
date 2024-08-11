@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './gamepart.css';
+import { useVideoCallStore } from '@stores/videoCallStore';
+import { useAuthStore } from '@stores/authStore';
 
 const QuizQnA = () => {
+  const {} = useVideoCallStore();
+  const {} = useAuthStore();
+
   const [questionNum, setQuestionNum] = useState(1);
   const [counter, setCounter] = useState(20);
   const familyName = '이삼성';
+
+  useEffect(() => {}, []);
 
   return (
     <>

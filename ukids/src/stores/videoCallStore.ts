@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import {
   OpenVidu,
   Session as OVSession,
@@ -24,7 +24,6 @@ interface VideoCallStore {
   toggleAudio: () => void; // 오디오 상태를 토글하는 함수
 }
 
-// 상태 관리를 위한 zustand 스토어 생성
 export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
   session: null,
   OV: null,

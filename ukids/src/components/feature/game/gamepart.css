@@ -81,5 +81,39 @@
 /* 게임 회색 */
 .game-btn-g {
   border-radius: 100rem;
-  background: #777777;
+  background: #777;
+}
+
+.quiz-O-btn {
+  background-color: #fff;
+  color: #333;
+  border: 2px solid #777;
+  border-right: none;
+  padding: 10px 20px;
+  border-radius: 9999px 0px 0px 9999px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-X-btn {
+  background-color: #777;
+  color: #333;
+  border: 2px solid #777;
+  border-left: none;
+  padding: 10px 20px;
+  border-radius: 0px 9999px 9999px 0px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-O-btn.selected {
+  background-color: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.quiz-X-btn.selected {
+  background-color: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
 }

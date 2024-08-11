@@ -66,7 +66,7 @@ const QuizHistory = () => {
                   <tr className="border-solid border-b-4 border-[#777777]">
                     <th className="text-center py-3">번호</th>
                     <th className="text-center">날짜</th>
-                    <th className="text-center">우승자</th>
+                    <th className="text-center">내 순위</th>
                     <th className="text-center">맞은 개수 / 문제 수</th>
                   </tr>
                 </thead>
@@ -76,9 +76,7 @@ const QuizHistory = () => {
                       <tr key={index}>
                         <td className="text-center py-2">{index + 1}</td>
                         <td className="text-center py-2">{history.date}</td>
-                        <td className="text-center py-2">
-                          {history.familyRepresentative}
-                        </td>
+                        <td className="text-center py-2">{history.rank}</td>
                         <td className="text-center py-2">
                           {history.correctCounts} / {history.totalCounts}
                         </td>

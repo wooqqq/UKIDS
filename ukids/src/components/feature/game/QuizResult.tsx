@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import QuizButton from './QuizButton';
 import './gamepart.css';
 
-const QuizQnA = () => {
+const QuizResult = () => {
   // 게임 결과 가져오기
 
   useEffect(() => {});
@@ -30,4 +30,4 @@ const QuizQnA = () => {
   );
 };
 
-export default QuizQnA;
+export default QuizResult;

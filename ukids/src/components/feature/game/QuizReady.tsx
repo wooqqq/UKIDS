@@ -21,7 +21,7 @@ const QuizReady = () => {
             <span className="flex items-center game-font quiz-font-color">
               가족 퀴즈 준비
             </span>
-            <button className="">
+            <button className="mx-4">
               <img src={gameExplain} alt="설명" />
             </button>
           </div>

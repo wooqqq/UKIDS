@@ -80,6 +80,7 @@ const QuizQuestion = () => {
                   onChange={(e) => {
                     setQuestion(e.target.value);
                   }}
+                  className="border-solid border-b-4 border-[#999] py-2 mx-2"
                 />
               </div>
               <div className="m-4">
@@ -91,6 +92,7 @@ const QuizQuestion = () => {
                   id="question"
                   onChange={handleAnswerChange}
                   placeholder="답변을 입력하세요!"
+                  className="border-solid border-b-4 border-[#999] py-2 mx-2"
                 />
                 <button
                   type="button"
@@ -98,7 +100,7 @@ const QuizQuestion = () => {
                   className={`pl-4 py-2 w-20 rounded-s-full ${
                     selectedOption === 'O'
                       ? 'bg-blue-500 text-white'
-                      : 'bg-white text-blue-600 border-solid border-gray-600'
+                      : 'bg-white border-solid border-gray-600'
                   }`}
                 >
                   O
@@ -109,7 +111,7 @@ const QuizQuestion = () => {
                   className={`pr-4 py-2 w-20 rounded-e-full ${
                     selectedOption === 'X'
                       ? 'bg-red-500 text-white'
-                      : 'bg-[#777777] text-red-600'
+                      : 'bg-[#777777]'
                   }`}
                 >
                   X
