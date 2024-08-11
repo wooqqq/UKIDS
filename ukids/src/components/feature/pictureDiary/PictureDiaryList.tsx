@@ -108,7 +108,7 @@ const PictureDiaryList = () => {
 
 
         
-        
+{/*         
         {diaries.map((item) => (
           <Link to={`/paintdiary/${item.pictureDiaryId}`} className="paint-item">
             <PictureDiaryItem
@@ -119,7 +119,7 @@ const PictureDiaryList = () => {
             />
           </Link>
         ))}
-    
+     */}
     
     
     </div>
