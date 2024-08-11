@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useVideoCallStore } from '../../../stores/videoCallStore';
-// import { useAuthStore } from '../../../stores/authStore';
+import { useVideoCallStore } from '@stores/videoCallStore';
+// import { useAuthStore } from '@stores/authStore';
 import { jwtDecode } from 'jwt-decode';
 import Session from './Session';
 import './sessions.css';

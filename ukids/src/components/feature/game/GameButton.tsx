@@ -29,7 +29,7 @@ const GameButton = ({ name, path }: GameButtonProps) => {
       onClick={handleClick}
       className={`rounded-full ${
         checkGray() ? 'game-btn-quiz-g' : 'game-btn-quiz-y'
-      } game-btn-common common-btn`}
+      } game-btn-common`}
     >
       {name}
     </button>

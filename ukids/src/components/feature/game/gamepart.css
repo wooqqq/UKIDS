@@ -24,18 +24,35 @@
   font-family: 'ONE-Mobile-POP';
 }
 
+/* 글자 외곽선 css 추가해야함 */
+.game-font {
+  color: #ffbf33;
+  text-align: center;
+  --webkit-text-stroke-width: 5;
+  --webkit-text-stroke-color: #222;
+  font-family: 'ONE-Mobile-POP';
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 /* 게임 버튼 스타일 */
 .game-btn-common {
   display: flex;
+  width: auto;
+  padding: 1rem 2rem;
   justify-content: center;
   align-items: center;
-  font-family: 'ONE Mobile POP';
-  font-size: 2rem;
-  text-weight: 700px;
-  color: white;
-  padding: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  color: var(--Grays-White, #fff);
+  text-align: center;
+  font-family: 'ONE-Mobile-POP';
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
 }
 
 /* 가족 퀴즈 노랑 */
