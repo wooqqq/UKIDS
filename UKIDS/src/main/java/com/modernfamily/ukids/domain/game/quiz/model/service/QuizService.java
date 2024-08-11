@@ -40,6 +40,7 @@ public class QuizService {
         }
 
         Map<String, Object> response = new HashMap<>();
+        response.put("type", "ENTER_GAME");
         response.put("id", familyId);
         response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
 
@@ -53,7 +54,6 @@ public class QuizService {
         // 이미 게임 진행 중
         if(quizRoomRespository.isPlaying(quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.ALREADY_PLAYING_EXCEPTION);
-
 
         quizRoomRespository.enterGame(userId, familyId, quizRooms.get(familyId));
 
@@ -75,9 +75,11 @@ public class QuizService {
     }
 
     // 게임방 정보 반환
-    public QuizRoom getQuizRoom(Long familyId) {
-
-        return quizRooms.get(familyId);
+    public Map<String, Object> getQuizRoom(Long familyId) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("type", "GET_QUIZ_ROOM");
+        response.put("game", quizRooms.get(familyId));
+        return response;
     }
 
     // 퀴즈 개수 설정
@@ -87,6 +89,8 @@ public class QuizService {
         quizRoomRespository.saveQuizCount(counts, quizRooms.get(familyId));
 
         Map<String, Object> response = new HashMap<>();
+        response.put("type", "SET_QUIZ_COUNTS");
+
         response.put("quizCount", quizRooms.get(familyId).getQuizCount());
 
         return response;
@@ -97,6 +101,7 @@ public class QuizService {
         isExistFamilyGame(familyId);
 
         Map<String, Object> response = new HashMap<>();
+        response.put("type", "QUIZ_COUNTS");
         response.put("quizCount", quizRooms.get(familyId).getQuizCount());
 
         return response;
@@ -118,19 +123,30 @@ public class QuizService {
         quizRoomRespository.generateQuiz(quizRooms.get(familyId));
         quizRoomRespository.startGame(quizRooms.get(familyId));
 
+        response.put("type", "IS_READY_GAME");
+
         response.put("gameStart", isState);
         return response;
     }
 
     // 질문 반환 -> 반환 끝나면 게임 종료
-    public QuizQuestionRandomResponseDto getQuizQuestion(Long familyId) {
+    public Map<String, Object> getQuizQuestion(Long familyId) {
         isExistFamilyGame(familyId);
         QuizQuestionRandomResponseDto quizQuestion = quizRepository.getQuizQuestion(quizRooms.get(familyId));
 
-        if(quizQuestion == null)
-            endGame(familyId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("type", "QUIZ_QUESTION");
 
-        return quizQuestion;
+        if(quizQuestion == null) {
+            response.put("gameState", "END");
+            endGame(familyId);
+            return response;
+        }
+
+        response.put("gameState", "ING");
+        response.put("quizQuestion", quizQuestion);
+
+        return response;
     }
 
     // 정답 확인
@@ -138,6 +154,7 @@ public class QuizService {
         isExistFamilyGame(familyId);
 
         Map<String, Object> response = new HashMap<>();
+        response.put("type", "QUIZ_ANSWER");
         response.put("answer", quizRepository.checkAnswer(quizRooms.get(familyId), userId, inputAnswer));
 
         return response;

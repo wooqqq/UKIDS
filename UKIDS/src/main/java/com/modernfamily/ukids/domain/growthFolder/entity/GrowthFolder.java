@@ -6,11 +6,13 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@Where(clause = "is_delete = false")
 public class GrowthFolder extends BaseTimeEntity {
 
     public GrowthFolder() {

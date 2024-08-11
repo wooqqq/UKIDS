@@ -16,7 +16,6 @@ public class FamilyMemberValidator {
 
     public FamilyMember checkUserInFamilyMember(Long familyId){
         String userId = CustomUserDetails.contextGetUserId();
-
         FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId).orElseThrow(() ->
                 new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
 
