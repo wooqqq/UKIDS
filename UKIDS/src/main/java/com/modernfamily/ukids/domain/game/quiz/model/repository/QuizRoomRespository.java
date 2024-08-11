@@ -9,6 +9,7 @@ import com.modernfamily.ukids.domain.user.model.repository.UserRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
@@ -32,8 +33,7 @@ public class QuizRoomRespository {
         Optional<FamilyMember> familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId);
 
         if(familyMember.isEmpty() || familyMember == null)
-            throw new RuntimeException("NOT FOUND FAMILYMEMBER EXCEPTION");
-
+            throw new IllegalArgumentException("NOT FOUND FAMILYMEMBER EXCEPTION");
         quizRoom.enterParticipate(userId, Participate.createParticipate(familyMember.get().getUser().getName(),
                 familyMember.get().getRole(), maxCounts));
     }
