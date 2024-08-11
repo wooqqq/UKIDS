@@ -51,7 +51,7 @@ public class QuizService {
         response.put("id", familyId);
         response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
 
-        quizRoomRespository.enterGame(userId, quizRooms.get(familyId));
+        quizRoomRespository.enterGame(userId, familyId, quizRooms.get(familyId));
 
         response.put("gameRoomInfo", quizRooms.get(familyId));
 
