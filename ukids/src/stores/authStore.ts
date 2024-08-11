@@ -12,6 +12,13 @@ interface User {
   birthDate: string;
 }
 
+interface Family {
+  familyId: number;
+  name: string;
+  code: string;
+  userFamilyDto: User;
+}
+
 interface AuthState {
   token: string | null;
   setToken: (token: string | null) => void;
@@ -28,6 +35,24 @@ interface AuthState {
 
   chatRoomId: number;
   setChatRoomId: (familyId: number) => void;
+
+  // 회원가입 함수
+  joinUser: (form: {
+    id: string;
+    password: string;
+    name: string;
+    birthDate: string;
+    email: string;
+    phone: string;
+  }) => Promise<void>;
+}
+
+// 가족방 관련 상태 정의
+interface FamilyState {
+  family: Family | null;
+  error: string | null;
+  fetchFamilyInfo: (familyId: number) => Promise<void>;
+  createFamily: (name: string, password: string) => Promise<void>;
 }
 
 // 자동 로그아웃 테스트
@@ -87,7 +112,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   /***** 회원 정보 관리 *****/
   userInfo: null,
 
+  // 회원정보 조회
   getUserInfo: async () => {
+    const setToken = get().setToken;
     try {
       const token = get().token;
 
@@ -106,8 +133,30 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       console.error('Error fetching user info', error);
       // 자동 로그아웃 처리
       localStorage.removeItem('token');
-      set({ token: null, userInfo: null });
+      setToken(null);
       alert('로그인한지 1시간이 경과되어 자동 로그아웃 됩니다.');
+    }
+  },
+
+  // 회원가입 API
+  joinUser: async (form) => {
+    try {
+      const response = await api.post('/user/signup', {
+        id: form.id,
+        password: form.password,
+        name: form.name,
+        birthDate: form.birthDate,
+        email: form.email,
+        phone: form.phone,
+        role: 'ROLE_USER',
+      });
+
+      if (response.data.code === 201) {
+        alert(response.data.result); // '회원 생성 완료' 메시지 표시
+      }
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      alert('회원가입에 실패했습니다.' + error);
     }
   },
 
@@ -139,6 +188,45 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const response = await api.post(`/chat/room`, { familyId });
       set({ chatRoomId: Number.parseInt(response.data.chatRoomId) });
     } catch (error: any) {
+      set({ error: error.message });
+    }
+  },
+}));
+
+//////////////////////////////////////////////////////
+
+// familyStore 생성
+export const useFamilyStore = create<FamilyState>((set) => ({
+  // 초기 상태 설정
+  family: null,
+  error: null,
+
+  // 가족방 정보 가져오기
+  fetchFamilyInfo: async (familyId: number) => {
+    try {
+      const response = await api.get(`/family/${familyId}`);
+
+      const familyData: Family = response.data.result;
+
+      set({ family: familyData, error: null });
+    } catch (error: any) {
+      console.error('Error fetching family info', error);
+      set({ error: error.message });
+    }
+  },
+  // 가족방 생성
+  createFamily: async (name: string, password: string) => {
+    try {
+      const response = await api.post(`/family`, { name, password });
+      const newFamilyName = response.data.result.name;
+      set({ family: { ...response.data.result }, error: null });
+
+      // 추가적인 처리 (예: 생성된 가족방으로 이동 등)
+      if (response.data.code === 201) {
+        alert(`가족방이 생성되었습니다. Family ID: ${newFamilyName}`);
+      }
+    } catch (error: any) {
+      console.error('Error creating family', error);
       set({ error: error.message });
     }
   },

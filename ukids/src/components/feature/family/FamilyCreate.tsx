@@ -1,26 +1,51 @@
 import { useNavigate } from 'react-router-dom';
 import BlueButton from '../../common/BlueButton';
+import { useState } from 'react';
+import { useFamilyStore } from '../../../stores/authStore';
 
 const FamilyCreate = () => {
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const nav = useNavigate();
+  const createFamily = useFamilyStore((state) => state.createFamily);
+
+  const handleCreateFamily = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (password != confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    // 가족방 생성 API 요청
+    await createFamily(name, password);
+    nav(`/main`);
+  };
+
   return (
     <div className="common-feature-box w-[1000px] h-[576px]">
       <p className="big-title-style text-center text-[#FFBF33] my-10">
         가족방 생성
       </p>
 
-      <form className="join-form">
+      <form className="join-form" onSubmit={handleCreateFamily}>
         {/* <label htmlFor="id">가족방 이름</label> */}
         <input
           type="text"
-          id="id"
+          id="familyname"
           placeholder="가족방 이름"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
         {/* <label htmlFor="name">가족방 비밀번호</label> */}
         <input
           type="password"
-          id="familypw"
+          id="familypassword"
           placeholder="가족방 비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
         {/* <label htmlFor="familypwConfirm">비밀번호 확인</label> */}
@@ -28,6 +53,8 @@ const FamilyCreate = () => {
           type="password"
           id="familypwConfirm"
           placeholder="가족방 비밀번호 확인"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
         <div className="mx-auto my-5 w-1/2">
