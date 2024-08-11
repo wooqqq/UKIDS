@@ -30,12 +30,11 @@
     top: 0; /* 상단에서 0px의 위치 */
     background-color: #fff;
     z-index: 50; /* 다른 요소보다 앞에 위치 */
-    width: 100%;
     
   }
   .album-container {
     position: relative;
-    padding-top: 150px; /* 상단 고정 영역만큼의 패딩 */
+    padding-top: 70px; /* 상단 고정 영역만큼의 패딩 */
 }
 
 

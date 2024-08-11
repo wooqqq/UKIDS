@@ -139,12 +139,12 @@ const Albums: React.FC = () => {
   }, [token, familyId]);
 
   return (
-    <div className="relative w-[911px] h-[576px]">
+    <div className="relative feature-box">
       {albums.length === 0 ? (
         <div className="absolute left-0 top-0 w-[911px] h-[576px] flex-shrink-0 rounded-xl bg-white shadow-[0_0_15px_rgba(153,153,153,0.25)] overflow-y-auto">
-          <div className="absolute left-0 right-0 top-0 bottom-0 rounded-[20px]"></div>
+          {/* <div className="absolute left-0 right-0 top-0 bottom-0 rounded-[20px]"></div> */}
           <div className="absolute left-[764px] top-[33px]">
-            <BlueButton name=" 만들기 " path="/albums/upload" />
+            <BlueButton name="만들기" path="/albums/upload" />
           </div>
           <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
             앨범 {albums.length} {familyId} 
@@ -155,12 +155,18 @@ const Albums: React.FC = () => {
         </div>
       ) : (
         <div className="feature-box">
-          <div className="top-fixed-area">
-            <div className="absolute left-[764px] top-[33px]">
-              <BlueButton name=" 만들기 " path="/albums/upload" />
+         
+
+
+            {/* 메인 오른쪽 만들기 버튼 */}
+            <div style={{ marginLeft: '764px', marginTop: '33px' }}>
+              <BlueButton name="만들기" path="/albums/upload" />
             </div>
+
+
+
             <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">앨범 ({albums.length}개) </div>
-          </div>
+          
 
           <div className="album-container">
             <div className="albums-scrollable">
