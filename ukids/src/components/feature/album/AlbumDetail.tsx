@@ -5,7 +5,7 @@
 // 절대 경로로 수정하기
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
 
 import './AlbumDetail.css';
