@@ -32,19 +32,49 @@ public class CallMyNameRepository {
     }
 
     // 게임 종료 및 게임 결과 저장
-    // 미완
     public List<CallMyNameResultSaveDto> endGame(Long familyId, CallMyNameRoom callMyNameRoom) {
 
         List<Map.Entry<String, Participate>> entryList = new ArrayList<>(callMyNameRoom.getParticipantList().entrySet());
-        entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getRound()));
 
-        Long rank = 1L;
+        // 참가자 리스트를 정렬 (정답을 맞춘 순서에 따라, 그 다음 라운드 순서에 따라)
+        entryList.sort((entry1, entry2) -> {
+            Participate p1 = entry1.getValue();
+            Participate p2 = entry2.getValue();
+
+            // isCorrect가 true인 참가자는 작은 round 우선
+            if (p1.isCorrect() && !p2.isCorrect()) {
+                return -1;
+            } else if (!p1.isCorrect() && p2.isCorrect()) {
+                return 1;
+            }
+            // 두 참가자가 모두 맞췄거나 모두 틀린 경우
+            return Long.compare(p1.getRound(), p2.getRound());
+        });
+
+        long rank = 1L;
+        long prevRound = -1;
         List<CallMyNameResultSaveDto> gameResultSaveDtoList = new ArrayList<>();
+
         for (Map.Entry<String, Participate> entry : entryList) {
-            // GameResult 저정해야함
+            Participate participate = entry.getValue();
+            long roundToUse = participate.isCorrect() ? participate.getRound() : Integer.MAX_VALUE;
+
+            if (roundToUse != prevRound) {
+                rank = gameResultSaveDtoList.size() + 1;
+            }
+
+            gameResultSaveDtoList.add(CallMyNameResultSaveDto.createResultDto(
+                    participate.getRound(),
+                    participate.getKeyword(),
+                    roundToUse == Integer.MAX_VALUE ? -1 : rank,
+                    entry.getKey(),
+                    familyId
+            ));
+            prevRound = roundToUse;
         }
+
+        gameResultSaveDtoList.sort(Comparator.comparing(CallMyNameResultSaveDto::getRank));
 
         return gameResultSaveDtoList;
     }
-
 }

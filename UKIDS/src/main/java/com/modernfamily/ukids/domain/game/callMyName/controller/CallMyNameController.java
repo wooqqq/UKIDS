@@ -97,4 +97,7 @@ public class CallMyNameController {
         return callMyNameService.checkAnswer(familyId, inputAnswer, userId);
     }
 
+    // 게임 결과 반환
+
+
 }

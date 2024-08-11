@@ -62,8 +62,8 @@ public class CallMyNameRoom {
         this.currentTurn = (currentTurn + 1) % participantList.size();
     }
 
-    public boolean isAllParticipantsEliminated() {
-        return participantList.size() == elimiatedParticipants.size();
+    public void endGame() {
+        this.currentTurn = -1;
     }
 
 }

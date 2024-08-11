@@ -29,12 +29,12 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     private final CallMyNameRoomRepository callMyNameRoomRepository;
     private final CallMyNameKeywordService keywordService;
     private final WebrtcService webrtcService;
-    
+
     @PostConstruct
     private void init() {
         callMyNameRooms = new HashMap<>();
     }
-    
+
     // 게임방 생성
     @Override
     public Map<String, Object> enterCallMyNameRoom(Long familyId, String userId)
@@ -148,18 +148,18 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     @Override
     public void proceedTurn(Long familyId) {
 
-        CallMyNameRoom callMyNameRoom = callMyNameRooms.get(familyId);
-
-        // 게임 진행 불가한 상태라면 초기화
-        if (callMyNameRoom.getParticipantList().size() <= 1) {
-            endGame(familyId);
-        }
-
-        Map<String, Participate> participateList = callMyNameRoom.getParticipantList();
-
-        // 현재 턴을 결정
-        int currentTurn = callMyNameRoom.getCurrentTurn();
-        List<Participate> participantIdx = new ArrayList<>(participateList.values());
+//        CallMyNameRoom callMyNameRoom = callMyNameRooms.get(familyId);
+//
+//        // 게임 진행 불가한 상태라면 초기화
+//        if (callMyNameRoom.getParticipantList().size() <= 1) {
+//            endGame(familyId);
+//        }
+//
+//        Map<String, Participate> participateList = callMyNameRoom.getParticipantList();
+//
+//        // 현재 턴을 결정
+//        int currentTurn = callMyNameRoom.getCurrentTurn();
+//        List<Participate> participantIdx = new ArrayList<>(participateList.values());
 
         // 라운드 진행
 
@@ -188,6 +188,11 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         Map<String, Object> response = new HashMap<>();
         response.put("answer", callMyNameRepository.checkAnswer(callMyNameRooms.get(familyId), userId, inputAnswer));
 
+        // 만약 남은 참가자가 1명이라면 게임 종료
+        if (callMyNameRooms.get(familyId).getParticipantList().size() == 1) {
+            endGame(familyId);
+        }
+
         // boolean 타입을 반환
         // true: 정답
         // false: 오답
@@ -199,6 +204,7 @@ public class CallMyNameServiceImpl implements CallMyNameService {
     public void endGame(Long familyId) {
         callMyNameRepository.endGame(familyId, callMyNameRooms.get(familyId));
         callMyNameRooms.remove(familyId);
+        callMyNameRooms.get(familyId).endGame();
     }
 
     private void isExistFamilyGame(Long familyId) {
