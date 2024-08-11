@@ -1,6 +1,11 @@
 // 메인화면에 뿌려질 나무 관련
 import { useEffect, useState } from 'react';
 import { useTreeStore } from '../../../stores/treeStore';
+import treeLv1 from '../../../assets/tree_lv1.png';
+import treeLv2 from '../../../assets/tree_lv2.png';
+import treeLv3 from '../../../assets/tree_lv3.png';
+import treeLv4 from '../../../assets/tree_lv4.png';
+import treeLv5 from '../../../assets/tree_lv5.png';
 import tree from '../../../assets/front-view-3d-tree-with-leaves-trunk.png';
 import '../../common/common.css';
 
@@ -42,6 +47,18 @@ const FamilyTree = () => {
   if (!treeData) {
     return <div>Loading...</div>;
   }
+
+  // 레벨에 따라 보여줄 이미지 매핑
+  const treeImages: Record<number, string> = {
+    1: treeLv1,
+    2: treeLv2,
+    3: treeLv3,
+    4: treeLv4,
+    5: treeLv5,
+  }
+
+  // 현재 레벨에 맞는 이미지 선택
+  const treeImage = treeImages[level];
   
 
   return (
@@ -54,7 +71,7 @@ const FamilyTree = () => {
         </div>
         {/* 나무이미지 */}
         <img
-          src={tree}
+          src={treeImage}
           alt="가족 유대감 나무"
           className="max-w-[400px]"
           style={{
