@@ -157,7 +157,7 @@ const Albums: React.FC = () => {
         <div className="feature-box">
           <div className="top-fixed-area">
             <div className="absolute left-[764px] top-[33px]">
-              <BlueButton name="만들기" path="/albums/upload" />
+              <BlueButton name="만들기 " path="/albums/upload" />
             </div>
             <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">앨범 ({albums.length}개) </div>
           </div>
