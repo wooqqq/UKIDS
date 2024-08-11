@@ -7,7 +7,7 @@ const QuizQuestion = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState(''); // 답변 입력 필드의 내용
   const [selectedOption, setSelectedOption] = useState(''); // OX 버튼의 선택 상태 ('O' or 'X')
-  const [applyToAll, setApplyToAll] = useState(false); // 체크박스 상태 (가족들에게도 질문할지 여부)
+  // const [applyToAll, setApplyToAll] = useState(false); // 체크박스 상태 (가족들에게도 질문할지 여부)
 
   // 답변 입력 필드 변경 시 호출되는 함수
   const handleAnswerChange = (e: any) => {
@@ -21,10 +21,10 @@ const QuizQuestion = () => {
     setAnswer(''); // 답변 입력 필드 초기화
   };
 
-  // 체크박스 상태 변경 시 호출되는 함수
-  const handleCheckboxChange = (e: any) => {
-    setApplyToAll(e.target.checked); // 체크박스 상태 업데이트
-  };
+  // // 체크박스 상태 변경 시 호출되는 함수
+  // const handleCheckboxChange = (e: any) => {
+  //   setApplyToAll(e.target.checked); // 체크박스 상태 업데이트
+  // };
 
   // 폼 제출 시 호출되는 함수
   const handleSubmit = (e: any) => {
@@ -53,20 +53,21 @@ const QuizQuestion = () => {
     };
 
     console.log(data);
+    alert('퀴즈 등록 완료!');
 
-    if (applyToAll) {
-      // 가족방에 있는 사람들의 ID를 얻어와서 이 질문 등록 요청
-    } else {
-      // 내 질문만 업데이트 요청
-      api
-        .post('/quiz-question', data)
-        .then((response: any) => {
-          console.log(response.data);
-        })
-        .catch((e: any) => {
-          console.error(e);
-        });
-    }
+    // if (applyToAll) {
+    //   // 가족방에 있는 사람들의 ID를 얻어와서 이 질문 등록 요청
+    // } else {
+    //   // 내 질문만 업데이트 요청
+    //   api
+    //     .post('/quiz-question', data)
+    //     .then((response: any) => {
+    //       console.log(response.data);
+    //     })
+    //     .catch((e: any) => {
+    //       console.error(e);
+    //     });
+    // }
   };
 
   return (
@@ -127,7 +128,8 @@ const QuizQuestion = () => {
                   X
                 </button>
               </div>
-              <div className="m-4">
+              {/* 체크박스 사용 X 예정 */}
+              {/* <div className="m-4">
                 <input
                   type="checkbox"
                   id="sameQuestion"
@@ -138,7 +140,7 @@ const QuizQuestion = () => {
                 <label htmlFor="sameQuestion" className="m-2">
                   가족들에게도 같은 질문하기
                 </label>
-              </div>
+              </div> */}
 
               {/* 버튼 영역 */}
               <div className="flex justify-center p-4 mt-32">
