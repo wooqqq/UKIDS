@@ -13,7 +13,7 @@ interface Diary{
 export const PictureDiaryCreate = () => {
 
     const [diary, setDiary] = useState<Diary>({
-        familyId: 11,
+        familyId: 6,
         file: null,         // File은 null로 초기화
         content: '',
         date: '',

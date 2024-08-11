@@ -45,7 +45,7 @@ export const Modal = ({content, modalState, setModalState, deleteElement}: Modal
     const checkPassword = async () => {
         const url = "/family/pwcheck";
         const config = {
-            familyId : 11,
+            familyId : 6,
             password
         }
 

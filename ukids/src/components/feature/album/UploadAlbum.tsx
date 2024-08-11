@@ -139,7 +139,7 @@ const UploadAlbum = () => {
   };
 
   return (
-    <div className="feature-box relative w-[911px] h-[576px] overflow-x-hidden overflow-y-hidden">
+    <div className="feature-box relative w-[911px] h-[576px] ">
       <div className="left-88 top-37 w-[911px] h-[150px] bg-[#fff] z-50">
         <div className="absolute left-0 top-0 w-[911px] h-[150px] bg-[#fff] rounded-[20px]"></div>
         <div className="absolute left-[94px] top-[20px] w-[726px] h-[50px] border-[solid] border-#ddd border">
@@ -166,7 +166,7 @@ const UploadAlbum = () => {
 
         <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px]">
           <WhiteButton name="목록" path="/albums" className="absolute left-0 top-0 w-[80px] h-[30px]" />
-          <div className="absolute left-1/2 top-0 transform -translate-x-1/2">
+          <div className="absolute left-1/2 top-0 transform -translate-x-1/2" style={{ zIndex: 9999 }}>
           <DatePicker
             selected={date}
             onChange={handleDateChange}   
@@ -223,7 +223,7 @@ const UploadAlbum = () => {
 
       <div className="preview-box">
         {photos.map((photo, index) => (
-          <div key={index} className="photo-container relative">
+          <div key={index} className="photo-containertwo relative">
             <img
               src={closeIcon}
               alt="Delete Icon"
