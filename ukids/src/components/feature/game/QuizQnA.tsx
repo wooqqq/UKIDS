@@ -89,11 +89,11 @@ const QuizQnA = () => {
         {/* 질문 목록 */}
         <div className="h-[65%] overflow-y-auto">
           {/* 테이블 영역 */}
-          <div className=" flex justify-center">
+          <div className="flex justify-center">
             {questionList.length !== 0 ? (
               <table className="w-[80%]">
-                <thead className="">
-                  <tr className="border-solid border-b-4 border-[#777777] ">
+                <thead>
+                  <tr className="border-solid border-b-4 border-[#777777]">
                     <th className="text-center py-3">번호</th>
                     <th className="text-center">질문</th>
                     <th className="text-center">답변</th>
@@ -186,7 +186,7 @@ const QuizQnA = () => {
 
         {/* 버튼 */}
         <div className="h-[15%] flex justify-center">
-          <button onClick={onClick} className="game-btn-quiz-y game-btn-common">
+          <button onClick={onClick} className="game-btn-quiz game-btn-common">
             퀴즈 더 내러가기
           </button>
         </div>

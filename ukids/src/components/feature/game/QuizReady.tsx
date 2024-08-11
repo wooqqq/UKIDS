@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import GameButton from './GameButton';
+import QuizButton from './QuizButton';
 import FamilyMemberList from '../family/FamilyMemberList';
 import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
@@ -18,7 +18,9 @@ const QuizReady = () => {
         <div className="w-3/4 flex flex-col justify-center items-center">
           {/* 제목 */}
           <div className="h-[15%] flex flex-row">
-            <span className="flex items-center text-5xl">가족 퀴즈 준비</span>
+            <span className="flex items-center game-font quiz-font-color">
+              가족 퀴즈 준비
+            </span>
             <button className="">
               <img src={gameExplain} alt="설명" />
             </button>
@@ -49,10 +51,10 @@ const QuizReady = () => {
           <div className="h-[15%] flex flex-row p-4">
             {!isReady ? (
               <>
-                <GameButton name="돌아가기" path="../" />
+                <QuizButton name="돌아가기" path="../" />
                 <button
                   onClick={handleClick}
-                  className="game-btn-quiz-y game-btn-common"
+                  className="game-btn-quiz game-btn-common"
                 >
                   준비 완료!
                 </button>
@@ -60,7 +62,7 @@ const QuizReady = () => {
             ) : (
               <button
                 onClick={handleClick}
-                className="game-btn-quiz-g game-btn-common"
+                className="game-btn-g game-btn-common"
               >
                 준비 취소
               </button>

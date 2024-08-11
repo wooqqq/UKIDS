@@ -6,7 +6,7 @@ interface GameButtonProps {
   path: string;
 }
 
-const GameButton = ({ name, path }: GameButtonProps) => {
+const CallMyNameButton = ({ name, path }: GameButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -28,7 +28,7 @@ const GameButton = ({ name, path }: GameButtonProps) => {
     <button
       onClick={handleClick}
       className={`rounded-full ${
-        checkGray() ? 'game-btn-quiz-g' : 'game-btn-quiz-y'
+        checkGray() ? 'game-btn-g' : 'game-btn-callmyname'
       } game-btn-common`}
     >
       {name}
@@ -36,4 +36,4 @@ const GameButton = ({ name, path }: GameButtonProps) => {
   );
 };
 
-export default GameButton;
+export default CallMyNameButton;

@@ -1,12 +1,17 @@
-import GameButton from './GameButton';
+import { useEffect } from 'react';
+import QuizButton from './QuizButton';
 import './gamepart.css';
 
 const QuizQnA = () => {
+  // 게임 결과 가져오기
+
+  useEffect(() => {});
+
   return (
     <>
       <div className="feature-box">
         {/* 상단 */}
-        <div className="h-[15%] flex justify-center items-center game-font">
+        <div className="h-[15%] flex justify-center items-center game-font quiz-font-color">
           <h1>퀴즈 결과</h1>
         </div>
 
@@ -17,8 +22,8 @@ const QuizQnA = () => {
 
         {/* 버튼 */}
         <div className="h-[15%] flex flex-row justify-center">
-          <GameButton name="결과 기록" path="../history" />
-          <GameButton name="메인으로" path="/" />
+          <QuizButton name="결과 기록" path="../history" />
+          <QuizButton name="메인으로" path="/game" />
         </div>
       </div>
     </>

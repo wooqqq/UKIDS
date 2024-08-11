@@ -10,7 +10,7 @@ const QuizQnA = () => {
     <>
       <div className="feature-box flex justify-center flex-col">
         {/* 문제 */}
-        <div className="h-[15%] flex justify-center game-font">
+        <div className="h-[15%] flex justify-center game-font quiz-font-color">
           <p>문제 {questionNum}</p>
         </div>
 

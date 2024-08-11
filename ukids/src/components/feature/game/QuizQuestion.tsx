@@ -120,7 +120,7 @@ const QuizQuestion = () => {
               <div className="flex justify-center p-4 mt-32">
                 <button
                   type="button"
-                  className="game-btn-common game-btn-quiz-g"
+                  className="game-btn-common game-btn-g"
                   onClick={() => {
                     setQuestion('');
                     setAnswer('');
@@ -129,10 +129,7 @@ const QuizQuestion = () => {
                 >
                   초기화
                 </button>
-                <button
-                  className="game-btn-common game-btn-quiz-y"
-                  type="submit"
-                >
+                <button className="game-btn-common game-btn-quiz" type="submit">
                   등록하기
                 </button>
               </div>

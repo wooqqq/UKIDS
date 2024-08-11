@@ -24,17 +24,28 @@
   font-family: 'ONE-Mobile-POP';
 }
 
-/* 글자 외곽선 css 추가해야함 */
+/* 게임 폰트 */
 .game-font {
-  color: #ffbf33;
   text-align: center;
-  --webkit-text-stroke-width: 5;
-  --webkit-text-stroke-color: #222;
   font-family: 'ONE-Mobile-POP';
   font-size: 64px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  text-shadow: 1px 1px 0 #222, -1px 1px 0 #222, 1px -1px 0 #222,
+    -1px -1px 0 #222, 1px 0 0 #222, -1px 0 0 #222, 0 1px 0 #222, 0 -1px 0 #222,
+    2px 2px 0 #222, -2px 2px 0 #222, 2px -2px 0 #222, -2px -2px 0 #222,
+    2px 0 0 #222, -2px 0 0 #222, 0 2px 0 #222, 0 -2px 0 #222, 3px 3px 0 #222,
+    -3px 3px 0 #222, 3px -3px 0 #222, -3px -3px 0 #222, 3px 0 0 #222,
+    -3px 0 0 #222, 0 3px 0 #222, 0 -3px 0 #222;
+}
+
+.quiz-font-color {
+  color: #ffbf33;
+}
+
+.callmyname-font-color {
+  color: #9f6ad5;
 }
 
 /* 게임 버튼 스타일 */
@@ -44,7 +55,7 @@
   padding: 1rem 2rem;
   justify-content: center;
   align-items: center;
-  color: var(--Grays-White, #fff);
+  color: #fff;
   text-align: center;
   font-family: 'ONE-Mobile-POP';
   font-size: 36px;
@@ -55,19 +66,20 @@
   margin-right: 1.25rem;
 }
 
-/* 가족 퀴즈 노랑 */
-.game-btn-quiz-y {
+/* 퀴즈 노랑 */
+.game-btn-quiz {
   border-radius: 100rem;
   background: #ffbf33;
 }
 
-/* 가족 퀴즈 회색 */
-.game-btn-quiz-g {
+/* 콜마넴 보라 */
+.game-btn-callmyname {
   border-radius: 100rem;
-  background: #777777;
+  background: #9f6ad5;
 }
 
-/* 콜마넴 긍정 */
-.game-btn-callmyname {
-  background: #9f6ad5;
+/* 게임 회색 */
+.game-btn-g {
+  border-radius: 100rem;
+  background: #777777;
 }
