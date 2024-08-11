@@ -27,6 +27,8 @@
     font-family: 'UhBeejung', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
     font-size: 26px; /* 폰트 크기 설정 */
     color: #333; /* 입력 텍스트 색상 */
+
+    overflow-y: auto;
 }
 
 /* 내용을 입력하세요 문구  */
