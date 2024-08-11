@@ -2,15 +2,12 @@ package com.modernfamily.ukids.domain.game.callMyName.model.repository;
 
 import com.modernfamily.ukids.domain.game.callMyName.entity.CallMyNameRoom;
 import com.modernfamily.ukids.domain.game.callMyName.entity.Participate;
-import com.modernfamily.ukids.domain.game.callMyName.model.service.CallMyNameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class CallMyNameRoomRepository {
-
-    private final CallMyNameService callMyNameService;
 
     // 게임방 생성
     public CallMyNameRoom createCallMyNameRoom(String sessionId) {
@@ -58,8 +55,4 @@ public class CallMyNameRoomRepository {
         return callMyNameRoom.isStart();
     }
 
-    // 키워드 생성
-    public void generateKeyword(CallMyNameRoom callMyNameRoom) {
-
-    }
 }
