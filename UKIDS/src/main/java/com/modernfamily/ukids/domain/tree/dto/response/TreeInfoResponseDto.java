@@ -1,13 +1,10 @@
 package com.modernfamily.ukids.domain.tree.dto.response;
 
-import com.modernfamily.ukids.domain.tree.entity.TreeType;
-import lombok.AllArgsConstructor;
+import com.modernfamily.ukids.domain.tree.entity.Tree;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class TreeInfoResponseDto {
 
     private Long treeId;
@@ -16,8 +13,23 @@ public class TreeInfoResponseDto {
 
     private boolean isComplete;
 
-    private TreeType treeType;
-
     private Long familyId;
+
+    @Builder
+    private TreeInfoResponseDto(Long treeId, Long exp, boolean isComplete, Long familyId) {
+        this.treeId = treeId;
+        this.exp = exp;
+        this.isComplete = isComplete;
+        this.familyId = familyId;
+    }
+
+    public static TreeInfoResponseDto createResponseDto(Tree tree) {
+        return TreeInfoResponseDto.builder()
+                .treeId(tree.getTreeId())
+                .exp(tree.getExp())
+                .isComplete(tree.isComplete())
+                .familyId(tree.getFamily().getFamilyId())
+                .build();
+    }
 
 }

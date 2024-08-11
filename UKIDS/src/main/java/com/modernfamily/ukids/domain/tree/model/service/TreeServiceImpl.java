@@ -7,7 +7,6 @@ import com.modernfamily.ukids.domain.tree.dto.request.TreeCreateRequestDto;
 import com.modernfamily.ukids.domain.tree.dto.request.TreeUpdateRequestDto;
 import com.modernfamily.ukids.domain.tree.dto.response.TreeInfoResponseDto;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
-import com.modernfamily.ukids.domain.tree.mapper.TreeMapper;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
@@ -21,7 +20,6 @@ public class TreeServiceImpl implements TreeService {
     private final TreeRepository treeRepository;
     private final FamilyRepository familyRepository;
     private final LetterRepository letterRepository;
-    private final TreeMapper treeMapper;
 
     @Override
     public Tree createTree(TreeCreateRequestDto treeDto) {
@@ -29,7 +27,7 @@ public class TreeServiceImpl implements TreeService {
         Family family = familyRepository.findByFamilyId(treeDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILY_EXCEPTION));
 
-        Tree tree = treeMapper.toCreateEntity(treeDto);
+        Tree tree = new Tree(family);
         tree.setFamily(family);
 
         return treeRepository.save(tree);
@@ -42,7 +40,7 @@ public class TreeServiceImpl implements TreeService {
         Tree tree = treeRepository.findByFamily_FamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
-        return treeMapper.toResponseDto(tree);
+        return TreeInfoResponseDto.createResponseDto(tree);
     }
 
     // 가족 id를 통해 나무 경험치 업데이트
