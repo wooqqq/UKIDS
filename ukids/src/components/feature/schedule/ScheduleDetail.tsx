@@ -52,26 +52,26 @@ const ScheduleDetail = () => {
         <WhiteButton name="목록" path="/schedule/list" />
         <GrayButton name="수정" path="/schedule/edit/:scheduleId" />
       </section>
-      <section>
-        <div>
+      <section className="px-5 content-center">
+        <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>
           <label>제목</label>
-          <p></p>
+          <p className="p-2"></p>
         </div>
-        <div>
+        <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>
           <label>장소</label>
-          <p></p>
+          <p className="p-2"></p>
         </div>
-        <div>
+        <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>
           <label>일시</label>
-          <p></p>
+          <p className="p-2"></p>
         </div>
-        <div>
+        <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>
           <label>가족</label>
-          <p></p>
+          <p className="p-2"></p>
         </div>
-        <div>
-          <label>알림</label>
-          <p></p>
+        <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>
+          <label>메모</label>
+          <p className="p-2"></p>
         </div>
       </section>
     </div>
