@@ -40,7 +40,11 @@ public class TreeServiceImpl implements TreeService {
         Tree tree = treeRepository.findByFamily_FamilyId(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
-        return TreeInfoResponseDto.createResponseDto(tree);
+        // 해당 나무와 연결된 편지 수 계산
+//        int letterCount = letterRepository.countByTreeAndIsOpen(tree, false); // isOpen이 false인 편지 개수
+
+//        return TreeInfoResponseDto.createResponseDto(tree, letterCount);
+        return TreeInfoResponseDto.createResponseDto(tree, 1);
     }
 
     // 가족 id를 통해 나무 경험치 업데이트

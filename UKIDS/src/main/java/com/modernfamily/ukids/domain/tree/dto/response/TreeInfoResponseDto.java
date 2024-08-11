@@ -31,13 +31,13 @@ public class TreeInfoResponseDto {
         this.createTime = createTime;
     }
 
-    public static TreeInfoResponseDto createResponseDto(Tree tree) {
+    public static TreeInfoResponseDto createResponseDto(Tree tree, int letterCount) {
         return TreeInfoResponseDto.builder()
                 .treeId(tree.getTreeId())
                 .exp(tree.getExp())
                 .isComplete(tree.isComplete())
                 .familyId(tree.getFamily().getFamilyId())
-                .letterCount(0)
+                .letterCount(letterCount)
                 .createTime(tree.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
     }
