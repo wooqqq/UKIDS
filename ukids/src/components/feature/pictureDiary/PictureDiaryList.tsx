@@ -19,9 +19,9 @@ const PictureDiaryList = () => {
   //   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentPage] = useState<number>(1);
 
-  const getDiaryList = async () => {
-    const url = `/picture-diary/all/11?page=${currentPage}&size=10`;
-    const { data } = await api.get(url);
+    const getDiaryList = async () =>{
+        const url = `/picture-diary/all/6?page=${currentPage}&size=10`;
+        const {data} = await api.get(url);
 
     setDiaries(data.result.pictureDiaries);
   };
