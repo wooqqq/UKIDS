@@ -38,9 +38,9 @@ public class GrowthRecordController {
         return httpResponseUtil.createResponse(HttpMethodCode.POST, SuccessMessage.SUCCESS_UPDATE_GROWTHRECORD.getMessage());
     }
 
-    @GetMapping
-    public ResponseEntity<Map<String,Object>> getGrowthRecord(@RequestBody GrowthRecordDetailDto growthRecordDetailDto){
-        GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.getGrowthRecord(growthRecordDetailDto);
+    @GetMapping("/{recordId}")
+    public ResponseEntity<Map<String,Object>> getGrowthRecord(@PathVariable("recordId") Long recordId){
+        GrowthRecordResponseDto growthRecordResponseDto = growthRecordService.getGrowthRecord(recordId);
 
         return httpResponseUtil.createResponse(HttpMethodCode.GET, growthRecordResponseDto);
     }

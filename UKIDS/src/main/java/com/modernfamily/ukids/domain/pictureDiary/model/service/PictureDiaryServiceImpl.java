@@ -150,7 +150,7 @@ public class PictureDiaryServiceImpl implements PictureDiaryService{
                 throw new RuntimeException(e);
             }
 
-            s3Manager.deleteFile(pictureDiaryUpdateDto.getImageS3Name());
+            s3Manager.deleteFile(pictureDiary.getImageS3Name());
 
             pictureDiaryUpdateDto.setImageName(uploadParam.get("originalName").toString());
             pictureDiaryUpdateDto.setImageS3Name(uploadParam.get("s3FileName").toString());
