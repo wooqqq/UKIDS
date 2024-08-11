@@ -1,5 +1,3 @@
-
-
 interface DiaryItem {
     pictureUrl: string;
     content: string;
