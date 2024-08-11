@@ -12,7 +12,7 @@ const FamilyTree = () => {
   }));
 
   useEffect(() => {
-    const familyId = 3;
+    const familyId = 14;
     fetchTreeData(familyId);
   }, [fetchTreeData]);
 
@@ -58,7 +58,7 @@ const FamilyTree = () => {
           <div
             className="h-7 bg-blue-600 rounded-full dark:bg-blue-500 text-center font-semibold content-center"
             style={{
-              width: `${treeData.result.exp}%`,
+              width: `${treeData.result.exp / 10}%`,
               color: '#fff',
               background: '#FFBF33',
             }}
