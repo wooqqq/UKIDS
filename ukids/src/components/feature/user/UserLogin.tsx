@@ -30,7 +30,6 @@ const UserLogin = () => {
       if (token) {
         setToken(token); // 로그인 성공하여 토큰 저장
         api.defaults.headers.common['Authorization'] = `Bearer ${result}`; // 새로운 토큰 설정
-
         nav('/main'); // 로그인 후 리디렉션할 페이지
       } else {
         throw new Error('토큰이 응답에 포함되어 있지 않습니다.');

@@ -23,22 +23,22 @@ const ScheduleBox = () => {
       <h1 className="title-style">{selectedDate}</h1>
       <section className="flex justify-between mt-8">
         <button className="half-pre-box" onClick={onClickAlbumButton}>
-          <div>앨범</div>
+          <div className="title-style">앨범</div>
           <div>
             <img src="#" alt="앨범 이미지" />
           </div>
           <button>앨범 페이지 이동</button>
         </button>
         <button className="half-pre-box" onClick={onClickPaintButton}>
-          <div>그림일기</div>
+          <div className="title-style">그림일기</div>
           <div>
             <img src="#" alt="그림일기 이미지" />
             <button>그림일기 페이지 이동</button>
           </div>
         </button>
       </section>
-      <section className="pre-box mt-8">
-        <div>일정</div>
+      <section className="pre-box mt-8 p-5">
+        <div className="title-style">일정</div>
         <button onClick={onClickScheduleListButton}>더보기</button>
 
         {selectedDate && (

@@ -7,7 +7,6 @@ import BlueButton from '../../common/BlueButton';
 import SockJS from 'sockjs-client';
 import { useAuthStore } from '@/stores/authStore';
 import api from '../../../util/api';
-import axios from 'axios';
 
 interface Message {
   messageId: number;
@@ -21,19 +20,28 @@ interface Message {
 interface JwtPayload {
   userId: string;
 }
+// interface DecodedToken {
+//   userId: number;
+//   // 필요한 다른 필드들 추가
+// }
 
 const FamilyChatting = () => {
   const { ukidsURL, token } = useAuthStore();
-  const chatRoomId = 1;
-  const familyId = 1;
+  const familyId = 7;
+  const chatRoomId = familyId;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [stompClient, setStompClient] = useState<Client | null>(null);
+  const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
+    null,
+  );
 
   const userId = Number.parseInt(
     jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
   );
+
+  // 디코딩된 토큰 정보 가져오기
+  // const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,48 +55,76 @@ const FamilyChatting = () => {
     }
   };
 
+  const getChatList = async () => {
+    const url = `/chat/room/${chatRoomId}/messages`;
+
+    const { data } = await api.get(url);
+
+    console.log('chats : ', data);
+
+    const formattedMessages = data.map((chat: any) => ({
+      messageId: chat.createTime,
+      content: chat.message,
+      user_id: chat.senderId,
+      is_delete: false,
+      create_time: chat.createTime,
+      update_time: chat.createTime,
+    }));
+
+    formattedMessages.reverse();
+
+    setMessages(formattedMessages);
+  };
+
+  // 채팅방 입장
+  const enterChatRoom = async () => {
+    console.log('Enter chat room');
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: '/pub/chat/message',
+          body: JSON.stringify({
+            type: 'ENTER',
+            roomId: chatRoomId,
+            message: message,
+          }),
+        });
+      } catch (error) {
+        console.error('Enter 메세지 전송 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
   // 메세지 전송
   const sendMessage = async () => {
-    if (stompClient && stompClient.connected && message.trim() !== '') {
+    console.log('Sending message:', message);
+    if (
+      stompClientInstance &&
+      stompClientInstance.connected &&
+      message.trim() !== ''
+    ) {
       try {
-        // 서버로 메시지 전송 (POST 요청)
-        const response = await axios.post(
-          `${ukidsURL}/ws/ws-stomp/pub/chat/message`,
-          JSON.stringify({
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: '/pub/chat/message',
+          body: JSON.stringify({
             type: 'TALK',
             roomId: chatRoomId,
             sender: userId,
-            message,
+            message: message,
           }),
-          {
-            headers: {
-              Authorization: token,
-            },
-          },
-        );
-
-        if (response.status !== 200) {
-          throw new Error('Failed to send message');
-        }
-
-        // 전송 후 상태 업데이트
-        setMessages((prevMessages) => [
-          {
-            messageId: Date.now(),
-            content: message,
-            user_id: userId,
-            is_delete: false,
-            create_time: new Date().toISOString(),
-            update_time: new Date().toISOString(),
-          },
-          ...prevMessages,
-        ]);
+        });
 
         setMessage('');
         scrollToBottom();
       } catch (error) {
         console.error('메세지 전송 오류:', error);
       }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
     }
   };
 
@@ -100,18 +136,11 @@ const FamilyChatting = () => {
 
   // 처음 입장 시
   useEffect(() => {
-    console.log(userId);
-    console.log(token);
-    console.log(token?.substring(7));
-    // 방 연결
-
-    // 웹소켓 설정
     const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
-    // 클라이언트(방 입장자) 생성 및 서버와 연결
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
-        Authorization: `Bearer ${token?.substring(7)}`,
+        Authorization: `${token}`,
       },
       debug: (str) => {
         console.log('웹소켓 디버그: ' + str);
@@ -121,49 +150,41 @@ const FamilyChatting = () => {
       heartbeatOutgoing: 4000,
     });
 
-    // 소켓 연결 후, 저장된 메세지 불러오기
-    api
-      .get(`/chat/room/${chatRoomId}/messages`)
-      .then((response) => {
-        setMessages(
-          response.data.map((msg: any) => ({
-            messageId: msg.messageId,
-            content: msg.message,
-            user_id: msg.userId,
-            is_delete: msg.is_delete,
-            create_time: msg.createTime,
-            update_time: msg.updateTime,
-          })),
-        );
-        scrollToBottom();
-      })
-      .catch((error) => {
-        console.error('메세지 가져오기 실패:', error);
-      });
-
-    // 구독하기
     client.onConnect = (frame) => {
       console.log('WebSocket 연결이 열렸습니다.', frame);
 
-      // 채팅방 메세지 구독
-      client.subscribe(
-        `${ukidsURL}/topic/chat/room/${chatRoomId}`,
-        (message: IMessage) => {
-          const receivedMessage: Message = JSON.parse(message.body);
-          setMessages((prevMessages) => [receivedMessage, ...prevMessages]);
-        },
-      );
+      // 올바른 stompClientInstance 설정
+      console.log('Setting stompClientInstance:', client);
+      setStompClientInstance(client);
 
-      // 웹소켓 클라이언트를 상태로 저장
-      setStompClient(client);
+      client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
+        console.log('Received message:', message.body);
+        const receivedRawMessage = JSON.parse(message.body);
+
+        const receivedMessage: Message = {
+          messageId: receivedRawMessage.createTime,
+          content: receivedRawMessage.message,
+          user_id: receivedRawMessage.senderId,
+          is_delete: false,
+          create_time: receivedRawMessage.createTime,
+          update_time: receivedRawMessage.createTime,
+        };
+        setMessages((prevMessages) => {
+          const messageExists = prevMessages.some(
+            (msg) => msg.messageId === receivedMessage.messageId,
+          );
+          if (!messageExists) {
+            return [receivedMessage, ...prevMessages];
+          }
+          return prevMessages;
+        });
+      });
     };
-
     client.onStompError = (frame) => {
       console.error('STOMP Error:', frame.headers['message']);
       console.error('Details:', frame.body);
     };
 
-    // 클라이언트 활성화
     client.activate();
 
     return () => {
@@ -171,8 +192,12 @@ const FamilyChatting = () => {
         client.deactivate();
       }
     };
-  }, []);
+  }, [ukidsURL, token, chatRoomId]);
 
+  useEffect(() => {
+    getChatList();
+    enterChatRoom();
+  }, []);
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
   useEffect(() => {
     scrollToBottom();
