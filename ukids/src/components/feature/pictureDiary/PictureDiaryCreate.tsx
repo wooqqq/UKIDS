@@ -93,23 +93,23 @@ export const PictureDiaryCreate = () => {
                 fontFamily: 'UhBeejung' // 폰트 
               }}
             />
-      </div>
+            </div>
 
-      {/* 상단 목록, 등록 버튼 */}
+         {/* 상단 목록, 등록 버튼 */}
 
      
       
       
-      {/* <button onClick={createDiary}>등록</button> */}
+          {/* <button onClick={createDiary}>등록</button> */}
 
 
-      <div style={{ position: 'absolute', top: '27px', left: '30px' }}>
-        <WhiteButton name="목록" path="/paintdiary"/>
-      </div>
+          <div style={{ position: 'absolute', top: '27px', left: '30px' }}>
+            <WhiteButton name="목록" path="/paintdiary"/>
+          </div>
 
-      <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
-        <BlueButton name="등록" path="/paintdiary" onClick={createDiary} />
-      </div>
+          <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
+            <BlueButton name="등록" path="/paintdiary" onClick={createDiary} />
+          </div>
 
       <div className="container">
 
