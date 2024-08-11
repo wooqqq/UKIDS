@@ -44,7 +44,6 @@ public class QuizController {
 
     }
 
-
     // 유저 퇴장
     @MessageMapping("/quiz/exit")
     public void exitQuizRoom(@RequestBody Map<String, Object> payload, SimpMessageHeaderAccessor headerAccessor) {
