@@ -1,9 +1,16 @@
-.input-content{
+.container {
+    display: flex;       /* Flexbox를 활성화 */
+    align-items: flex-start; /* 자식 요소들을 컨테이너의 상단에 정렬 */
+    gap: 10px;           /* 요소 사이의 간격 설정 */
+  }
+  
+  
+  .input-content{
     border: 3px solid  #f3f2f2;
     background-color: #f3f2f2;
     text-align: center;
-    width: 850px;
-    height: 180px;
+    width: 400px;
+    height: 450px;
 
     margin-top: 30px;
 
@@ -49,14 +56,14 @@
     position: relative;
 
    
-    justify-content: center;  /* 가로 축에서 중앙 정렬 */
+    
 
 
     border: 5px solid #FFEFCC;
     text-align: center;
 
-    width: 500px;
-    height: 250px;
+    width: 400px;
+    height: 450px;
 
 
     flex-shrink: 0;
@@ -65,7 +72,7 @@
     stroke: #FFEFCC;
     opacity: var(--sds-size-stroke-border);
     filter: drop-shadow(0px 0px 7px rgba(153, 153, 153, 0.25)); 
-    margin-left: 220px; /* 왼쪽 마진 추가 */
+    margin-left: 40px; /* 왼쪽 마진 추가 */
     border-radius: 15px; /* 테두리를 둥글게 */
 
  

@@ -96,37 +96,32 @@ export const PictureDiaryDetail = () => {
 
 
 
-      
+      <div className="container">
 
-      {/* 그림 등록 네모 박스  */}
-      <div className="image-box">
-        
-          <label className="input-file-box" htmlFor="fileUpload">
-            
-          {/* 이미지 미리보기 */}
-
-          <div>
-            <img src={diary?.pictureUrl} alt="" />
-          </div>
-         
+        {/* 그림 등록 네모 박스  */}
+        <div className="image-box">
           
-          </label>
+            <label className="input-file-box" htmlFor="fileUpload">
+              
+            {/* 이미지 미리보기 */}
+              <div>
+                <img src={diary?.pictureUrl} alt="" />
+              </div> 
+            </label>
+        </div>
+
+
+
+        <div>
+          
+
+
+          {/* 글자 입력창  */}
+        <div className="input-content">
+          {diary?.content}
+        </div>
 
       </div>
-
-
-
-      <div>
-       
-
-
-           {/* 글자 입력창  */}
-          <div className="input-content">
-            {diary?.content}
-
-          </div>
-
-
 
 
 
