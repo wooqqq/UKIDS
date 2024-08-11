@@ -48,6 +48,9 @@ const FamilyTree = () => {
     return <div>Loading...</div>;
   }
 
+  console.log(treeData.result);
+  
+
   // 레벨에 따라 보여줄 이미지 매핑
   const treeImages: Record<number, string> = {
     1: treeLv1,
