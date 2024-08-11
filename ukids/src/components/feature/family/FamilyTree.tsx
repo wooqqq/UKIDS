@@ -1,5 +1,5 @@
 // 메인화면에 뿌려질 나무 관련
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTreeStore } from '../../../stores/treeStore';
 import tree from '../../../assets/front-view-3d-tree-with-leaves-trunk.png';
 import '../../common/common.css';
@@ -11,16 +11,37 @@ const FamilyTree = () => {
     fetchTreeData: state.fetchTreeData,
   }));
 
+  const [level, setLevel] = useState(1);
+
+
   useEffect(() => {
     const familyId = 14;
     fetchTreeData(familyId);
   }, [fetchTreeData]);
 
+  
+  // 나무 레벨 설정
+  useEffect(() => {
+    if (treeData && treeData.result && treeData.result.exp != undefined) {
+      const exp = treeData.result.exp;
+      let calculatedLevel = 1;
+      if (exp >= 800) {
+        calculatedLevel = 5;
+      } else if (exp >= 600) {
+        calculatedLevel = 4;
+      } else if (exp >= 400) {
+        calculatedLevel = 3;
+      } else if (exp >= 200) {
+        calculatedLevel = 2;
+      }
+      setLevel(calculatedLevel);
+    }
+  }, [treeData]);
+
+
   if (!treeData) {
     return <div>Loading...</div>;
   }
-
-  console.log(treeData.result);
   
 
   return (
@@ -48,7 +69,7 @@ const FamilyTree = () => {
           style={{ color: '#333', fontSize: '1.2rem' }}
         >
           {/* 레벨, 경험치 정보 */}
-          Lv.4 자라나무
+          Lv.{level} 자라나무
         </div>
             <div className="w-full absolute text-center" style={{color: '#fff'}}>
               {/* 게이지바 */}
