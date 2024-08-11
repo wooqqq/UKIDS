@@ -5,9 +5,10 @@ import api from "@/util/api.ts"
 interface ModalProps {
     modalState: boolean;
     setModalState: React.Dispatch<React.SetStateAction<boolean>>;
+    renewFolderList: () => void
 }
 
-export const GrowthFolderCreateModal = ({modalState, setModalState}: ModalProps) => {
+export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderList}: ModalProps) => {
     const navigate = useNavigate();
     
     const [folderName, setFolderName] = useState<string>();
@@ -35,13 +36,15 @@ export const GrowthFolderCreateModal = ({modalState, setModalState}: ModalProps)
         const url = `/growth-folder`;
 
         const inputData = {
-            familyId: 11,
+            familyId: 1,
             folderName: folderName
         }
 
         const {data} = await api.post(url, inputData);
 
         console.log(data);
+
+        renewFolderList();
 
         setModalState(!modalState);
 

@@ -22,7 +22,7 @@ export const GrowthFolderList = () => {
 
 
     const getFolderList = async () => {
-        const url = `/growth-folder/all/11?size=10`;
+        const url = `/growth-folder/all/1?size=10`;
 
         const {data} = await api.get(url);
 
@@ -34,6 +34,10 @@ export const GrowthFolderList = () => {
     useEffect(() => {
         getFolderList();
     }, [])
+
+    const renewFolderList = () => {
+        getFolderList();
+    }
 
     {/* <div className="relative mt-10"> */}
     return (
@@ -72,7 +76,7 @@ export const GrowthFolderList = () => {
                 
                 <div>
                     {modalState && (
-                    <GrowthFolderCreateModal modalState={modalState} setModalState={setModalState}/>
+                    <GrowthFolderCreateModal modalState={modalState} setModalState={setModalState} renewFolderList={renewFolderList}/>
                     )}
                 </div>
 
