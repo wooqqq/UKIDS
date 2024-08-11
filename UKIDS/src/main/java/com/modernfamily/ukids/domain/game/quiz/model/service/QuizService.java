@@ -39,17 +39,21 @@ public class QuizService {
             quizRooms.put(familyId, quizRoomRespository.createGameRoom(sessionId));
         }
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", familyId);
+        response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
+
+
         // 참여자 목록에 있어
-        if(quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
-            throw new ExceptionResponse(CustomException.DUPLICATED_ID_EXCEPTION);
+        if(quizRoomRespository.isExistUser(userId, quizRooms.get(familyId))){
+            response.put("gameRoomInfo", quizRooms.get(familyId));
+            return response;
+        }
 
         // 이미 게임 진행 중
         if(quizRoomRespository.isPlaying(quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.ALREADY_PLAYING_EXCEPTION);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", familyId);
-        response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
 
         quizRoomRespository.enterGame(userId, familyId, quizRooms.get(familyId));
 
