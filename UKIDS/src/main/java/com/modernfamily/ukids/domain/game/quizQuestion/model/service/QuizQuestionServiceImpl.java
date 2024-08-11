@@ -138,7 +138,7 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
             List<String> wrongAnswer = null;
 
             if(quizQuestion.getQuizType() == QuizType.MULTIPLE_CHOICE){
-                String prompt = quizQuestion.getQuestion() + " 에 대한 답변이 " + quizQuestion.getAnswer() + "인데, 답변과 비슷한 2개 보기를 줘.";
+                String prompt = quizQuestion.getQuestion() + " 에 대한 답변이 " + quizQuestion.getAnswer() + "인데, 문제에 대한 다른 보기 2개만 줘. 단어면 단어로. '보기', 번호 이런거는 빼도 됨";
                 wrongAnswer = chatgptService.runPrompt(prompt);
             }
             responseDtoList.add(QuizQuestionRandomResponseDto.createResponseDto(quizQuestion, userMapper.toUserDto(writer), wrongAnswer));

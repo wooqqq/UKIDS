@@ -72,17 +72,18 @@ public class QuizController {
     }
 
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성 => boolean return
-    @MessageMapping("/quiz/ready/{id}")
+    @MessageMapping("/quiz/ready")
     public void isReadyGameStart(@RequestBody Map<String, Object> payload, SimpMessageHeaderAccessor headerAccessor) {
         String userId = headerAccessor.getUser().getName();
         Long familyId = Long.parseLong(payload.get("familyId").toString());
-
-        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.isReadyGameStart(familyId, userId));
+        boolean isReady = payload.get("state").toString().equals("true");
+        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.isReadyGameStart(familyId, userId, isReady));
     }
 
     // 질문 가져오기 -> 반환 끝나면 게임 종료 -> QuizQuestionRandomResponseDto or null (이건 게임 종료)
-    @MessageMapping("/quiz/quiz-question/{id}")
+    @MessageMapping("/quiz/question")
     public void getQuizQuestion(@RequestBody Map<String, Object> payload) {
+        log.info("Quiz Question Received payload: {}", payload);
         Long familyId = Long.parseLong(payload.get("familyId").toString());
 
         messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.getQuizQuestion(familyId));
@@ -95,5 +96,12 @@ public class QuizController {
         String userId = headerAccessor.getUser().getName();
         Long familyId = Long.parseLong(payload.get("familyId").toString());
         messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.checkQuizAnswer(familyId, (String) payload.get("inputAnswer"), userId));
+    }
+
+    @MessageMapping("/quiz/quit")
+    public void deleteQuizRoom(@RequestBody Map<String, Object> payload,
+                                SimpMessageHeaderAccessor headerAccessor) {
+        Long familyId = Long.parseLong(payload.get("familyId").toString());
+        quizService.deleteQuizRoom(familyId);
     }
 }
