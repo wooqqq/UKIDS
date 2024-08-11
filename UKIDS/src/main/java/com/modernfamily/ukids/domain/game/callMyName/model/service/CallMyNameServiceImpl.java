@@ -144,31 +144,6 @@ public class CallMyNameServiceImpl implements CallMyNameService {
         return response;
     }
 
-    // 게임 진행
-    @Override
-    public void proceedTurn(Long familyId) {
-
-//        CallMyNameRoom callMyNameRoom = callMyNameRooms.get(familyId);
-//
-//        // 게임 진행 불가한 상태라면 초기화
-//        if (callMyNameRoom.getParticipantList().size() <= 1) {
-//            endGame(familyId);
-//        }
-//
-//        Map<String, Participate> participateList = callMyNameRoom.getParticipantList();
-//
-//        // 현재 턴을 결정
-//        int currentTurn = callMyNameRoom.getCurrentTurn();
-//        List<Participate> participantIdx = new ArrayList<>(participateList.values());
-
-        // 라운드 진행
-
-
-        // 게임 종료가 반환되는 메서드
-        // 못맞힌 사람 한명이 남는다면 게임 종료
-
-    }
-
     // 질문
     @Override
     public void question(Long familyId, String userId) {

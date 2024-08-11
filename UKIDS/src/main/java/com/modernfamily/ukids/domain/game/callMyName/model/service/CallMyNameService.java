@@ -23,8 +23,6 @@ public interface CallMyNameService {
 
     Map<String, Object> getCurrentTurn(Long familyId);
 
-    void proceedTurn(Long familyId);
-
     void question(Long familyId, String userId);
 
     Map<String, Object> checkAnswer(Long familyId, String inputAnswer, String userId);
