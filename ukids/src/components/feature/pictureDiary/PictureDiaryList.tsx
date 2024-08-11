@@ -8,6 +8,12 @@ import api from '@/util/api.ts';
 import BlueButton from '@components/common/BlueButton';
 import './PictureDiaryList.css'
 
+
+import ReactFlipPage from 'react-flip-page';
+
+
+
+
 interface Diary {
   pictureDiaryId: number;
   familyId: number;
@@ -59,10 +65,48 @@ const PictureDiaryList = () => {
       {/* 이하 영역 */}
 
       <div className="paints-container">
-          <div className="paints-scrollable">
+          
 
 
       <div>
+
+
+      <ReactFlipPage
+        width={650}
+        height={400}
+    
+    
+        orientation="horizontal"
+        uncutPages
+        showSwipeHint
+        className="flip-page-container"
+
+      >
+
+        {diaries.map((diary, index) => (
+                  <div key={index} className="flip-page">
+
+
+                    <div className="left-page">
+                      <img src={diary.pictureUrl} alt="" className="diary-image" />
+                    </div>
+
+
+                    <div className="right-page">
+                      <div className="paint-item-date">{diary.date}</div>
+                      <div className="paint-item-content">{diary.content}</div>
+                      <Link to={`/paintdiary/${diary.pictureDiaryId}`} className="view-details">
+                      🔍︎
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </ReactFlipPage>
+
+
+
+
+
         
         
         {diaries.map((item) => (
@@ -81,7 +125,7 @@ const PictureDiaryList = () => {
     </div>
     </div>
     </div>
-    </div>
+    
   );
 };
 

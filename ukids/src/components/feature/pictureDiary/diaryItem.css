@@ -107,3 +107,132 @@ input[type="date"] {
     font-family: 'UhBeejung', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
 
   }
+
+
+  .flip-page-container {
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-left: 140px;
+   
+  }
+
+  .flip-page {
+    display: flex; /* 페이지들을 수평으로 배열합니다. */
+    width: 650px; /* `ReactFlipPage`의 너비에 맞춰 조정합니다. */
+    height: 400px; /* `ReactFlipPage`의 높이에 맞춰 조정합니다. */
+    align-items: center; /* 수직 중앙 정렬합니다. */
+    justify-content: center; /* 수평 중앙 정렬합니다. */
+  }
+
+
+
+  .left-page {
+    
+
+    height: 100%;  /* 왼쪽만 차지하게 */
+  }
+  
+  .right-page {
+    
+    
+    height: 100%;  /* 왼쪽만 차지하게 */ 
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .left-page {
+    flex: 1; /* 각 페이지가 동일한 너비를 가지도록 조정합니다. */
+    display: flex; /* 내부 요소를 flexbox 레이아웃으로 표시합니다. */
+    flex-direction: column; /* 내부 요소를 수직으로 배열합니다. */
+    justify-content: center; /* 내부 요소를 수직 중앙 정렬합니다. */
+    align-items: center; /* 내부 요소를 수평 중앙 정렬합니다. */
+    padding: 10px; /* 내부 여백을 추가합니다. */
+  }
+
+.right-page {
+    flex: 1; /* 각 페이지가 동일한 너비를 가지도록 조정합니다. */
+    position: relative; /* 상대적 위치 설정 */
+    display: flex; /* 내부 요소를 flexbox 레이아웃으로 표시합니다. */
+    flex-direction: column; /* 내부 요소를 수직으로 배열합니다. */
+    justify-content: center; /* 내부 요소를 수직 중앙 정렬합니다. */
+    align-items: center; /* 내부 요소를 수평 중앙 정렬합니다. */
+    padding: 10px; /* 내부 여백을 추가합니다. */
+  }
+
+
+
+  
+  .diary-image {
+    width: 99%; /* 이미지가 최대 너비를 넘지 않도록 합니다. */
+    height: 99%; /* 이미지 높이를 자동으로 조절합니다. */
+    border-radius: 15px; /* 이미지의 모서리를 둥글게 합니다. */
+  }
+
+  .paint-item-date  {
+
+    position: absolute; /* 절대적 위치 설정 */
+    top: 22px; /* 상단에서 10px의 위치 */
+    width: 100%; /* 전체 너비 사용 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    font-size: 20px; /* 글자 크기 */
+    color: #333; /* 글자 색상 */
+    font-family: 'UhBeejung', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
+   
+  }
+  
+
+
+
+/* 그림일기 내용*/
+
+.paint-item-content {
+    width: 100%; /* 전체 너비 사용 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    margin: 10px 0; /* 상하 간격 조정 */
+    font-size: 16px; /* 글자 크기 */
+    color: #333; /* 글자 색상 */
+    font-family: 'UhBeejung', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
+}
+
+
+
+
+  .view-details {
+
+    position: absolute; /* 절대적 위치 설정 */
+    bottom: 10px; /* 하단에서 10px 위 */
+
+
+
+    text-decoration: none; /* 밑줄 제거 */
+    color: black; /* 링크 색상 */
+    font-weight: bold; /* 글자 굵기 */
+  
+    border-radius: 8px; /* 모서리 둥글게 */
+    
+    margin-bottom: 15px; /* 여백 */
+
+   
+    
+  
+    padding: 5px 25px;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 5rem;
+    opacity: var(--sds-size-stroke-border);
+    box-shadow: 0px 0px 19px 0px rgba(153, 153, 153, 0.25);
+
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+
+    border: #333;
+
+
+
+  }
+
+
+
+  
