@@ -36,7 +36,7 @@ public class QuizService {
     public Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
         if(!quizRooms.containsKey(familyId)){
             String sessionId = webrtcService.initializeSessions(null);
-            quizRoomRespository.createGameRoom(sessionId);
+            quizRooms.put(familyId, quizRoomRespository.createGameRoom(sessionId));
         }
 
         // 참여자 목록에 있어

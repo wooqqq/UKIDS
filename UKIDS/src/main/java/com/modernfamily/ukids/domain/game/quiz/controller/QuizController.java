@@ -6,31 +6,40 @@ import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestion
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class QuizController {
 
     private final QuizService quizService;
 
     // 게임방 생성 -> 게임방 정보 및 connection 반환
-    @MessageMapping("/quiz/enter/{id}")
+    @MessageMapping("/quiz/enter")
     @SendTo("/topic/quiz/{id}")
-    public Map<String, Object> enterQuizRoom(@PathVariable("id") Long familyId,
+    public Map<String, Object> enterQuizRoom(@RequestBody Map<String, Object> payload,
                                              SimpMessageHeaderAccessor headerAccessor)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        log.info("Received payload: {}", payload);
+
         String userId = headerAccessor.getUser().getName();
-        return quizService.enterQuizRoom(familyId, userId);
+        log.info("Entering quiz room : {}", userId);
+
+        Long id = Long.parseLong(payload.get("familyId").toString());
+        return quizService.enterQuizRoom(id, userId);
     }
+
 
     // 유저 퇴장
     @MessageMapping("/quiz/exit/{id}")

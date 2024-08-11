@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,11 +28,14 @@ public class QuizRoomRespository {
 
     // 유저 참여
     public void enterGame(String userId, long familyId, QuizRoom quizRoom){
-        long maxCounts = quizQuestionService.getCountQuizQuestionByUser();
-        FamilyMember familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId)
-                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_FAMILYMEMBER_EXCEPTION));
-        quizRoom.enterParticipate(userId, Participate.createParticipate(familyMember.getUser().getName(),
-                familyMember.getRole(), maxCounts));
+        long maxCounts = quizQuestionService.getCountQuizQuestionByUser(userId);
+        Optional<FamilyMember> familyMember = familyMemberRepository.findByUser_IdAndFamily_FamilyId(userId, familyId);
+
+        if(familyMember.isEmpty() || familyMember == null)
+            throw new RuntimeException("NOT FOUND FAMILYMEMBER EXCEPTION");
+
+        quizRoom.enterParticipate(userId, Participate.createParticipate(familyMember.get().getUser().getName(),
+                familyMember.get().getRole(), maxCounts));
     }
 
     // 게임 중복 참여 여부 판별
