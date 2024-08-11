@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import BlueButton from '../../common/BlueButton';
 import { useState } from 'react';
-import { useFamilyStore } from '../../../stores/authStore';
+import { useFamilyStore } from '../../../stores/familyStore';
 
 const FamilyCreate = () => {
   const [name, setName] = useState('');
