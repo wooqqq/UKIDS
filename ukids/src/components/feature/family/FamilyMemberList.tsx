@@ -1,6 +1,12 @@
 // 가족방, 게임에 사용할 참여가족 리스트 오른쪽 사이드에 위치할 예정
 import { useEffect, useState } from 'react';
-import BlueButton from '../../common/BlueButton';
+import callIcon from '../../../assets/subway_call-2.png';
+import discallIcon from '../../../assets/subway_call-3.png';
+
+import { useNavigate } from 'react-router-dom';
+import { useVideoCallStore } from '../../../stores/videoCallStore';
+import VideoToggleButton from '../family_communication/VideoToggleButton';
+import AudioToggleButton from '../family_communication/AudioToggleButton';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;
@@ -10,10 +16,27 @@ const number = 4;
 
 const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
   const [onlineFamilyNum, setOnlineFamilyNum] = useState(0);
+  const { isChatting, setIsChatting, leaveSession } = useVideoCallStore();
+  const nav = useNavigate();
+
+  const handleClickCallBtn = () => {
+    setIsChatting(!isChatting);
+    if (isChatting) {
+      leaveSession();
+      nav('/chat');
+    } else {
+      nav('./call');
+    }
+  };
 
   useEffect(() => {
+    setIsChatting(false);
+  }, []);
+
+  // 온라인인 가족 확인 후 숫자 변경
+  useEffect(() => {
     setOnlineFamilyNum(number);
-  }, [onlineFamilyNum]);
+  }, [number]);
 
   return (
     <>
@@ -32,19 +55,23 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
         {isChattingRoom ? (
           <div className="flex-none m-2">
             {/* 통화버튼 */}
-            <div className="mb-2">
-              <BlueButton name="연결하기" path="/chat/call" />
-              {/* 나중에 통화방 전환시 사용 */}
-              {/* {isChatting ? (
-              <BlueButton name="연결하기" path="/chat/call" />
-            ) : (
-              <RedButton name="연결끊기" path="/chat" />
-            )} */}
+            <div className="flex justify-center mb-2">
+              {/* 채팅방/통화방 전환 */}
+              <button
+                onClick={handleClickCallBtn}
+                className={`common-btn ${isChatting ? 'red-btn' : 'green-btn'}`}
+              >
+                <img
+                  src={isChatting ? discallIcon : callIcon}
+                  alt="call-icon"
+                />
+                {isChatting ? '연결끊기' : '연결하기'}
+              </button>
             </div>
             {/* 카메라, 마이크 버튼 */}
-            <div className="flex space-x-2">
-              <BlueButton name="카메라" path="#" />
-              <BlueButton name="마이크" path="#" />
+            <div className="flex justify-evenly">
+              <VideoToggleButton />
+              <AudioToggleButton />
             </div>
           </div>
         ) : null}

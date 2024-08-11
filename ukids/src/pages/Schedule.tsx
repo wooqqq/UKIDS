@@ -16,7 +16,7 @@ const Schedule = () => {
       <div className="half-feature-box items-center p-[20px]">
         <Routes>
           <Route path="" element={<ScheduleBox />} />
-          <Route path="list/year-month-day" element={<ScheduleList />} />
+          <Route path="list" element={<ScheduleList />} />
           <Route path="detail/:scheduleId" element={<ScheduleDetail />} />
           <Route path="new" element={<ScheduleCreate />} />
           <Route path="edit/:scheduleId" element={<ScheduleUpdate />} />
