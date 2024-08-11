@@ -35,7 +35,7 @@ const QuizQnA = () => {
         quizQuestionId: quizQuestion.quizQuestionId,
         question: quizQuestion.question,
         answer: answer,
-        quizType: 'MULTIPLE_CHOICE',
+        quizType: quizQuestion.quizType,
       })
       .then(() => {
         loadingQuestionList();
@@ -57,7 +57,7 @@ const QuizQnA = () => {
   };
 
   // 질문목록 불러오기
-  const loadingQuestionList = async () => {
+  const loadingQuestionList = () => {
     api
       .get(`/quiz-question`)
       .then((response: any) => {
@@ -87,96 +87,101 @@ const QuizQnA = () => {
         </div>
 
         {/* 질문 목록 */}
-        <div className="h-[65%] overflow-y-auto flex justify-center">
-          {questionList.length !== 0 ? (
-            <table className="w-[80%]">
-              <thead>
-                <tr className="border-solid border-b-4 border-[#777777] py-2">
-                  <th className="w-[20%] text-center">번호</th>
-                  <th className="w-[40%] text-center">질문</th>
-                  <th className="w-[40%] text-center">답변</th>
-                </tr>
-              </thead>
-              {/* <tbody> */}
-              {questionList.map((question: Question, index) => {
-                return (
-                  <tr key={question.quizQuestionId}>
-                    <td className="w-[20%] text-center py-2">{index + 1}</td>
-                    <td className="w-[40%] text-center py-2">
-                      {question.question}
-                    </td>
-                    <td className="w-[40%] flex flex-row justify-center items-center py-2">
-                      {isEditing === question.quizQuestionId ? (
-                        <form
-                          onSubmit={(e) => {
-                            e.preventDefault();
-                            editSubmit(question);
-                          }}
-                          className="flex items-center"
-                        >
-                          {question.quizType === 'OX' ? (
-                            <div className="flex space-x-2">
-                              <button
-                                type="button"
-                                onClick={() => setAnswer('O')}
-                                className={`${
-                                  answer === 'O' ? 'selected' : ''
-                                } px-4 py-2`}
-                              >
-                                O
+        <div className="h-[65%] overflow-y-auto">
+          {/* 테이블 영역 */}
+          <div className=" flex justify-center">
+            {questionList.length !== 0 ? (
+              <table className="w-[80%]">
+                <thead className="">
+                  <tr className="border-solid border-b-4 border-[#777777] ">
+                    <th className="text-center py-3">번호</th>
+                    <th className="text-center">질문</th>
+                    <th className="text-center">답변</th>
+                    <th className="text-center">수정/삭제</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {questionList.map((question: Question, index) => {
+                    return (
+                      <tr key={question.quizQuestionId}>
+                        <td className="text-center py-2">{index + 1}</td>
+                        <td className="text-center py-2">
+                          {question.question}
+                        </td>
+                        <td className="text-center py-2">
+                          {isEditing === question.quizQuestionId ? (
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                editSubmit(question);
+                              }}
+                              className="flex justify-center"
+                            >
+                              {question.quizType === 'OX' ? (
+                                <div className="">
+                                  <button
+                                    type="button"
+                                    onClick={() => setAnswer('O')}
+                                    className={`${
+                                      answer === 'O' ? 'selected' : ''
+                                    } px-4 py-2`}
+                                  >
+                                    O
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setAnswer('X')}
+                                    className={`${
+                                      answer === 'X' ? 'selected' : ''
+                                    }`}
+                                  >
+                                    X
+                                  </button>
+                                </div>
+                              ) : (
+                                <input
+                                  type="text"
+                                  value={answer}
+                                  onChange={(e) => setAnswer(e.target.value)}
+                                  className="border border-gray-300 rounded"
+                                />
+                              )}
+                              <button type="submit" className="m-2">
+                                <img src={checkIcon} alt="submit" />
                               </button>
-                              <button
-                                type="button"
-                                onClick={() => setAnswer('X')}
-                                className={`${
-                                  answer === 'X' ? 'selected' : ''
-                                } px-4 py-2`}
-                              >
-                                X
-                              </button>
-                            </div>
+                            </form>
                           ) : (
-                            <input
-                              type="text"
-                              value={answer}
-                              onChange={(e) => setAnswer(e.target.value)}
-                              className="px-2 py-1 border border-gray-300 rounded"
-                            />
+                            <>
+                              <span className="">{question.answer}</span>
+                            </>
                           )}
-                          <button type="submit" className="ml-2">
-                            <img src={checkIcon} alt="submit" />
-                          </button>
-                        </form>
-                      ) : (
-                        <>
-                          <span className="flex-1 text-center">
-                            {question.answer}
-                          </span>
+                        </td>
+                        <td className="flex justify-center items-center py-2">
+                          {/* 수정버튼 */}
                           <button onClick={() => handleWriteAns(question)}>
                             <img src={writeAns} alt="edit" />
                           </button>
-                        </>
-                      )}
-                      {/* 질문 삭제 버튼 */}
-                      <button
-                        onClick={() =>
-                          handleDeleteQuestion(question.quizQuestionId)
-                        }
-                        className="ml-2"
-                      >
-                        <img src={deleteAns} alt="delete" />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-              {/* </tbody> */}
-            </table>
-          ) : (
-            <div className="flex items-center text-3xl">
-              질문이 없습니다...!
-            </div>
-          )}
+                          {/* 질문 삭제 버튼 */}
+                          <button
+                            onClick={() =>
+                              handleDeleteQuestion(question.quizQuestionId)
+                            }
+                            className="m-2"
+                          >
+                            <img src={deleteAns} alt="delete" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <div className="flex items-center text-3xl">
+                질문이 없습니다...!
+              </div>
+            )}
+          </div>
         </div>
 
         {/* 버튼 */}
