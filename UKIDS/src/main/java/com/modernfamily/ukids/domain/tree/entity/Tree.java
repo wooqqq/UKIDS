@@ -19,19 +19,23 @@ public class Tree extends BaseTimeEntity {
     private Long treeId;
 
     @Column(nullable = false)
-    public Long exp = 0L;   // 경험치 default = 0
+    public long exp = 0L;   // 경험치 default = 0
 
     @ColumnDefault("false")
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isComplete;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tree_type_id")
-    private TreeType treeType;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "tree_type_id")
+//    private TreeType treeType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id")
     private Family family;
+
+    public Tree(Family family) {
+        this.family = family;
+    }
 
     public void setFamily(Family family) {
         this.family = family;
