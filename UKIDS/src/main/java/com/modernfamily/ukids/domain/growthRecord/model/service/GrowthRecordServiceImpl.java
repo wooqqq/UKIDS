@@ -110,11 +110,11 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
     }
 
     @Override
-    public GrowthRecordResponseDto getGrowthRecord(GrowthRecordDetailDto growthRecordDetailDto) {
-        GrowthRecord growthRecord = growthRecordRepository.findByRecordId(growthRecordDetailDto.getRecordId())
+    public GrowthRecordResponseDto getGrowthRecord(Long recordId) {
+        GrowthRecord growthRecord = growthRecordRepository.findByRecordId(recordId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_GROWTHRECORD_EXCEPTION));
 
-        FamilyMember familyMember = familyMemberValidator.checkUserInFamilyMember(growthRecordDetailDto.getFamilyId());
+        FamilyMember familyMember = familyMemberValidator.checkUserInFamilyMember(growthRecord.getFolder().getFamily().getFamilyId());
 
         if(familyMember.getRole().equals(FamilyRole.ROLE_SON) || familyMember.getRole().equals(FamilyRole.ROLE_DAUGHTER)){
             int currentYear = LocalDate.now().getYear();

@@ -118,19 +118,16 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
         return pagenationResponseDto;
     }
 
-    public long getCountQuizQuestionByUser() {
-        String id = CustomUserDetails.contextGetUserId();
-        User writer = userRepository.findById(id)
-                .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+    public long getCountQuizQuestionByUser(String id) {
 
-        return quizQuestionRepository.countByWriter_UserId(writer.getUserId());
+        return quizQuestionRepository.countByWriter_Id(id);
     }
 
     public List<QuizQuestionRandomResponseDto> chooseRandomQuizQuestion(String userId , long count) {
         User writer = userRepository.findById(userId)
                 .orElseThrow(()-> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
-        long existCount = quizQuestionRepository.countByWriter_UserId(writer.getUserId());
+        long existCount = quizQuestionRepository.countByWriter_Id(userId);
         if(existCount < count)
             throw new ExceptionResponse(CustomException.NOT_ENOUGH_QUIZ_QUESTION_EXCEPTION);
 
@@ -141,7 +138,7 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
             List<String> wrongAnswer = null;
 
             if(quizQuestion.getQuizType() == QuizType.MULTIPLE_CHOICE){
-                String prompt = quizQuestion.getQuestion() + " 에 대한 답변이 " + quizQuestion.getAnswer() + "인데, 답변과 비슷한 2개 보기를 줘.";
+                String prompt = quizQuestion.getQuestion() + " 에 대한 답변이 " + quizQuestion.getAnswer() + "인데, 문제에 대한 다른 보기 2개만 줘. 단어면 단어로. '보기', 번호 이런거는 빼도 됨";
                 wrongAnswer = chatgptService.runPrompt(prompt);
             }
             responseDtoList.add(QuizQuestionRandomResponseDto.createResponseDto(quizQuestion, userMapper.toUserDto(writer), wrongAnswer));
@@ -149,7 +146,6 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
 
         return responseDtoList;
     }
-
 
 
 }

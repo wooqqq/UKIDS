@@ -18,7 +18,7 @@ public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Long
 
     Page<QuizQuestion> findByWriter_UserId(Long userId, Pageable pageable);
 
-    long countByWriter_UserId(Long userId);
+    long countByWriter_Id(String id);
 
     @Query(value = "SELECT * FROM quiz_question WHERE user_id = :userId ORDER BY RAND() LIMIT :count", nativeQuery = true)
     List<QuizQuestion> findRandomQuizQuestionsByUser(@Param("count") long count, @Param("userId") Long userId);

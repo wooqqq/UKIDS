@@ -11,7 +11,7 @@ public interface GrowthRecordService {
 
     void updateGrowthRecord(GrowthRecordUpdateDto growthRecordUpdate) throws IOException;
 
-    GrowthRecordResponseDto getGrowthRecord(GrowthRecordDetailDto growthRecordDetailDto);
+    GrowthRecordResponseDto getGrowthRecord(Long recordId);
 
     GrowthRecordPaginationDto getGrowthRecords(Long folderId, int size, int page);
 

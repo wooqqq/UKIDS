@@ -4,18 +4,20 @@ import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultSaveDto;
 import com.modernfamily.ukids.domain.game.quiz.dto.Participate;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
+@Slf4j
 public class QuizRepository {
 
     // 퀴즈 가져오기 및 출제
     public QuizQuestionRandomResponseDto getQuizQuestion(QuizRoom quizRoom){
         if(!quizRoom.increaseCurrentQuestionIndex())
             return null;  // 게임 종료
-
+        log.info("----------current Index------------ : {}", quizRoom.getCurrentQuestionIndex());
         return quizRoom.getRandomQuizQuestionList().get(quizRoom.getCurrentQuestionIndex());
     }
 

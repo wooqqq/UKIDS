@@ -21,6 +21,8 @@ public interface LetterRepository extends JpaRepository<Letter, Long>, LetterRep
 
     Page<Letter> findByFromUser(User fromUser, Pageable pageable);
 
+    long countByTree_TreeId(Long treeId);
+
     @Override
     long updateLettersOpenStatusByTree(Tree tree);
 
