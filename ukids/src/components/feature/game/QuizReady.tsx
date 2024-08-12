@@ -76,11 +76,8 @@ const QuizReady = () => {
   };
 
   useEffect(() => {
-    if (isReady) {
-      // navigate('/quiz/start');
-      window.location.href = '/quiz/start';
-    }
-  }, [isReady, navigate]);
+    if (isReady) navigate('/quiz/start');
+  }, [isReady]);
 
   const { ukidsURL, token, userInfo } = useAuthStore();
   const familyId = useFamilyStore((state) => state.selectedFamilyId);
@@ -183,6 +180,7 @@ const QuizReady = () => {
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       enterQuizRoom();
+      GetQuizMaxCounts();
     }
   }, [stompClientInstance]);
 
@@ -202,9 +200,6 @@ const QuizReady = () => {
       debug: (str) => {
         console.log('웹소켓 디버그: ' + str);
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
@@ -297,7 +292,7 @@ const QuizReady = () => {
       if (client) {
         // exitQuizRoom();
         client.deactivate();
-        navigate('../');
+        // navigate('../');
       }
     };
   }, [ukidsURL, token, familyId]);
