@@ -27,7 +27,7 @@ const GrayButton = (props: GrayButtonProps) => {
     return (
       <button
         onClick={onClickLogoutButton}
-        className="rounded-md gray-btn common-btn"
+        className="rounded-md gray-btn common-btn w-[150px]"
       >
         {props.name}
       </button>

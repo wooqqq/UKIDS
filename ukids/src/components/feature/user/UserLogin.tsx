@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 // import axios from 'axios';
-import api from '../../../util/api'; // 생성한 axios 인스턴스
 import { useAuthStore } from '../../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import './user.css';
@@ -10,33 +9,17 @@ import BlueButton from '../../common/BlueButton';
 const UserLogin = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const setToken = useAuthStore((state) => state.setToken);
+  const userLogin = useAuthStore((state) => state.userLogin);
   const nav = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
-
     try {
-      // 로그인 API 요청
-      const response = await api.post('/user/login', {
-        id: id,
-        password: password,
-      });
-
-      const { result } = response.data;
-      const token = result;
-      // console.log(userId);
-
-      if (token) {
-        setToken(token); // 로그인 성공하여 토큰 저장
-        api.defaults.headers.common['Authorization'] = `Bearer ${result}`; // 새로운 토큰 설정
-        nav('/main'); // 로그인 후 리디렉션할 페이지
-      } else {
-        throw new Error('토큰이 응답에 포함되어 있지 않습니다.');
-      }
+      await userLogin(id, password); // 로그인 API 요청
+      nav('/main'); // 로그인 후 리디렉션할 페이지
     } catch (error) {
       console.error('로그인 실패:', error);
-      alert('로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.' + error);
+      alert(error);
     }
   };
 

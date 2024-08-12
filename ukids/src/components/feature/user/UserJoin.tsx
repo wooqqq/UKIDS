@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
-import api from '../../../util/api';
 import './user.css';
 import '../../common/common.css';
 import BlueButton from '../../common/BlueButton';
+import { useAuthStore } from '../../../stores/authStore';
+import { useNavigate } from 'react-router-dom';
 
 const UserJoin = () => {
   const [form, setForm] = useState({
@@ -18,7 +17,9 @@ const UserJoin = () => {
     phone: '',
     role: 'ROLE_USER',
   });
+
   const nav = useNavigate();
+  const joinUser = useAuthStore((state) => state.joinUser);
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
@@ -34,26 +35,16 @@ const UserJoin = () => {
       return;
     }
 
-    try {
-      // 회원가입 API 요청
-      const response = await api.post('/user/signup', {
-        id: form.id,
-        password: form.password,
-        name: form.name,
-        birthDate: form.birthDate,
-        email: form.email,
-        phone: form.phone,
-        role: 'ROLE_USER',
-      });
-      // 성공적으로 회원가입 시 처리
-      if (response.data.code === 201) {
-        alert(response.data.result); // '회원 생성 완료' 메시지 표시
-        nav('/login'); // 회원가입 성공하면 페이지로 네비게이션
-      }
-    } catch (error) {
-      console.error('회원가입 실패:', error);
-      alert('회원가입에 실패했습니다.' + error);
-    }
+    // 회원가입 API 요청
+    await joinUser({
+      id: form.id,
+      password: form.password,
+      name: form.name,
+      birthDate: form.birthDate,
+      email: form.email,
+      phone: form.phone,
+    });
+    nav('/login');
   };
 
   return (
