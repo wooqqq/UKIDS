@@ -59,6 +59,7 @@ const FamilyCreate = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
+        <div className="text-[red]">{error ? error : ''}</div>
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="방 만들기" type="submit" path="" />
         </div>
