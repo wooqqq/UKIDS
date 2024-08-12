@@ -263,22 +263,22 @@ const QuizStart = () => {
   };
 
   return (
-    <div className="feature-box flex justify-center flex-col">
-      <div className="flex justify-center">
+    <div className="feature-box font-[ONE-Mobile-POP]">
+      <div className="h-[15%] flex justify-center game-font quiz-font-color m-4">
         <h1>문제 {questionIndex}</h1>
       </div>
 
-      <div className="flex justify-center">
+      <div className="h-[20%] flex justify-center items-center text-3xl">
         {isLoading ? (
-          <h3>준비중...</h3>
+          <p>준비중...</p>
         ) : (
-          <h3>
+          <p>
             {quizQuestion?.writer.name}이(가) {quizQuestion?.question}
-          </h3>
+          </p>
         )}
       </div>
 
-      <div className="flex flex-row justify-evenly">
+      <div className="h-[25%] flex flex-row justify-evenly flex-wrap text-3xl">
         {options.map((option, index) => (
           <button
             key={index}
@@ -298,12 +298,12 @@ const QuizStart = () => {
         ))}
       </div>
 
-      <div className="flex justify-center">
-        <div className="flex justify-center items-center w-[106px] h-[106px] rounded-full border-solid border-8 border-[#36d5f1] text-[#36d5f1]">
+      <div className="h-[20%] flex justify-center">
+        <div className="flex justify-center items-center w-[106px] h-[106px] rounded-full border-solid border-8 border-[#36d5f1] text-[#36d5f1] text-2xl">
           {secondsLeft}
         </div>
       </div>
-      <div>
+      <div className="flex justify-center">
         {!isStart && (
           <button onClick={handleClick} className="game-btn-g game-btn-common">
             돌아가기

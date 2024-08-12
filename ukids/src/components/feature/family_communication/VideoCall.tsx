@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useVideoCallStore } from '@stores/videoCallStore';
-// import { useAuthStore } from '@stores/authStore';
 import { jwtDecode } from 'jwt-decode';
 import Session from './Session';
 import './sessions.css';
-import api from '@/util/api';
+import { useFamilyStore } from '../../../stores/familyStore';
 
 interface JwtPayload {
   name: string;
@@ -19,9 +18,8 @@ function VideoCall() {
     joinSession,
     setUserName,
   } = useVideoCallStore();
-  // const { familyId } = useAuthStore(); // 실제 가족 ID 사용처
-  let familyId = 33;
-  // console.log(familyId);
+
+  const { selectedFamilyId } = useFamilyStore();
 
   const nameOfUser = jwtDecode<JwtPayload>(localStorage.getItem('token')!).name;
   // console.log('유저이름: ' + nameOfUser);
@@ -37,15 +35,10 @@ function VideoCall() {
   useEffect(() => {
     setUserName(nameOfUser);
 
-    api.get('family/all').then((response) => {
-      console.log(response.data);
-      familyId = response.data.result.familyId;
-    });
-
     // 토큰 생성 및 세션에 연결하는 함수 호출
     const connectSession = async () => {
       try {
-        await joinSession(familyId, userName);
+        await joinSession(selectedFamilyId, userName);
         console.log('Successfully joined the session.');
       } catch (error) {
         console.error('Error joining the session:', error);

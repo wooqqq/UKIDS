@@ -46,7 +46,7 @@ interface ErrorMessage {
 type GameMessage = EnterGameMessage | SetQuizMessage | ErrorMessage;
 
 const QuizReady = () => {
-  const [isReady, setIsReady] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState();
   const navigate = useNavigate();
   const handleClick = () => {
     if (selectedValue === 0) {

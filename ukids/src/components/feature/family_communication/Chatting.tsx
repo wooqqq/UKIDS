@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Client, IMessage } from '@stomp/stompjs';
-
 import ChattingBox from './ChattingBox';
-import BlueButton from '../../common/BlueButton';
+import BlueButton from '@components/common/BlueButton';
 import SockJS from 'sockjs-client';
 import { useAuthStore } from '@/stores/authStore';
-import api from '../../../util/api';
+import { useFamilyStore } from '@stores/familyStore';
+import api from '@/util/api';
 
 interface Message {
   messageId: number;
@@ -21,29 +21,29 @@ interface JwtPayload {
   userId: string;
 }
 
-interface DecodedToken {
-  userId: number;
-  // 필요한 다른 필드들 추가
-}
+// interface DecodedToken {
+//   userId: number;
+//   // 필요한 다른 필드들 추가
+// }
 
 const FamilyChatting = () => {
   const { ukidsURL, token } = useAuthStore();
-  const familyId = 7;
-  const chatRoomId = familyId;
+  const { selectedFamilyId } = useFamilyStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
     null,
   );
+  const [chatRoomId, setChatRoomId] = useState(-1);
 
   const userId = Number.parseInt(
     jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
   );
 
-  // 디코딩된 토큰 정보 가져오기
-  const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
-  console.log(decodedToken);
+  // // 디코딩된 토큰 정보 가져오기
+  // const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
+  // console.log(decodedToken);
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,6 +138,12 @@ const FamilyChatting = () => {
 
   // 처음 입장 시
   useEffect(() => {
+    api.get(`/chat/room/${selectedFamilyId}`).then((response: any) => {
+      console.log(response);
+      setChatRoomId(Number.parseInt(response.result.chatRoomId));
+      console.log(chatRoomId);
+    });
+
     const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
       webSocketFactory: () => socket,

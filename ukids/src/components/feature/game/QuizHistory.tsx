@@ -20,31 +20,32 @@ const QuizHistory = () => {
   // 게임 기록 가져오기
   useEffect(() => {
     api.get('/quiz').then((response) => {
+      console.log(response.data);
       setHistoryList(response.data.result.quizResults);
 
-      // 테스트 코드
-      setHistoryList(() => {
-        return [
-          {
-            correctCounts: 4,
-            totalCounts: 5,
-            rank: 2,
-            date: '2024-08-11',
-            familyId: 2,
-            familyName: '김가네',
-            familyRepresentative: '김싸피',
-          },
-          {
-            correctCounts: 2,
-            totalCounts: 6,
-            rank: 3,
-            date: '2024-08-10',
-            familyId: 4,
-            familyName: '김가네',
-            familyRepresentative: '김싸피',
-          },
-        ];
-      });
+      // // 테스트 코드
+      // setHistoryList(() => {
+      //   return [
+      //     {
+      //       correctCounts: 4,
+      //       totalCounts: 5,
+      //       rank: 2,
+      //       date: '2024-08-11',
+      //       familyId: 2,
+      //       familyName: '김가네',
+      //       familyRepresentative: '김싸피',
+      //     },
+      //     {
+      //       correctCounts: 2,
+      //       totalCounts: 6,
+      //       rank: 3,
+      //       date: '2024-08-10',
+      //       familyId: 4,
+      //       familyName: '김가네',
+      //       familyRepresentative: '김싸피',
+      //     },
+      //   ];
+      // });
     });
   }, []);
 

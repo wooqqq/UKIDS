@@ -139,7 +139,6 @@ const QuizResult = () => {
     return () => {
       if (client) {
         client.deactivate();
-        navigate('../');
       }
     };
   }, [ukidsURL, token, familyId]);
@@ -153,7 +152,7 @@ const QuizResult = () => {
 
   return (
     <>
-      <div className="feature-box">
+      <div className="feature-box font-[ONE-Mobile-POP]">
         {/* 상단 */}
         <div className="h-[15%] flex justify-center items-center game-font quiz-font-color">
           <h1>퀴즈 결과</h1>
@@ -161,16 +160,27 @@ const QuizResult = () => {
 
         {/* 결과 창 */}
         <div className="h-[65%] flex justify-center items-center">
-          <div className="w-[45rem] h-[20rem] bg-[#d9d9d9] rounded-[10px] p-4">
-            {participants.map((participant, index) => (
-              <div key={index} className="flex justify-between">
-                <span>{participant.userName}</span>
-                <span>{participant.role}</span>
-                <span>
-                  {participant.hit} / {totalQuestions} 정답
-                </span>
-              </div>
-            ))}
+          <div className="w-[45rem] h-[20rem] bg-[#d9d9d9] rounded-[10px] p-4 text-2xl flex justify-center">
+            <table className="w-[80%]">
+              <thead>
+                <tr className="border-solid border-b-4 border-[#777777]">
+                  <th className="text-center py-2">이름</th>
+                  <th className="text-center py-2">역할</th>
+                  <th className="text-center py-2">맞힌 개수</th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {participants.map((participant, index) => (
+                  <tr key={index}>
+                    <td className="text-center py-2">{participant.userName}</td>
+                    <td className="text-center py-2">{participant.role}</td>
+                    <td className="text-center py-2">
+                      {participant.hit} / {totalQuestions} 정답
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
