@@ -126,7 +126,7 @@ const QuizQnA = () => {
                                       answer === 'O' ? 'selected' : ''
                                     }`}
                                   >
-                                    O
+                                    🞅
                                   </button>
                                   <button
                                     type="button"
@@ -135,7 +135,7 @@ const QuizQnA = () => {
                                       answer === 'X' ? 'selected' : ''
                                     }`}
                                   >
-                                    X
+                                    ✖
                                   </button>
                                 </div>
                               ) : (
