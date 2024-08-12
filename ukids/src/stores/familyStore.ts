@@ -42,7 +42,8 @@ interface FamilyState {
   deleteFamily: (familyId: number, password: string) => Promise<void>;
 
   // 가족 id
-  familyId: number | null;
+  selectedFamilyId: number | null;
+  setSelectedFamilyId: (familyId: number) => void;
   // 채팅방 id
   chatRoomId: number | null;
 }
@@ -52,8 +53,13 @@ export const useFamilyStore = create<FamilyState>((set) => ({
   // 초기 상태 설정
   family: [],
   error: null,
-  familyId: null,
+  selectedFamilyId: Number(localStorage.getItem('selectedFamilyId')) || null,
   chatRoomId: null,
+
+  setSelectedFamilyId: (familyId: number) => {
+    localStorage.setItem('selectedFamilyId', String(familyId));
+    set({ selectedFamilyId: familyId });
+  },
 
   // 가족방 정보 가져오기
   fetchFamilyInfo: async (familyId: number) => {
@@ -62,7 +68,11 @@ export const useFamilyStore = create<FamilyState>((set) => ({
 
       const familyData: Family = response.data.result;
 
-      set({ family: [familyData], error: null, familyId: familyData.familyId });
+      set({
+        family: [familyData],
+        error: null,
+        selectedFamilyId: familyData.familyId,
+      });
     } catch (error: any) {
       console.error('Error fetching family info', error);
       set({ error: error.message });
@@ -73,7 +83,11 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
-      set((state) => ({ family: [...state.family, newFamily], error: null }));
+      set((state) => ({
+        family: [...state.family, newFamily],
+        error: null,
+        selectedFamilyId: newFamily.familyId,
+      }));
 
       // 가족방 생성 시 나무 자동 생성
       await api.post(`/tree`, { familyId: newFamily.familyId });
@@ -103,7 +117,11 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.get(`/family/search/${code}`);
       const familyData: Family = response.data.result;
-      set((state) => ({ family: [...state.family, familyData], error: null }));
+      set((state) => ({
+        family: [...state.family, familyData],
+        error: null,
+        selectedFamilyId: familyData.familyId,
+      }));
     } catch (error: any) {
       console.log('Error finding family', error);
       set({ error: error.message });
@@ -180,6 +198,8 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         set((state) => ({
           family: state.family.filter((fam) => fam.familyId !== familyId),
           error: null,
+          selectedFamilyId:
+            state.selectedFamilyId === familyId ? null : state.selectedFamilyId,
         }));
       }
     } catch (error: any) {

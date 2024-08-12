@@ -68,13 +68,9 @@
   opacity: var(--sds-size-stroke-border);
   background: #fff;
   box-shadow: 0px 0px 7px 0px rgba(153, 153, 153, 0.25);
-  color: #999;
+  color: #555;
   font-weight: 600;
   font-size: 15px;
-}
-
-.profile-btn-family {
-  color: #333;
 }
 
 .profile-name {
@@ -89,26 +85,39 @@
 }
 
 .profile-list {
-  display: flex;
-  width: 249px;
-  height: 244px;
-  padding: var(--sds-size-space-200) var(--sds-size-space-300);
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sds-size-space-0);
-  flex-shrink: 0;
-  border-radius: var(--sds-size-radius-200);
-  border: var(--sds-size-stroke-border) solid
-    var(--sds-color-border-default-default);
-  opacity: var(--sds-size-stroke-border);
-  background: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  margin-top: 4px;
+  right: 0;
+  z-index: 10;
+  background-color: #fff;
+  width: 250px;
+  height: 320px;
+}
 
-  /* Drop Shadow/200 */
-  box-shadow: var(--sds-size-depth-0) var(--sds-size-depth-025)
-      var(--sds-size-depth-100) var(--sds-size-depth-0)
-      var(--sds-color-black-200),
-    var(--sds-size-depth-0) var(--sds-size-depth-025) var(--sds-size-depth-100)
-      var(--sds-size-depth-0) var(--sds-color-black-100);
+.family-list-box {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 180px;
+}
+
+.family-list-box::-webkit-scrollbar {
+  width: 10px;
+}
+.family-list-box::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 5px;
+}
+.family-list-box::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+.family-list {
+  display: flex;
+  padding: 15px 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
 }
 
 /* index.css로 이동 */
