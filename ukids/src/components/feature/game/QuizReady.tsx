@@ -43,16 +43,9 @@ interface ErrorMessage {
   message: string;
 }
 
-type GameMessage =
-  | EnterGameMessage
-  | SetQuizMessage
-  | IsReadyMessage
-  | ErrorMessage;
+type GameMessage = EnterGameMessage | SetQuizMessage | ErrorMessage;
 
 const QuizReady = () => {
-  const { ukidsURL, token } = useAuthStore();
-  const familyId = 7;
-
   const [isReady, setIsReady] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleClick = () => {
