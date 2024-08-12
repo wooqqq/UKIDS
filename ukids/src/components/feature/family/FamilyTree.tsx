@@ -20,7 +20,7 @@ const FamilyTree = () => {
 
 
   useEffect(() => {
-    const familyId = 14;
+    const familyId = 5;
     fetchTreeData(familyId);
   }, [fetchTreeData]);
 
@@ -89,7 +89,7 @@ const FamilyTree = () => {
           style={{ color: '#333', fontSize: '1.2rem' }}
         >
           {/* 레벨, 경험치 정보 */}
-          Lv.{level} 자라나무
+          Lv.{level} {treeData.result.familyName} 나무
         </div>
             <div className="w-full absolute text-center" style={{color: '#fff'}}>
               {/* 게이지바 */}
