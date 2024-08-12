@@ -24,4 +24,15 @@ public class LetterRepositoryImpl implements LetterRepositoryCustom {
                         .and(letter.isOpen.eq(false)))
                 .execute();
     }
+
+    @Modifying
+    @Transactional
+    @Override
+    public void updateLetterRead(Long letterId) {
+        queryFactory
+                .update(letter)
+                .set(letter.isRead, true)
+                .where(letter.letterId.eq(letterId))
+                .execute();
+    }
 }

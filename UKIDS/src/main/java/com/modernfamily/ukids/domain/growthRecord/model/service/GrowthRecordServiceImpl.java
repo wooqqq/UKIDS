@@ -116,7 +116,7 @@ public class GrowthRecordServiceImpl implements GrowthRecordService{
 
         FamilyMember familyMember = familyMemberValidator.checkUserInFamilyMember(growthRecord.getFolder().getFamily().getFamilyId());
 
-        if(familyMember.getRole().equals(FamilyRole.ROLE_CHILD)){
+        if(familyMember.getRole().equals(FamilyRole.ROLE_SON) || familyMember.getRole().equals(FamilyRole.ROLE_DAUGHTER)){
             int currentYear = LocalDate.now().getYear();
             int birthYear = Integer.parseInt(familyMember.getUser().getBirthDate().substring(0, 4));
             if(currentYear - birthYear + 1 < 20){
