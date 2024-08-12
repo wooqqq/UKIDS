@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { Client, IMessage } from '@stomp/stompjs';
 import { jwtDecode } from 'jwt-decode';
 import SockJS from 'sockjs-client';
+import { useFamilyStore } from '@/stores/familyStore.ts';
 
 import './gamepart.css';
 
@@ -59,7 +60,7 @@ interface JwtPayload {
 const QuizStart = () => {
   const navigate = useNavigate();
   const { ukidsURL, token } = useAuthStore();
-  const familyId = 1;
+  const familyId = useFamilyStore((state) => state.selectedFamilyId);
   const userId = Number.parseInt(
     jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
   );
@@ -259,7 +260,7 @@ const QuizStart = () => {
   };
 
   const resetTimer = () => {
-    setSecondsLeft(20);
+    setSecondsLeft(12);
   };
 
   return (

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { Client, IMessage } from '@stomp/stompjs';
+import { useFamilyStore } from '@/stores/familyStore.ts';
 
 import SockJS from 'sockjs-client';
 
@@ -39,7 +40,7 @@ interface ErrorMessage {
 type GameMessage = GameInfoMessage | ErrorMessage;
 const QuizResult = () => {
   const { ukidsURL, token } = useAuthStore();
-  const familyId = 1;
+  const familyId = useFamilyStore((state) => state.selectedFamilyId);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
   const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
@@ -147,7 +148,6 @@ const QuizResult = () => {
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       getGameInfo();
-      quitGame();
     }
   }, [stompClientInstance]);
 

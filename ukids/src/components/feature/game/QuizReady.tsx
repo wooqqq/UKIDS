@@ -6,6 +6,7 @@ import './gamepart.css';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
+import { useFamilyStore } from '@/stores/familyStore.ts';
 
 interface Participant {
   userName: string;
@@ -33,9 +34,21 @@ interface EnterGameMessage {
   gameRoomInfo: GameRoom;
 }
 
+interface ExitGameMessage {
+  type: 'EXIT_GAME';
+  id: number;
+  webrtcConnection: string;
+  gameRoomInfo: GameRoom;
+}
+
 interface SetQuizMessage {
   type: 'SET_QUIZ_COUNTS';
   quizCount: number;
+}
+
+interface GetQuizMaxMessage {
+  type: 'GET_MAX_QUESTION_COUNTS';
+  maxCounts: number;
 }
 
 interface ErrorMessage {
@@ -43,7 +56,12 @@ interface ErrorMessage {
   message: string;
 }
 
-type GameMessage = EnterGameMessage | SetQuizMessage | ErrorMessage;
+type GameMessage =
+  | EnterGameMessage
+  | SetQuizMessage
+  | ExitGameMessage
+  | GetQuizMaxMessage
+  | ErrorMessage;
 
 const QuizReady = () => {
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -54,13 +72,18 @@ const QuizReady = () => {
       return;
     }
 
-    setIsReady(() => {
-      window.location.href = '/quiz/start';
-    });
+    setIsReady(true); // 상태 변경
   };
 
+  useEffect(() => {
+    if (isReady) {
+      // navigate('/quiz/start');
+      window.location.href = '/quiz/start';
+    }
+  }, [isReady, navigate]);
+
   const { ukidsURL, token, userInfo } = useAuthStore();
-  const familyId = 1;
+  const familyId = useFamilyStore((state) => state.selectedFamilyId);
   const user = userInfo.id;
   console.log('user : ', user);
   const [selectedValue, setSelectedValue] = useState<number>(1);
@@ -108,6 +131,25 @@ const QuizReady = () => {
         });
       } catch (error) {
         console.error('게임방 퇴장 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
+  const GetQuizMaxCounts = async () => {
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: `/app/quiz/quiz-max`,
+          body: JSON.stringify({
+            familyId,
+            counts: `${selectedValue}`,
+          }),
+        });
+      } catch (error) {
+        console.error('최대 퀴즈 개수 갱신 오류:', error);
       }
     } else {
       console.log('stompClientInstance is null or message is empty');
@@ -229,6 +271,10 @@ const QuizReady = () => {
             }));
             setParticipants(newParticipantEntries);
 
+            break;
+
+          case 'GET_MAX_QUESTION_COUNTS':
+            setMaxOptions(receivedMessage.maxCounts);
             break;
 
           case 'SET_QUIZ_COUNTS':

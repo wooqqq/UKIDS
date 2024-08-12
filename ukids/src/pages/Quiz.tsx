@@ -13,7 +13,7 @@ const Quiz = () => {
       <Routes>
         <Route path="" element={<QuizMain />} />
         <Route path="ready" element={<QuizReady />} />
-        <Route path="start" element={<QuizStart />} />
+        <Route path="ready/start" element={<QuizStart />} />
         <Route path="result" element={<QuizResult />} />
         <Route path="qna" element={<QuizQnA />} />
         <Route path="question" element={<QuizQuestion />} />
