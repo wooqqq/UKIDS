@@ -1,4 +1,3 @@
-// FamilyTree.tsx
 import { useEffect, useState } from 'react';
 import { useTreeStore } from '../../../stores/treeStore';
 import treeLv1 from '../../../assets/tree_lv1.png';
@@ -9,18 +8,21 @@ import treeLv5 from '../../../assets/tree_lv5.png';
 import '../../common/common.css';
 
 const FamilyTree = () => {
-  const { treeData, fetchTreeData, updateTreeExp } = useTreeStore((state) => ({
+  const { treeData, fetchTreeData, updateTreeExp, familyId } = useTreeStore((state) => ({
     treeData: state.treeData,
     fetchTreeData: state.fetchTreeData,
     updateTreeExp: state.updateTreeExp,
+    setFamilyId: state.setFamilyId,
+    familyId: state.familyId,
   }));
 
   const [level, setLevel] = useState(1);
 
   useEffect(() => {
-    const familyId = 5; // 이 값은 필요에 따라 변경하거나 prop으로 전달 받을 수 있습니다.
-    fetchTreeData(familyId);
-  }, [fetchTreeData]);
+    if (familyId !== null) {
+      fetchTreeData(familyId);
+    }
+  }, [fetchTreeData, familyId]);
 
   useEffect(() => {
     if (treeData && treeData.result && treeData.result.exp != undefined) {
@@ -39,19 +41,15 @@ const FamilyTree = () => {
     }
   }, [treeData]);
 
-  // 경험치 증가 관련 로직 구현
   const handleAddExperience = async () => {
     if (treeData && treeData.result) {
-      const familyId = 5; // 이 값은 필요에 따라 변경하거나 prop으로 전달 받을 수 있습니다.
-      await updateTreeExp(familyId, 5);
+      await updateTreeExp(5);
     }
   };
 
   if (!treeData) {
     return <div>Loading...</div>;
   }
-
-  console.log(treeData.result);
 
   const treeImages: Record<number, string> = {
     1: treeLv1,
