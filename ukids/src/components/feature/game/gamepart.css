@@ -1,3 +1,4 @@
+/* 퀴즈 메인 버튼 */
 .quiz-select-box {
   width: 246.33px;
   height: 264.33px;
@@ -6,11 +7,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffbf33;
   font-size: 56px;
-  font-family: 'ONE-Mobile-POP';
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+}
+.quiz-select-box:hover {
+  border: 0.5rem solid #ffbf33;
+  /* transition: all 0.3s; */
 }
 
+/* 콜마넴 메인 버튼 */
 .callmyname-select-box {
   width: 426.5px;
   height: 426.5px;
@@ -19,16 +24,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9f6ad5;
   font-size: 56px;
-  font-family: 'ONE-Mobile-POP';
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+}
+.callmyname-select-box:hover {
+  border: 0.5rem solid #9f6ad5;
+  /* transition: all 0.3s; */
+}
+
+/* 이전 흰색 버튼 */
+.game-white-btn {
+  width: 5rem;
+  height: 2rem;
+  border-radius: 50px;
+  margin-left: 1rem;
+  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
 }
 
 /* 게임 폰트 */
 .game-font {
   text-align: center;
   font-family: 'ONE-Mobile-POP';
-  font-size: 64px;
+  font-size: 56px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -40,15 +57,17 @@
     -3px 0 0 #222, 0 3px 0 #222, 0 -3px 0 #222;
 }
 
+/* 퀴즈 글자 색깔 */
 .quiz-font-color {
   color: #ffbf33;
 }
 
+/* 콜마넴 글자 색깔 */
 .callmyname-font-color {
   color: #9f6ad5;
 }
 
-/* 게임 버튼 스타일 */
+/* 게임 버튼 기본 스타일 */
 .game-btn-common {
   display: flex;
   width: auto;
@@ -66,16 +85,22 @@
   margin-right: 1.25rem;
 }
 
-/* 퀴즈 노랑 */
+/* 퀴즈 버튼 노랑 */
 .game-btn-quiz {
   border-radius: 100rem;
   background: #ffbf33;
 }
 
-/* 콜마넴 보라 */
+/* 콜마넴 버튼 보라 */
 .game-btn-callmyname {
   border-radius: 100rem;
   background: #9f6ad5;
+}
+
+/* 게임 버튼 회색 */
+.game-btn-g {
+  border-radius: 100rem;
+  background: #777;
 }
 
 .modal {
@@ -97,11 +122,7 @@
   text-align: center;
 }
 
-.game-btn-g {
-  border-radius: 100rem;
-  background: #777;
-}
-
+/* 퀴즈 질문 O 버튼 */
 .quiz-O-btn {
   background-color: #fff;
   color: #333;
@@ -113,6 +134,13 @@
   transition: background-color 0.3s ease;
 }
 
+.quiz-O-btn.selected {
+  background-color: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+/* 퀴즈 질문 X 버튼 */
 .quiz-X-btn {
   background-color: #777;
   color: #333;
@@ -122,12 +150,6 @@
   border-radius: 0px 9999px 9999px 0px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-.quiz-O-btn.selected {
-  background-color: #3b82f6;
-  color: #fff;
-  border-color: #3b82f6;
 }
 
 .quiz-X-btn.selected {
