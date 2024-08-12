@@ -1,4 +1,4 @@
-import GameButton from './GameButton';
+import QuizButton from './QuizButton';
 import './gamepart.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -82,7 +82,7 @@ const QuizResult = () => {
   };
 
   useEffect(() => {
-    const socket = new SockJS(`${ukidsURL}/api/ws-stomp`);
+    const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {

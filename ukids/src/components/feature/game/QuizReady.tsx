@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import GameButton from './GameButton';
+import QuizButton from './QuizButton';
 import { useAuthStore } from '@/stores/authStore';
 import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
@@ -38,11 +38,6 @@ interface SetQuizMessage {
   quizCount: number;
 }
 
-interface IsReadyMessage {
-  type: 'IS_READY_GAME';
-  gameStart: boolean;
-}
-
 interface ErrorMessage {
   type: 'ERROR';
   message: string;
@@ -63,9 +58,8 @@ const QuizReady = () => {
       return;
     }
 
-    setIsReady((prev) => {
-      setReady(!prev);
-      return !prev;
+    setIsReady(() => {
+      window.location.href = '/quiz/start';
     });
   };
 
@@ -81,6 +75,11 @@ const QuizReady = () => {
   const [participants, setParticipants] = useState<
     { userName: string; role: string }[]
   >([]);
+
+  const handleBack = () => {
+    exitQuizRoom();
+    navigate('../');
+  };
 
   const enterQuizRoom = async () => {
     console.log('방 입장 ');
@@ -143,25 +142,6 @@ const QuizReady = () => {
     setSelectedValue(parseInt(event.target.value, 10));
   };
 
-  const setReady = async (state) => {
-    if (stompClientInstance && stompClientInstance.connected) {
-      try {
-        console.log('stompClientInstance:', stompClientInstance);
-        stompClientInstance.publish({
-          destination: `/app/quiz/ready`,
-          body: JSON.stringify({
-            familyId,
-            state,
-          }),
-        });
-      } catch (error) {
-        console.error('퀴즈 개수 설정 오류:', error);
-      }
-    } else {
-      console.log('stompClientInstance is null or message is empty');
-    }
-  };
-
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       enterQuizRoom();
@@ -175,7 +155,7 @@ const QuizReady = () => {
   }, [selectedValue]);
   // 처음 입장 시
   useEffect(() => {
-    const socket = new SockJS(`${ukidsURL}/api/ws-stomp`);
+    const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
@@ -237,15 +217,26 @@ const QuizReady = () => {
 
             break;
 
-          case 'SET_QUIZ_COUNTS':
-            setSelectedValue(receivedMessage.quizCount);
+          case 'EXIT_GAME':
+            setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
+
+            console.log(
+              'participantList:',
+              receivedMessage.gameRoomInfo.participantList,
+            );
+
+            const newParticipantEntries = Object.entries(
+              receivedMessage.gameRoomInfo.participantList,
+            ).map(([nkey, remainParticipant]) => ({
+              userName: remainParticipant.userName,
+              role: remainParticipant.role,
+            }));
+            setParticipants(newParticipantEntries);
+
             break;
 
-          case 'IS_READY_GAME':
-            if (receivedMessage.gameStart) {
-              // client.deactivate();
-              window.location.href = '/quiz/start';
-            }
+          case 'SET_QUIZ_COUNTS':
+            setSelectedValue(receivedMessage.quizCount);
             break;
 
           case 'ERROR':
@@ -259,7 +250,6 @@ const QuizReady = () => {
     };
 
     client.activate();
-    // enterQuizRoom();
 
     return () => {
       if (client) {
@@ -326,7 +316,13 @@ const QuizReady = () => {
           <div className="h-[15%] flex flex-row p-4">
             {!isReady ? (
               <>
-                <QuizButton name="돌아가기" path="../" />
+                <button
+                  onClick={handleBack}
+                  className="game-btn-quiz game-btn-common"
+                >
+                  돌아가기
+                </button>
+
                 <button
                   onClick={handleClick}
                   className="game-btn-quiz game-btn-common"

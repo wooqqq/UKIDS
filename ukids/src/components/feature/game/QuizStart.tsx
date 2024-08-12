@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { Client, IMessage } from '@stomp/stompjs';
@@ -25,6 +25,11 @@ interface QuizQuestion {
   writer: Participant;
 }
 
+interface IsReadyMessage {
+  type: 'IS_READY_GAME';
+  gameStart: boolean;
+}
+
 interface GetQuizMessage {
   type: 'QUIZ_QUESTION';
   gameState: string;
@@ -42,7 +47,11 @@ interface ErrorMessage {
   message: string;
 }
 
-type GameMessage = GetQuizMessage | CheckAnswerMessage | ErrorMessage;
+type GameMessage =
+  | GetQuizMessage
+  | CheckAnswerMessage
+  | ErrorMessage
+  | IsReadyMessage;
 
 interface JwtPayload {
   userId: string;
@@ -62,24 +71,51 @@ const QuizStart = () => {
   const [secondsLeft, setSecondsLeft] = useState<number>(20);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
+  const [isStart, setIsStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isQuestionLoaded, setIsQuestionLoaded] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const getQuizQuestion = async () => {
+  const setReady = async (state: boolean) => {
     if (stompClient && stompClient.connected) {
-      console.log('질문 요청 중...');
       try {
+        console.log('stompClientInstance:', stompClient);
         stompClient.publish({
-          destination: `/app/quiz/question`,
-          body: JSON.stringify({ familyId }),
+          destination: `/app/quiz/ready`,
+          body: JSON.stringify({
+            familyId,
+            state,
+          }),
         });
-        console.log('질문 요청이 성공적으로 발행되었습니다.');
       } catch (error) {
-        console.error('질문 가져오기 오류:', error);
+        console.error('퀴즈 개수 설정 오류:', error);
       }
     } else {
-      console.log('STOMP 클라이언트가 연결되어 있지 않습니다.');
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
+  const handleClick = () => {
+    setReady(false);
+    exitQuizRoom();
+    navigate('/quiz');
+  };
+
+  const exitQuizRoom = async () => {
+    if (stompClient && stompClient.connected) {
+      try {
+        console.log('stompClientInstance:', stompClient);
+        stompClient.publish({
+          destination: `/app/quiz/exit`,
+          body: JSON.stringify({
+            familyId,
+          }),
+        });
+      } catch (error) {
+        console.error('게임방 퇴장 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
     }
   };
 
@@ -104,18 +140,15 @@ const QuizStart = () => {
   };
 
   useEffect(() => {
-    const socket = new SockJS(`${ukidsURL}/api/ws-stomp`);
+    const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `${token}`,
       },
       debug: (str) => {
         console.log('웹소켓 디버그:', str);
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
@@ -125,9 +158,15 @@ const QuizStart = () => {
       client.subscribe(`/topic/quiz/${familyId}`, (message: IMessage) => {
         const receivedMessage: GameMessage = JSON.parse(message.body);
 
-        console.log('받은 메시지:', receivedMessage);
+        console.log('received message:', receivedMessage);
 
         switch (receivedMessage.type) {
+          case 'IS_READY_GAME':
+            if (receivedMessage.gameStart) {
+              setIsStart(true);
+            }
+            break;
+
           case 'QUIZ_QUESTION':
             if (receivedMessage.gameState === 'END') {
               navigate('/quiz/result');
@@ -154,6 +193,9 @@ const QuizStart = () => {
             setTimeout(() => {
               setShowModal(false);
             }, 1000);
+            resetTimer();
+            setIsQuestionLoaded(false);
+
             break;
 
           case 'ERROR':
@@ -178,8 +220,10 @@ const QuizStart = () => {
   }, [ukidsURL, token, familyId]);
 
   useEffect(() => {
-    if (stompClient && stompClient.connected && !showModal) getQuizQuestion();
-  }, [showModal, stompClient]);
+    if (stompClient && stompClient.connected) {
+      setReady(true);
+    }
+  }, [stompClient]);
 
   useEffect(() => {
     let timerId: NodeJS.Timeout | null = null;
@@ -258,6 +302,13 @@ const QuizStart = () => {
         <div className="flex justify-center items-center w-[106px] h-[106px] rounded-full border-solid border-8 border-[#36d5f1] text-[#36d5f1]">
           {secondsLeft}
         </div>
+      </div>
+      <div>
+        {!isStart && (
+          <button onClick={handleClick} className="game-btn-g game-btn-common">
+            돌아가기
+          </button>
+        )}
       </div>
 
       {showModal && (

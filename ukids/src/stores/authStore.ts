@@ -35,8 +35,8 @@ interface AuthState {
 //   'token',
 //   'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlkIjoidXNlcjEiLCJuYW1lIjoi6rmA7Iu47ZS8IiwicGhvbmUiOiIwMTAtMTIxMi0xMjEyIiwiZW1haWwiOiJ3d3dAYXNzZGYuY29tIiwiaWF0IjoxNzIzMDgwMjUwLCJleHAiOjE3MjMwODM4NTB9.HRFEqm_i66m4JOa5yUEFlNHb7BQkuvV8mW_a-wnc2Sk',
 // );
-const ukidsURL = `http://localhost:8080`;
-// const ukidsURL = `https://i11b306.p.ssafy.io`;
+// const ukidsURL = `http://localhost:8080`;
+const ukidsURL = `https://i11b306.p.ssafy.io`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   // 초기 토큰 값: localStorage에서 불러옴
