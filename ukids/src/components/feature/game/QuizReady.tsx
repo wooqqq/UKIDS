@@ -7,6 +7,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
 import { useFamilyStore } from '@/stores/familyStore.ts';
+import ReadyCall from './ReadyCall';
 
 interface Participant {
   userName: string;
@@ -91,6 +92,11 @@ const QuizReady = () => {
   const [participants, setParticipants] = useState<
     { userName: string; role: string }[]
   >([]);
+
+  const [nameOfUser, setNameOfUser] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [connection, setConnection] = useState<string | null>(null);
+  const [isEnter, setIsEnter] = useState<boolean>(false);
 
   const handleBack = () => {
     exitQuizRoom();
@@ -221,6 +227,10 @@ const QuizReady = () => {
             const participant =
               receivedMessage.gameRoomInfo.participantList[user];
             console.log('----user : ----', participant);
+            setNameOfUser(participant.userName);
+            setSessionId(receivedMessage.gameRoomInfo.sessionId);
+            setConnection(receivedMessage.webrtcConnection);
+
             if (participant && participant.maxQuestion === 0) {
               alert('퀴즈 문제 개수가 0입니다. 게임에 참여할 수 없습니다.');
               navigate('../');
@@ -390,6 +400,13 @@ const QuizReady = () => {
             ))}
           </ul>
         </div>
+        {nameOfUser && sessionId && connection && (
+          <ReadyCall
+            nameOfUser={nameOfUser}
+            sessionId={sessionId}
+            token={connection}
+          />
+        )}
       </div>
     </>
   );

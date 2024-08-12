@@ -36,7 +36,7 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
   isChatting: false,
   setIsChatting: (value) => set(() => ({ isChatting: value })),
 
-  joinSession: async (familyId, userName) => {
+  joinSession: async (familyId, userName, token: string | null = null) => {
     const OV = new OpenVidu();
     set({ OV });
 
@@ -64,8 +64,11 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
     });
 
     try {
-      const token = await getToken(familyId);
-      await session.connect(token, { clientData: userName });
+      console.log('webrtc token : ', token);
+
+      const sessionToken = token || (await getToken(familyId));
+      // const token = await getToken(familyId);
+      await session.connect(sessionToken, { clientData: userName });
 
       const publisher = OV.initPublisher(undefined, {
         audioSource: undefined,
