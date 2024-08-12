@@ -24,4 +24,5 @@ public interface LetterRepository extends JpaRepository<Letter, Long>, LetterRep
     @Override
     long updateLettersOpenStatusByTree(Tree tree);
 
+
 }

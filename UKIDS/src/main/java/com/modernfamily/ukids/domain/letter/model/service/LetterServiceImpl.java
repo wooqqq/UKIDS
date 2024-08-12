@@ -6,6 +6,7 @@ import com.modernfamily.ukids.domain.letter.dto.response.LetterListResponseDto;
 import com.modernfamily.ukids.domain.letter.dto.response.LetterResponseDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
+import com.modernfamily.ukids.domain.letter.model.repository.LetterRepositoryCustom;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
@@ -126,7 +127,10 @@ public class LetterServiceImpl implements LetterService {
         }
 
         // letter의 isRead가 false이면 true로 변경
-        if (!letter.isRead()) letter.readLetter();
+        if (!letter.isRead()) {
+            letterRepository.updateLetterRead(letterId);
+            letter.readLetter();
+        }
 
         return LetterResponseDto.createResponseDto(letter);
     }
