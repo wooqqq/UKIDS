@@ -17,16 +17,19 @@ public class TreeInfoResponseDto {
 
     private Long familyId;
 
+    private String familyName;
+
     private int letterCount;
 
     private String createTime;
 
     @Builder
-    private TreeInfoResponseDto(Long treeId, Long exp, boolean isComplete, Long familyId, int letterCount, String createTime) {
+    private TreeInfoResponseDto(Long treeId, Long exp, boolean isComplete, Long familyId, String familyName, int letterCount, String createTime) {
         this.treeId = treeId;
         this.exp = exp;
         this.isComplete = isComplete;
         this.familyId = familyId;
+        this.familyName = familyName;
         this.letterCount = letterCount;
         this.createTime = createTime;
     }
@@ -37,6 +40,7 @@ public class TreeInfoResponseDto {
                 .exp(tree.getExp())
                 .isComplete(tree.isComplete())
                 .familyId(tree.getFamily().getFamilyId())
+                .familyName(tree.getFamily().getName())
                 .letterCount(letterCount)
                 .createTime(tree.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
