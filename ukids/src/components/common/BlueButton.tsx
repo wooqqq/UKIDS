@@ -21,15 +21,14 @@ const BlueButton = (props: BlueButtonProps) => {
     }
   };
 
-  if (props.name == '로그인' || props.name == '회원가입') {
+  if (
+    props.name == '로그인' ||
+    props.name == '회원가입' ||
+    props.name == '방 만들기' ||
+    props.name == '가입신청'
+  ) {
     return (
       <button onClick={handleClick} className="common-btn blue-btn login-btn">
-        {props.name}
-      </button>
-    );
-  } else if (props.name == '만들기' || props.name == '가입신청') {
-    return (
-      <button onClick={handleClick} className="common-btn blue-btn">
         {props.name}
       </button>
     );

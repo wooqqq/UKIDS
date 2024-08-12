@@ -50,8 +50,6 @@ const Header = () => {
         <>
           <ProfileButton
             name={name || ''} // 사용자 이름이 없을 때 기본값
-            hasFamily={false}
-            isManager={true}
           />
         </>
       )}
