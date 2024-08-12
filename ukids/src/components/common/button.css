@@ -1,4 +1,4 @@
-@import url(../../reset.css);
+@import url(@/reset.css);
 
 .common-btn {
   display: flex;
@@ -71,22 +71,6 @@
 /* 통화 연결하기 버튼 */
 .green-btn {
   background: #2cda0f;
-}
-
-/* 게임 버튼 스타일 */
-.game-btn-common {
-  font-family: 'ONE Mobile POP';
-  font-size: 2rem;
-}
-
-/* 가족 퀴즈 긍정 */
-.game-btn-quiz {
-  background: #ffbf33;
-}
-
-/* 콜마넴 긍정 */
-.game-btn-callmyname {
-  background: #9f6ad5;
 }
 
 /* 플러스 버튼 */

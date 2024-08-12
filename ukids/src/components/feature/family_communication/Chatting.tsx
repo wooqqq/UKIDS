@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Client, IMessage } from '@stomp/stompjs';
 
-import ChattingBox from '../chatting/ChattingBox';
+import ChattingBox from './ChattingBox';
 import BlueButton from '../../common/BlueButton';
 import SockJS from 'sockjs-client';
 import { useAuthStore } from '@/stores/authStore';
@@ -20,10 +20,11 @@ interface Message {
 interface JwtPayload {
   userId: string;
 }
-// interface DecodedToken {
-//   userId: number;
-//   // 필요한 다른 필드들 추가
-// }
+
+interface DecodedToken {
+  userId: number;
+  // 필요한 다른 필드들 추가
+}
 
 const FamilyChatting = () => {
   const { ukidsURL, token } = useAuthStore();
@@ -41,7 +42,8 @@ const FamilyChatting = () => {
   );
 
   // 디코딩된 토큰 정보 가져오기
-  // const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
+  const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
+  console.log(decodedToken);
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -198,6 +200,7 @@ const FamilyChatting = () => {
     getChatList();
     enterChatRoom();
   }, []);
+
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
   useEffect(() => {
     scrollToBottom();
