@@ -111,7 +111,7 @@ export const PictureDiaryCreate = () => {
         <BlueButton name="등록" path="/paintdiary" onClick={createDiary} />
       </div>
 
-
+      <div className="container">
 
       {/* 그림 등록 네모 박스  */}
       <div className="image-box">
@@ -148,6 +148,7 @@ export const PictureDiaryCreate = () => {
             ></textarea>
           </div>
 
+      </div>
 
 
 
