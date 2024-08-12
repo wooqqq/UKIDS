@@ -38,7 +38,7 @@ public class FamilyMember {
     @JoinColumn(name="family_id")
     private Family family;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

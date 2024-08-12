@@ -1,11 +1,16 @@
 package com.modernfamily.ukids.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.modernfamily.ukids.global.handler.StompHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
@@ -41,4 +46,35 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new StompHandler(jwtConfig));
     }
 
+    @Override
+    public void configureClientOutboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ErrorHandlingInterceptor());
+    }
+
+    private static class ErrorHandlingInterceptor implements ChannelInterceptor {
+        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        public void afterSendCompletion(Message<?> message, MessageChannel channel, Exception ex) {
+            if (ex != null) {
+                String errorMessage;
+                try {
+                    errorMessage = objectMapper.writeValueAsString(new ErrorMessage("ERROR", ex.getMessage()));
+                } catch (Exception e) {
+                    errorMessage = "{\"type\": \"ERROR\", \"message\": \"Unknown error\"}";
+                }
+
+                log.error("Sending error message to clients: {}", errorMessage);
+            }
+        }
+    }
+
+    private static class ErrorMessage {
+        private String type;
+        private String message;
+
+        public ErrorMessage(String type, String message) {
+            this.type = type;
+            this.message = message;
+        }
+    }
 }

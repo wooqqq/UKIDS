@@ -4,6 +4,7 @@ import com.modernfamily.ukids.domain.game.quizQuestion.dto.request.QuizQuestionC
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.request.QuizQuestionUpdateRequestDto;
 import com.modernfamily.ukids.domain.game.quizQuestion.message.SuccessMessage;
 import com.modernfamily.ukids.domain.game.quizQuestion.model.service.QuizQuestionService;
+import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
 import com.modernfamily.ukids.global.util.HttpMethodCode;
 import com.modernfamily.ukids.global.util.HttpResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,7 @@ public class QuizQuestionController {
     @GetMapping("/count")
     public ResponseEntity<Map<String, Object>> getCountQuizQuestionByUser() {
         return responseUtil.createResponse(HttpMethodCode.GET,
-                quizQuestionService.getCountQuizQuestionByUser());
+                quizQuestionService.getCountQuizQuestionByUser(CustomUserDetails.contextGetUserId()));
     }
 
 }

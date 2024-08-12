@@ -1,5 +1,6 @@
 package com.modernfamily.ukids.domain.game.quiz.model.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRepository;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRoomRespository;
@@ -11,6 +12,7 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QuizService {
 
     // 방 정보
@@ -36,21 +39,25 @@ public class QuizService {
     public Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
         if(!quizRooms.containsKey(familyId)){
             String sessionId = webrtcService.initializeSessions(null);
-            quizRoomRespository.createGameRoom(sessionId);
+            quizRooms.put(familyId, quizRoomRespository.createGameRoom(sessionId));
         }
-
-        // 참여자 목록에 있어
-        if(quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
-            throw new ExceptionResponse(CustomException.DUPLICATED_ID_EXCEPTION);
-
-        // 이미 게임 진행 중
-        if(quizRoomRespository.isPlaying(quizRooms.get(familyId)))
-            throw new ExceptionResponse(CustomException.ALREADY_PLAYING_EXCEPTION);
 
         Map<String, Object> response = new HashMap<>();
         response.put("type", "ENTER_GAME");
         response.put("id", familyId);
         response.put("webrtcConnection", webrtcService.getToken(quizRooms.get(familyId).getSessionId(), null));
+
+        // 이미 게임 진행 중
+        if(quizRoomRespository.isPlaying(quizRooms.get(familyId))){
+            response.put("gameRoomInfo", quizRooms.get(familyId));
+            return response;
+        }
+
+
+        // 참여자 목록에 있어
+        if(quizRoomRespository.isExistUser(userId, quizRooms.get(familyId))){
+            quizRoomRespository.exitGame(userId, quizRooms.get(familyId));
+        }
 
         quizRoomRespository.enterGame(userId, familyId, quizRooms.get(familyId));
 
@@ -61,22 +68,34 @@ public class QuizService {
 
 
     // 유저 퇴장
-    public void exitQuizRoom(Long familyId, String userId) {
+    public Map<String, Object> exitQuizRoom(Long familyId, String userId) {
 
         isExistFamilyGame(familyId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("type", "EXIT_GAME");
+
 
         if(!quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_USER_EXCEPTION);
 
         quizRoomRespository.exitGame(userId, quizRooms.get(familyId));
+
+        response.put("gameRoomInfo", quizRooms.get(familyId));
+        return response;
     }
 
     // 게임방 정보 반환
     public Map<String, Object> getQuizRoom(Long familyId) {
         Map<String, Object> response = new HashMap<>();
         response.put("type", "GET_QUIZ_ROOM");
-        response.put("game", quizRooms.get(familyId));
+        response.put("gameResult", quizRooms.get(familyId));
+        quizRepository.endGame(familyId, quizRooms.get(familyId));
+//        endGame(familyId);
         return response;
+    }
+
+    public void deleteQuizRoom(Long familyId) {
+        quizRooms.remove(familyId);
     }
 
     // 퀴즈 개수 설정
@@ -105,21 +124,22 @@ public class QuizService {
     }
 
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성
-    public Map<String, Object> isReadyGameStart(Long familyId, String userId) {
+    public Map<String, Object> isReadyGameStart(Long familyId, String userId, boolean isReady) {
         isExistFamilyGame(familyId);
 
-        quizRoomRespository.clickReady(userId, quizRooms.get(familyId));
+        quizRoomRespository.clickReady(userId, quizRooms.get(familyId), isReady);
 
         Map<String, Object> response = new HashMap<>();
-        boolean isState = true;
+        boolean isState = false;
 
-        // 참가자 모두 준비 안됨
-        if(!quizRoomRespository.checkReady(quizRooms.get(familyId)))
-            isState = false;
+        // 참가자 모두 준비 완료
+        if(quizRoomRespository.checkReady(quizRooms.get(familyId))) {
+            isState = true;
 
-        quizRoomRespository.generateQuiz(quizRooms.get(familyId));
-        quizRoomRespository.startGame(quizRooms.get(familyId));
+            quizRoomRespository.generateQuiz(quizRooms.get(familyId));
+            quizRoomRespository.startGame(quizRooms.get(familyId));
 
+        }
         response.put("type", "IS_READY_GAME");
 
         response.put("gameStart", isState);
@@ -128,19 +148,23 @@ public class QuizService {
 
     // 질문 반환 -> 반환 끝나면 게임 종료
     public Map<String, Object> getQuizQuestion(Long familyId) {
+        log.info("++++++++++++++++Generate and Pick Quiz++++++++++++++++++");
         isExistFamilyGame(familyId);
+        log.info("++++++++++++++++Start++++++++++++++++++");
         QuizQuestionRandomResponseDto quizQuestion = quizRepository.getQuizQuestion(quizRooms.get(familyId));
+        log.info("++++++++++++++++Finish++++++++++++++++++");
 
         Map<String, Object> response = new HashMap<>();
         response.put("type", "QUIZ_QUESTION");
 
         if(quizQuestion == null) {
             response.put("gameState", "END");
-            endGame(familyId);
+
             return response;
         }
 
         response.put("gameState", "ING");
+        response.put("problemIndex", quizRooms.get(familyId).getCurrentQuestionIndex()+1);
         response.put("quizQuestion", quizQuestion);
 
         return response;
@@ -165,6 +189,6 @@ public class QuizService {
 
     private void isExistFamilyGame(Long familyId) {
         if(!quizRooms.containsKey(familyId))
-            throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_GAME_EXCEPTION);
+            throw new NotFoundException("NOT FOUND FAMILY GAME");
     }
 }

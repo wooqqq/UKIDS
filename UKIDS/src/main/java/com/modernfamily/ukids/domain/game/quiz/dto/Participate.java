@@ -29,7 +29,7 @@ public class Participate {
         this.hit++;
     }
 
-    public void clickReady(){
-        this.isReady = !this.isReady;
+    public void clickReady(boolean isReady){
+        this.isReady = isReady;
     }
 }

@@ -3,11 +3,14 @@ package com.modernfamily.ukids.domain.game.quiz.dto;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Getter
+@Slf4j
 public class QuizRoom {
     private String sessionId;
     private Long quizCount;
@@ -38,10 +41,10 @@ public class QuizRoom {
                 .quizCount(0L)
                 .isStart(false)
                 .numberOfParticipants(0L)
-                .maxQuestionCounts(0L)
+                .maxQuestionCounts(Long.MAX_VALUE)
                 .currentQuestionIndex(-1)
                 .participantList(new HashMap<String, Participate>())
-                .randomQuizQuestionList(null)
+                .randomQuizQuestionList(new ArrayList<>())
                 .build();
 
     }
@@ -56,7 +59,8 @@ public class QuizRoom {
 
     public void enterParticipate(String userId, Participate participant){
         participantList.put(userId, participant);
-        maxQuestionCounts = Math.min(maxQuestionCounts, participant.getMaxQuestion());
+        log.info("Enter user : {}", participant.getUserName());
+        this.maxQuestionCounts = Math.min(maxQuestionCounts, participant.getMaxQuestion());
         ++this.numberOfParticipants;
     }
 
