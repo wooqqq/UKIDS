@@ -1,20 +1,20 @@
 import { useNavigate } from 'react-router-dom';
-import './gamebutton.css';
+import './gamepart.css';
 
 const QuizMain = () => {
   const nav = useNavigate();
 
   const onClickStart = () => {
     // 준비방으로 이동
-    nav('./ready');
+    nav('ready');
   };
   const onClickQnAList = () => {
     // 질문 목록으로 이동
-    nav('./qna');
+    nav('qna');
   };
   const onClickHistory = () => {
     // 결과 기록으로 이동
-    nav('./history');
+    nav('history');
   };
 
   return (
