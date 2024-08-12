@@ -61,12 +61,6 @@ interface AuthState {
 
   // 전화번호 중복 검사
   checkedPhone: (phone: string) => Promise<void>;
-
-  // familyId: number;
-  // setfamilyId: (name: string, password: string) => void;
-
-  chatRoomId: number;
-  setChatRoomId: (familyId: number) => void;
 }
 
 // 자동 로그아웃 테스트
@@ -304,38 +298,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (error) {
       console.error('전화번호 중복 검사 실패:', error);
       alert('전화번호 중복 검사에 실패했습니다.');
-    }
-  },
-
-  /***** 각종 방 ID들 설정 *****/
-
-  // 가족방 생성 시 가족방 ID 얻어오고
-  // openvidu sessionId 생성 요청하기
-  // 가족 ID로 채팅방 ID 얻어오기
-  // familyId: NaN,
-  // setfamilyId: (name, password) => async () => {
-  //   try {
-  //     const response = await api.post(`/family`, { name, password });
-  //     const newFamilyId = Number.parseInt(response.data.familyId);
-
-  //     set({ familyId: newFamilyId });
-
-  //     await api.post(`/webrtc`, { familyId: newFamilyId });
-  //     await get().setChatRoomId(newFamilyId);
-  //   } catch (error: any) {
-  //     set({ error: error.message });
-  //   }
-  // },
-
-  // 가족 ID로 채팅방 ID 생성하기
-  chatRoomId: NaN,
-  setChatRoomId: (familyId) => async () => {
-    set({ error: null });
-    try {
-      const response = await api.post(`/chat/room`, { familyId });
-      set({ chatRoomId: Number.parseInt(response.data.chatRoomId) });
-    } catch (error: any) {
-      set({ error: error.message });
     }
   },
 }));

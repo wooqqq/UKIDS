@@ -12,7 +12,7 @@ interface FamilyMemberListProps {
   isChattingRoom: boolean;
 }
 
-const number = 4;
+const number = 3;
 
 const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
   const [onlineFamilyNum, setOnlineFamilyNum] = useState(0);

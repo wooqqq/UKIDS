@@ -4,7 +4,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 import ChattingBox from './ChattingBox';
 import BlueButton from '@components/common/BlueButton';
 import SockJS from 'sockjs-client';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore } from '@stores/authStore';
 import { useFamilyStore } from '@stores/familyStore';
 import api from '@/util/api';
 
