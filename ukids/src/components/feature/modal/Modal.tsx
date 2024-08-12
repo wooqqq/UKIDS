@@ -45,52 +45,59 @@ export const Modal = ({
     };
   }, [setModalState]);
 
-  if (!modalState) return null;
+    if (!modalState) return null;
 
-  const checkPassword = async () => {
-    const url = '/family/pwcheck';
-    const config = {
-      familyId: 11,
-      password,
-    };
+    const checkPassword = async () => {
+        const url = "/family/pwcheck";
+        const config = {
+            familyId : 6,
+            password
+        }
 
-    const { data } = await api.post(url, config, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (data.result == 'SUCCESS_PASSWORD_DISCORD') {
-      alert('비밀번호가 일치하지 않습니다.');
-    } else {
-      if (confirm('삭제하시겠습니까?')) {
-        deleteElement();
-        navigate('/paintdiary');
-      }
+        const {data} = await api.post(url, config, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if(data.result == "SUCCESS_PASSWORD_DISCORD"){
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+        else {
+            if(confirm("삭제하시겠습니까?")){
+                deleteElement();
+
+                // 수정 : nav 할 때 삭제 상태 갱신을 요청해야함
+                navigate('/paintdiary');
+            }
+        }
+        console.log(data);
     }
-    console.log(data);
-  };
 
   return (
     <div className="modal-overlay">
       <div className="modal-top-container">
         <div className="modal-container">
           <div className="modal-header">
-            <span>{content}</span>
+            <span className='content-title'>{content}</span>
             <span className="modal-close-button" onClick={onClickCloseButton}>
               X
             </span>
           </div>
 
           <div className="modal-content text-center">
-            <p>가족방 비밀번호를 입력해주세요</p>
-            <input
+
+            <p className="password-label">가족방 비밀번호를 입력해주세요</p>
+            
+            <input 
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호 입력" // 추가 : 입력 플레이스홀더 
+              className="password-input" // 추가 : css 
             />
           </div>
           <div className="text-center">
-            <button onClick={checkPassword}>삭제</button>
+            <button className="common-btn red-font" style={{ position: 'absolute', bottom: '30px', right: '30px' }} onClick={checkPassword}>삭제</button>
           </div>
         </div>
       </div>
