@@ -6,7 +6,7 @@ import Schedule from './pages/Schedule';
 import Letters from './pages/Letters';
 import Albums from './components/feature/album/Albums';
 import AlbumDetail from './components/feature/album/AlbumDetail';
-import UploadPhoto from './components/feature/album/UploadPhoto';
+import UploadAlbum from './components/feature/album/UploadAlbum';
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
 import GrowthFolder from './pages/GrowthFolder';
@@ -95,7 +95,7 @@ const App = () => {
             <Route path="/albums" element={<Albums />} />
             {/* 앨범 중첩 라우팅 */}
             <Route path="/albums/:albumId" element={<AlbumDetail />} />
-            <Route path="/albums/upload" element={<UploadPhoto />} />
+            <Route path="/albums/upload" element={<UploadAlbum />} />
             <Route path="/paintdiary/*" element={<PaintingDiary />} />
             <Route path="/growthdiary/*" element={<GrowthDiary />} />
             <Route path="/growthfolder/*" element={<GrowthFolder />} />

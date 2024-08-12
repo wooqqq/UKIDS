@@ -50,7 +50,7 @@ export const Modal = ({
     const checkPassword = async () => {
         const url = "/family/pwcheck";
         const config = {
-            familyId : 11,
+            familyId : 6,
             password
         }
 
@@ -65,9 +65,10 @@ export const Modal = ({
         else {
             if(confirm("삭제하시겠습니까?")){
                 deleteElement();
-                console.log(data);
+                navigate('/paintdiary');
             }
         }
+        console.log(data);
     }
 
   return (
