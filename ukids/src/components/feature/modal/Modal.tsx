@@ -47,28 +47,29 @@ export const Modal = ({
 
   if (!modalState) return null;
 
-  const checkPassword = async () => {
-    const url = '/family/pwcheck';
-    const config = {
-      familyId: 11,
-      password,
-    };
+    const checkPassword = async () => {
+        const url = "/family/pwcheck";
+        const config = {
+            familyId : 6,
+            password
+        }
 
-    const { data } = await api.post(url, config, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (data.result == 'SUCCESS_PASSWORD_DISCORD') {
-      alert('비밀번호가 일치하지 않습니다.');
-    } else {
-      if (confirm('삭제하시겠습니까?')) {
-        deleteElement();
-        navigate('/paintdiary');
-      }
+        const {data} = await api.post(url, config, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if(data.result == "SUCCESS_PASSWORD_DISCORD"){
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+        else {
+            if(confirm("삭제하시겠습니까?")){
+                deleteElement();
+                navigate('/paintdiary');
+            }
+        }
+        console.log(data);
     }
-    console.log(data);
-  };
 
   return (
     <div className="modal-overlay">

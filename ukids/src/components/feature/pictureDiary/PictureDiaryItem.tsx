@@ -9,11 +9,15 @@ interface DiaryItem {
 export const PictureDiaryItem = ({pictureUrl, content, date}: DiaryItem) => {
 
 
+    
+    
+
+
     return (
-        <div className="card-item">
+        <div>
             <img src={pictureUrl} alt="" />
-            <div>{date}</div>
-            <div>{content}</div>
+            <div className="album-item-date">{date}</div>
+            <div className="album-item-title">{content}</div>
         </div>
     ) 
-}
+    }
