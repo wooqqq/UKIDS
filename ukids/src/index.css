@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
@@ -41,18 +40,19 @@ body {
 /* 기능 박스 수정*/
 .feature-box {
   width: 911px;
+  /* width: 90%; */
   height: 576px;
   flex-shrink: 0;
   border-radius: 20px;
   opacity: var(--sds-size-stroke-border);
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
-  
 }
 
 /* 기능 박스 (반) */
 .half-feature-box {
   width: 440px;
+  /* width: 43%; */
   height: 576px;
   flex-shrink: 0;
   border-radius: 20px;

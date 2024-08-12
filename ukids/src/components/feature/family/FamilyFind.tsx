@@ -10,7 +10,6 @@ const FamilyFind = () => {
   const [error, setError] = useState('');
 
   const findFamily = useFamilyStore((state) => state.findFamily);
-  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,7 +29,7 @@ const FamilyFind = () => {
       if (family) {
         // 이름과 코드가 일치하면 가족방 신청 처리
         alert(`${name} 가족방에 가입 신청이 완료되었습니다.`);
-        navigate('/');
+        window.location.href = `/main`;
       } else {
         // 일치하지 않으면 오류 메시지 표시
         setError('가족방 이름과 코드가 일치하지 않습니다.');
@@ -66,7 +65,9 @@ const FamilyFind = () => {
           placeholder="가족방 코드"
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
-        <div className="text-[red] text-center">{error ? error : ''}</div>
+        <div className="text-[red] text-center invisible">
+          {error ? error : ''}
+        </div>
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="가입신청" type="submit" path="" />
         </div>

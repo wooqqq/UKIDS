@@ -9,7 +9,6 @@ const FamilyCreate = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const nav = useNavigate();
   const createFamily = useFamilyStore((state) => state.createFamily);
 
   const handleCreateFamily = async (e: React.FormEvent) => {
@@ -22,7 +21,8 @@ const FamilyCreate = () => {
     }
     // 가족방 생성 API 요청
     await createFamily(name, password);
-    nav(`/main`);
+    alert('가족방이 생성되었습니다.');
+    window.location.href = `/main`;
   };
 
   return (
@@ -59,7 +59,7 @@ const FamilyCreate = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
-        <div className="text-[red]">{error ? error : ''}</div>
+        <div className="text-[#F03F2F]">{error ? error : ''}</div>
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="방 만들기" type="submit" path="" />
         </div>
@@ -94,7 +94,7 @@ const FamilyCreateButton = () => {
           />
         </svg>
       </div>
-      <div className="big-title-style mt-5">가족방 만들기</div>
+      <div className="z-20 big-title-style mt-5">가족방 만들기</div>
     </button>
   );
 };

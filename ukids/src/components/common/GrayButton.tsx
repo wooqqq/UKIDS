@@ -7,6 +7,7 @@ interface GrayButtonProps {
   path: string;
   className?: string;
   type?: string;
+  onClick?: () => void;
 }
 
 const GrayButton = (props: GrayButtonProps) => {
@@ -14,7 +15,11 @@ const GrayButton = (props: GrayButtonProps) => {
   const setToken = useAuthStore((state) => state.setToken);
 
   const handleClick = () => {
-    nav(props.path);
+    if (props.onClick) {
+      props.onClick(); // onClick 함수 호출
+    } else {
+      nav(props.path);
+    }
   };
 
   const onClickLogoutButton = () => {

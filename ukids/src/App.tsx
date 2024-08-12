@@ -22,7 +22,7 @@ import Sidebar from './components/common/Sidebar';
 import Main from './pages/Main';
 import FamilyCreateFind from './pages/FamliyCreateFind';
 import { ProtectedRoute, PublicRoute } from './components/error/ProtectedRoute';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전)
 // 1-1. FamilyHome "/:familyId" : 로그인 후 메인 페이지
@@ -60,15 +60,15 @@ const App = () => {
     location.pathname === '/join';
 
   // 배경색 변경 (회색 그라데이션)
-  useEffect(() => {
-    if (
-      location.pathname === '/' ||
-      location.pathname === '/login' ||
-      location.pathname === '/join'
-    ) {
-      document.body.style.backgroundColor = '#fff';
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (
+  //     location.pathname === '/' ||
+  //     location.pathname === '/login' ||
+  //     location.pathname === '/join'
+  //   ) {
+  //     document.body.style.backgroundColor = '#fff';
+  //   }
+  // }, [location.pathname]);
 
   return (
     <div className="">
