@@ -41,13 +41,11 @@ const CallMyNameStart = () => {
   useEffect(() => {
     setUserName(nameOfUser);
 
-    api.get('family/all').then((response: any) => {
-      console.log(response.data);
-      familyId = response.data.result.familyId;
-    });
-
-    const connectSession = async () => {
+    const fetchFamilyId = async () => {
       try {
+        const response = await api.get('family/all');
+        console.log(response.data.result);
+        familyId = response.data.result[0].familyId;
         await joinSession(familyId, userName);
         console.log('Successfully joined the session.');
       } catch (error) {
@@ -55,8 +53,8 @@ const CallMyNameStart = () => {
       }
     };
 
-    connectSession();
-  }, []);
+    fetchFamilyId();
+  }, [joinSession, nameOfUser, setUserName, userName]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -65,6 +63,12 @@ const CallMyNameStart = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (remainingTime <= 0) {
+      handleNextTurn(); // 타이머가 0이 되었을 때 다음 턴으로 넘어가도록 호출
+    }
+  }, [remainingTime]);
 
   const handleCorrectAnswer = () => {
     alert('Correct! You are now excluded from the spotlight.');
