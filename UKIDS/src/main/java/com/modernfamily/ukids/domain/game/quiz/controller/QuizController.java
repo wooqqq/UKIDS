@@ -95,7 +95,7 @@ public class QuizController {
                         scheduler.shutdown();
                     }
                 }
-            }, 3, 24, TimeUnit.SECONDS);
+            }, 1, 16, TimeUnit.SECONDS);
         }
     }
 

@@ -36,7 +36,7 @@ public class QuizService {
 
     // 게임방 생성 -> 있으면 참여, 없으면 생성 + 중복 참여인지 검사 + 유저 참여
     // + webrtc 세션 생성 + connection 반환
-    public Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public synchronized Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
         if(!quizRooms.containsKey(familyId)){
             String sessionId = webrtcService.initializeSessions(null);
             quizRooms.put(familyId, quizRoomRespository.createGameRoom(sessionId));
@@ -85,12 +85,15 @@ public class QuizService {
     }
 
     // 게임방 정보 반환
-    public Map<String, Object> getQuizRoom(Long familyId) {
+    public synchronized Map<String, Object> getQuizRoom(Long familyId) {
+        isExistFamilyGame(familyId);
+
         Map<String, Object> response = new HashMap<>();
         response.put("type", "GET_QUIZ_ROOM");
         response.put("gameResult", quizRooms.get(familyId));
-        quizRepository.endGame(familyId, quizRooms.get(familyId));
-//        endGame(familyId);
+        if(!quizRooms.get(familyId).isSave())
+            quizRepository.endGame(familyId, quizRooms.get(familyId));
+        quizRoomRespository.endGame(quizRooms.get(familyId));
         return response;
     }
 
@@ -124,7 +127,7 @@ public class QuizService {
     }
 
     // 준비 클릭 -> 다 준비되면 바로 게임 시작 -> 퀴즈 개수만큼 퀴즈 생성
-    public Map<String, Object> isReadyGameStart(Long familyId, String userId, boolean isReady) {
+    public synchronized Map<String, Object> isReadyGameStart(Long familyId, String userId, boolean isReady) {
         isExistFamilyGame(familyId);
 
         quizRoomRespository.clickReady(userId, quizRooms.get(familyId), isReady);
