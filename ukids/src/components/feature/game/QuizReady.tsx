@@ -1,15 +1,95 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import QuizButton from './QuizButton';
 import FamilyMemberList from '../family/FamilyMemberList';
 import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import { useAuthStore } from '@stores/authStore';
 
 const QuizReady = () => {
+  const { ukidsURL, token } = useAuthStore();
+  const familyId = 7;
+
   const [isReady, setIsReady] = useState<boolean>(false);
+  const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
+    null,
+  );
 
   const handleClick = () => {
     setIsReady((prev) => !prev);
   };
+
+  // 퀴즈방 입장
+  const enterGameRoom = async () => {
+    console.log('Enter chat room');
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: `/quiz/enter/${familyId}`,
+          body: JSON.stringify({
+            type: 'ENTER',
+            roomId: familyId,
+          }),
+        });
+      } catch (error) {
+        console.error('Enter 메세지 전송 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
+  // 처음 입장 시
+  useEffect(() => {
+    const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
+    const client = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: `${token}`,
+      },
+      debug: (str) => {
+        console.log('웹소켓 디버그: ' + str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.onConnect = (frame) => {
+      console.log('WebSocket 연결이 열렸습니다.', frame);
+
+      // 올바른 stompClientInstance 설정
+      console.log('Setting stompClientInstance:', client);
+      setStompClientInstance(client);
+
+      client.subscribe(`/topic/quiz/${familyId}`, () => {});
+    };
+    client.onStompError = (frame) => {
+      console.error('STOMP Error:', frame.headers['message']);
+      console.error('Details:', frame.body);
+    };
+
+    client.activate();
+
+    return () => {
+      if (client) {
+        client.deactivate();
+      }
+    };
+  }, [ukidsURL, token]);
+
+  useEffect(() => {
+    enterGameRoom();
+  }, []);
+
+  // 준비 완료, 취소 될때
+  useEffect(() => {
+    if (isReady === true) {
+    } else {
+    }
+  }, [isReady]);
 
   return (
     <>

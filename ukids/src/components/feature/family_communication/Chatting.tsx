@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Client, IMessage } from '@stomp/stompjs';
 
-import ChattingBox from '../chatting/ChattingBox';
+import ChattingBox from './ChattingBox';
 import BlueButton from '../../common/BlueButton';
 import SockJS from 'sockjs-client';
 import { useAuthStore } from '@/stores/authStore';
@@ -200,6 +200,7 @@ const FamilyChatting = () => {
     getChatList();
     enterChatRoom();
   }, []);
+
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
   useEffect(() => {
     scrollToBottom();

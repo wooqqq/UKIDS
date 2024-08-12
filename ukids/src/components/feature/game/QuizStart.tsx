@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './gamepart.css';
 import { useVideoCallStore } from '@stores/videoCallStore';
 import { useAuthStore } from '@stores/authStore';
+import api from '../../../util/api';
 
 const QuizQnA = () => {
   const {} = useVideoCallStore();
@@ -11,7 +12,32 @@ const QuizQnA = () => {
   const [counter, setCounter] = useState(20);
   const familyName = '이삼성';
 
-  useEffect(() => {}, []);
+  const [question, setQuestion] = useState('');
+  const [options, setOptions] = useState([]);
+
+  // 타이머 및 문제 업데이트
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCounter((prevCounter) => {
+        if (prevCounter === 1) {
+          loadNewQuestion(); // 시간이 다 되면 새로운 문제를 가져옴
+          return 20; // 타이머를 20초로 재설정
+        }
+        return prevCounter - 1; // 타이머 감소
+      });
+    }, 1000); // 1초마다 실행
+
+    return () => clearInterval(timer); // 컴포넌트가 언마운트되면 타이머 정리
+  }, []);
+
+  // 새로운 문제를 가져오는 함수
+  const loadNewQuestion = () => {
+    // 문제 번호 증가
+    setQuestionNum((prevNum) => prevNum + 1);
+
+    api.setQuestion('새로운 질문 예시');
+    setOptions(['선택지1', '선택지2', '선택지3']);
+  };
 
   return (
     <>

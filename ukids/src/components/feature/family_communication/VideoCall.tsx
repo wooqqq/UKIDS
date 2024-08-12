@@ -4,7 +4,7 @@ import { useVideoCallStore } from '@stores/videoCallStore';
 import { jwtDecode } from 'jwt-decode';
 import Session from './Session';
 import './sessions.css';
-import api from '../../../util/api';
+import api from '@/util/api';
 
 interface JwtPayload {
   name: string;
@@ -20,7 +20,7 @@ function VideoCall() {
     setUserName,
   } = useVideoCallStore();
   // const { familyId } = useAuthStore(); // 실제 가족 ID 사용처
-  let familyId = 7;
+  let familyId = 33;
   // console.log(familyId);
 
   const nameOfUser = jwtDecode<JwtPayload>(localStorage.getItem('token')!).name;
