@@ -1,6 +1,6 @@
 .paints-container {
     position: relative;
-    padding-top: 70px; /* 상단 고정 영역만큼의 패딩 */
+    padding-top: 30px; /* 상단 고정 영역만큼의 패딩 */
 }
 
 
