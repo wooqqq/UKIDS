@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/stores/authStore';
 import { Client, IMessage } from '@stomp/stompjs';
-import { jwtDecode } from 'jwt-decode';
 import SockJS from 'sockjs-client';
-
+import { useAuthStore } from '@/stores/authStore';
+import { useFamilyStore } from '@stores/familyStore';
 import './gamepart.css';
 
 interface Participant {
@@ -53,16 +52,11 @@ type GameMessage =
   | ErrorMessage
   | IsReadyMessage;
 
-interface JwtPayload {
-  userId: string;
-}
 const QuizStart = () => {
   const navigate = useNavigate();
-  const { ukidsURL, token } = useAuthStore();
-  const familyId = 1;
-  const userId = Number.parseInt(
-    jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
-  );
+  const { ukidsURL, token, userInfo } = useAuthStore();
+  const { selectedFamilyId } = useFamilyStore();
+  const [userId] = useState(userInfo.id);
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion | null>(null);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
@@ -83,7 +77,7 @@ const QuizStart = () => {
         stompClient.publish({
           destination: `/app/quiz/ready`,
           body: JSON.stringify({
-            familyId,
+            familyId: selectedFamilyId,
             state,
           }),
         });
@@ -108,7 +102,7 @@ const QuizStart = () => {
         stompClient.publish({
           destination: `/app/quiz/exit`,
           body: JSON.stringify({
-            familyId,
+            familyId: selectedFamilyId,
           }),
         });
       } catch (error) {
@@ -126,7 +120,7 @@ const QuizStart = () => {
         stompClient.publish({
           destination: `/app/quiz/answer`,
           body: JSON.stringify({
-            familyId,
+            familyId: selectedFamilyId,
             inputAnswer: answer,
           }),
         });
@@ -155,54 +149,57 @@ const QuizStart = () => {
       console.log('웹소켓 연결됨:', frame);
       setStompClient(client);
 
-      client.subscribe(`/topic/quiz/${familyId}`, (message: IMessage) => {
-        const receivedMessage: GameMessage = JSON.parse(message.body);
+      client.subscribe(
+        `/topic/quiz/${selectedFamilyId}`,
+        (message: IMessage) => {
+          const receivedMessage: GameMessage = JSON.parse(message.body);
 
-        console.log('received message:', receivedMessage);
+          console.log('received message:', receivedMessage);
 
-        switch (receivedMessage.type) {
-          case 'IS_READY_GAME':
-            if (receivedMessage.gameStart) {
-              setIsStart(true);
-            }
-            break;
+          switch (receivedMessage.type) {
+            case 'IS_READY_GAME':
+              if (receivedMessage.gameStart) {
+                setIsStart(true);
+              }
+              break;
 
-          case 'QUIZ_QUESTION':
-            if (receivedMessage.gameState === 'END') {
-              navigate('/quiz/result');
-              return;
-            }
+            case 'QUIZ_QUESTION':
+              if (receivedMessage.gameState === 'END') {
+                navigate('/quiz/result');
+                return;
+              }
 
-            const { quizQuestion } = receivedMessage;
-            setQuizQuestion(quizQuestion);
-            setQuestionIndex(receivedMessage.problemIndex);
+              const { quizQuestion } = receivedMessage;
+              setQuizQuestion(quizQuestion);
+              setQuestionIndex(receivedMessage.problemIndex);
 
-            if (quizQuestion.quizType === 'OX') setOptions(['O', 'X']);
-            if (quizQuestion.quizType === 'MULTIPLE_CHOICE')
-              setOptions([...quizQuestion.wrongAnswer, quizQuestion.answer]);
+              if (quizQuestion.quizType === 'OX') setOptions(['O', 'X']);
+              if (quizQuestion.quizType === 'MULTIPLE_CHOICE')
+                setOptions([...quizQuestion.wrongAnswer, quizQuestion.answer]);
 
-            setIsLoading(false);
-            setIsQuestionLoaded(true);
-            resetTimer();
-            setSelectedOption(null);
-            break;
+              setIsLoading(false);
+              setIsQuestionLoaded(true);
+              resetTimer();
+              setSelectedOption(null);
+              break;
 
-          case 'QUIZ_ANSWER':
-            setModalMessage(`정답: ${receivedMessage.answer}`);
-            setShowModal(true);
-            setTimeout(() => {
-              setShowModal(false);
-            }, 1000);
-            resetTimer();
-            setIsQuestionLoaded(false);
+            case 'QUIZ_ANSWER':
+              setModalMessage(`정답: ${receivedMessage.answer}`);
+              setShowModal(true);
+              setTimeout(() => {
+                setShowModal(false);
+              }, 1000);
+              resetTimer();
+              setIsQuestionLoaded(false);
 
-            break;
+              break;
 
-          case 'ERROR':
-            console.error('에러 메시지:', receivedMessage.message);
-            break;
-        }
-      });
+            case 'ERROR':
+              console.error('에러 메시지:', receivedMessage.message);
+              break;
+          }
+        },
+      );
     };
 
     client.onStompError = (frame) => {
@@ -217,7 +214,7 @@ const QuizStart = () => {
         client.deactivate();
       }
     };
-  }, [ukidsURL, token, familyId]);
+  }, [ukidsURL, token, selectedFamilyId]);
 
   useEffect(() => {
     if (stompClient && stompClient.connected) {
