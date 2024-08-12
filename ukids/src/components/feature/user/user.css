@@ -41,10 +41,10 @@
   border-radius: 10px;
   border: 1px solid #999;
   background: #fff;
-  width: 100%;
+  width: 80%;
   height: 43px;
   flex-shrink: 0;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
 }
 
 .login-id-box:focus {

@@ -55,13 +55,13 @@ interface AuthState {
   deleteUser: () => Promise<void>;
 
   // id 중복 검사
-  checkedId: (id: string) => Promise<void>;
+  checkedId: (id: string) => Promise<boolean>;
 
   // email 중복 검사
-  checkedEmail: (email: string) => Promise<void>;
+  checkedEmail: (email: string) => Promise<boolean>;
 
   // 전화번호 중복 검사
-  checkedPhone: (phone: string) => Promise<void>;
+  checkedPhone: (phone: string) => Promise<boolean>;
 
   // familyId: number;
   // setfamilyId: (name: string, password: string) => void;
@@ -234,7 +234,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('비밀번호 확인 실패:', error);
-      alert('비밀번호 확인에 실패했습니다.');
+      // alert('비밀번호 확인에 실패했습니다.');
     }
   },
 
@@ -264,47 +264,54 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   // ID 중복 검사
-  checkedId: async (id: string) => {
+  checkedId: async (id: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/id/${id}`);
       if (response.data.code === 200) {
-        alert('사용 가능한 ID입니다.');
+        // alert('사용 가능한 ID입니다.');
+        return true;
       } else {
-        alert('이미 사용 중인 ID입니다.');
+        // alert('이미 사용 중인 ID입니다.');
+        return false;
       }
     } catch (error) {
       console.error('ID 중복 검사 실패:', error);
-      alert('ID 중복 검사에 실패했습니다.');
+      return false;
     }
   },
 
   // 이메일 중복 검사
-  checkedEmail: async (email: string) => {
+  checkedEmail: async (email: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/email/${email}`);
       if (response.data.code === 200) {
-        alert('사용 가능한 이메일입니다.');
+        // alert('사용 가능한 이메일입니다.');
+        return true;
       } else {
-        alert('이미 사용 중인 이메일입니다.');
+        // alert('이미 사용 중인 이메일입니다.');
+        return false;
       }
     } catch (error) {
       console.error('이메일 중복 검사 실패:', error);
-      alert('이메일 중복 검사에 실패했습니다.');
+      return false;
     }
   },
 
   // 전화번호 중복 검사
-  checkedPhone: async (phone: string) => {
+  checkedPhone: async (phone: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/phone/${phone}`);
       if (response.data.code === 200) {
-        alert('사용 가능한 전화번호입니다.');
+        // alert('사용 가능한 전화번호입니다.');
+        return true;
       } else {
-        alert('이미 사용 중인 전화번호입니다.');
+        // alert('이미 사용 중인 전화번호입니다.');
+        return false;
       }
     } catch (error) {
       console.error('전화번호 중복 검사 실패:', error);
-      alert('전화번호 중복 검사에 실패했습니다.');
+      // alert('전화번호 중복 검사에 실패했습니다.');
+      return false;
     }
   },
 

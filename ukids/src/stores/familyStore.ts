@@ -24,7 +24,7 @@ interface FamilyState {
   // 가족방 정보
   fetchFamilyInfo: (familyId: number) => Promise<void>;
   // 가족방 생성
-  createFamily: (name: string, password: string) => Promise<void>;
+  createFamily: (name: string, password: string) => Promise<number>;
   // 가족방 찾기
   findFamily: (code: string) => Promise<void>;
   // 내가 속한 가족방 전체 리스트 조회
@@ -80,10 +80,12 @@ export const useFamilyStore = create<FamilyState>((set) => ({
   },
 
   // 가족방 생성
-  createFamily: async (name: string, password: string) => {
+  createFamily: async (name: string, password: string): Promise<number> => {
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
+      const newFamilyId: number = newFamily.familyId;
+      console.log('newFamily.familyId : ' + newFamily.familyId);
       set((state) => ({
         family: [...state.family, newFamily],
         error: null,
@@ -103,14 +105,11 @@ export const useFamilyStore = create<FamilyState>((set) => ({
 
       // webRTC 세션 생성
       await api.post(`/webrtc`, { familyId: newFamily.familyId });
-
-      // 추가적인 처리 (예: 생성된 가족방으로 이동 등)
-      if (response.data.code === 201) {
-        alert(`${newFamily.name} 가족방이 생성되었습니다.`);
-      }
+      return newFamilyId;
     } catch (error: any) {
       console.error('Error creating family', error);
       set({ error: error.message });
+      return 0;
     }
   },
 
