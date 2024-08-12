@@ -68,14 +68,20 @@ public class QuizService {
 
 
     // 유저 퇴장
-    public void exitQuizRoom(Long familyId, String userId) {
+    public Map<String, Object> exitQuizRoom(Long familyId, String userId) {
 
         isExistFamilyGame(familyId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("type", "EXIT_GAME");
+
 
         if(!quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_USER_EXCEPTION);
 
         quizRoomRespository.exitGame(userId, quizRooms.get(familyId));
+
+        response.put("gameRoomInfo", quizRooms.get(familyId));
+        return response;
     }
 
     // 게임방 정보 반환
@@ -124,15 +130,16 @@ public class QuizService {
         quizRoomRespository.clickReady(userId, quizRooms.get(familyId), isReady);
 
         Map<String, Object> response = new HashMap<>();
-        boolean isState = true;
+        boolean isState = false;
 
-        // 참가자 모두 준비 안됨
-        if(!quizRoomRespository.checkReady(quizRooms.get(familyId)))
-            isState = false;
+        // 참가자 모두 준비 완료
+        if(quizRoomRespository.checkReady(quizRooms.get(familyId))) {
+            isState = true;
 
-        quizRoomRespository.generateQuiz(quizRooms.get(familyId));
-        quizRoomRespository.startGame(quizRooms.get(familyId));
+            quizRoomRespository.generateQuiz(quizRooms.get(familyId));
+            quizRoomRespository.startGame(quizRooms.get(familyId));
 
+        }
         response.put("type", "IS_READY_GAME");
 
         response.put("gameStart", isState);

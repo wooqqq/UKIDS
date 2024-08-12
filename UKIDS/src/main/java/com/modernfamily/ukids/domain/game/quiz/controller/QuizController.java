@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequiredArgsConstructor
@@ -50,7 +53,8 @@ public class QuizController {
         String userId = headerAccessor.getUser().getName();
         Long familyId = Long.parseLong(payload.get("familyId").toString());
 
-        quizService.exitQuizRoom(familyId, userId);
+        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.exitQuizRoom(familyId, userId));
+
     }
 
     // 게임방 정보 반환
@@ -77,16 +81,28 @@ public class QuizController {
         String userId = headerAccessor.getUser().getName();
         Long familyId = Long.parseLong(payload.get("familyId").toString());
         boolean isReady = payload.get("state").toString().equals("true");
-        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.isReadyGameStart(familyId, userId, isReady));
-    }
 
-    // 질문 가져오기 -> 반환 끝나면 게임 종료 -> QuizQuestionRandomResponseDto or null (이건 게임 종료)
-    @MessageMapping("/quiz/question")
-    public void getQuizQuestion(@RequestBody Map<String, Object> payload) {
-        log.info("Quiz Question Received payload: {}", payload);
-        Long familyId = Long.parseLong(payload.get("familyId").toString());
+        Map<String, Object> quizRoom = quizService.isReadyGameStart(familyId, userId, isReady);
+        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizRoom);
 
-        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.getQuizQuestion(familyId));
+        if((boolean) quizRoom.get("gameStart")) {
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    Map<String, Object> question = quizService.getQuizQuestion(familyId);
+
+                    // 메세지 전송
+                    messagingTemplate.convertAndSend("/topic/quiz/" + familyId, question);
+
+                    // "END"이면 스케줄러 종료
+                    if ("END".equals(question.get("gameState"))) {
+                        scheduler.shutdown();
+                    }
+                }
+            }, 3, 24, TimeUnit.SECONDS);
+        }
     }
 
     // 정답 확인
@@ -103,5 +119,6 @@ public class QuizController {
                                 SimpMessageHeaderAccessor headerAccessor) {
         Long familyId = Long.parseLong(payload.get("familyId").toString());
         quizService.deleteQuizRoom(familyId);
+
     }
 }
