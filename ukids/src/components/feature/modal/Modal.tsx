@@ -45,7 +45,7 @@ export const Modal = ({
     };
   }, [setModalState]);
 
-  if (!modalState) return null;
+    if (!modalState) return null;
 
     const checkPassword = async () => {
         const url = "/family/pwcheck";
