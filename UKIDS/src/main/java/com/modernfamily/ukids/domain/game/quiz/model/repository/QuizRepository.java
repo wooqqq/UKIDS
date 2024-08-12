@@ -50,7 +50,7 @@ public class QuizRepository {
             prevCounts = entry.getValue().getHit();
             rank++;
         }
-
+        quizRoom.saveGame();
         return gameResultSaveDtoList;
     }
 

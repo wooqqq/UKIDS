@@ -15,6 +15,7 @@ public class QuizRoom {
     private String sessionId;
     private Long quizCount;
     private boolean isStart;
+    private boolean isSave;
     private Long numberOfParticipants;
     private Long maxQuestionCounts;
     private int currentQuestionIndex;
@@ -22,12 +23,13 @@ public class QuizRoom {
     private List<QuizQuestionRandomResponseDto> randomQuizQuestionList;
 
     @Builder
-    private QuizRoom(String sessionId ,Long quizCount, boolean isStart,
+    private QuizRoom(String sessionId ,Long quizCount, boolean isStart, boolean isSave,
                      Long numberOfParticipants, Long maxQuestionCounts, int currentQuestionIndex,
                      HashMap<String, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
         this.sessionId = sessionId;
         this.quizCount = quizCount;
         this.isStart = isStart;
+        this.isSave = isSave;
         this.numberOfParticipants = numberOfParticipants;
         this.maxQuestionCounts = maxQuestionCounts;
         this.currentQuestionIndex = currentQuestionIndex;
@@ -40,6 +42,7 @@ public class QuizRoom {
                 .sessionId(sessionId)
                 .quizCount(0L)
                 .isStart(false)
+                .isSave(false)
                 .numberOfParticipants(0L)
                 .maxQuestionCounts(Long.MAX_VALUE)
                 .currentQuestionIndex(-1)
@@ -49,12 +52,21 @@ public class QuizRoom {
 
     }
 
+    public void saveGame(){
+        this.isSave = true;
+    }
+
     public void updateQuizCount(long quizCount){
         this.quizCount = quizCount;
     }
 
     public void startGame(){
         this.isStart = true;
+        this.isSave = false;
+    }
+
+    public void endGame(){
+        this.isStart = false;
     }
 
     public void enterParticipate(String userId, Participate participant){

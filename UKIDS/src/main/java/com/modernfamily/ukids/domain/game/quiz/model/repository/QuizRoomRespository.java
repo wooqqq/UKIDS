@@ -74,6 +74,11 @@ public class QuizRoomRespository {
         quizRoom.startGame();
     }
 
+    // 게임 종료
+    public void endGame(QuizRoom quizRoom){
+        quizRoom.endGame();
+    }
+
     // 게임 중인지 확인
     public boolean isPlaying(QuizRoom quizRoom){
         return quizRoom.isStart();
