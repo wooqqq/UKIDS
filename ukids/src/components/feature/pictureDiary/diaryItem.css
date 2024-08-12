@@ -29,6 +29,8 @@
     color: #333; /* 입력 텍스트 색상 */
 
     overflow-y: auto;
+
+    padding: 15px; /* 내부 간격  */
 }
 
 /* 내용을 입력하세요 문구  */
@@ -109,39 +111,34 @@ input[type="date"] {
   }
 
 
-  .flip-page-container {
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin-left: 140px;
-   
-  }
+.flip-page-container {
+border: 1px solid #ccc;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+margin-left: 140px;
 
-  .flip-page {
+}
+
+
+
+.flip-page {
     display: flex; /* 페이지들을 수평으로 배열합니다. */
     width: 650px; /* `ReactFlipPage`의 너비에 맞춰 조정합니다. */
     height: 400px; /* `ReactFlipPage`의 높이에 맞춰 조정합니다. */
     align-items: center; /* 수직 중앙 정렬합니다. */
     justify-content: center; /* 수평 중앙 정렬합니다. */
-  }
+}
+
 
 
 
   .left-page {
-    
 
     height: 100%;  /* 왼쪽만 차지하게 */
-  }
-  
-  .right-page {
-    
-    
-    height: 100%;  /* 왼쪽만 차지하게 */ 
-    flex-direction: column;
-    padding: 20px;
-  }
 
-  .left-page {
+
     flex: 1; /* 각 페이지가 동일한 너비를 가지도록 조정합니다. */
+
+    
     display: flex; /* 내부 요소를 flexbox 레이아웃으로 표시합니다. */
     flex-direction: column; /* 내부 요소를 수직으로 배열합니다. */
     justify-content: center; /* 내부 요소를 수직 중앙 정렬합니다. */
@@ -152,16 +149,25 @@ input[type="date"] {
   }
 
 .right-page {
-    flex: 1; /* 각 페이지가 동일한 너비를 가지도록 조정합니다. */
+    flex: 1; /* 각 페이지가 동일한 너비를 가지도록 조정 */
     position: relative; /* 상대적 위치 설정 */
-    display: flex; /* 내부 요소를 flexbox 레이아웃으로 표시합니다. */
-    flex-direction: column; /* 내부 요소를 수직으로 배열합니다. */
-    justify-content: center; /* 내부 요소를 수직 중앙 정렬합니다. */
-    align-items: center; /* 내부 요소를 수평 중앙 정렬합니다. */
-    padding: 10px; /* 내부 여백을 추가합니다. */
-
+    display: flex; /* 내부 요소를 flexbox 레이아웃으로 표시 */
+    flex-direction: column; /* 내부 요소를 수직으로 배열 */
+    justify-content: flex-start; /* 내부 요소를 상단에서부터 시작 */
+    align-items: center; /* 내부 요소를 수평 중앙 정렬 */
+    padding: 10px; /* 내부 여백을 추가 */
     border-left: 1px solid #ccc; /* 왼쪽 경계선 추가 */
+    height: 100%; /* 전체 높이 사용 */
+
+   
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 55px;
+    padding-bottom: 65px;
   }
+
+   
+  
 
 
 
@@ -181,7 +187,7 @@ input[type="date"] {
     font-size: 20px; /* 글자 크기 */
     color: #333; /* 글자 색상 */
     font-family: 'UhBeejung', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
-   
+    margin-bottom: 10px; /* 날짜와 내용 사이의 공간 */
   }
   
 
@@ -190,6 +196,10 @@ input[type="date"] {
 /* 그림일기 내용*/
 
 .paint-item-content {
+    overflow: hidden; /* 내용 넘침 숨김 처리 */
+    text-overflow: ellipsis; /* 말줄임표 사용 */
+
+
     width: 100%; /* 전체 너비 사용 */
     text-align: center; /* 텍스트 중앙 정렬 */
     margin: 10px 0; /* 상하 간격 조정 */
@@ -241,4 +251,28 @@ input[type="date"] {
 
 
 
+  
+
+
+/* 페이지 번호 */
+
+
+
+.page-selector {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .page-selector button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .page-selector button:hover {
+    background-color: #ccc;
+  }
   

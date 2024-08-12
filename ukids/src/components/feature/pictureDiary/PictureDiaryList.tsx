@@ -7,6 +7,7 @@ import api from '@/util/api.ts';
 
 import BlueButton from '@components/common/BlueButton';
 import './PictureDiaryList.css'
+import './diaryItem.css'
 
 
 import ReactFlipPage from 'react-flip-page';
@@ -26,18 +27,34 @@ const PictureDiaryList = () => {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   //   const [totalPage, setTotalPage] = useState<number>();
   //   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [currentPage] = useState<number>(1);
 
-    const getDiaryList = async () =>{
-        const url = `/picture-diary/all/6?page=${currentPage}&size=10`;
-        const {data} = await api.get(url);
 
-    setDiaries(data.result.pictureDiaries);
+
+ 
+  // API 요청
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // 플립 페이지 (인덱스는 0부터 시작)
+  const [currentPageflip, setCurrentPageflip] = useState(0); 
+
+
+
+
+  const getDiaryList = async () =>{
+      const url = `/picture-diary/all/6?page=${currentPage}&size=10`;
+      const {data} = await api.get(url);
+      setDiaries(data.result.pictureDiaries);
   };
 
   useEffect(() => {
     getDiaryList();
-  }, []);
+  }, [currentPage]);
+
+  // FlipPage 컨트롤 변경 시 API 페이지도 업데이트
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPageflip(pageNumber);
+    setCurrentPage(pageNumber); // 이를 API 요청 페이지 상태에도 반영
+  };
 
   return (
     <div className='feature-box'>
@@ -80,7 +97,8 @@ const PictureDiaryList = () => {
         uncutPages
         showSwipeHint
         className="flip-page-container"
-
+        page={currentPageflip}
+        onPageChange={handlePageChange}
       >
 
         {diaries.map((diary, index) => (
@@ -101,8 +119,21 @@ const PictureDiaryList = () => {
                     </div>
                   </div>
                 ))}
+
+
+
+
+
               </ReactFlipPage>
 
+
+              {/* <div className="page-selector">
+                  {diaries.map((_, index) => (
+                    <button key={index} onClick={() => handlePageChange(index)}>
+                      {index + 1}
+                    </button>
+                  ))}
+                </div> */}
 
 
 
