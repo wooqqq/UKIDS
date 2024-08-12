@@ -7,15 +7,17 @@ const FamilyCreate = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   const nav = useNavigate();
   const createFamily = useFamilyStore((state) => state.createFamily);
 
   const handleCreateFamily = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    //
+    setError('');
     if (password != confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
+      setError('비밀번호가 일치하지 않습니다.');
       return;
     }
     // 가족방 생성 API 요청

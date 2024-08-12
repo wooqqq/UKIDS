@@ -1,19 +1,59 @@
 import { useNavigate } from 'react-router-dom';
 import '../user/user.css';
 import BlueButton from '../../common/BlueButton';
+import { useState } from 'react';
+import { useFamilyStore } from '../../../stores/familyStore';
 
 const FamilyFind = () => {
+  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
+
+  const findFamily = useFamilyStore((state) => state.findFamily);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      // 이전 오류를 초기화
+      setError('');
+
+      // 가족방 찾기 시도
+      await findFamily(code);
+
+      // 찾은 가족방 정보 가져오기
+      const family = useFamilyStore
+        .getState()
+        .family.find((family) => family.code === code && family.name === name);
+
+      if (family) {
+        // 이름과 코드가 일치하면 가족방 신청 처리
+        alert(`${name} 가족방에 가입 신청이 완료되었습니다.`);
+        navigate('/');
+      } else {
+        // 일치하지 않으면 오류 메시지 표시
+        setError('가족방 이름과 코드가 일치하지 않습니다.');
+      }
+    } catch (err: any) {
+      // 가족방이 발견되지 않았을 경우 오류 처리
+      setError('가족방을 찾을 수 없습니다. 코드를 확인하세요.');
+    }
+  };
+
   return (
     <div className="common-feature-box w-[1000px] h-[576px]">
       <p className="big-title-style text-center text-[#FFBF33] my-14">
         가족방 찾기
       </p>
 
-      <form className="join-form">
+      <form className="join-form" onSubmit={handleSubmit}>
         {/* <label htmlFor="familyid">가족방 이름</label> */}
         <input
           type="text"
-          id="id"
+          id="familyname"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="가족방 이름"
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
@@ -21,9 +61,12 @@ const FamilyFind = () => {
         <input
           type="text"
           id="familycode"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
           placeholder="가족방 코드"
           className="input-box px-5 py-7 font-semibold text-[#555555]"
         />
+        <div className="text-[red] text-center">{error ? error : ''}</div>
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="가입신청" type="submit" path="" />
         </div>

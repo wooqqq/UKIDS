@@ -78,6 +78,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set({ error: error.message });
     }
   },
+
   // 가족방 생성
   createFamily: async (name: string, password: string) => {
     try {
@@ -112,6 +113,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set({ error: error.message });
     }
   },
+
   // 가족방 찾기
   findFamily: async (code: string) => {
     try {
@@ -127,6 +129,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set({ error: error.message });
     }
   },
+
   // 내가 속한 가족방 전체 리스트 조회
   fetchFamilyList: async () => {
     try {
@@ -138,6 +141,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set({ error: error.message });
     }
   },
+
   // 가족방 수정
   updateFamily: async (
     familyId: number,
@@ -169,6 +173,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set({ error: error.message });
     }
   },
+
   // 가족방 비밀번호 확인
   checkedPassword: async (familyId: number, password: string) => {
     try {
@@ -184,6 +189,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set({ error: error.message });
     }
   },
+
   // 가족방 삭제
   deleteFamily: async (familyId: number, password: string) => {
     try {
