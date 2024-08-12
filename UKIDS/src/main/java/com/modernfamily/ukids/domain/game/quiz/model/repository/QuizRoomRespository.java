@@ -56,6 +56,11 @@ public class QuizRoomRespository {
         quizRoom.updateQuizCount(counts);
     }
 
+    // 최대 퀴즈 개수 업데이트
+    public void updateMaxQuestionCounts(QuizRoom quizRoom) {
+        quizRoom.updateMaxQuestionCounts();
+    }
+
     // 참가자 준비 상태 확인
     public boolean checkReady(QuizRoom quizRoom){
         for(Participate participate : quizRoom.getParticipantList().values()){

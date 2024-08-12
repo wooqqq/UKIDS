@@ -97,6 +97,16 @@ public class QuizService {
         return response;
     }
 
+    public Map<String, Object> updateMaxQuestionCounts(Long familyId) {
+        isExistFamilyGame(familyId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("type", "GET_MAX_QUESTION_COUNTS");
+        response.put("maxCounts", quizRooms.get(familyId).getMaxQuestionCounts());
+
+        return response;
+    }
+
     public void deleteQuizRoom(Long familyId) {
         quizRooms.remove(familyId);
     }

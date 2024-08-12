@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Slf4j
@@ -60,6 +61,13 @@ public class QuizRoom {
         this.quizCount = quizCount;
     }
 
+    public void updateMaxQuestionCounts(){
+        for(Map.Entry<String, Participate> entry : participantList.entrySet()){
+            Participate participate = entry.getValue();
+            this.maxQuestionCounts = Math.min(maxQuestionCounts, participate.getMaxQuestion());
+        }
+    }
+
     public void startGame(){
         this.isStart = true;
         this.isSave = false;
@@ -73,6 +81,7 @@ public class QuizRoom {
         participantList.put(userId, participant);
         log.info("Enter user : {}", participant.getUserName());
         this.maxQuestionCounts = Math.min(maxQuestionCounts, participant.getMaxQuestion());
+        log.info("User's Max question count : {}", participant.getMaxQuestion());
         ++this.numberOfParticipants;
     }
 

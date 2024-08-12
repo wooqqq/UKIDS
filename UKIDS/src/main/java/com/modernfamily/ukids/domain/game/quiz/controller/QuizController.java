@@ -60,6 +60,15 @@ public class QuizController {
 
     }
 
+    // 게임방 정보 반환
+    @MessageMapping("/quiz/quiz-max")
+    public void updateMaxQuestionCounts(@RequestBody Map<String, Object> payload) {
+        Long familyId = Long.parseLong(payload.get("familyId").toString());
+
+        messagingTemplate.convertAndSend("/topic/quiz/" + familyId,quizService.updateMaxQuestionCounts(familyId));
+
+    }
+
     // 퀴즈 개수 설정
     @MessageMapping("/quiz/quiz-count")
     public void saveQuizCounts(@RequestBody Map<String, Object> payload) {
