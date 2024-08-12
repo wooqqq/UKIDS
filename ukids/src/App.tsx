@@ -9,6 +9,7 @@ import AlbumDetail from './components/feature/album/AlbumDetail';
 import UploadAlbum from './components/feature/album/UploadAlbum';
 import PaintingDiary from './pages/PaintingDiary';
 import GrowthDiary from './pages/GrowthDiary';
+import GrowthFolder from './pages/GrowthFolder';
 import GameSelect from './pages/GameSelect';
 import Quiz from './pages/Quiz';
 import CallMyName from './pages/CallMyName';
@@ -96,7 +97,8 @@ const App = () => {
             <Route path="/albums/:albumId" element={<AlbumDetail />} />
             <Route path="/albums/upload" element={<UploadAlbum />} />
             <Route path="/paintdiary/*" element={<PaintingDiary />} />
-            <Route path="/growthdiary" element={<GrowthDiary />} />
+            <Route path="/growthdiary/*" element={<GrowthDiary />} />
+            <Route path="/growthfolder/*" element={<GrowthFolder />} />
             <Route path="/chat/*" element={<FamilyVideoCall />} />
             <Route path="/game" element={<GameSelect />}></Route>
             <Route path="/quiz/*" element={<Quiz />} />

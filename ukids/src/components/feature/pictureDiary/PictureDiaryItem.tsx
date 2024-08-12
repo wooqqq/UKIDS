@@ -1,5 +1,3 @@
-
-
 interface DiaryItem {
     pictureUrl: string;
     content: string;
@@ -20,4 +18,10 @@ export const PictureDiaryItem = ({pictureUrl, content, date}: DiaryItem) => {
             <div className="album-item-title">{content}</div>
         </div>
     ) 
-    }
+
+
+
+
+
+
+}
