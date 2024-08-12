@@ -8,8 +8,7 @@ import api from '@/util/api.ts';
 import BlueButton from '@components/common/BlueButton';
 import './PictureDiaryList.css'
 import './diaryItem.css'
-
-
+// 
 import ReactFlipPage from 'react-flip-page';
 
 
