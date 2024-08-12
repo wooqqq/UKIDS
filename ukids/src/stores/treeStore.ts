@@ -4,7 +4,7 @@ import api from '../util/api';
 interface TreeState {
   treeData: any | null;
   fetchTreeData: (familyId: number) => Promise<void>;
-  updateTree: (treeData: any) => Promise<void>;
+  updateTreeExp: (familyId: number, point: number) => Promise<void>;
   error: string | null;
 }
 
@@ -21,10 +21,15 @@ export const useTreeStore = create<TreeState>((set) => ({
     }
   },
 
-  updateTree: async (treeData) => {
+  updateTreeExp: async (familyId, point) => {
     try {
-      await api.put(`/tree`, treeData);
-      set({ treeData: { ...treeData } });
+      // Update tree experience points
+      await api.put(`/tree`, { familyId, point });
+
+      // Fetch updated tree data
+      // Call fetchTreeData directly
+      const response = await api.get(`/tree/${familyId}`);
+      set({ treeData: response.data });
     } catch (error: any) {
       set({ error: error.message });
     }
