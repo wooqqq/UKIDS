@@ -1,6 +1,8 @@
 import { useState } from "react";
 import openLetterImg from "@/assets/openLetter.png"
 import letterImg from "@/assets/letterImg.png"
+import sendLetter from "@/assets/sendLetter.png"
+import '@components/feature/letters/letter.css'
 interface Letter{
     letterId: number;
     content: string;
@@ -8,7 +10,7 @@ interface Letter{
     familyName: string;
     fromUsername: string;
     toUsername: string;
-    isRead: boolean;
+    read: boolean;
 }
 
 interface LetterProps {
@@ -20,15 +22,16 @@ export const LetterItem = ({letter, state} : LetterProps) => {
 
     const letterImgTag = () => {
         if(!state){
-            if(letter.isRead){
-                return <div><img className="w-85 h-122" src={letterImg} alt="" /></div>
+            console.log(letter.read);
+            if(!letter.read){
+                return <div><img className="letterImg" src={letterImg} alt="" /></div>
             }
             else{
-                return <div><img className="w-85 h-122" src={openLetterImg} alt="" /></div>
+                return <div><img className="letterReadImg" src={openLetterImg} alt="" /></div>
             }
         }
         else{
-            return <img src={letterImg} alt="" />
+            return <img className="letterImg" src={sendLetter} alt="" />
         }
     }
 

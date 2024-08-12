@@ -11,10 +11,10 @@ interface Letter{
     familyName: string;
     fromUsername: string;
     toUsername: string;
+    isRead: boolean;
 }
 
 export const LetterList = () => {
-    const [modalState, setModalState] = useState<boolean>(false);
     const [letters, setLetters] = useState<Letter[]>([]);
 
     // 받은 편지함(false)인지 보낸 편지함(true)인지
@@ -30,11 +30,15 @@ export const LetterList = () => {
             }
             
             else {
-                return (<div>
-                    {letters.map((item) => (
-                        <LetterItem key={item.letterId} letter={item} state={state} />
-                    ))}
-                </div>)
+                return (
+                    <div>
+                        {letters.map((item) => (
+                            <Link to={`/letters/${item.letterId}`}>
+                                <LetterItem key={item.letterId} letter={item} state={state} />
+                            </Link>
+                        ))}
+                    </div>
+                )
             }
 
         }
@@ -42,12 +46,17 @@ export const LetterList = () => {
         else {
             if(letters.length === 0){
                 return <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
-                    아직 받은 편지가 없어요!<br/>면저 편지를 쓰러 가볼까요?
+                    아직 보낸 편지가 없어요!<br/>면저 편지를 쓰러 가볼까요?
                 </div>
             }
-
             else {
-
+                return (<div>
+                    {letters.map((item) => (
+                        <Link to={`/letters/${item.letterId}`} state={{state: state}}>
+                            <LetterItem key={item.letterId} letter={item} state={state} />
+                        </Link>
+                    ))}
+                </div>)
             }
         }
     }
@@ -60,21 +69,20 @@ export const LetterList = () => {
             url = '/letter/to';
         else
             url = 'letter/from';
-
         const {data} = await api.get(url);
-
         console.log(data);
         setLetters(data.result.letters);
 
     }
     
-    const onModalOpen = () => {
-        setModalState(!modalState);
-    }
 
     useEffect(() => {
         getLetters();
     }, [])
+    
+    useEffect(() => {
+        getLetters();
+    }, [state])
 
     return (
         <div>
@@ -82,7 +90,7 @@ export const LetterList = () => {
                 <div className="absolute left-0 right-0 top-0 bottom-0 bg-[#fff] rounded-[20px]"></div>
             </div>
             <div className="absolute left-[764px] top-[23px]">
-                <BlueButton name="편지쓰기" path={`/letter/write`} />
+                <BlueButton name="편지쓰기" path={`/letters/write`} />
             </div>
             <button onClick={() => setState(false)} className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">받은 편지함</button>
             <button onClick={() => setState(true)} className="absolute left-[128px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">보낸 편지함</button>
