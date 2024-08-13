@@ -22,7 +22,7 @@ interface VideoCallStore {
   setUserName: (userName: string) => void;
   toggleVideo: () => void;
   toggleAudio: () => void;
-  setAudioForSubscriber: (index: number, enabled: boolean) => void; // 추가된 메서드
+  setAudioForSubscriber: (index: number, enabled: boolean) => void;
 }
 
 export const useVideoCallStore = create<VideoCallStore>((set, get) => ({

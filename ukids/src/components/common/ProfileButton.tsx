@@ -90,6 +90,7 @@ const ProfileButton = ({ name }: UserProps) => {
           <ul className="py-2 text-sm text-gray-700 family-list-box">
             {family.map((family) => (
               <li
+                key={family.familyId}
                 className={`family-list hover:bg-gray-100`}
                 onClick={() => handleFamilyClick(family.familyId)}
               >
