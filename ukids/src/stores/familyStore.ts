@@ -209,14 +209,13 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       set((state) => ({
         family:
           state.family?.familyId === familyId ? updatedFamily : state.family,
-        // familyList: state.familyList.map((fam) =>
-        //   fam.familyId === familyId ? updatedFamily : fam,
-        // ),
         error: null,
       }));
 
       if (response.data.code === 201) {
         alert('가족방 정보가 수정되었습니다.');
+      } else {
+        alert('가족방 정보 수정에 실패했습니다.');
       }
     } catch (error: any) {
       console.log('Error updating family', error);

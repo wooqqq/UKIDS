@@ -32,11 +32,7 @@ const FamilyUpdate = () => {
   const handleUpdateFamily = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedFamilyId !== null) {
-      try {
-        await updateFamily(selectedFamilyId, name, password, representative);
-      } catch (error) {
-        console.error('가족방 수정 중 오류 발생', error);
-      }
+      await updateFamily(selectedFamilyId, name, password, representative);
     } else {
       console.error('가족 ID 또는 대표자 ID가 설정되지 않았습니다.');
     }

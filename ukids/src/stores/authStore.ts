@@ -168,7 +168,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
 
       if (response.data.code === 201) {
-        alert(response.data.result); // '회원 생성 완료' 메시지 표시
+        // alert(response.data.result); // '회원 생성 완료' 메시지 표시
+        alert('회원가입이 완료되었습니다!');
       }
     } catch (error) {
       console.error('회원가입 실패:', error);
@@ -253,7 +254,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         });
 
         if (response.data.code === 200) {
-          alert('회원 탈퇴가 완료되었습니다.');
+          alert('회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.');
           get().setToken(null); // 토큰 제거
         }
       }
