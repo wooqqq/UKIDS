@@ -3,7 +3,9 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // DayGrid 플러그인 (달�
 import interactionPlugin from '@fullcalendar/interaction'; // 상호작용 플러그인 (클릭 등의 이벤트 처리를 위해 필요)
 import koLocale from '@fullcalendar/core/locales/ko'; // 한국어 로케일 (날짜 형식 및 텍스트를 한국어로 표시)
 import { DateClickArg } from '@fullcalendar/interaction'; // DateClickArg 타입 (날짜 클릭 이벤트의 정보 타입)
-import { useScheduleStore } from '../../../stores/scheduleStore'; // zustand를 사용한 상태 관리 store
+import { useScheduleStore } from '../../../stores/scheduleStore';
+import { useFamilyStore } from '@/stores/familyStore.ts';
+// zustand를 사용한 상태 관리 store
 import { useEffect } from 'react'; // React의 useEffect 훅
 import './schedule.css'; // CSS 스타일 파일
 
@@ -17,102 +19,60 @@ export default function CalendarBox({
   height = '550px',
 }: CalendarBoxProps) {
   // zustand store에서 상태와 상태 업데이트 함수 가져오기
-  const { events, setEvents, setSelectedDate, setEventData } =
-    useScheduleStore();
+  const {
+    selectedDate,
+    setSelectedDate,
+    monthScheduleList,
+    setMonthScheduleList,
+    events,
+    setEvents,
+  } = useScheduleStore();
+  const { selectedFamilyId } = useFamilyStore();
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date) => {
     const year = date.getFullYear();
-    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
-    const day = date.getDate();
-    return `${year}년 ${month}월 ${day}일`;
-  };
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
+    return `${year}-${month}-${day}`;
+  };
   useEffect(() => {
     // 컴포넌트가 마운트될 때 호출되는 비동기 함수
     const fetchEvents = async () => {
       try {
-        const response = await fetch('/api/events'); // 실제 API URL로 변경
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setEvents(data); // 상태 업데이트 (이벤트 데이터를 store에 저장)
-
         // 오늘 날짜 설정
         const today = new Date();
-        const formattedToday = formatDate(today); // 오늘 날짜 포맷팅
-        setSelectedDate(formattedToday);
+        const formattedDate = formatDate(today);
+        setSelectedDate(formattedDate);
 
-        // 오늘 날짜의 이벤트 필터링
-        const todayISOString = today.toISOString().split('T')[0];
-        const todayEvents = data.filter((event: any) => {
-          const eventStart = new Date(event.start).toISOString().split('T')[0];
-          const eventEnd = new Date(event.end || event.start)
-            .toISOString()
-            .split('T')[0];
-          return todayISOString >= eventStart && todayISOString <= eventEnd;
-        });
-
-        setEventData(todayEvents.length > 0 ? todayEvents : null); // 필터링된 이벤트를 store에 저장
+        console.log('today month : ', today.getMonth());
+        setMonthScheduleList(today.getMonth() + 1, selectedFamilyId);
+        setEvents(
+          monthScheduleList?.scheduleList,
+          monthScheduleList?.familyName,
+        );
       } catch (error) {
         console.error('Error fetching events:', error); // 오류 처리
       }
     };
 
     fetchEvents(); // API 호출
-  }, [setEvents, setSelectedDate, setEventData]); // setEvents, setSelectedDate, setEventData가 변경될 때마다 이 useEffect가 실행됨
+  }, []);
 
   // 클릭한 날짜에 해당하는 이벤트를 찾아서 설정하는 함수
   const handleDateClick = (info: DateClickArg) => {
     const date = new Date(info.dateStr); // 클릭한 날짜를 문자열로 가져옴
-    const formattedToday = formatDate(date); // 오늘 날짜 포맷팅
-    setSelectedDate(formattedToday);
+    const formattedDate = formatDate(date);
+    console.log('click dates : ', date.getMonth() + 1);
+    // const formattedToday = formatDate(date); // 오늘 날짜 포맷팅
+    setSelectedDate(formattedDate);
 
     // 클릭한 날짜에 해당하는 이벤트를 필터링
-    const eventData = events.filter((event) => {
-      const eventStart = new Date(event.start).toISOString().split('T')[0];
-      const eventEnd = new Date(event.end || event.start)
-        .toISOString()
-        .split('T')[0];
-      return info.dateStr >= eventStart && info.dateStr <= eventEnd;
-    });
-
-    setEventData(eventData.length > 0 ? eventData : null); // 필터링된 이벤트를 store에 저장
+    setMonthScheduleList(date.getMonth() + 1, selectedFamilyId);
+    setEvents(monthScheduleList?.scheduleList, monthScheduleList?.familyName);
 
     if (onDateClick) onDateClick();
   };
-
-  // 일정 이벤트
-  // const events = [
-  //   {
-  //     title: '할머니할아버지와 제주도 여행!',
-  //     allDay: true,
-  //     // date: '2024-08-01', // 시작 일자로 사용 가능
-  //     start: '2024-08-01', // 시작 일자
-  //     end: '2024-08-05', // 끝나는 일자 -> 표시는 전날까지 됨
-  //     // backgroundColor: '#FFBF33', // 배경색
-  //     // borderColor: '#FFBF33', // 테두리색
-  //     color: '#FFBF33', // 배경, 테두리색 모두
-  //     textColor: '#fff', // 글자 색상 (우리는 흰색 고정)
-  //   },
-  //   {
-  //     title: '할머니할아버지와 제주도 여행!',
-  //     allDay: true,
-  //     // date: '2024-08-01', // 시작 일자로 사용 가능
-  //     start: '2024-08-01', // 시작 일자
-  //     end: '2024-08-05', // 끝나는 일자 -> 표시는 전날까지 됨
-  //     // backgroundColor: '#FFBF33', // 배경색
-  //     // borderColor: '#FFBF33', // 테두리색
-  //     color: '#FFBF33', // 배경, 테두리색 모두
-  //   },
-  //   {
-  //     title: '딸기 생일🍓',
-  //     allDay: true,
-  //     start: '2024-08-08', // 시작 일자
-  //     // end: '2024-08-08', // 끝나는 일자 -> 표시는 전날까지 됨
-  //     color: '#F6AEEF',
-  //   },
-  // ];
 
   return (
     <div>

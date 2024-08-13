@@ -25,6 +25,10 @@ const ScheduleCreate = () => {
 
   const callCreateSchedule = async () => {
     console.log('create schedule : ', createForm);
+    if (!createForm.title || !createForm.startTime || !createForm.endTime) {
+      alert('제목과 날짜를 입력해주세요.');
+      return;
+    }
     const { data } = await api.post('/schedule', {
       title: createForm.title,
       content: createForm.content,
@@ -95,6 +99,7 @@ const ScheduleCreate = () => {
           <input
             id="date"
             type="datetime-local"
+            defaultValue={createForm.startTime}
             value={createForm.endTime}
             placeholder="종료 날짜"
             className="p-2"

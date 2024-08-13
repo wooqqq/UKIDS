@@ -1,9 +1,12 @@
 import { useScheduleStore } from '../../../stores/scheduleStore';
 import { useNavigate } from 'react-router-dom';
 import '../../common/common.css';
+import { useFamilyStore } from '@/stores/familyStore.ts';
+import { useEffect } from 'react';
 
 const ScheduleBox = () => {
-  const { selectedDate, eventData } = useScheduleStore();
+  const { selectedDate, setDateScheduleList, dateScheduleList } =
+    useScheduleStore();
   const nav = useNavigate();
   const onClickAlbumButton = () => {
     // 앨범 페이지로 이동
@@ -18,6 +21,16 @@ const ScheduleBox = () => {
     //  일정 리스트 조회 페이지로 이동
     nav('/schedule/list');
   };
+
+  const { selectedFamilyId } = useFamilyStore();
+
+  useEffect(() => {
+    if (selectedDate && selectedFamilyId) {
+      setDateScheduleList(selectedDate, selectedFamilyId);
+      console.log('date schedule : ', dateScheduleList);
+    }
+  }, [selectedDate, selectedFamilyId]);
+
   return (
     <>
       <h1 className="title-style">{selectedDate}</h1>
@@ -43,19 +56,20 @@ const ScheduleBox = () => {
 
         {selectedDate && (
           <div className="schedule-list">
-            {eventData ? (
-              eventData.map((event, index) => (
+            {dateScheduleList && dateScheduleList.scheduleList ? (
+              dateScheduleList.scheduleList.map((value, index) => (
                 <div key={index}>
                   <p>
                     <div className="circle-color"></div>
-                    {event.title}
+                    {value.title}
                   </p>
-                  {/* <p>시작 날짜: {event.start}</p> */}
-                  {/* {event.end && <p>끝 날짜: {event.end}</p>} */}
+                  <p>장소: {value.place}</p>
                 </div>
               ))
             ) : (
-              <p>해당 날짜에 이벤트가 없습니다.</p>
+              <p className="mt-2" style={{ color: '#999' }}>
+                해당 날짜에 일정이 없습니다.
+              </p>
             )}
           </div>
         )}

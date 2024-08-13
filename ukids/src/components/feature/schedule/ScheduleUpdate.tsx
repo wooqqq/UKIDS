@@ -1,11 +1,43 @@
 import BlueButton from '@/components/common/BlueButton';
 import WhiteButton from '@/components/common/WhiteButton';
 import api from '@/util/api';
-import { useFamilyStore } from '@/stores/familyStore.ts';
+import { useScheduleStore } from '@/stores/scheduleStore';
 import { useState } from 'react';
 
+interface UpdateScheduleForm {
+  title: string;
+  content: string;
+  place: string;
+  startTime: string;
+  endTime: string;
+}
+
 const ScheduleUpdate = () => {
-  let { scheduleId } = useParams() as { scheduleId: string };
+  const { scheduleDetail, setScheduleDetail } = useScheduleStore();
+  const [updateForm, setUpdateForm] = useState<UpdateScheduleForm>({
+    title: scheduleDetail.title,
+    content: scheduleDetail.content,
+    place: scheduleDetail.place,
+    startTime: scheduleDetail.startTime,
+    endTime: scheduleDetail.endTime,
+  });
+  const callUpdateSchedule = async () => {
+    console.log('update : ', updateForm);
+    if (!updateForm.title || !updateForm.startTime || !updateForm.endTime) {
+      alert('제목과 날짜를 입력해주세요.');
+      return;
+    }
+    const { data } = await api.put('/schedule', {
+      scheduleId: scheduleDetail.scheduleId,
+      title: updateForm.title,
+      content: updateForm.content,
+      place: updateForm.place,
+      startTime: updateForm.startTime,
+      endTime: updateForm.endTime,
+      familyId: scheduleDetail.familyId,
+    });
+    console.log('put : ', data);
+  };
 
   return (
     <div>
@@ -13,8 +45,8 @@ const ScheduleUpdate = () => {
         <WhiteButton name="목록" path="/schedule/list" />
         <BlueButton
           name="등록"
-          onClick={callCreateSchedule}
-          path="/schedule/detail/:scheduleId"
+          onClick={callUpdateSchedule}
+          path="/schedule/list"
         />
       </section>
       <section className="px-5 content-center">
@@ -23,11 +55,11 @@ const ScheduleUpdate = () => {
           <input
             id="title"
             type="text"
-            value={createForm.title}
+            value={updateForm.title}
             placeholder="제목"
             className="p-2"
             onChange={(e) =>
-              setCreateForm({ ...createForm, title: e.target.value })
+              setUpdateForm({ ...updateForm, title: e.target.value })
             }
           />
         </div>
@@ -36,11 +68,11 @@ const ScheduleUpdate = () => {
           <input
             id="place"
             type="text"
-            value={createForm.place}
+            value={updateForm.place}
             placeholder="장소"
             className="p-2"
             onChange={(e) =>
-              setCreateForm({ ...createForm, place: e.target.value })
+              setUpdateForm({ ...updateForm, place: e.target.value })
             }
           />
         </div>
@@ -49,13 +81,13 @@ const ScheduleUpdate = () => {
           <input
             id="date"
             type="datetime-local"
-            value={createForm.startTime}
+            value={updateForm.startTime}
             placeholder="시작 날짜"
             className="p-2"
-            max={createForm.endTime}
+            max={updateForm.endTime}
             onChange={(e) =>
-              setCreateForm({
-                ...createForm,
+              setUpdateForm({
+                ...updateForm,
                 startTime: e.target.value,
               })
             }
@@ -66,13 +98,13 @@ const ScheduleUpdate = () => {
           <input
             id="date"
             type="datetime-local"
-            value={createForm.endTime}
+            value={updateForm.endTime}
             placeholder="종료 날짜"
             className="p-2"
-            min={createForm.startTime}
+            min={updateForm.startTime}
             onChange={(e) =>
-              setCreateForm({
-                ...createForm,
+              setUpdateForm({
+                ...updateForm,
                 endTime: e.target.value,
               })
             }
@@ -83,11 +115,11 @@ const ScheduleUpdate = () => {
           <input
             id="content"
             type="text"
-            value={createForm.content}
+            value={updateForm.content}
             placeholder="메모할 내용을 입력하세요"
             className="p-2"
             onChange={(e) =>
-              setCreateForm({ ...createForm, content: e.target.value })
+              setUpdateForm({ ...updateForm, content: e.target.value })
             }
           />
         </div>

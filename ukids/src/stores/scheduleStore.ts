@@ -4,11 +4,12 @@ import ScheduleDetail from '../components/feature/schedule/ScheduleDetail';
 
 interface Store {
   events: Event[];
-  setEvents: (events: Event[]) => void;
+  setEvents: (
+    scheduleShortList: ScheduleShort[] | undefined,
+    familyName: string,
+  ) => void;
   selectedDate: string | null;
   setSelectedDate: (date: string | null) => void;
-  eventData: Event[] | null;
-  setEventData: (events: Event[] | null) => void;
   scheduleDetail: ScheduleDetail | null;
   setScheduleDetail: (scheduleId: number) => Promise<void>;
   monthScheduleList: MonthScheduleList | null;
@@ -66,15 +67,39 @@ interface DateScheduleList {
 
 export const useScheduleStore = create<Store>((set, get) => ({
   events: [],
-  setEvents: (events) => set({ events }),
+  setEvents: (
+    scheduleShortList: ScheduleShort[] | undefined,
+    familyName: string,
+  ) => {
+    if (!scheduleShortList) {
+      console.log('no schedules');
+      return;
+    }
+    const events: Event[] = scheduleShortList.map((schedule) => ({
+      id: String(schedule.scheduleId),
+      title: schedule.title,
+      start: schedule.startTime.split('T')[0],
+      end: schedule.endTime.split('T')[0],
+      color: '#3788d8',
+      textColor: '#ffffff',
+      extendedProps: {
+        place: schedule.place,
+        family: familyName,
+      },
+    }));
+
+    set({ events });
+  },
   selectedDate: null,
   setSelectedDate: (date) => set({ selectedDate: date }),
-  eventData: null,
-  setEventData: (events) => set({ eventData: events }),
+  // eventData: null,
+  // setEventData: (events) => set({ eventData: events }),
   scheduleDetail: null,
   setScheduleDetail: async (scheduleId: number) => {
-    if (scheduleId != null) {
+    console.log('schedule detail api 요청 : ', scheduleId);
+    if (scheduleId) {
       const { data } = await api.get(`/schedule/${scheduleId}`);
+      console.log('schedule detail data : ', data);
       const scheduleDetail: ScheduleDetail = {
         scheduleId: data.result.scheduleId,
         title: data.result.title,
@@ -87,10 +112,12 @@ export const useScheduleStore = create<Store>((set, get) => ({
       };
 
       set({ scheduleDetail });
+      console.log('saved scheduleDetail : ', scheduleDetail);
     }
   },
   monthScheduleList: null,
   setMonthScheduleList: async (month: number, familyId: number) => {
+    console.log('month : ', month);
     if (month != null && familyId != null) {
       const { data } = await api.get(
         `/schedule/month/${familyId}?month=${month}`,
@@ -107,7 +134,12 @@ export const useScheduleStore = create<Store>((set, get) => ({
   dateScheduleList: null,
   setDateScheduleList: async (date: string, familyId: number) => {
     if (date != null && familyId != null) {
-      const { data } = await api.get(`/schedule/date/${familyId}?date=${date}`);
+      const encodedDate = encodeURIComponent(date);
+      console.log('encodedDate : ', date);
+      const { data } = await api.get(
+        `/schedule/date/${familyId}?date=${encodedDate}`,
+      );
+      console.log('schedule by date : ', data);
       const dateScheduleList: DateScheduleList = {
         scheduleList: data.result.scheduleList,
         familyId: data.result.family.familyId,
