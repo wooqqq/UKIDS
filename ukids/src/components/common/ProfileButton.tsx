@@ -56,6 +56,7 @@ const ProfileButton = ({ name }: UserProps) => {
   // 가족방을 클릭했을 때
   const handleFamilyClick = (familyId: number) => {
     // window.location.reload();
+    // nav('/');
 
     const selectedFamily = family.find(
       (family) => family.familyId === familyId,
