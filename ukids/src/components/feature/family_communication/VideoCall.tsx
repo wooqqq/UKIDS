@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
 import Session from './Session';
 import { useVideoCallStore } from '@stores/videoCallStore';
 import { useFamilyStore } from '@stores/familyStore';
@@ -21,9 +20,6 @@ function VideoCall() {
   const { selectedFamilyId } = useFamilyStore();
 
   const nameOfUser = jwtDecode<JwtPayload>(localStorage.getItem('token')!).name;
-  // console.log('유저이름: ' + nameOfUser);
-
-  const nav = useNavigate();
 
   useEffect(() => {
     window.addEventListener('beforeunload', leaveSession);
@@ -32,7 +28,7 @@ function VideoCall() {
       leaveSession();
       window.removeEventListener('beforeunload', leaveSession);
     };
-  }, [leaveSession, nav]);
+  }, [leaveSession]);
 
   useEffect(() => {
     setUserName(nameOfUser);

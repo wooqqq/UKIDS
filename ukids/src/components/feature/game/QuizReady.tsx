@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '@/stores/authStore';
 import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
-import { useFamilyStore } from '@/stores/familyStore.ts';
+import { useAuthStore } from '@stores/authStore';
+import { useFamilyStore } from '@stores/familyStore';
 import ReadyCall from './ReadyCall';
+import VideoToggleButton from '../family_communication/VideoToggleButton';
+import AudioToggleButton from '../family_communication/AudioToggleButton';
 
 interface Participant {
   userName: string;
@@ -80,6 +82,7 @@ const QuizReady = () => {
   }, [isReady]);
 
   const { ukidsURL, token, userInfo } = useAuthStore();
+  const { leaveSession } = useFamilyStore();
   const { selectedFamilyId } = useFamilyStore();
   const [user] = useState(userInfo.id);
   const [selectedValue, setSelectedValue] = useState<number>(1);
@@ -301,9 +304,7 @@ const QuizReady = () => {
 
     return () => {
       if (client) {
-        // exitQuizRoom();
         client.deactivate();
-        // navigate('../');
       }
     };
   }, [ukidsURL, token, selectedFamilyId]);
@@ -314,16 +315,18 @@ const QuizReady = () => {
         const currentPath = window.location.pathname;
         if (currentPath !== '/quiz/start') {
           exitQuizRoom();
+          leaveSession();
+          window.removeEventListener('beforeunload', leaveSession);
         }
       }
     };
-  }, [navigate]);
+  }, [leaveSession]);
 
   return (
     <>
       <div className="feature-box flex h-full">
         {/* 왼쪽 영역 */}
-        <div className="w-3/4 flex flex-col justify-center items-center">
+        <div className="w-[75%] flex flex-col justify-center items-center">
           {/* 제목 */}
           <div className="h-[15%] flex flex-row">
             <span className="flex items-center game-font quiz-font-color">
@@ -390,9 +393,9 @@ const QuizReady = () => {
         </div>
 
         {/* 오른쪽 영역 */}
-        <div className="w-1/4 p-4">
-          <h2 className="text-xl font-bold mb-2">참여자 목록</h2>
-          <ul>
+        <div className="w-1/4 h-[100%] p-4">
+          <h2 className="h-[5%] text-xl font-bold mb-2 over">참여자 목록</h2>
+          <ul className="h-[20%] overflow-y-auto">
             {participants.map((participant, index) => (
               <li key={index} className="mb-2">
                 <span className="font-bold">{participant.userName}</span>:{' '}
@@ -400,8 +403,6 @@ const QuizReady = () => {
               </li>
             ))}
           </ul>
-        </div>
-        <div>
           {nameOfUser && sessionId && connection && (
             <ReadyCall
               nameOfUser={nameOfUser}
@@ -409,6 +410,10 @@ const QuizReady = () => {
               token={connection}
             />
           )}
+          <div className="h-[10%] flex flex-fow justify-evenly">
+            <VideoToggleButton />
+            <AudioToggleButton />
+          </div>
         </div>
       </div>
     </>

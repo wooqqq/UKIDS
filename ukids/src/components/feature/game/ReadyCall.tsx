@@ -22,6 +22,7 @@ function ReadyCall({ nameOfUser, sessionId, token }: ReadyCallProps) {
     window.addEventListener('beforeunload', leaveSession);
 
     return () => {
+      leaveSession();
       window.removeEventListener('beforeunload', leaveSession);
     };
   }, [leaveSession]);
@@ -50,7 +51,7 @@ function ReadyCall({ nameOfUser, sessionId, token }: ReadyCallProps) {
   }, []);
 
   return (
-    <div className="w-3/4">
+    <div className="h-[60%]">
       <ReadySession publisher={publisher} subscribers={subscribers} />
     </div>
   );
