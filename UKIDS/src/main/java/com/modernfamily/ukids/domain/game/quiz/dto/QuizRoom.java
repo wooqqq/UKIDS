@@ -62,6 +62,7 @@ public class QuizRoom {
     }
 
     public void updateMaxQuestionCounts(){
+        this.maxQuestionCounts = Long.MAX_VALUE;
         for(Map.Entry<String, Participate> entry : participantList.entrySet()){
             Participate participate = entry.getValue();
             this.maxQuestionCounts = Math.min(maxQuestionCounts, participate.getMaxQuestion());
@@ -75,6 +76,8 @@ public class QuizRoom {
 
     public void endGame(){
         this.isStart = false;
+        this.currentQuestionIndex = -1;
+        this.randomQuizQuestionList.clear();
     }
 
     public void enterParticipate(String userId, Participate participant){
