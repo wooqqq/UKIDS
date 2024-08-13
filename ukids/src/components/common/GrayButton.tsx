@@ -7,7 +7,7 @@ interface GrayButtonProps {
   path: string;
   className?: string;
   type?: string;
-  onClick?: () => void;
+  onClick?: () => void; // onClick 타입 정의 추가
 }
 
 const GrayButton = (props: GrayButtonProps) => {
@@ -17,6 +17,14 @@ const GrayButton = (props: GrayButtonProps) => {
   const handleClick = () => {
     if (props.onClick) {
       props.onClick(); // onClick 함수 호출
+    } else {
+      nav(props.path);
+    }
+  };
+
+  const deleteHandleClick = () => {
+    if (props.onClick) {
+      props.onClick();
     } else {
       nav(props.path);
     }

@@ -32,7 +32,11 @@
     z-index: 50; /* 다른 요소보다 앞에 위치 */
     
   }
-  .album-container {
+
+
+
+  
+.album-container {
     position: relative;
     padding-top: 70px; /* 상단 고정 영역만큼의 패딩 */
 }

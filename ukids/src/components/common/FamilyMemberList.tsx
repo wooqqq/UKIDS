@@ -1,18 +1,18 @@
 // 가족방, 게임에 사용할 참여가족 리스트 오른쪽 사이드에 위치할 예정
 import { useEffect, useState } from 'react';
-import callIcon from '../../../assets/subway_call-2.png';
-import discallIcon from '../../../assets/subway_call-3.png';
+import callIcon from '@/assets/subway_call-2.png';
+import discallIcon from '@/assets/subway_call-3.png';
 
 import { useNavigate } from 'react-router-dom';
-import { useVideoCallStore } from '../../../stores/videoCallStore';
-import VideoToggleButton from '../family_communication/VideoToggleButton';
-import AudioToggleButton from '../family_communication/AudioToggleButton';
+import { useVideoCallStore } from '@stores/videoCallStore';
+import VideoToggleButton from '@components/feature/family_communication/VideoToggleButton';
+import AudioToggleButton from '@components/feature/family_communication/AudioToggleButton';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;
 }
 
-const number = 4;
+const number = 3;
 
 const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
   const [onlineFamilyNum, setOnlineFamilyNum] = useState(0);
@@ -52,7 +52,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
         </div>
 
         {/* 가족대화방에서만 사용될 하단 버튼 영역 */}
-        {isChattingRoom ? (
+        {isChattingRoom && (
           <div className="flex-none m-2">
             {/* 통화버튼 */}
             <div className="flex justify-center mb-2">
@@ -74,7 +74,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
               <AudioToggleButton />
             </div>
           </div>
-        ) : null}
+        )}
       </div>
     </>
   );

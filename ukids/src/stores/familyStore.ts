@@ -148,13 +148,12 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         familyId: newFamily.familyId,
       });
       // 채팅방 ID 추출
-      const chatRoomId = chatRoomResponse.data.result.chatRoomId;
+      const chatRoomId = chatRoomResponse.data.chatRoomId;
       // 채팅방 ID 상태에 저장
       set({ chatRoomId });
 
       // webRTC 세션 생성
-      await api.post(`/webrtc`, { familyId: newFamily.familyId });
-      return newFamilyId;
+      await api.post(`/webrtc?familyId=${newFamily.familyId}`);
     } catch (error: any) {
       console.error('Error creating family', error);
       set({ error: error.message });

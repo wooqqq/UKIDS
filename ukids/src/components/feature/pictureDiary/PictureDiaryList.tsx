@@ -31,7 +31,8 @@ const PictureDiaryList = () => {
   const [currentPageflip, setCurrentPageflip] = useState(0);
 
   const getDiaryList = async () => {
-    const url = `/picture-diary/all/6?page=${currentPage}&size=10`;
+    // 수정
+    const url = `/picture-diary/all/21?page=${currentPage}&size=10`;
     const { data } = await api.get(url);
     setDiaries(data.result.pictureDiaries);
   };

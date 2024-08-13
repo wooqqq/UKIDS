@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import BlueButton from '../../common/BlueButton';
 import { useState } from 'react';
-import { useFamilyStore } from '../../../stores/familyStore';
+import { useFamilyStore } from '@stores/familyStore';
 
 const FamilyCreate = () => {
   const [name, setName] = useState('');
@@ -9,7 +9,7 @@ const FamilyCreate = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const createFamily = useFamilyStore((state) => state.createFamily);
+  const createFamily = useFamilyStore((state: any) => state.createFamily);
 
   const handleCreateFamily = async (e: React.FormEvent) => {
     e.preventDefault();

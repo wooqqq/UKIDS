@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 import api from '../util/api';
 
-// 타입스크립트 타입 설정...
 interface User {
   userId: number;
   id: string;
@@ -61,13 +60,7 @@ interface AuthState {
   checkedEmail: (email: string) => Promise<boolean>;
 
   // 전화번호 중복 검사
-  checkedPhone: (phone: string) => Promise<boolean>;
-
-  // familyId: number;
-  // setfamilyId: (name: string, password: string) => void;
-
-  chatRoomId: number;
-  setChatRoomId: (familyId: number) => void;
+  checkedPhone: (phone: string) => Promise<void>;
 }
 
 // 자동 로그아웃 테스트
@@ -75,7 +68,7 @@ interface AuthState {
 //   'token',
 //   'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlkIjoidXNlcjEiLCJuYW1lIjoi6rmA7Iu47ZS8IiwicGhvbmUiOiIwMTAtMTIxMi0xMjEyIiwiZW1haWwiOiJ3d3dAYXNzZGYuY29tIiwiaWF0IjoxNzIzMDgwMjUwLCJleHAiOjE3MjMwODM4NTB9.HRFEqm_i66m4JOa5yUEFlNHb7BQkuvV8mW_a-wnc2Sk',
 // );
-
+// const ukidsURL = `http://localhost:8080`;
 const ukidsURL = `https://i11b306.p.ssafy.io`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -311,40 +304,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('전화번호 중복 검사 실패:', error);
-      // alert('전화번호 중복 검사에 실패했습니다.');
-      return false;
-    }
-  },
-
-  /***** 각종 방 ID들 설정 *****/
-
-  // 가족방 생성 시 가족방 ID 얻어오고
-  // openvidu sessionId 생성 요청하기
-  // 가족 ID로 채팅방 ID 얻어오기
-  // familyId: NaN,
-  // setfamilyId: (name, password) => async () => {
-  //   try {
-  //     const response = await api.post(`/family`, { name, password });
-  //     const newFamilyId = Number.parseInt(response.data.familyId);
-
-  //     set({ familyId: newFamilyId });
-
-  //     await api.post(`/webrtc`, { familyId: newFamilyId });
-  //     await get().setChatRoomId(newFamilyId);
-  //   } catch (error: any) {
-  //     set({ error: error.message });
-  //   }
-  // },
-
-  // 가족 ID로 채팅방 ID 얻어오기
-  chatRoomId: NaN,
-  setChatRoomId: (familyId) => async () => {
-    set({ error: null });
-    try {
-      const response = await api.post(`/chat/room`, { familyId });
-      set({ chatRoomId: Number.parseInt(response.data.chatRoomId) });
-    } catch (error: any) {
-      set({ error: error.message });
+      alert('전화번호 중복 검사에 실패했습니다.');
     }
   },
 }));

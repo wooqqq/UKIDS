@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Client, IMessage } from '@stomp/stompjs';
-
-import ChattingBox from '../chatting/ChattingBox';
-import BlueButton from '../../common/BlueButton';
+import ChattingBox from './ChattingBox';
+import BlueButton from '@components/common/BlueButton';
 import SockJS from 'sockjs-client';
-import { useAuthStore } from '@/stores/authStore';
-import api from '../../../util/api';
+import { useAuthStore } from '@stores/authStore';
+import { useFamilyStore } from '@stores/familyStore';
+import api from '@/util/api';
 
 interface Message {
   messageId: number;
+  sender: string;
   content: string;
   user_id: number;
   is_delete: boolean;
@@ -20,18 +21,14 @@ interface Message {
 interface JwtPayload {
   userId: string;
 }
-// interface DecodedToken {
-//   userId: number;
-//   // 필요한 다른 필드들 추가
-// }
 
 const FamilyChatting = () => {
   const { ukidsURL, token } = useAuthStore();
-  const familyId = 7;
-  const chatRoomId = familyId;
+  const { selectedFamilyId } = useFamilyStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [chatRoomId, setChatRoomId] = useState(-1);
   const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
     null,
   );
@@ -39,9 +36,6 @@ const FamilyChatting = () => {
   const userId = Number.parseInt(
     jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
   );
-
-  // 디코딩된 토큰 정보 가져오기
-  // const decodedToken: DecodedToken = token ? jwtDecode(token) : { userId: -1 };
 
   // 사용자가 입력하는 메세지 내용 인지
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +50,7 @@ const FamilyChatting = () => {
   };
 
   const getChatList = async () => {
-    const url = `/chat/room/${chatRoomId}/messages`;
+    const url = `/chat/room/${selectedFamilyId}/messages`;
 
     const { data } = await api.get(url);
 
@@ -65,6 +59,7 @@ const FamilyChatting = () => {
     const formattedMessages = data.map((chat: any) => ({
       messageId: chat.createTime,
       content: chat.message,
+      sender: chat.sender,
       user_id: chat.senderId,
       is_delete: false,
       create_time: chat.createTime,
@@ -136,6 +131,8 @@ const FamilyChatting = () => {
 
   // 처음 입장 시
   useEffect(() => {
+    setChatRoomId(selectedFamilyId);
+
     const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
       webSocketFactory: () => socket,
@@ -165,6 +162,7 @@ const FamilyChatting = () => {
           messageId: receivedRawMessage.createTime,
           content: receivedRawMessage.message,
           user_id: receivedRawMessage.senderId,
+          sender: receivedRawMessage.sender,
           is_delete: false,
           create_time: receivedRawMessage.createTime,
           update_time: receivedRawMessage.createTime,
@@ -198,6 +196,7 @@ const FamilyChatting = () => {
     getChatList();
     enterChatRoom();
   }, []);
+
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
   useEffect(() => {
     scrollToBottom();
@@ -224,6 +223,7 @@ const FamilyChatting = () => {
                 >
                   <ChattingBox
                     message={storedMessage.content}
+                    sender={storedMessage.sender}
                     isSender={storedMessage.user_id === userId}
                   />
                 </div>
@@ -233,10 +233,10 @@ const FamilyChatting = () => {
 
           {/* 채팅입력 영역 */}
           <div className="flex-none">
-            <form className="flex" onSubmit={onSubmit}>
+            <form className="flex flex-row justify-center" onSubmit={onSubmit}>
               <input
                 type="text"
-                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mr-4"
+                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4"
                 onChange={onChange}
                 value={message}
               />

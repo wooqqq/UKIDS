@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import '../components/feature/game/gamebutton.css';
 import quizImg from '../assets/game_quiz.png';
 import callmynameImg from '../assets/game_callmyname.png';
 
@@ -9,7 +8,7 @@ const Game = () => {
     nav('/quiz');
   };
   const onCallMyNameClick = () => {
-    nav('/callMyName');
+    nav('/callmyname');
   };
 
   return (

@@ -1,70 +1,194 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '@/util/api';
+import { useNavigate } from 'react-router-dom';
+import GamePageHeader from './GamePageHeader';
+import './gamepart.css';
 
-import GameButton from '../../common/GameButton';
-import './gamebutton.css';
-import { useAuthStore } from '../../../stores/authStore';
+import writeAns from '@/assets/write_ans.png';
+import deleteAns from '@/assets/delete_ans.png';
+import checkIcon from '@/assets/game_checkbox.png';
+
+interface Question {
+  quizQuestionId: number;
+  question: string;
+  answer: string;
+  quizType: string;
+}
 
 const QuizQnA = () => {
-  const { ukidsURL, chatRoomId } = useAuthStore();
-  const [num, setNum] = useState(0);
-  const [questionList, setQuestionList] = useState([]);
+  const [questionList, setQuestionList] = useState<Question[]>([]);
+  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [answer, setAnswer] = useState<string>('');
 
-  // 처음 접속 시 질문 목록 불러오기 - 가족방, 유저에 따라 다를 것
-  useEffect(() => {
-    axios
-      .get(`${ukidsURL}/message/${chatRoomId}`)
-      .then((response) => {
-        const messageList = response.data;
+  // 페이지 이동
+  const nav = useNavigate();
+  const onClick = () => {
+    nav('../question');
+  };
 
-        setQuestionList(
-          messageList.filter((message: any) => {
-            return !message.isDelete;
-          }),
-        );
+  // 답변 수정한거 서버로 보내고 리스트 갱신
+  const editSubmit = (quizQuestion: any) => {
+    console.log(quizQuestion);
+    console.log(answer);
+    api
+      .put('/quiz-question', {
+        quizQuestionId: quizQuestion.quizQuestionId,
+        question: quizQuestion.question,
+        answer: answer,
+        quizType: quizQuestion.quizType,
+      })
+      .then(() => {
+        loadingQuestionList();
+        setIsEditing(null); // 편집 모드 종료
+      })
+      .catch((e: any) => {
+        console.error(e);
+      });
+  };
+
+  // 답변 핸들러
+  const handleWriteAns = (question: Question) => {
+    setIsEditing(question.quizQuestionId); // 현재 편집 중인 질문 ID 설정
+    setAnswer(question.answer || ''); // 기존 답변을 state에 저장
+
+    if (question.quizType === 'OX') {
+      // 퀴즈타입이 OX일 때는 OX 버튼 선택
+    }
+  };
+
+  // 질문목록 불러오기
+  const loadingQuestionList = () => {
+    api
+      .get(`/quiz-question`)
+      .then((response: any) => {
+        setQuestionList(response.data.result.quizQuestions);
       })
       .catch((error: any) => {
         console.error(error);
       });
+  };
+
+  // 질문 삭제
+  const handleDeleteQuestion = (quizQuestionId: number) => {
+    api.delete(`/quiz-question/${quizQuestionId}`).then(loadingQuestionList());
+  };
+
+  // 처음 접속 시 질문 목록 불러오기
+  useEffect(() => {
+    loadingQuestionList();
   }, []);
 
   return (
     <>
       <div className="feature-box">
-        {/*상단 */}
-        <div>
-          <h1>질문목록</h1>
+        {/* 헤더 */}
+        <div className="h-[15%] flex items-center">
+          <GamePageHeader title="질문목록" />
         </div>
 
         {/* 질문 목록 */}
-        <div>
-          <table>
-            <tr>
-              <th>번호</th>
-              <th>질문</th>
-              <th>답변</th>
-            </tr>
-            {questionList.map((value: { question: string; answer: string }) => {
-              setNum((prev) => prev + 1);
-
-              return (
-                <tr>
-                  <td>{num}</td>
-                  <td>{value.question}</td>
-                  <td>
-                    {value.answer ? value.answer : '답변없음'}
-                    {/* 수정버튼 */}
-                    {/* 삭제버튼 */}
-                  </td>
-                </tr>
-              );
-            })}
-          </table>
+        <div className="h-[65%] overflow-y-auto">
+          {/* 테이블 영역 */}
+          <div className="flex justify-center">
+            {questionList.length !== 0 ? (
+              <table className="w-[80%]">
+                <thead>
+                  <tr className="border-solid border-b-4 border-[#777777]">
+                    <th className="text-center py-3">번호</th>
+                    <th className="text-center">질문</th>
+                    <th className="text-center">답변</th>
+                    <th className="text-center">수정/삭제</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {questionList.map((question: Question, index) => {
+                    return (
+                      <tr key={question.quizQuestionId}>
+                        <td className="text-center py-2">{index + 1}</td>
+                        <td className="text-center py-2">
+                          {question.question}
+                        </td>
+                        <td className="text-center py-2">
+                          {isEditing === question.quizQuestionId ? (
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                editSubmit(question);
+                              }}
+                              className="flex justify-center"
+                            >
+                              {question.quizType === 'OX' ? (
+                                <div>
+                                  <button
+                                    type="button"
+                                    onClick={() => setAnswer('O')}
+                                    className={`quiz-O-btn ${
+                                      answer === 'O' ? 'selected' : ''
+                                    }`}
+                                  >
+                                    🞅
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setAnswer('X')}
+                                    className={`quiz-X-btn ${
+                                      answer === 'X' ? 'selected' : ''
+                                    }`}
+                                  >
+                                    ✖
+                                  </button>
+                                </div>
+                              ) : (
+                                <input
+                                  type="text"
+                                  value={answer}
+                                  onChange={(e) => setAnswer(e.target.value)}
+                                  className="border border-gray-300 rounded"
+                                />
+                              )}
+                              <button type="submit" className="m-2">
+                                <img src={checkIcon} alt="submit" />
+                              </button>
+                            </form>
+                          ) : (
+                            <>
+                              <span className="">{question.answer}</span>
+                            </>
+                          )}
+                        </td>
+                        <td className="flex justify-center items-center py-2">
+                          {/* 수정버튼 */}
+                          <button onClick={() => handleWriteAns(question)}>
+                            <img src={writeAns} alt="edit" />
+                          </button>
+                          {/* 질문 삭제 버튼 */}
+                          <button
+                            onClick={() =>
+                              handleDeleteQuestion(question.quizQuestionId)
+                            }
+                            className="m-2"
+                          >
+                            <img src={deleteAns} alt="delete" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <div className="flex items-center text-3xl">
+                질문이 없습니다...!
+              </div>
+            )}
+          </div>
         </div>
 
         {/* 버튼 */}
-        <div>
-          <GameButton name="퀴즈 더 내러가기" path="../question" />
+        <div className="h-[15%] flex justify-center">
+          <button onClick={onClick} className="game-btn-quiz game-btn-common">
+            퀴즈 더 내러가기
+          </button>
         </div>
       </div>
     </>

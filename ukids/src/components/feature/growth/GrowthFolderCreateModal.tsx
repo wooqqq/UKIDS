@@ -11,7 +11,9 @@ interface ModalProps {
 export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderList}: ModalProps) => {
     const navigate = useNavigate();
     
-    const [folderName, setFolderName] = useState<string>();
+
+    // 수정 : // 초기 값으로 빈 문자열 설정
+    const [folderName, setFolderName] = useState<string>(""); 
 
     const onClickCloseButton = () => { 
         setModalState(!modalState);
@@ -33,10 +35,17 @@ export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderL
     if (!modalState) return null;
 
     const createFolder = async () => {
+
+
+        if (!folderName.trim()) { // 입력 유효성 검사
+            alert("폴더 이름을 입력해주세요.");
+            return;
+        }
+
         const url = `/growth-folder`;
 
         const inputData = {
-            familyId: 1,
+            familyId: 21,
             folderName: folderName
         }
 
@@ -48,6 +57,9 @@ export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderL
 
         setModalState(!modalState);
 
+        alert("폴더가 성공적으로 생성되었습니다."); 
+
+
     }
 
     return (
@@ -55,21 +67,28 @@ export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderL
             <div className="modal-top-container">
                 <div className="modal-container">
                     <div className="modal-header">
-                        <span>폴더 생성</span>
-                        <span className="modal-close-button" onClick={onClickCloseButton}>X</span>
-                    </div>
-
-                    <div className="text-center mt-5">
-                        생성할 폴더 이름을 입력해주세요 
+                        <span className='content-title'>폴더 생성</span>
+                        <span className="modal-close-button" onClick={onClickCloseButton}>
+                            X
+                        </span>
                     </div>
 
                     <div className="modal-content text-center">
-                        <label htmlFor="foldername"></label>
-                        <input id="foldername" type="text" value={folderName} onChange={(e) => setFolderName(e.target.value)}/>
+
+                    <p className="password-label">생성할 폴더 이름을 입력해주세요 </p>
+                        
+                        
+                        <input
+                            id="foldername"
+                            type="text"
+                            value={folderName} onChange={(e) => setFolderName(e.target.value)}
+                            placeholder="폴더 이름을 입력하세요" // 추가 : 입력 플레이스홀더 
+                            className="password-input" // 추가 : css 
+                        />
                     </div>
 
                     <div className="text-center">
-                        <button onClick={createFolder}>생성</button>
+                        <button className="common-btn list-btn" style={{ position: 'absolute', bottom: '30px', right: '30px', color: 'gray'}} onClick={createFolder}>등록</button>
                     </div>
 
                 </div>
