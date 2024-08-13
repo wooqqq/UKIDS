@@ -3,6 +3,7 @@ import WhiteButton from '@/components/common/WhiteButton';
 import api from '@/util/api';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface UpdateScheduleForm {
   title: string;
@@ -14,6 +15,7 @@ interface UpdateScheduleForm {
 
 const ScheduleUpdate = () => {
   const { scheduleDetail, setScheduleDetail } = useScheduleStore();
+  const nav = useNavigate();
   const [updateForm, setUpdateForm] = useState<UpdateScheduleForm>({
     title: scheduleDetail.title,
     content: scheduleDetail.content,
@@ -37,6 +39,12 @@ const ScheduleUpdate = () => {
       familyId: scheduleDetail.familyId,
     });
     console.log('put : ', data);
+    console.log('post : ', data);
+    if (data.code == 201) {
+      alert('일정 수정 성공');
+      nav('/schedule/list');
+    }
+    alert('일정 수정 실패, 재시도해주세요.');
   };
 
   return (

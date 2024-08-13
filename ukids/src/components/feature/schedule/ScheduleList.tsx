@@ -23,8 +23,7 @@ const ScheduleList = () => {
   const onClickDetail = (scheduleId: number) => {
     console.log('list schedule id : ', scheduleId);
     if (scheduleId) {
-      setScheduleDetail(scheduleId);
-      nav(`/schedule/detail`);
+      nav(`/schedule/detail/${scheduleId}`);
     }
   };
 

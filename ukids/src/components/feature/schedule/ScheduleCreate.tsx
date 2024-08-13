@@ -4,6 +4,7 @@ import WhiteButton from '@/components/common/WhiteButton';
 import api from '@/util/api';
 import { useFamilyStore } from '@/stores/familyStore.ts';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CreateScheduleForm {
   title: string;
@@ -15,6 +16,8 @@ interface CreateScheduleForm {
 
 const ScheduleCreate = () => {
   const { selectedFamilyId } = useFamilyStore();
+  const nav = useNavigate();
+
   const [createForm, setCreateForm] = useState<CreateScheduleForm>({
     title: '',
     content: '',
@@ -38,6 +41,11 @@ const ScheduleCreate = () => {
       familyId: selectedFamilyId,
     });
     console.log('post : ', data);
+    if (data.code == 201) {
+      alert('일정 등록 성공');
+      nav('/schedule/list');
+    }
+    alert('일정 등록 실패, 재시도해주세요.');
   };
 
   return (
