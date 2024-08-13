@@ -19,6 +19,7 @@
 // 절대경로로 수정하기
 
 import axios from 'axios';
+import api from '@/util/api';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../common/common.css';
@@ -71,7 +72,7 @@ const Albums: React.FC = () => {
 
   // 임시 familyId 6. (ssafy2가 속한 가족)
     // 앨범 12 개 등록되어있음 (총 3페이지)
-  const familyId = '6';
+  const familyId = '1';
 
 
 
@@ -83,11 +84,7 @@ const Albums: React.FC = () => {
 
         // 불러온 전체 album에 페이지가 있음
         // 첫 페이지 데이터를 불러와서 전체 페이지 수 확인
-        let response = await axios.get(`https://i11b306.p.ssafy.io/api/album/all/${familyId}?page=1`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        let response = await api.get(`/album/all/${familyId}?page=1`);
 
         // 전체 페이지 (예: 3)
         const totalPages = response.data.result.totalPage;
@@ -98,9 +95,7 @@ const Albums: React.FC = () => {
         // 2페이지 ~ total page 데이터 불러오기
 
         for (let page = 2; page <= totalPages; page++) {
-          response = await axios.get(`https://i11b306.p.ssafy.io/api/album/all/${familyId}?page=${page}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
+          response = await api.get(`/album/all/${familyId}?page=${page}`);
           allAlbums = allAlbums.concat(response.data.result.albumResponseDtoList);
         }
 
@@ -115,14 +110,21 @@ const Albums: React.FC = () => {
         // setAlbums(allAlbums);
 
         const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
-          const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
+          const photosResponse = await api.get<AlbumPhotosResponse>(`/photo/all/${album.albumId}`);
           return {
             ...album,
             photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
           };
         }));
+        // const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
+        //   const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
+        //     headers: { 'Authorization': `Bearer ${token}` }
+        //   });
+        //   return {
+        //     ...album,
+        //     photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
+        //   };
+        // }));
         
         setAlbums(albumsWithPhotos);
         

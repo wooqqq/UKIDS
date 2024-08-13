@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import api from '@/util/api';
 import { useAuthStore } from '../../../stores/authStore';
+import { useParams } from 'react-router-dom';
+import api from '@/util/api';
 
 
 import DatePicker from 'react-datepicker';
@@ -20,19 +21,27 @@ interface Photo {
   caption: string;
 }
 
+interface UploadedPhoto {
+    fileName: string;
+    imgUrl: string;
+    s3Name: string;
+    caption: string;
+}
 
 
 
-const UploadAlbum = () => {
+export const UpdateAlbum = () => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState<Date | null>(new Date());
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhoto[]>([]);
+  const [deletePhotos, setDeletePhotos] = useState<UploadedPhoto[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const token = useAuthStore((state) => state.token);
   
-
+  const {albumId} = useParams();
 
 
   const handleFileChange = (event: any) => {
@@ -63,33 +72,19 @@ const UploadAlbum = () => {
     setDate(newDate);
   };
 
-  const createAlbum = async () => {
-    if (!date) {
-      alert('날짜를 선택해주세요.');
-      return null;  // 날짜가 선택되지 않았으면 null을 반환하고 함수 종료
-    }
-    try {
-      const response = await api.post('/album', {
-        title,
-        date: date ? date.toISOString().slice(0, 10) : '',
-        familyId: '1'
-      });
-      return {
-        albumId: response.data.albumId,
-        familyId: '1',
-        date: date.toISOString().slice(0, 10)
-      };
-    } catch (error) {
-      console.error('앨범 생성 실패:', error);
-      alert('앨범 생성에 실패했습니다.');
-      return null;
-    }
-  };
-  
-  console.log('앨범 만들어짐')
-
 
   const uploadPhotos = async (albumData: any) => {
+    deletePhotos.map(photo => {
+        const s3Name = photo.s3Name.substring(6);
+        console.log(s3Name);
+        const url = `/photo/uploaded/${s3Name}`;
+        console.log(url);
+        const {data} = api.delete(url);
+
+        console.log(data);
+    })
+
+
     try {
       const responses = await Promise.all(photos.map(photo => {
         const formData = new FormData();
@@ -116,8 +111,8 @@ const UploadAlbum = () => {
     }
   };
 
-  const uploadAlbum = async () => {
-    if (photos.length === 0) {
+  const updateAlbum = async () => {
+    if (photos.length === 0 && uploadedPhotos.length === 0) {
       alert('사진을 등록해 주세요.');
       return;
     }
@@ -126,15 +121,30 @@ const UploadAlbum = () => {
       return ;
     }
 
+    const url = `/album/${albumId}`;
+    const{data} = await api.get(url);
 
-    const albumData = await createAlbum();
-    if (albumData) {
-      await uploadPhotos(albumData);
-      setPhotos([]);
-      setTitle('');
-      setDate(new Date());
-    }
+    uploadPhotos(data.result);
   };
+
+  const getUploadedPhotos = async () => {
+    const url = `/photo/all/${albumId}`;
+
+    const {data} = await api.get(url);
+    console.log(data);
+
+    setUploadedPhotos(data.result.photoList);
+  }
+
+  const deletePrevPhoto = (photo: UploadedPhoto, index: any) => {
+    setUploadedPhotos(prevUploadedPhotos => prevUploadedPhotos.filter((_, i) => i !== index));
+    setDeletePhotos(prevDeletePhoto => [...prevDeletePhoto, photo]);
+    console.log(deletePhotos);
+  }
+
+  useEffect(() => {
+    getUploadedPhotos();
+  }, [])
 
   return (
     <div className="feature-box relative w-[911px] h-[576px]" style={{ zIndex: 1000 }}>
@@ -176,7 +186,7 @@ const UploadAlbum = () => {
         </div>
 
       <div className="absolute top-[87px] right-[70px]">
-        <BlueButton name="등록" path="/albums" className="absolute" onClick={uploadAlbum} />
+        <BlueButton name="수정" path="/albums" className="absolute" onClick={updateAlbum} />
       </div>
 
 
@@ -220,6 +230,18 @@ const UploadAlbum = () => {
 
 
       <div className="preview-box">
+        {uploadedPhotos.map((photo, index) => (
+            <div key={index} className="photo-containertwo relative">
+            <img
+              src={closeIcon}
+              alt="Delete Icon"
+              className="delete-icon"
+              onClick={() => deletePrevPhoto(photo, index)}
+            />
+            <img src={photo.imgUrl} alt={`Preview ${index}`} className="w-full h-auto rounded" />
+            <p>{photo.caption}</p>
+          </div>
+        ))}
         {photos.map((photo, index) => (
           <div key={index} className="photo-containertwo relative">
             <img
@@ -236,5 +258,3 @@ const UploadAlbum = () => {
     </div>
   );
 };
-
-export default UploadAlbum;

@@ -4,6 +4,7 @@
 
 // 절대 경로로 수정하기
 import axios from 'axios';
+import api from '@/util/api';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
@@ -48,13 +49,8 @@ const AlbumDetail: React.FC = () => {
   useEffect(() => {
     const fetchAlbumDetails = async () => {
       try {
-        const response = await axios.get(
-          `https://i11b306.p.ssafy.io/api/photo/all/${albumId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+        const response = await api.get(
+          `/photo/all/${albumId}`,
         );
 
         if (response.data.result) {
@@ -119,7 +115,7 @@ const AlbumDetail: React.FC = () => {
         {/* 수정,삭제 */}
         {/* 기능 추가 필요함 */}
         <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
-          <BlueButton name="수정" path="/albums" className="submit-btn mr-2" />
+          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn mr-2" />
           <GrayButton name="삭제" path="/albums" className="submit-btn" />
         </div>
       </div>
