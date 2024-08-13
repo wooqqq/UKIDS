@@ -97,24 +97,20 @@ const QuizQuestion = () => {
                 <button
                   type="button"
                   onClick={() => handleOptionClick('O')}
-                  className={`pl-4 py-2 w-20 rounded-s-full ${
-                    selectedOption === 'O'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white border-solid border-gray-600'
+                  className={`quiz-O-btn ${
+                    selectedOption === 'O' ? 'selected' : ''
                   }`}
                 >
-                  O
+                  🞅
                 </button>
                 <button
                   type="button"
                   onClick={() => handleOptionClick('X')}
-                  className={`pr-4 py-2 w-20 rounded-e-full ${
-                    selectedOption === 'X'
-                      ? 'bg-red-500 text-white'
-                      : 'bg-[#777777]'
+                  className={`quiz-X-btn ${
+                    selectedOption === 'X' ? 'selected' : ''
                   }`}
                 >
-                  X
+                  ✖
                 </button>
               </div>
 

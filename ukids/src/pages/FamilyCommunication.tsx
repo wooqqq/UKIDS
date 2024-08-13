@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import FamilyMemberList from '../components/feature/family/FamilyMemberList';
+import FamilyMemberList from '../components/common/FamilyMemberList';
 import VideoCall from '../components/feature/family_communication/VideoCall';
 import FamilyChatting from '../components/feature/family_communication/Chatting';
 

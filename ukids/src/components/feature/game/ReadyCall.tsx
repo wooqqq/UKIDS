@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import Session from './Session';
 import { useVideoCallStore } from '@stores/videoCallStore';
-import { useFamilyStore } from '@stores/familyStore';
+import ReadySession from './ReadySession';
 
-interface JwtPayload {
-  name: string;
+interface ReadyCallProps {
+  nameOfUser: string;
+  sessionId: string;
+  token: string;
 }
 
-function VideoCall() {
+function ReadyCall({ nameOfUser, sessionId, token }: ReadyCallProps) {
   const {
     subscribers,
     publisher,
@@ -17,9 +17,6 @@ function VideoCall() {
     joinSession,
     setUserName,
   } = useVideoCallStore();
-  const { selectedFamilyId } = useFamilyStore();
-
-  const nameOfUser = jwtDecode<JwtPayload>(localStorage.getItem('token')!).name;
 
   useEffect(() => {
     window.addEventListener('beforeunload', leaveSession);
@@ -33,10 +30,17 @@ function VideoCall() {
   useEffect(() => {
     setUserName(nameOfUser);
 
-    // 토큰 생성 및 세션에 연결하는 함수 호출
     const connectSession = async () => {
       try {
-        await joinSession(selectedFamilyId, userName);
+        console.log(
+          'before join session : ',
+          nameOfUser,
+          ', ',
+          sessionId,
+          ', ',
+          token,
+        );
+        joinSession(0, userName, token);
         console.log('Successfully joined the session.');
       } catch (error) {
         console.error('Error joining the session:', error);
@@ -47,10 +51,10 @@ function VideoCall() {
   }, []);
 
   return (
-    <div className="w-3/4">
-      <Session publisher={publisher} subscribers={subscribers} />
+    <div className="h-[60%]">
+      <ReadySession publisher={publisher} subscribers={subscribers} />
     </div>
   );
 }
 
-export default VideoCall;
+export default ReadyCall;
