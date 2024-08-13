@@ -58,25 +58,24 @@ const ScheduleBox = () => {
         <div className="title-style">일정</div>
         <button onClick={onClickScheduleListButton}>더보기</button>
 
-        {selectedDate && (
-          <div className="schedule-list">
-            {dateScheduleList && dateScheduleList.scheduleList ? (
-              dateScheduleList.scheduleList.map((value, index) => (
-                <div key={index}>
-                  <p>
-                    <div className="circle-color"></div>
-                    {value.title}
-                  </p>
-                  {value.place && <p>장소: {value.place}</p>}
-                </div>
-              ))
-            ) : (
-              <p className="mt-2" style={{ color: '#999' }}>
-                해당 날짜에 일정이 없습니다.
-              </p>
-            )}
-          </div>
-        )}
+        <div className="schedule-list">
+          {selectedDate && dateScheduleList && dateScheduleList.scheduleList ? (
+            dateScheduleList.scheduleList.map((value, index) => (
+              <div key={index}>
+                <p>
+                  <div className="circle-color"></div>
+                  {value.title}
+                </p>
+                {value.place && <p>장소: {value.place}</p>}
+                <hr />
+              </div>
+            ))
+          ) : (
+            <p className="mt-2" style={{ color: '#999' }}>
+              해당 날짜에 일정이 없습니다.
+            </p>
+          )}
+        </div>
       </section>
     </>
   );
