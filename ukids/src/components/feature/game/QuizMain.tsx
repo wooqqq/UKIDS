@@ -1,10 +1,12 @@
+// import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GameBackButton from './GameBackButton';
-import gameExplain from '@/assets/game_explain.png';
+// import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
 
 const QuizMain = () => {
   const nav = useNavigate();
+  // const [isHover, setIsHover] = useState(false);
 
   const onClickStart = () => {
     // 준비방으로 이동
@@ -30,7 +32,20 @@ const QuizMain = () => {
         {/* 윗 부분 */}
         <div className="flex flex-row justify-between">
           <GameBackButton path={'/game'} />
-          <img src={gameExplain} alt="설명" className="" />
+          {/* <img
+            src={gameExplain}
+            alt="설명"
+            // className={isHover && 'className'}
+          />
+          <div className="relative">
+            <div className="flex items-center gap-5">
+              <div className="inline-block profile-name">{name}</div>
+              <button onClick={handleClick} className="profile-btn">
+                <div>'가족방을 만들어보세요!'</div>
+                <div className="fill-black">▼</div>
+              </button>
+            </div>
+          </div> */}
         </div>
 
         {/* 본 영역 */}
