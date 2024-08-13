@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import QuizButton from './QuizButton';
 import { useAuthStore } from '@/stores/authStore';
 import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
+import { useFamilyStore } from '@/stores/familyStore.ts';
+import ReadyCall from './ReadyCall';
 
 interface Participant {
   userName: string;
@@ -33,9 +34,21 @@ interface EnterGameMessage {
   gameRoomInfo: GameRoom;
 }
 
+interface ExitGameMessage {
+  type: 'EXIT_GAME';
+  id: number;
+  webrtcConnection: string;
+  gameRoomInfo: GameRoom;
+}
+
 interface SetQuizMessage {
   type: 'SET_QUIZ_COUNTS';
   quizCount: number;
+}
+
+interface GetQuizMaxMessage {
+  type: 'GET_MAX_QUESTION_COUNTS';
+  maxCounts: number;
 }
 
 interface ErrorMessage {
@@ -43,10 +56,15 @@ interface ErrorMessage {
   message: string;
 }
 
-type GameMessage = EnterGameMessage | SetQuizMessage | ErrorMessage;
+type GameMessage =
+  | EnterGameMessage
+  | SetQuizMessage
+  | ExitGameMessage
+  | GetQuizMaxMessage
+  | ErrorMessage;
 
 const QuizReady = () => {
-  const [isReady, setIsReady] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState();
   const navigate = useNavigate();
   const handleClick = () => {
     if (selectedValue === 0) {
@@ -54,15 +72,16 @@ const QuizReady = () => {
       return;
     }
 
-    setIsReady(() => {
-      window.location.href = '/quiz/start';
-    });
+    setIsReady(true); // 상태 변경
   };
 
+  useEffect(() => {
+    if (isReady) navigate('/quiz/start');
+  }, [isReady]);
+
   const { ukidsURL, token, userInfo } = useAuthStore();
-  const familyId = 1;
-  const user = userInfo.id;
-  console.log('user : ', user);
+  const { selectedFamilyId } = useFamilyStore();
+  const [user] = useState(userInfo.id);
   const [selectedValue, setSelectedValue] = useState<number>(1);
   const [maxOptions, setMaxOptions] = useState<number>(1);
   const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
@@ -71,6 +90,10 @@ const QuizReady = () => {
   const [participants, setParticipants] = useState<
     { userName: string; role: string }[]
   >([]);
+
+  const [nameOfUser, setNameOfUser] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [connection, setConnection] = useState<string | null>(null);
 
   const handleBack = () => {
     exitQuizRoom();
@@ -85,7 +108,7 @@ const QuizReady = () => {
         stompClientInstance.publish({
           destination: `/app/quiz/enter`,
           body: JSON.stringify({
-            familyId,
+            familyId: selectedFamilyId,
           }),
         });
       } catch (error) {
@@ -103,11 +126,30 @@ const QuizReady = () => {
         stompClientInstance.publish({
           destination: `/app/quiz/exit`,
           body: JSON.stringify({
-            familyId,
+            familyId: selectedFamilyId,
           }),
         });
       } catch (error) {
         console.error('게임방 퇴장 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
+  const GetQuizMaxCounts = async () => {
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: `/app/quiz/quiz-max`,
+          body: JSON.stringify({
+            familyId: selectedFamilyId,
+            counts: `${selectedValue}`,
+          }),
+        });
+      } catch (error) {
+        console.error('최대 퀴즈 개수 갱신 오류:', error);
       }
     } else {
       console.log('stompClientInstance is null or message is empty');
@@ -122,7 +164,7 @@ const QuizReady = () => {
         stompClientInstance.publish({
           destination: `/app/quiz/quiz-count`,
           body: JSON.stringify({
-            familyId,
+            familyId: selectedFamilyId,
             counts: `${selectedValue}`,
           }),
         });
@@ -141,6 +183,7 @@ const QuizReady = () => {
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       enterQuizRoom();
+      GetQuizMaxCounts();
     }
   }, [stompClientInstance]);
 
@@ -149,7 +192,8 @@ const QuizReady = () => {
       setQuizCounts();
     }
   }, [selectedValue]);
-  // 처음 입장 시
+
+  // 처음 들어왔을 때 방 연결
   useEffect(() => {
     const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
@@ -160,9 +204,6 @@ const QuizReady = () => {
       debug: (str) => {
         console.log('웹소켓 디버그: ' + str);
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
@@ -173,72 +214,83 @@ const QuizReady = () => {
       setStompClientInstance(client);
 
       // enterQuizRoom();
-      client.subscribe(`/topic/quiz/${familyId}`, (message: IMessage) => {
-        console.log('Received message:', message.body);
-        const receivedMessage: GameMessage = JSON.parse(message.body);
+      client.subscribe(
+        `/topic/quiz/${selectedFamilyId}`,
+        (message: IMessage) => {
+          console.log('Received message:', message.body);
+          const receivedMessage: GameMessage = JSON.parse(message.body);
 
-        console.log('receivedMessage : ', receivedMessage);
+          console.log('receivedMessage : ', receivedMessage);
 
-        switch (receivedMessage.type) {
-          case 'ENTER_GAME':
-            const participant =
-              receivedMessage.gameRoomInfo.participantList[user];
-            console.log('----user : ----', participant);
-            if (participant && participant.maxQuestion === 0) {
-              alert('퀴즈 문제 개수가 0입니다. 게임에 참여할 수 없습니다.');
-              navigate('../');
-              return;
-            }
+          switch (receivedMessage.type) {
+            case 'ENTER_GAME':
+              const participant =
+                receivedMessage.gameRoomInfo.participantList[user];
+              console.log('----user : ----', participant);
+              setNameOfUser(participant.userName);
+              setSessionId(receivedMessage.gameRoomInfo.sessionId);
+              setConnection(receivedMessage.webrtcConnection);
 
-            if (receivedMessage.gameRoomInfo.isStart) {
-              alert('현재 게임이 진행 중입니다.');
-              navigate('../');
-              return;
-            }
+              if (participant && participant.maxQuestion === 0) {
+                alert('퀴즈 문제 개수가 0입니다. 게임에 참여할 수 없습니다.');
+                navigate('../');
+                return;
+              }
 
-            setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
+              if (receivedMessage.gameRoomInfo.isStart) {
+                alert('현재 게임이 진행 중입니다.');
+                navigate('../');
+                return;
+              }
 
-            console.log(
-              'participantList:',
-              receivedMessage.gameRoomInfo.participantList,
-            );
+              setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
 
-            const participantEntries = Object.entries(
-              receivedMessage.gameRoomInfo.participantList,
-            ).map(([key, participant]) => ({
-              userName: participant.userName,
-              role: participant.role,
-            }));
-            setParticipants(participantEntries);
+              console.log(
+                'participantList:',
+                receivedMessage.gameRoomInfo.participantList,
+              );
 
-            break;
+              const participantEntries = Object.entries(
+                receivedMessage.gameRoomInfo.participantList,
+              ).map(([key, participant]) => ({
+                userName: participant.userName,
+                role: participant.role,
+              }));
+              setParticipants(participantEntries);
 
-          case 'EXIT_GAME':
-            setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
+              break;
 
-            console.log(
-              'participantList:',
-              receivedMessage.gameRoomInfo.participantList,
-            );
+            case 'EXIT_GAME':
+              setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
 
-            const newParticipantEntries = Object.entries(
-              receivedMessage.gameRoomInfo.participantList,
-            ).map(([nkey, remainParticipant]) => ({
-              userName: remainParticipant.userName,
-              role: remainParticipant.role,
-            }));
-            setParticipants(newParticipantEntries);
+              console.log(
+                'participantList:',
+                receivedMessage.gameRoomInfo.participantList,
+              );
 
-            break;
+              const newParticipantEntries = Object.entries(
+                receivedMessage.gameRoomInfo.participantList,
+              ).map(([nkey, remainParticipant]) => ({
+                userName: remainParticipant.userName,
+                role: remainParticipant.role,
+              }));
+              setParticipants(newParticipantEntries);
 
-          case 'SET_QUIZ_COUNTS':
-            setSelectedValue(receivedMessage.quizCount);
-            break;
+              break;
 
-          case 'ERROR':
-            console.log('error : ', receivedMessage.message);
-        }
-      });
+            case 'GET_MAX_QUESTION_COUNTS':
+              setMaxOptions(receivedMessage.maxCounts);
+              break;
+
+            case 'SET_QUIZ_COUNTS':
+              setSelectedValue(receivedMessage.quizCount);
+              break;
+
+            case 'ERROR':
+              console.log('error : ', receivedMessage.message);
+          }
+        },
+      );
     };
     client.onStompError = (frame) => {
       console.error('STOMP Error:', frame.headers['message']);
@@ -251,10 +303,10 @@ const QuizReady = () => {
       if (client) {
         // exitQuizRoom();
         client.deactivate();
-        navigate('../');
+        // navigate('../');
       }
     };
-  }, [ukidsURL, token, familyId]);
+  }, [ukidsURL, token, selectedFamilyId]);
 
   useEffect(() => {
     return () => {
@@ -314,7 +366,7 @@ const QuizReady = () => {
               <>
                 <button
                   onClick={handleBack}
-                  className="game-btn-quiz game-btn-common"
+                  className="game-btn-g game-btn-common"
                 >
                   돌아가기
                 </button>
@@ -348,6 +400,15 @@ const QuizReady = () => {
               </li>
             ))}
           </ul>
+        </div>
+        <div>
+          {nameOfUser && sessionId && connection && (
+            <ReadyCall
+              nameOfUser={nameOfUser}
+              sessionId={sessionId}
+              token={connection}
+            />
+          )}
         </div>
       </div>
     </>

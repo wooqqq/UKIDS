@@ -55,7 +55,8 @@ const ProfileButton = ({ name }: UserProps) => {
 
   // 가족방을 클릭했을 때
   const handleFamilyClick = (familyId: number) => {
-    window.location.reload();
+    // window.location.reload();
+    // nav('/');
 
     const selectedFamily = family.find(
       (family) => family.familyId === familyId,
@@ -90,6 +91,7 @@ const ProfileButton = ({ name }: UserProps) => {
           <ul className="py-2 text-sm text-gray-700 family-list-box">
             {family.map((family) => (
               <li
+                key={family.familyId}
                 className={`family-list hover:bg-gray-100`}
                 onClick={() => handleFamilyClick(family.familyId)}
               >
