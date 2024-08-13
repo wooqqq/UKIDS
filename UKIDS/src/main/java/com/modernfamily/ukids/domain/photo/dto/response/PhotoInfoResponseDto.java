@@ -16,15 +16,18 @@ public class PhotoInfoResponseDto {
 
     String imgUrl;
 
+    String s3Name;
+
     String caption;
 
     AlbumInfoResponseDto album;
 
     @Builder
-    private PhotoInfoResponseDto(Long photoId, String fileName, String imgUrl, String content, AlbumInfoResponseDto album) {
+    private PhotoInfoResponseDto(Long photoId, String fileName, String imgUrl, String s3Name, String content, AlbumInfoResponseDto album) {
         this.photoId = photoId;
         this.fileName = fileName;
         this.imgUrl = imgUrl;
+        this.s3Name = s3Name;
         this.caption = content;
         this.album = album;
     }
@@ -34,6 +37,7 @@ public class PhotoInfoResponseDto {
                 .photoId(photo.getPhotoId())
                 .fileName(photo.getPhotoOriginalName())
                 .imgUrl(photo.getPhotoUrl())
+                .s3Name(photo.getPhotoS3Name())
                 .content(caption)
                 .album(AlbumInfoResponseDto.createAlbumInfoResponseDto(photo.getAlbum(), familyResponseDto))
                 .build();

@@ -5,7 +5,10 @@ import com.modernfamily.ukids.domain.photo.entity.Photo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,4 +21,12 @@ public interface PhotoRepository extends JpaRepository<Photo, Long>, PhotoReposi
 
     @Override
     long deleteAllByAlbum(Album album);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "update Photo " +
+            "set isDelete = true " +
+            "where photoS3Name = :photoS3Name")
+    void deleteUploadedPhoto(String photoS3Name);
 }

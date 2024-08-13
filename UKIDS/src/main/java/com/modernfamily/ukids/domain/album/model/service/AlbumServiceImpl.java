@@ -57,16 +57,14 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Transactional
     public void updateAlbum(AlbumUpdateRequestDto requestDto) {
-
         Family family = familyMemberValidator.checkUserInFamilyMember(requestDto.getFamilyId()).getFamily();
 
         albumRepository.findByAlbumId(requestDto.getAlbumId()).orElseThrow(() ->
             new ExceptionResponse(CustomException.NOT_FOUND_ALBUM_EXCEPTION));
 
-        Optional<Album> existAlbum =  albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId());
-        if(!existAlbum.isEmpty())
+        Optional<Album> existAlbum = albumRepository.findByDateAndFamily_FamilyId(requestDto.getDate(), requestDto.getFamilyId());
+        if(!existAlbum.isEmpty() && existAlbum.get().getAlbumId() != requestDto.getAlbumId())
             throw new ExceptionResponse(CustomException.DUPLICATED_ALBUM_EXCEPTION);
-
 
         Album album = Album.createAlbum(requestDto.getDate(), requestDto.getTitle(), family);
         album.updateAlbum(requestDto.getAlbumId());

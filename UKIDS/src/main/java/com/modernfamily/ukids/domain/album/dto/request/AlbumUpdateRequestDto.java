@@ -25,4 +25,14 @@ public class AlbumUpdateRequestDto {
 
     @NotNull
     LocalDate date;
+
+    @Override
+    public String toString() {
+        return "AlbumUpdateRequestDto{" +
+                "albumId=" + albumId +
+                ", familyId=" + familyId +
+                ", title='" + title + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

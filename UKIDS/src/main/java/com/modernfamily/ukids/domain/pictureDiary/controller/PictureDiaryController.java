@@ -36,7 +36,7 @@ public class PictureDiaryController {
     public ResponseEntity<Map<String, Object>> getPictureDiary(@PathVariable("pictureDiaryId") Long pictureDiaryId){
         PictureDiaryResponseDto pictureDiaryResponseDto = pictureDiaryService.getPictureDiary(pictureDiaryId);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, pictureDiaryResponseDto);
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, pictureDiaryResponseDto);
     }
 
     // 날짜로 조회
@@ -48,7 +48,7 @@ public class PictureDiaryController {
 
         PictureDiaryPaginationDto pictureDiaryPaginationDto = pictureDiaryService.getPictureDiariesByDate(familyId, date, size, page);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, pictureDiaryPaginationDto);
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, pictureDiaryPaginationDto);
     }
     // 전체 조회
     @GetMapping("/all/{familyId}")
@@ -57,7 +57,7 @@ public class PictureDiaryController {
                                                                     @RequestParam(value = "page", defaultValue = "1") int page){
         PictureDiaryPaginationDto pictureDiaryPaginationDto = pictureDiaryService.getPictureDiariesAll(familyId, size, page);
 
-        return httpResponseUtil.createResponse(HttpMethodCode.POST, pictureDiaryPaginationDto);
+        return httpResponseUtil.createResponse(HttpMethodCode.GET, pictureDiaryPaginationDto);
     }
 
     @DeleteMapping("/{pictureDiaryId}")
