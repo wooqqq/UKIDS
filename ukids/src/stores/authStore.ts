@@ -97,9 +97,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   userLogin: async (id, password) => {
     try {
       // 로그인 API 요청
-      const response = await axios.post(`${ukidsURL}/user/login`, {
-        id: id,
-        password: password,
+      const response = await axios.post(`${ukidsURL}/api/user/login`, {
+        id,
+        password,
       });
 
       const { result } = response.data;
