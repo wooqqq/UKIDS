@@ -35,6 +35,20 @@ body {
   /* overflow: hidden; */
   min-width: 1440px;
   width: 100%;
+
+  /* 드래그 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 드래그 허용 */
+.draggable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 /* 기능 박스 수정*/

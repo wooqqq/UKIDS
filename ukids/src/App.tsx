@@ -71,7 +71,7 @@ const App = () => {
   // }, [location.pathname]);
 
   return (
-    <div className="">
+    <div className="-webkit-user-select:none -moz-user-select:none -ms-user-select:none user-select:none">
       <Header />
       <div
         className={
