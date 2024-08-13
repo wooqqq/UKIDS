@@ -92,7 +92,7 @@ const App = () => {
             <Route path="/family/*" element={<FamilyCreateFind />} />
             <Route path="/main" element={<Main />} />
             <Route path="/schedule/*" element={<Schedule />}></Route>
-            <Route path="/letters" element={<Letters />} />
+            <Route path="/letters/*" element={<Letters />} />
             <Route path="/albums" element={<Albums />} />
             {/* 앨범 중첩 라우팅 */}
             <Route path="/albums/:albumId" element={<AlbumDetail />} />
