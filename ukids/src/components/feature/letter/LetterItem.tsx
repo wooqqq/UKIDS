@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import openLetterImg from '@/assets/openLetter.png';
 import letterImg from '@/assets/letterImg.png';
 import sendLetter from '@/assets/sendLetter.png';
-import '@components/feature/Letters/letter.css';
+import '@components/feature/letter/letter.css';
 interface Letter {
   letterId: number;
   content: string;
