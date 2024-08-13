@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import api from '@/util/api.ts';
+import { useFamilyStore } from '@/stores/familyStore';
 
 interface ModalProps {
   content: string;
@@ -16,6 +17,7 @@ export const Modal = ({
   setModalState,
   deleteElement,
 }: ModalProps) => {
+  const {selectedFamilyId} = useFamilyStore();
   const navigate = useNavigate();
   // const modalRef = useRef<HTMLDivElement>(null);
   const { token } = useAuthStore();
@@ -50,7 +52,9 @@ export const Modal = ({
     const checkPassword = async () => {
         const url = "/family/pwcheck";
         const config = {
-            familyId : 1,
+
+            // 삭제용 familyId
+            familyId : selectedFamilyId,
             password
         }
 

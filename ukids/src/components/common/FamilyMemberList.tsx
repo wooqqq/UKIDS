@@ -1,12 +1,12 @@
 // 가족방, 게임에 사용할 참여가족 리스트 오른쪽 사이드에 위치할 예정
 import { useEffect, useState } from 'react';
-import callIcon from '../../../assets/subway_call-2.png';
-import discallIcon from '../../../assets/subway_call-3.png';
+import callIcon from '@/assets/subway_call-2.png';
+import discallIcon from '@/assets/subway_call-3.png';
 
 import { useNavigate } from 'react-router-dom';
-import { useVideoCallStore } from '../../../stores/videoCallStore';
-import VideoToggleButton from '../family_communication/VideoToggleButton';
-import AudioToggleButton from '../family_communication/AudioToggleButton';
+import { useVideoCallStore } from '@stores/videoCallStore';
+import VideoToggleButton from '@components/feature/family_communication/VideoToggleButton';
+import AudioToggleButton from '@components/feature/family_communication/AudioToggleButton';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;

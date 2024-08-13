@@ -3,7 +3,9 @@
     align-items: flex-start; /* 자식 요소들을 컨테이너의 상단에 정렬 */
     gap: 10px;           /* 요소 사이의 간격 설정 */
   }
-  
+
+
+
   
   .input-content{
     border: 3px solid  #f3f2f2;
@@ -105,10 +107,10 @@
 
 
 /* 날짜 */
-input[type="date"] {
-    font-family: 'UhBeejung', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
+/* input[type="date"] {
+    font-family: 'UhBeejung', sans-serif;
 
-  }
+  } */
 
 
 .flip-page-container {

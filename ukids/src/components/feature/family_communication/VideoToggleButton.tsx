@@ -1,6 +1,6 @@
 import React from 'react';
-import cam from '../../../assets/pepicons-pencil_camera.png';
-import { useVideoCallStore } from '../../../stores/videoCallStore';
+import cam from '@/assets/pepicons-pencil_camera.png';
+import { useVideoCallStore } from '@stores/videoCallStore';
 
 const VideoToggleButton: React.FC = () => {
   const { isVideoEnabled, toggleVideo } = useVideoCallStore();

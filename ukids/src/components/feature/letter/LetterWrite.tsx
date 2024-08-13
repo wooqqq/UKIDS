@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useFamilyStore } from "@/stores/familyStore";
+import { useTreeStore } from "@/stores/treeStore";
 import api from "@/util/api";
 import BlueButton from "@components/common/BlueButton";
 import axios from "axios";
@@ -35,6 +37,10 @@ export const LetterWrite = () => {
 
     const {fromUserId} = useParams();
 
+    const { selectedFamilyId } = useFamilyStore();
+
+    const { updateTreeExp } = useTreeStore();
+
     const [members, setMembers] = useState<Member[]>([]);
 
     const [toMember, setToMember] = useState<UserFamilyDto>();
@@ -56,7 +62,7 @@ export const LetterWrite = () => {
     }
 
     const getMembers = async () => {
-        const url = `/member/11 `;
+        const url = `/member/${selectedFamilyId}`;
         
         const {data} = await api.get(url);
         console.log(data);
@@ -78,7 +84,8 @@ export const LetterWrite = () => {
         if(toMember){
             console.log("답장");
             inputData = {
-                familyId: 11,
+                // 가족 ID 전역에서 가져올 수 있도록 수정
+                familyId: selectedFamilyId,
                 content: content,
                 toUserId: toMember.userId
             }
@@ -91,13 +98,17 @@ export const LetterWrite = () => {
                 return;
             }
             inputData = {
-                familyId: 11,
+                // 가족 ID 전역에서 가져올 수 있도록 수정
+                familyId: selectedFamilyId,
                 content: content,
                 toUserId: toUser.userId
             }
         }
         const {data} = await api.post(url, inputData);
         
+        // 편지 작성 시 나무 경험치 증가
+        updateTreeExp(selectedFamilyId, 75);
+
         navigate('/letters')
 
         console.log(data);
