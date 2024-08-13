@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import api from '@/util/api.ts';
+import { useFamilyStore } from '@/stores/familyStore';
 
 interface ModalProps {
   content: string;
@@ -16,6 +17,7 @@ export const Modal = ({
   setModalState,
   deleteElement,
 }: ModalProps) => {
+  const {selectedFamilyId} = useFamilyStore();
   const navigate = useNavigate();
   // const modalRef = useRef<HTMLDivElement>(null);
   const { token } = useAuthStore();
@@ -52,7 +54,7 @@ export const Modal = ({
         const config = {
 
             // 삭제용 familyId
-            familyId : 21,
+            familyId : selectedFamilyId,
             password
         }
 
@@ -67,9 +69,6 @@ export const Modal = ({
         else {
             if(confirm("삭제하시겠습니까?")){
                 deleteElement();
-
-                // 수정 : nav 할 때 삭제 상태 갱신을 요청해야함
-                navigate('/paintdiary');
             }
         }
         console.log(data);

@@ -1,5 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
+import LetterBox from '../components/feature/letters/LetterBox';
+=======
 import LetterBox from '../components/feature/letter/LetterBox';
+>>>>>>> develop/front
 import FamilyTree from '../components/feature/family/FamilyTree';
 import CalendarBox from '../components/feature/schedule/CalendarBox';
 // import { useScheduleStore } from '../stores/scheduleStore';

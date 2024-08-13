@@ -19,12 +19,13 @@
 // 절대경로로 수정하기
 
 import axios from 'axios';
+import api from '@/util/api';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../common/common.css';
 import { useAuthStore } from '../../../stores/authStore';
 // import { useAuthStore } from '@/stores/authStore';
-
+import { useFamilyStore } from '@/stores/familyStore';
 import BlueButton from '../../common/BlueButton';
 // import BlueButton from '@/common/BlueButton';
 import '../../feature/album/Albums.css';
@@ -71,8 +72,7 @@ const Albums: React.FC = () => {
 
   // 임시 familyId 6. (ssafy2가 속한 가족)
     // 앨범 12 개 등록되어있음 (총 3페이지)
-  const familyId = '6';
-
+  const {selectedFamilyId} = useFamilyStore();
 
 
 
@@ -83,11 +83,7 @@ const Albums: React.FC = () => {
 
         // 불러온 전체 album에 페이지가 있음
         // 첫 페이지 데이터를 불러와서 전체 페이지 수 확인
-        let response = await axios.get(`https://i11b306.p.ssafy.io/api/album/all/${familyId}?page=1`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        let response = await api.get(`/album/all/${selectedFamilyId}?page=1`);
 
         // 전체 페이지 (예: 3)
         const totalPages = response.data.result.totalPage;
@@ -98,9 +94,7 @@ const Albums: React.FC = () => {
         // 2페이지 ~ total page 데이터 불러오기
 
         for (let page = 2; page <= totalPages; page++) {
-          response = await axios.get(`https://i11b306.p.ssafy.io/api/album/all/${familyId}?page=${page}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
+          response = await api.get(`/album/all/${selectedFamilyId}?page=${page}`);
           allAlbums = allAlbums.concat(response.data.result.albumResponseDtoList);
         }
 
@@ -115,14 +109,21 @@ const Albums: React.FC = () => {
         // setAlbums(allAlbums);
 
         const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
-          const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
+          const photosResponse = await api.get<AlbumPhotosResponse>(`/photo/all/${album.albumId}`);
           return {
             ...album,
             photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
           };
         }));
+        // const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
+        //   const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
+        //     headers: { 'Authorization': `Bearer ${token}` }
+        //   });
+        //   return {
+        //     ...album,
+        //     photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
+        //   };
+        // }));
         
         setAlbums(albumsWithPhotos);
         
@@ -133,10 +134,10 @@ const Albums: React.FC = () => {
       }
     };
 
-    if (token && familyId) {
+    if (token && selectedFamilyId) {
       fetchAlbums();
     }
-  }, [token, familyId]);
+  }, [token, selectedFamilyId]);
 
   return (
     <div className="relative feature-box">
@@ -147,7 +148,7 @@ const Albums: React.FC = () => {
             <BlueButton name="만들기" path="/albums/upload" />
           </div>
           <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
-            앨범 {albums.length} {familyId} 
+            앨범 {albums.length} {selectedFamilyId} 
           </div>
           <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center">
             아직 앨범이 없어요!<br />앨범을 만들러 가볼까요?
