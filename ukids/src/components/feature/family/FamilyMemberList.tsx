@@ -12,7 +12,7 @@ interface FamilyMemberListProps {
   isChattingRoom: boolean;
 }
 
-const number = 4;
+const number = 3;
 
 const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
   const [onlineFamilyNum, setOnlineFamilyNum] = useState(0);
@@ -52,7 +52,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
         </div>
 
         {/* 가족대화방에서만 사용될 하단 버튼 영역 */}
-        {isChattingRoom ? (
+        {isChattingRoom && (
           <div className="flex-none m-2">
             {/* 통화버튼 */}
             <div className="flex justify-center mb-2">
@@ -74,7 +74,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
               <AudioToggleButton />
             </div>
           </div>
-        ) : null}
+        )}
       </div>
     </>
   );
