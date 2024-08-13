@@ -82,24 +82,19 @@ const UserUpdate = () => {
 
     // 이메일 중복 확인
     if (form.email) {
-      console.log(userInfo?.email);
-      if (userInfo && form.email !== userInfo.email) {
-        const isEmailDuplicate = await checkedEmail(form.email);
-        if (!isEmailDuplicate) {
-          setEmailError('이미 사용 중인 이메일입니다.');
-          return;
-        }
+      const isEmailDuplicate = await checkedEmail(form.email);
+      if (!isEmailDuplicate) {
+        setEmailError('이미 사용 중인 이메일입니다.');
+        return;
       }
     }
 
     // 전화번호 중복 확인
     if (form.phone) {
-      if (userInfo && form.phone !== userInfo.phone) {
-        const isPhoneDuplicate = await checkedPhone(form.phone);
-        if (!isPhoneDuplicate) {
-          setPhoneError('이미 사용 중인 전화번호입니다.');
-          return;
-        }
+      const isPhoneDuplicate = await checkedPhone(form.phone);
+      if (!isPhoneDuplicate) {
+        setPhoneError('이미 사용 중인 전화번호입니다.');
+        return;
       }
     }
 
