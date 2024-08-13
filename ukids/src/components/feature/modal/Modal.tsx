@@ -50,7 +50,7 @@ export const Modal = ({
     const checkPassword = async () => {
         const url = "/family/pwcheck";
         const config = {
-            familyId : 6,
+            familyId : 1,
             password
         }
 
@@ -65,9 +65,6 @@ export const Modal = ({
         else {
             if(confirm("삭제하시겠습니까?")){
                 deleteElement();
-
-                // 수정 : nav 할 때 삭제 상태 갱신을 요청해야함
-                navigate('/paintdiary');
             }
         }
         console.log(data);

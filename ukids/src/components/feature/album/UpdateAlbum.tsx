@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuthStore } from '../../../stores/authStore';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '@/util/api';
 
 
@@ -22,15 +22,23 @@ interface Photo {
 }
 
 interface UploadedPhoto {
+    photoId: number;
     fileName: string;
     imgUrl: string;
     s3Name: string;
     caption: string;
 }
 
+interface Caption {
+  captionId: number;
+  content: string;
+  photoId: number;
+}
+
 
 
 export const UpdateAlbum = () => {
+
   const [title, setTitle] = useState('');
   const [date, setDate] = useState<Date | null>(new Date());
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -38,8 +46,9 @@ export const UpdateAlbum = () => {
   const [deletePhotos, setDeletePhotos] = useState<UploadedPhoto[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
+  const [uploadedCaption, setUploadedCaption] = useState<Caption[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const token = useAuthStore((state) => state.token);
+  const navigate = useNavigate();
   
   const {albumId} = useParams();
 
@@ -74,14 +83,23 @@ export const UpdateAlbum = () => {
 
 
   const uploadPhotos = async (albumData: any) => {
+    // 삭제된 사진 없애기
     deletePhotos.map(photo => {
         const s3Name = photo.s3Name.substring(6);
-        console.log(s3Name);
         const url = `/photo/uploaded/${s3Name}`;
-        console.log(url);
         const {data} = api.delete(url);
+    })
 
-        console.log(data);
+    // 삭제되지 않은 사진의 캡션 수정
+    uploadedCaption.map(caption => {
+      const url = `/caption`;
+      const inputData = {
+        captionId: caption.captionId,
+        photoId: caption.photoId,
+        content: caption.content
+      }
+      const {data} = api.put(url, inputData);
+      console.log(data);
     })
 
 
@@ -90,7 +108,7 @@ export const UpdateAlbum = () => {
         const formData = new FormData();
         formData.append('multipartFile', photo.file);
         formData.append('caption', photo.caption);
-        formData.append('familyId', albumData.familyId);
+        formData.append('familyId', albumData.family.familyId);
         formData.append('date', albumData.date);
   
         return api.post('/photo', formData, {
@@ -109,6 +127,8 @@ export const UpdateAlbum = () => {
       console.error('사진 업로드 실패:', error);
       alert('사진 업로드에 실패했습니다.');
     }
+
+    navigate(`/albums/${albumId}`)
   };
 
   const updateAlbum = async () => {
@@ -123,7 +143,7 @@ export const UpdateAlbum = () => {
 
     const url = `/album/${albumId}`;
     const{data} = await api.get(url);
-
+    console.log(data.result);
     uploadPhotos(data.result);
   };
 
@@ -134,11 +154,21 @@ export const UpdateAlbum = () => {
     console.log(data);
 
     setUploadedPhotos(data.result.photoList);
+
+    for(let i=0; i<data.result.photoList.length; i++){
+      console.log("photoId: ", data.result.photoList[i].photoId);
+      const urlCaption = `/caption/${data.result.photoList[i].photoId}`;
+      const resp = await api.get(urlCaption);
+      console.log(resp.data.result);
+      setUploadedCaption(prevCaption => [...prevCaption, resp.data.result]);
+      
+    }
   }
 
   const deletePrevPhoto = (photo: UploadedPhoto, index: any) => {
     setUploadedPhotos(prevUploadedPhotos => prevUploadedPhotos.filter((_, i) => i !== index));
     setDeletePhotos(prevDeletePhoto => [...prevDeletePhoto, photo]);
+    setUploadedCaption(prevUploadedCaptions => prevUploadedCaptions.filter((_, i) => i !== index));
     console.log(deletePhotos);
   }
 
@@ -239,7 +269,14 @@ export const UpdateAlbum = () => {
               onClick={() => deletePrevPhoto(photo, index)}
             />
             <img src={photo.imgUrl} alt={`Preview ${index}`} className="w-full h-auto rounded" />
-            <p>{photo.caption}</p>
+            {/* <p>{uploadedCaption[index]?.content}</p> */}
+            <input className='text-center w-[100px]' type="text" value={uploadedCaption[index]?.content} onChange={(e) => {
+              setUploadedCaption(prevCaptions => 
+                prevCaptions.map((caption, i) => 
+                  i === index ? {...caption, content: e.target.value} : caption
+                ) 
+              )
+            }}/>
           </div>
         ))}
         {photos.map((photo, index) => (
@@ -251,7 +288,13 @@ export const UpdateAlbum = () => {
               onClick={() => handleDeletePhoto(index)}
             />
         <img src={URL.createObjectURL(photo.file)} alt={`Preview ${index}`} className="w-full h-auto rounded" />
-            <p>{photo.caption}</p>
+            {/* <p>{photo.caption}</p> */}
+            <input className='text-center w-[100px]' type="text" value={photo.caption} onChange={(e) => 
+              setPhotos(prevPhotos => 
+                prevPhotos.map((photo, i) => 
+                  i === index ? {...photo, caption: e.target.value} : photo
+                ) 
+              )}/>
           </div>
         ))}
       </div>
