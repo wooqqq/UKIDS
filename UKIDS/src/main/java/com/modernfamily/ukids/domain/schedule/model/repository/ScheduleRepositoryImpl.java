@@ -26,8 +26,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 
         return jpaQueryFactory.selectFrom(qSchedule)
                 .where(qSchedule.family.eq(family)
-                        .and(qSchedule.startTime.lt(endOfDay))
-                        .and(qSchedule.endTime.ne(startOfDay)))
+                        .and(qSchedule.startTime.loe(endOfDay))
+                        .and(qSchedule.endTime.goe(startOfDay)))
                 .fetch();
     }
 

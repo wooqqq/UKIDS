@@ -60,7 +60,7 @@ public class QuizController {
 
     }
 
-    // 게임방 정보 반환
+    // 최대 퀴즈 개수 반환
     @MessageMapping("/quiz/quiz-max")
     public void updateMaxQuestionCounts(@RequestBody Map<String, Object> payload) {
         Long familyId = Long.parseLong(payload.get("familyId").toString());
