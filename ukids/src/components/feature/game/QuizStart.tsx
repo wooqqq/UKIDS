@@ -256,7 +256,7 @@ const QuizStart = () => {
   };
 
   const resetTimer = () => {
-    setSecondsLeft(20);
+    setSecondsLeft(12);
   };
 
   return (
