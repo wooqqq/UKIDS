@@ -16,6 +16,7 @@ export const GrowthFolderList = () => {
     const [modalState, setModalState] = useState<boolean>(false);
 
 
+
     const onModalOpen = () => {
       setModalState(!modalState);
     }
@@ -28,6 +29,7 @@ export const GrowthFolderList = () => {
         const {data} = await api.get(url);
 
         console.log(data.result);
+        console.log("강경민")
         setFolders(data.result.growthFolders);
 
     }

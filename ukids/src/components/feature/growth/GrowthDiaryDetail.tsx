@@ -52,6 +52,7 @@ export const GrowthDiaryDetail = () => {
         const {data} = await api.get(url);
 
         console.log(data);
+        console.log(1111111)
         setDiary(data.result);
     }
 
@@ -102,7 +103,7 @@ export const GrowthDiaryDetail = () => {
             </Link>
 
 
-
+            {/* 삭제 고치기 */}
             <span className="home-modal-open-Button" onClick={onModalOpen}>
                 <button className="common-btn red-font" style={{ position: 'absolute', top: '27px', right: '30px' }}>
                 삭제
@@ -120,6 +121,50 @@ export const GrowthDiaryDetail = () => {
 
 
 
+        <div className="container">
+
+        {/* 그림 등록 네모 박스  */}
+        <div className="image-box">
+
+        <label className="input-file-box" htmlFor="fileUpload">
+            
+        {/* 이미지 */}
+        <div>
+            <img src={diary?.imageUrl} alt="" />
+        </div>  
+        
+        </label>
+        </div>
+
+
+        <div>
+
+        {/* 글자 입력창  */}
+        <div className="title-content">
+
+                                                        
+        
+            <input
+            type="text" 
+            id="title" 
+            value={diary?.title}
+            placeholder="제목" 
+            />
+
+
+                
+                
+            <textarea
+            className="grwoth-input"
+            value={diary?.content}
+            
+            ></textarea>
+        </div>
+
+        </div>
+
+
+            </div>
 
 
 
@@ -131,29 +176,23 @@ export const GrowthDiaryDetail = () => {
 
 
 
-
-
-
-
-
-
-
-           
 
 
             
 
-            <div>
-                <div>{diary?.date}</div>
+             
+                {/* <div>{diary?.date}</div>
                 <div><img src={diary?.imageUrl} alt="" /></div>
-                <div>{diary?.content}</div>
+                <div>{diary?.content}</div> */}
+
+
 
                 <div>
                     {modalState && (
                         <Modal content={content} modalState={modalState} setModalState={setModalState} deleteElement={deleteDiary}/>
                     )}
                 </div>
-            </div>
+            
         </div>
 
     )

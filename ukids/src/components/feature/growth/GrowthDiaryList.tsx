@@ -9,6 +9,8 @@ import WhiteButton from '@components/common/WhiteButton';
 import { Modal } from "@components/feature/modal/Modal";
 import { useNavigate } from "react-router-dom";
 
+
+import './GrowthDiaryList.css'
 interface Diary{
     recordId: number;
     writerId: number;
@@ -51,6 +53,7 @@ export const GrowthDiaryList = () => {
         const {data} = await api.get(url);
 
         console.log(data.result);
+        console.log("강경민")
         setDiaries(data.result.growthRecords);
 
     }
@@ -123,15 +126,18 @@ export const GrowthDiaryList = () => {
             {diaries.length === 0 ? (
                 <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">아직 성장일지가 없어요!<br/>성장일지를 만들러 가볼까요?</div>
             ) : (
-            <div className="relative mt-40">
+            <div className="diary-grid-container">
                 {diaries.map((item) => (
                     // 수정: 현재의 폴더 아이디도 함께 전달
                     <Link to={`/growthdiary/diary/${item.recordId}?folderId=${folderId}`}>
-                        <GrowthDiaryItem key={item.recordId} title={item.title} date={item.date} imageUrl={item.imageUrl}/>
+                        <GrowthDiaryItem className="growth-diary-item"
+                        key={item.recordId} title={item.title} date={item.date} imageUrl={item.imageUrl}/>
                     </Link>
                 ))}
             </div>
-
+            
+            
+    
             )}
 
             <div>
@@ -153,6 +159,8 @@ export const GrowthDiaryList = () => {
 
 
 
+            <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p>
         </div>
+        
     )
 }

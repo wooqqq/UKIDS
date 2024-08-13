@@ -14,7 +14,7 @@
 
   position: relative;
 
-  border: 5px solid #FFEFCC;
+  border: 5px solid #ffcce0;
   text-align: center;
 
   width: 400px;
@@ -37,7 +37,7 @@
 /*+글자*/
 .input-file-box span {
   font-size: 76px; /* 폰트 크기 키우기 */
-  color: #FFEFCC; /* 폰트 색상 지정 (오렌지색) */
+  color: #ffcce0; /* 폰트 색상 지정 (오렌지색) */
   cursor: pointer; /* 마우스 오버 시 커서 변경 */  
   position: absolute;
   top: 50%;
