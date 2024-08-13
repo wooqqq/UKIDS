@@ -23,6 +23,7 @@ const UserUpdate = () => {
 
   const [pwError, setPwError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [dateError, setDateError] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
   useEffect(() => {
@@ -59,6 +60,23 @@ const UserUpdate = () => {
     // 비밀번호와 확인 비밀번호가 일치하지 않을 때
     if (form.password && form.password !== form.confirmPassword) {
       setPwError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    // 비밀번호 빈 값 불가능
+    if (!form.password || !form.confirmPassword) {
+      setPwError('비밀번호를 입력하세요.');
+      return;
+    }
+
+    // 생년월일 유효성 검사
+    const today = new Date();
+    const birthDate = new Date(form.birthDate);
+    const isInvalidBirthDate = birthDate > today;
+
+    // 생년월일 유효성 검사
+    if (isInvalidBirthDate) {
+      setDateError('생년월일이 오늘 이후의 날짜입니다. 다시 입력해 주세요.');
       return;
     }
 
@@ -110,10 +128,10 @@ const UserUpdate = () => {
     <>
       {/* 회원수정 박스 */}
       <div className="px-[100px]">
-        <form onSubmit={handleUpdateUser} className="join-form w-[140%]">
+        <form onSubmit={handleUpdateUser} className="join-form w-[450px]">
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="id" className="text-[#555] font-bold">
                   아이디
                 </label>
@@ -124,13 +142,13 @@ const UserUpdate = () => {
                 placeholder="아이디"
                 value={form.id}
                 readOnly
-                className="input-box px-5 font-semibold text-[#555555] bg-[#eee]"
+                className="input-box px-5 w-80 font-semibold text-[#555555] bg-[#eee]"
               />
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="password" className="text-[#555] font-bold">
                   비밀번호
                 </label>
@@ -141,13 +159,13 @@ const UserUpdate = () => {
                 placeholder="비밀번호 입력"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label
                   htmlFor="confirm-password"
                   className="text-[#555] font-bold"
@@ -163,16 +181,16 @@ const UserUpdate = () => {
                 onChange={(e) =>
                   setForm({ ...form, confirmPassword: e.target.value })
                 }
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">{pwError ? pwError : ''}</p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="name" className="text-[#555] font-bold">
                   이름
                 </label>
@@ -183,13 +201,13 @@ const UserUpdate = () => {
                 placeholder="이름"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="birth" className="text-[#555] font-bold">
                   생년월일
                 </label>
@@ -202,13 +220,16 @@ const UserUpdate = () => {
                 onChange={(e) =>
                   setForm({ ...form, birthDate: e.target.value })
                 }
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{dateError ? dateError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label className="text-[#555] font-bold">이메일</label>
               </div>
               <input
@@ -217,18 +238,16 @@ const UserUpdate = () => {
                 placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">
-                {emailError ? emailError : ''}
-              </p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="phone" className="text-[#555] font-bold">
                   휴대전화번호
                 </label>
@@ -239,13 +258,11 @@ const UserUpdate = () => {
                 placeholder="[선택] 휴대전화번호"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">
-                {phoneError ? phoneError : ''}
-              </p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{phoneError ? phoneError : ''}</p>
             </div>
           </section>
           <BlueButton name="수정 완료" type="submit" path="" />

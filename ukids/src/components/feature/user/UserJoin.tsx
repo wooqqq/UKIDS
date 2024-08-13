@@ -28,9 +28,24 @@ const UserJoin = () => {
   const [pwError, setPwError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [dateError, setDateError] = useState('');
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
+
+    // 생년월일 유효성 검사
+    const today = new Date();
+    const birthDate = new Date(form.birthDate);
+    const isInvalidBirthDate = birthDate > today;
+
+    // 아이디 중복 확인
+    if (form.id) {
+      const isIdDuplicate = await checkedId(form.id);
+      if (!isIdDuplicate) {
+        setIdError('이미 사용 중인 아이디입니다.');
+        return;
+      }
+    }
 
     if (form.password !== form.confirmPassword) {
       setPwError('비밀번호가 일치하지 않습니다.');
@@ -43,15 +58,11 @@ const UserJoin = () => {
       return;
     }
 
-    // 아이디 중복 확인
-    if (form.id) {
-      const isIdDuplicate = await checkedId(form.id);
-      if (!isIdDuplicate) {
-        setIdError('이미 사용 중인 아이디입니다.');
-        return;
-      }
+    // 생년월일 유효성 검사
+    if (isInvalidBirthDate) {
+      setDateError('생년월일이 오늘 이후의 날짜입니다. 다시 입력해 주세요.');
+      return;
     }
-
     // 이메일 중복 확인
     if (form.email) {
       const isEmailDuplicate = await checkedEmail(form.email);
@@ -86,10 +97,10 @@ const UserJoin = () => {
     <>
       {/* 회원가입 박스 */}
       <div className="common-feature-box w-[1000px] h-[620px] p-[40px]">
-        <form onSubmit={handleJoin} className="join-form w-[60%]">
+        <form onSubmit={handleJoin} className="join-form w-[520px]">
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="id" className="text-[#555] font-bold">
                   아이디
                 </label>
@@ -100,16 +111,16 @@ const UserJoin = () => {
                 placeholder="아이디"
                 value={form.id}
                 onChange={(e) => setForm({ ...form, id: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">{idError ? idError : ''}</p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{idError ? idError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="password" className="text-[#555] font-bold">
                   비밀번호
                 </label>
@@ -120,13 +131,13 @@ const UserJoin = () => {
                 placeholder="비밀번호 입력"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label
                   htmlFor="confirm-password"
                   className="text-[#555] font-bold"
@@ -142,16 +153,16 @@ const UserJoin = () => {
                 onChange={(e) =>
                   setForm({ ...form, confirmPassword: e.target.value })
                 }
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">{pwError ? pwError : ''}</p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="name" className="text-[#555] font-bold">
                   이름
                 </label>
@@ -162,13 +173,13 @@ const UserJoin = () => {
                 placeholder="이름"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="birth" className="text-[#555] font-bold">
                   생년월일
                 </label>
@@ -181,13 +192,16 @@ const UserJoin = () => {
                 onChange={(e) =>
                   setForm({ ...form, birthDate: e.target.value })
                 }
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{dateError ? dateError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label className="text-[#555] font-bold">이메일</label>
               </div>
               <input
@@ -196,18 +210,16 @@ const UserJoin = () => {
                 placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">
-                {emailError ? emailError : ''}
-              </p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
             <div className="flex justify-between items-center">
-              <div className="w-full text-end mr-2">
+              <div className="w-28 text-end mr-2">
                 <label htmlFor="phone" className="text-[#555] font-bold">
                   휴대전화번호
                 </label>
@@ -218,16 +230,16 @@ const UserJoin = () => {
                 placeholder="[선택] 휴대전화번호"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="input-box px-5 font-semibold text-[#555555]"
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
-            <div className="text-end">
-              <p className="text-[#F03F2F] text-sm">
-                {phoneError ? phoneError : ''}
-              </p>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{phoneError ? phoneError : ''}</p>
             </div>
           </section>
-          <BlueButton name="회원가입" type="submit" path="" />
+          <div className="flex justify-center">
+            <BlueButton name="회원가입" type="submit" path="" />
+          </div>
         </form>
       </div>
     </>
