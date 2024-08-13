@@ -400,13 +400,15 @@ const QuizReady = () => {
             ))}
           </ul>
         </div>
-        {nameOfUser && sessionId && connection && (
-          <ReadyCall
-            nameOfUser={nameOfUser}
-            sessionId={sessionId}
-            token={connection}
-          />
-        )}
+        <div>
+          {nameOfUser && sessionId && connection && (
+            <ReadyCall
+              nameOfUser={nameOfUser}
+              sessionId={sessionId}
+              token={connection}
+            />
+          )}
+        </div>
       </div>
     </>
   );

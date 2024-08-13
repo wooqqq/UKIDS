@@ -1,6 +1,7 @@
 import React from 'react';
 import { Publisher, Subscriber } from 'openvidu-browser';
 import './readysessions.css';
+import AudioToggleButton from '../family_communication/AudioToggleButton';
 
 interface SessionProps {
   publisher: { publisher: Publisher; name: string } | null;
@@ -27,6 +28,9 @@ const ReadySession: React.FC<SessionProps> = ({ publisher, subscribers }) => {
               }}
             />
             <div className="name-tag">{subscriberObj.name}</div>
+            <div>
+              <AudioToggleButton></AudioToggleButton>
+            </div>
           </div>
         ))}
       </div>
@@ -41,6 +45,9 @@ const ReadySession: React.FC<SessionProps> = ({ publisher, subscribers }) => {
             }}
           />
           <div className="name-tag">{publisher.name}</div>
+          <div>
+            <AudioToggleButton></AudioToggleButton>
+          </div>
         </div>
       )}
     </div>
