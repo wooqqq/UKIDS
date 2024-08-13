@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "@/util/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import BlueButton from "@components/common/BlueButton";
 
 interface Diary {
@@ -13,6 +13,15 @@ interface Diary {
 }
 
 export const GrowthDiaryUpdate = () => {
+    // 안됨
+    // const {folderId} = useParams();
+
+    // url 직접 추출
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const folderId = queryParams.get('folderId');
+
+
     const { recordId } = useParams();
     const [imageName, setImageName] = useState();
     const [imageCheck, setImageCheck] = useState<boolean>(false);
@@ -70,7 +79,10 @@ export const GrowthDiaryUpdate = () => {
         });
 
         console.log(data);
-        navigate(`/growthdiary/diary/${recordId}`)
+        // 수정: 현재의 폴더 아이디도 함께 전달 
+        console.log(11111111111)
+        console.log(folderId)
+        navigate(`/growthdiary/diary/${recordId}?folderId=${folderId}`)
 
     }
 
@@ -81,7 +93,7 @@ export const GrowthDiaryUpdate = () => {
 
     useEffect(() => {
         getDiary();
-    }, [])
+    }, [folderId])
 
     return (
 
@@ -90,7 +102,7 @@ export const GrowthDiaryUpdate = () => {
                 <div className="absolute left-0 right-0 top-0 bottom-0 bg-[#fff] rounded-[20px]"></div>
             </div>
             <div className="absolute left-[764px] top-[23px]">
-                <BlueButton name="수정" path="/" onClick={updateDiary} />
+                <BlueButton name="등록" path="/" onClick={updateDiary} />
             </div>
             <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">성장일지</div>
 

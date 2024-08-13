@@ -23,12 +23,12 @@ interface Diary{
 }
 
 
-// 추가  : 폴더 정보 
+// // 추가  : 폴더 정보 
 
-interface Folder {
-    folderId: 21;
-    folderName: string;
-}
+// interface Folder {
+//     folderId: 21;
+//     folderName: string;
+// }
 
 
 
@@ -125,7 +125,8 @@ export const GrowthDiaryList = () => {
             ) : (
             <div className="relative mt-40">
                 {diaries.map((item) => (
-                    <Link to={`/growthdiary/diary/${item.recordId}`}>
+                    // 수정: 현재의 폴더 아이디도 함께 전달
+                    <Link to={`/growthdiary/diary/${item.recordId}?folderId=${folderId}`}>
                         <GrowthDiaryItem key={item.recordId} title={item.title} date={item.date} imageUrl={item.imageUrl}/>
                     </Link>
                 ))}
