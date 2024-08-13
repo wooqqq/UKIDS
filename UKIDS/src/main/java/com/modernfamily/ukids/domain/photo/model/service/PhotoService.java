@@ -15,4 +15,6 @@ public interface PhotoService {
     PhotoInfoResponseDto getPhotoInfo(Long photoId);
 
     PhotoListPagenationResponseDto getPhotoList(int size, int page, Long albumId);
+
+    void deleteUploadedPhoto(String photoS3Name) throws IOException;
 }

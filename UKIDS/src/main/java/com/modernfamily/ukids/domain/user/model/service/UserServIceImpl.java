@@ -114,12 +114,24 @@ public class UserServIceImpl implements UserService{
     public boolean emailExist(String email) {
         if(email.isEmpty()) return false;
 
+        String id = CustomUserDetails.contextGetUserId();
+        if(id != null){
+            User user = userRepository.findById(id).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+            if(email.equals(user.getEmail())) return false;
+        }
+
         return userRepository.existsByEmail(email);
     }
 
     @Override
     public boolean phoneExist(String phone){
         if(phone.isEmpty()) return false;
+
+        String id = CustomUserDetails.contextGetUserId();
+        if(id != null){
+            User user = userRepository.findById(id).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+            if(phone.equals(user.getPhone())) return false;
+        }
 
         return userRepository.existsByPhone(phone);
     }

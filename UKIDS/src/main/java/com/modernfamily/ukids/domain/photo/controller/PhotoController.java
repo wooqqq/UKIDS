@@ -35,6 +35,13 @@ public class PhotoController {
         return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_PHOTO.getMessage());
     }
 
+    @DeleteMapping("/uploaded/{photoS3Name}")
+    public ResponseEntity<Map<String, Object>> deleteUploadedPhoto(@PathVariable("photoS3Name") String photoS3Name) throws IOException {
+        photoService.deleteUploadedPhoto("photo/"+photoS3Name);
+
+        return httpResponseUtil.createResponse(HttpMethodCode.DELETE, SuccessMessage.SUCCESS_DELETE_PHOTO);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getPhoto(@PathVariable("id") Long photoId) {
         return httpResponseUtil.createResponse(HttpMethodCode.GET, photoService.getPhotoInfo(photoId));

@@ -125,4 +125,14 @@ public class PhotoServiceImpl implements PhotoService {
 
         return pagenationResponseDto;
     }
+
+    @Transactional
+    @Override
+    public void deleteUploadedPhoto(String photoS3Name) throws IOException {
+
+        s3Manager.deleteFile(photoS3Name);
+        photoRepository.deleteUploadedPhoto(photoS3Name);
+
+
+    }
 }
