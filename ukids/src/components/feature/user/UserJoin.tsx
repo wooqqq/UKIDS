@@ -20,19 +20,65 @@ const UserJoin = () => {
 
   const nav = useNavigate();
   const joinUser = useAuthStore((state) => state.joinUser);
+  const checkedId = useAuthStore((state) => state.checkedId);
+  const checkedEmail = useAuthStore((state) => state.checkedEmail);
+  const checkedPhone = useAuthStore((state) => state.checkedPhone);
+
+  const [idError, setIdError] = useState('');
+  const [pwError, setPwError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [dateError, setDateError] = useState('');
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
-    if (form.password != form.confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
-      // 알림창 말고...
-      // 입력창 빨갛게. 하단에 빨간 텍스트로 경고 문구
-      // 가입 비활성화 => 는 그냥 return으로 막았으니 됐음.
-      // 정규표현식 test사용
-      //const haslatt = [/^0-9].test(password) -> true false
-      //
+    // 생년월일 유효성 검사
+    const today = new Date();
+    const birthDate = new Date(form.birthDate);
+    const isInvalidBirthDate = birthDate > today;
+
+    // 아이디 중복 확인
+    if (form.id) {
+      const isIdDuplicate = await checkedId(form.id);
+      if (!isIdDuplicate) {
+        setIdError('이미 사용 중인 아이디입니다.');
+        return;
+      }
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setPwError('비밀번호가 일치하지 않습니다.');
       return;
+    }
+
+    // 비밀번호 빈 값 불가능
+    if (!form.password || !form.confirmPassword) {
+      setPwError('비밀번호를 입력하세요.');
+      return;
+    }
+
+    // 생년월일 유효성 검사
+    if (isInvalidBirthDate) {
+      setDateError('생년월일이 오늘 이후의 날짜입니다. 다시 입력해 주세요.');
+      return;
+    }
+    // 이메일 중복 확인
+    if (form.email) {
+      const isEmailDuplicate = await checkedEmail(form.email);
+      if (!isEmailDuplicate) {
+        setEmailError('이미 사용 중인 이메일입니다.');
+        return;
+      }
+    }
+
+    // 전화번호 중복 확인
+    if (form.phone) {
+      const isPhoneDuplicate = await checkedPhone(form.phone);
+      if (!isPhoneDuplicate) {
+        setPhoneError('이미 사용 중인 전화번호입니다.');
+        return;
+      }
     }
 
     // 회원가입 API 요청
@@ -51,74 +97,149 @@ const UserJoin = () => {
     <>
       {/* 회원가입 박스 */}
       <div className="common-feature-box w-[1000px] h-[620px] p-[40px]">
-        {/* <div className="title-style text-center text-[2rem] mb-3">회원가입</div> */}
-        <form onSubmit={handleJoin} className="join-form">
-          {/* <label htmlFor="id">아이디</label> */}
-          <input
-            type="text"
-            id="id"
-            placeholder="아이디"
-            value={form.id}
-            onChange={(e) => setForm({ ...form, id: e.target.value })}
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          {/* <label htmlFor="password">비밀번호</label> */}
-          <input
-            type="password"
-            id="password"
-            placeholder="비밀번호 입력"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          {/* <label htmlFor="confirm-password">비밀번호 확인</label> */}
-          <input
-            type="password"
-            id="confirm-password"
-            placeholder="비밀번호 확인"
-            value={form.confirmPassword}
-            onChange={(e) =>
-              setForm({ ...form, confirmPassword: e.target.value })
-            }
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          {/* <label htmlFor="name">이름</label> */}
-          <input
-            type="text"
-            id="name"
-            placeholder="이름"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          {/* <label htmlFor="birth">생년월일</label> */}
-          <input
-            type="date"
-            id="birthDate"
-            placeholder="생년월일"
-            value={form.birthDate}
-            onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          {/* <label htmlFor="email">이메일</label> */}
-          <input
-            type="email"
-            id="email"
-            placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          {/* <label htmlFor="phone">휴대전화번호</label> */}
-          <input
-            type="number"
-            id="phone"
-            placeholder="[선택] 휴대전화번호"
-            value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            className="input-box px-5 font-semibold text-[#555555]"
-          />
-          <BlueButton name="회원가입" type="submit" path="" />
+        <form onSubmit={handleJoin} className="join-form w-[520px]">
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label htmlFor="id" className="text-[#555] font-bold">
+                  아이디
+                </label>
+              </div>
+              <input
+                type="text"
+                id="id"
+                placeholder="아이디"
+                value={form.id}
+                onChange={(e) => setForm({ ...form, id: e.target.value })}
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{idError ? idError : ''}</p>
+            </div>
+          </section>
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label htmlFor="password" className="text-[#555] font-bold">
+                  비밀번호
+                </label>
+              </div>
+              <input
+                type="password"
+                id="password"
+                placeholder="비밀번호 입력"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+          </section>
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label
+                  htmlFor="confirm-password"
+                  className="text-[#555] font-bold"
+                >
+                  비밀번호 확인
+                </label>
+              </div>
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="비밀번호 확인"
+                value={form.confirmPassword}
+                onChange={(e) =>
+                  setForm({ ...form, confirmPassword: e.target.value })
+                }
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
+            </div>
+          </section>
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label htmlFor="name" className="text-[#555] font-bold">
+                  이름
+                </label>
+              </div>
+              <input
+                type="text"
+                id="name"
+                placeholder="이름"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+          </section>
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label htmlFor="birth" className="text-[#555] font-bold">
+                  생년월일
+                </label>
+              </div>
+              <input
+                type="date"
+                id="birthDate"
+                placeholder="생년월일"
+                value={form.birthDate}
+                onChange={(e) =>
+                  setForm({ ...form, birthDate: e.target.value })
+                }
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{dateError ? dateError : ''}</p>
+            </div>
+          </section>
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label className="text-[#555] font-bold">이메일</label>
+              </div>
+              <input
+                type="email"
+                id="email"
+                placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p>
+            </div>
+          </section>
+          <section className="mb-6">
+            <div className="flex justify-between items-center">
+              <div className="w-28 text-end mr-2">
+                <label htmlFor="phone" className="text-[#555] font-bold">
+                  휴대전화번호
+                </label>
+              </div>
+              <input
+                type="text"
+                id="phone"
+                placeholder="[선택] 휴대전화번호"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="input-box px-5 w-96 font-semibold text-[#555555]"
+              />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{phoneError ? phoneError : ''}</p>
+            </div>
+          </section>
+          <div className="flex justify-center">
+            <BlueButton name="회원가입" type="submit" path="" />
+          </div>
         </form>
       </div>
     </>

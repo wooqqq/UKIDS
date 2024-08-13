@@ -52,8 +52,7 @@ const UserLogin = () => {
               className="login-pw-box px-5 font-semibold text-[#555555]"
             />
           </div>
-          {/* <button type="submit">로그인</button> */}
-          <div className="mt-10">
+          <div className="mt-10 flex justify-center">
             <BlueButton name="로그인" type="submit" path="" />
           </div>
         </form>
