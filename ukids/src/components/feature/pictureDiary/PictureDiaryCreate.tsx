@@ -20,7 +20,9 @@ export const PictureDiaryCreate = () => {
   const navigate = useNavigate();
 
   const [diary, setDiary] = useState<Diary>({
-    familyId: 6,
+
+    // 가족아이디 수정!
+    familyId: 21,
     file: null, // File은 null로 초기화
     content: '',
     date: '',

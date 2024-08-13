@@ -1,9 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import api from '@/util/api';
 import { useAuthStore } from '../../../stores/authStore';
-import { useFamilyStore } from '@/stores/familyStore';
-import { useTreeStore } from '@/stores/treeStore';
+import { useParams, useNavigate } from 'react-router-dom';
+import api from '@/util/api';
+
+import {format} from 'date-fns';
+
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,28 +15,52 @@ import BlueButton from '../../common/BlueButton';
 import WhiteButton from '../../common/WhiteButton';
 import "../../feature/album/UploadAlbum.css"
 import closeIcon from '../../../assets/close.png'; // 이미지 파일 import
+import { useFamilyStore } from '@/stores/familyStore';
 
 
 // 인터페이스 수정
+interface Album{
+  date: string;
+  title: string;
+}
+
 interface Photo {
   file: File;
   caption: string;
 }
 
+interface UploadedPhoto {
+    photoId: number;
+    fileName: string;
+    imgUrl: string;
+    s3Name: string;
+    caption: string;
+}
+
+interface Caption {
+  captionId: number;
+  content: string;
+  photoId: number;
+}
 
 
 
-const UploadAlbum = () => {
+export const UpdateAlbum = () => {
+
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date>();
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhoto[]>([]);
+  const [deletePhotos, setDeletePhotos] = useState<UploadedPhoto[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
+  const [uploadedCaption, setUploadedCaption] = useState<Caption[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const token = useAuthStore((state) => state.token);
+  const navigate = useNavigate();
   
+  const {albumId} = useParams();
+
   const {selectedFamilyId} = useFamilyStore();
-  const {updateTreeExp} = useTreeStore();
 
 
   const handleFileChange = (event: any) => {
@@ -61,37 +87,33 @@ const UploadAlbum = () => {
     }
   };
 
-  const handleDateChange = (newDate: Date | null) => {
+
+  const handleDateChange = (newDate: Date) => {
     setDate(newDate);
   };
 
-  const createAlbum = async () => {
-    if (!date) {
-      alert('날짜를 선택해주세요.');
-      return null;  // 날짜가 선택되지 않았으면 null을 반환하고 함수 종료
-    }
-    try {
-      const response = await api.post('/album', {
-        title,
-        date: date ? date.toISOString().slice(0, 10) : '',
-        familyId: selectedFamilyId
-      });
-      return {
-        albumId: response.data.albumId,
-        familyId: selectedFamilyId,
-        date: date.toISOString().slice(0, 10)
-      };
-    } catch (error) {
-      console.error('앨범 생성 실패:', error);
-      alert('앨범 생성에 실패했습니다.');
-      return null;
-    }
-  };
-  
-  console.log('앨범 만들어짐')
-
 
   const uploadPhotos = async (albumData: any) => {
+    // 삭제된 사진 없애기
+    deletePhotos.map(photo => {
+        const s3Name = photo.s3Name.substring(6);
+        const url = `/photo/uploaded/${s3Name}`;
+        const {data} = api.delete(url);
+    })
+
+    // 삭제되지 않은 사진의 캡션 수정
+    uploadedCaption.map(caption => {
+      const url = `/caption`;
+      const inputData = {
+        captionId: caption.captionId,
+        photoId: caption.photoId,
+        content: caption.content
+      }
+      const {data} = api.put(url, inputData);
+      console.log(data);
+    })
+
+
     try {
       const responses = await Promise.all(photos.map(photo => {
         const formData = new FormData();
@@ -110,16 +132,31 @@ const UploadAlbum = () => {
       // 응답에서 사진 ID 추출 (응답 형식에 따라 수정 필요)
       const photoIds = responses.map(res => res.data.photoId);
       console.log("Uploaded photo IDs:", photoIds);
-      updateTreeExp(selectedFamilyId, 50);
+      
+
+
+      // 앨범 정보 변경
+      const inputData = {
+        albumId: albumId,
+        familyId: selectedFamilyId,
+        title: title,
+        date: format(date as Date, 'yyyy-MM-dd')
+      }
+      console.log(inputData.title)
+      api.put(`/album`, inputData);
+
+
       alert('모든 사진이 성공적으로 업로드되었습니다!');
     } catch (error) {
       console.error('사진 업로드 실패:', error);
       alert('사진 업로드에 실패했습니다.');
     }
+
+    navigate(`/albums/${albumId}`)
   };
 
-  const uploadAlbum = async () => {
-    if (photos.length === 0) {
+  const updateAlbum = async () => {
+    if (photos.length === 0 && uploadedPhotos.length === 0) {
       alert('사진을 등록해 주세요.');
       return;
     }
@@ -129,14 +166,43 @@ const UploadAlbum = () => {
     }
 
 
-    const albumData = await createAlbum();
-    if (albumData) {
-      await uploadPhotos(albumData);
-      setPhotos([]);
-      setTitle('');
-      setDate(new Date());
-    }
+
+    const url = `/album/${albumId}`;
+    const{data} = await api.get(url);
+    console.log(data.result);
+    uploadPhotos(data.result);
   };
+
+  const getUploadedPhotos = async () => {
+    const url = `/photo/all/${albumId}`;
+
+    const {data} = await api.get(url);
+    console.log(data);
+
+    setUploadedPhotos(data.result.photoList);
+    setDate(data.result.album.date);
+    setTitle(data.result.album.title)
+
+    for(let i=0; i<data.result.photoList.length; i++){
+      console.log("photoId: ", data.result.photoList[i].photoId);
+      const urlCaption = `/caption/${data.result.photoList[i].photoId}`;
+      const resp = await api.get(urlCaption);
+      console.log(resp.data.result);
+      setUploadedCaption(prevCaption => [...prevCaption, resp.data.result]);
+      
+    }
+  }
+
+  const deletePrevPhoto = (photo: UploadedPhoto, index: any) => {
+    setUploadedPhotos(prevUploadedPhotos => prevUploadedPhotos.filter((_, i) => i !== index));
+    setDeletePhotos(prevDeletePhoto => [...prevDeletePhoto, photo]);
+    setUploadedCaption(prevUploadedCaptions => prevUploadedCaptions.filter((_, i) => i !== index));
+    console.log(deletePhotos);
+  }
+
+  useEffect(() => {
+    getUploadedPhotos();
+  }, [])
 
   return (
     <div className="feature-box relative w-[911px] h-[576px]" style={{ zIndex: 1000 }}>
@@ -178,7 +244,7 @@ const UploadAlbum = () => {
         </div>
 
       <div className="absolute top-[87px] right-[70px]">
-        <BlueButton name="등록" path="/albums" className="absolute" onClick={uploadAlbum} />
+        <BlueButton name="수정" path="/albums" className="absolute" onClick={updateAlbum} />
       </div>
 
 
@@ -222,6 +288,24 @@ const UploadAlbum = () => {
 
 
       <div className="preview-box">
+        {uploadedPhotos.map((photo, index) => (
+            <div key={index} className="photo-containertwo relative">
+            <img
+              src={closeIcon}
+              alt="Delete Icon"
+              className="delete-icon"
+              onClick={() => deletePrevPhoto(photo, index)}
+            />
+            <img src={photo.imgUrl} alt={`Preview ${index}`} className="w-full h-auto rounded" />
+            <input className='text-center w-[100px]' type="text" value={uploadedCaption[index]?.content} onChange={(e) => {
+              setUploadedCaption(prevCaptions => 
+                prevCaptions.map((caption, i) => 
+                  i === index ? {...caption, content: e.target.value} : caption
+                ) 
+              )
+            }}/>
+          </div>
+        ))}
         {photos.map((photo, index) => (
           <div key={index} className="photo-containertwo relative">
             <img
@@ -231,12 +315,15 @@ const UploadAlbum = () => {
               onClick={() => handleDeletePhoto(index)}
             />
         <img src={URL.createObjectURL(photo.file)} alt={`Preview ${index}`} className="w-full h-auto rounded" />
-            <p>{photo.caption}</p>
+            <input className='text-center w-[100px]' type="text" value={photo.caption} onChange={(e) => 
+              setPhotos(prevPhotos => 
+                prevPhotos.map((photo, i) => 
+                  i === index ? {...photo, caption: e.target.value} : photo
+                ) 
+              )}/>
           </div>
         ))}
       </div>
     </div>
   );
 };
-
-export default UploadAlbum;

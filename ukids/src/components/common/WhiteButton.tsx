@@ -6,12 +6,14 @@ interface WhiteButtonProps {
   path: string;
   className?: string;
   type?: string;
+
 }
 
 const WhiteButton = (props: WhiteButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
+
     navigate(props.path);
   };
 

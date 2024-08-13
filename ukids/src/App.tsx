@@ -23,6 +23,7 @@ import Main from './pages/Main';
 import FamilyCreateFind from './pages/FamliyCreateFind';
 import { ProtectedRoute, PublicRoute } from './components/error/ProtectedRoute';
 import { useEffect } from 'react';
+import { UpdateAlbum } from './components/feature/album/UpdateAlbum';
 
 // 1. Home "/" : 가장 기본 페이지 (로그인 전)
 // 1-1. FamilyHome "/:familyId" : 로그인 후 메인 페이지
@@ -96,6 +97,7 @@ const App = () => {
             {/* 앨범 중첩 라우팅 */}
             <Route path="/albums/:albumId" element={<AlbumDetail />} />
             <Route path="/albums/upload" element={<UploadAlbum />} />
+            <Route path="/albums/update/:albumId" element={<UpdateAlbum />} />
             <Route path="/paintdiary/*" element={<PaintingDiary />} />
             <Route path="/growthdiary/*" element={<GrowthDiary />} />
             <Route path="/growthfolder/*" element={<GrowthFolder />} />
