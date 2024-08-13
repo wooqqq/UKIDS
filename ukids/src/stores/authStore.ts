@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 import api from '../util/api';
+import axios from 'axios';
 
 interface User {
   userId: number;
@@ -96,7 +97,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   userLogin: async (id, password) => {
     try {
       // 로그인 API 요청
-      const response = await api.post('/user/login', {
+      const response = await axios.post(`${ukidsURL}/user/login`, {
         id: id,
         password: password,
       });
