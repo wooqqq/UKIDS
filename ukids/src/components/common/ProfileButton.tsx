@@ -97,6 +97,9 @@ const ProfileButton = ({ name }: UserProps) => {
 
   // 가족방을 클릭했을 때
   const handleFamilyClick = (familyId: number) => {
+    window.location.reload();
+    // nav('/');
+
     const selectedFamily = familyList.find(
       (familyList) => familyList.familyId === familyId,
     );

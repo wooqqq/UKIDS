@@ -1,4 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import CalendarBox from '../components/feature/schedule/CalendarBox';
 import ScheduleBox from '../components/feature/schedule/ScheduleBox';
 import ScheduleList from '../components/feature/schedule/ScheduleList';
@@ -8,6 +10,14 @@ import ScheduleUpdate from '../components/feature/schedule/ScheduleUpdate';
 import '../components/feature/schedule/schedule.css';
 
 const Schedule = () => {
+  const [scheduleId, setScheduleId] = useState<string>();
+
+  useEffect(() => {
+    console.log('path: ', location.pathname);
+    const segments = location.pathname.split('/').filter(Boolean);
+    setScheduleId(segments[segments.length - 1]);
+  }, []);
+
   return (
     <>
       <div className="half-feature-box p-[20px] schedule-page">
