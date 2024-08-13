@@ -154,13 +154,6 @@ const FamilyTree = () => {
         </div>
         <div></div>
       </section>
-      {/* 경험치 증가 테스트 버튼 */}
-      <button
-        onClick={handleAddExperience}
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
-      >
-        Add 5 EXP
-      </button>
     </div>
   );
 };
