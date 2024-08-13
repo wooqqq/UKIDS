@@ -92,10 +92,11 @@ const FamilyTree = () => {
         <img
           src={treeImage}
           alt="가족 유대감 나무"
-          className="max-w-[400px]"
+          className="max-w-[400px] cursor-pointer"
           style={{
             margin: '50px auto 15px',
           }}
+          onClick={handleAddExperience}
         />
       </section>
       <section>
