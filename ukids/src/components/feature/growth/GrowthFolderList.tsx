@@ -23,7 +23,7 @@ export const GrowthFolderList = () => {
 
     const getFolderList = async () => {
         // 1->6
-        const url = `/growth-folder/all/6?size=10`;
+        const url = `/growth-folder/all/21?size=10`;
 
         const {data} = await api.get(url);
 
@@ -51,7 +51,7 @@ export const GrowthFolderList = () => {
 
             {/* 메인 왼쪽 : 제목 */}
             <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
-                성장일지 ({folders.length}개)
+                성장일지 폴더 ({folders.length}개)
             </div>
       
                           
@@ -61,9 +61,13 @@ export const GrowthFolderList = () => {
                 {/* 게시글이 없을 때  */}
                 {folders.length === 0 ? (
                     <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
-                        아직 성장일지가 없어요!<br/>성장일지를 만들러 가볼까요?</div>
+                        아직 성장일지 폴더가 없어요!<br/>성장일지 폴더를 만들러 가볼까요?</div>
                 )
                     :
+
+
+
+                    // 각각의 아이템 : 폴더 list item
                     (
                     <div className="album-container">
                         <div className="albums-scrollable">
