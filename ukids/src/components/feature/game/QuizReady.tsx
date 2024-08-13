@@ -332,9 +332,19 @@ const QuizReady = () => {
             <span className="flex items-center game-font quiz-font-color">
               가족 퀴즈 준비
             </span>
-            <button className="mx-4">
+            <div className="hover-container m-4" id="hover-effect">
               <img src={gameExplain} alt="설명" />
-            </button>
+              <div className="hover-text-bottom">
+                참여할 가족이 모두 대기방에 들어올 때까지 기다려주세요!
+                <br />
+                기다리는 동안 내가 작성한 질문의 수만큼 개수를 설정할 수 있어요!
+                <br />
+                가족이 선택한 질문 수 중 가장 작은 개수가 맞출 퀴즈의 개수가
+                돼요.
+                <br />한 질문당 12초가 주어져요! 문제를 선택하면 글씨가
+                굵어져요!
+              </div>
+            </div>
           </div>
 
           {/* 가운데 영역 */}

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Publisher, Subscriber } from 'openvidu-browser';
 import './readysessions.css';
-import VideoToggleButton from '../family_communication/VideoToggleButton';
-import AudioToggleButton from '../family_communication/AudioToggleButton';
 
 interface SessionProps {
   publisher: { publisher: Publisher; name: string } | null;

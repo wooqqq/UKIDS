@@ -157,3 +157,54 @@
   color: #fff;
   border-color: #ef4444;
 }
+
+/* 이미지와 텍스트를 감싸는 컨테이너 */
+.hover-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* 설명 텍스트 (왼쪽으로) */
+.hover-text-left {
+  visibility: hidden; /* 기본적으로 숨겨진 상태 */
+  width: 30rem; /* 설명창의 너비 */
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  /* 이미지 왼편으로 텍스트가 나타나도록 설정 */
+  right: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* 설명 텍스트 (아래로) */
+.hover-text-bottom {
+  visibility: hidden;
+  width: 30rem;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  /* 이미지 아래로 텍스트가 나타나도록 설정 */
+  top: 110%;
+  left: 0%;
+  transform: translateX(-50%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* 호버 시 텍스트가 나타나도록 설정 */
+.hover-container:hover .hover-text-left,
+.hover-container:hover .hover-text-bottom {
+  visibility: visible;
+  opacity: 1;
+}
