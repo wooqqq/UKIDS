@@ -14,12 +14,20 @@ interface Family {
   familyId: number;
   name: string;
   code: string;
+  representative: number;
+  userFamilyDto: User;
+}
+
+interface Member {
+  familyMemberId: number; // 가족 구성원의 ID
   userFamilyDto: User;
 }
 
 // 가족방 관련 상태 정의
 interface FamilyState {
-  family: Family[];
+  family: Family;
+  familyList: Family[];
+  member: Member[];
   error: string | null;
   // 가족방 정보
   fetchFamilyInfo: (familyId: number) => Promise<void>;
@@ -32,9 +40,9 @@ interface FamilyState {
   // 가족방 수정
   updateFamily: (
     familyId: number,
-    representative: number,
     name: string,
     password: string,
+    representative: number,
   ) => Promise<void>;
   // 가족방 비밀번호 확인
   checkedPassword: (familyId: number, password: string) => Promise<void>;
@@ -46,12 +54,55 @@ interface FamilyState {
   setSelectedFamilyId: (familyId: number) => void;
   // 채팅방 id
   chatRoomId: number | null;
+
+  // 승인 대기 리스트
+  pendingMemberList: (familyId: number) => Promise<void>;
+
+  // 가족 구성원 신청
+  applyMember: (familyId: number, role: string) => Promise<void>;
+
+  // 가족 구성원 승인
+  approvedMember: (familyMemberId: number) => Promise<void>;
+
+  // 가족 구성원 취소
+  cancleMember: (familyMemberId: number) => Promise<void>;
+
+  // 가족 구성원 거절
+  decliedMember: (familyMemberId: number) => Promise<void>;
+
+  // 가족 구성원 리스트
+  fetchMemberList: (familyId: number) => Promise<void>;
+
+  // 가족 역할 설정
+  setMemberRole: (
+    userId: number,
+    familyRole: string,
+    familyId: number,
+  ) => Promise<void>;
+
+  // 구성원 탈퇴
+  deleteMember: (familyMemberId: number, type: boolean) => Promise<void>;
 }
 
 // familyStore 생성
 export const useFamilyStore = create<FamilyState>((set) => ({
   // 초기 상태 설정
-  family: [],
+  family: {
+    familyId: 0,
+    name: '',
+    code: '',
+    representative: 0,
+    userFamilyDto: {
+      userId: 0,
+      id: '',
+      name: '',
+      email: '',
+      phone: '',
+      birthDate: '',
+    },
+  },
+  familyList: [],
+  member: [],
   error: null,
   selectedFamilyId: Number(localStorage.getItem('selectedFamilyId')) || null,
   chatRoomId: null,
@@ -65,11 +116,9 @@ export const useFamilyStore = create<FamilyState>((set) => ({
   fetchFamilyInfo: async (familyId: number) => {
     try {
       const response = await api.get(`/family/${familyId}`);
-
       const familyData: Family = response.data.result;
-
       set({
-        family: [familyData],
+        family: familyData,
         error: null,
         selectedFamilyId: familyData.familyId,
       });
@@ -86,11 +135,11 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       const newFamily: Family = response.data.result;
       const newFamilyId: number = newFamily.familyId;
       console.log('newFamily.familyId : ' + newFamily.familyId);
-      set((state) => ({
-        family: [...state.family, newFamily],
+      set({
+        family: newFamily,
         error: null,
         selectedFamilyId: newFamily.familyId,
-      }));
+      });
 
       // 가족방 생성 시 나무 자동 생성
       await api.post(`/tree`, { familyId: newFamily.familyId });
@@ -119,7 +168,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       const response = await api.get(`/family/search/${code}`);
       const familyData: Family = response.data.result;
       set((state) => ({
-        family: [...state.family, familyData],
+        familyList: [...state.familyList, familyData],
         error: null,
         selectedFamilyId: familyData.familyId,
       }));
@@ -134,7 +183,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.get(`/family/all`);
       const familyList: Family[] = response.data.result;
-      set({ family: familyList, error: null });
+      set({ familyList: familyList, error: null });
     } catch (error: any) {
       console.log('Error fetching family list', error);
       set({ error: error.message });
@@ -144,23 +193,25 @@ export const useFamilyStore = create<FamilyState>((set) => ({
   // 가족방 수정
   updateFamily: async (
     familyId: number,
-    representative: number,
     name: string,
     password: string,
+    representative: number,
   ) => {
     try {
       const response = await api.put(`/family`, {
         familyId,
-        representative,
         name,
         password,
+        representative,
       });
       const updatedFamily = response.data.result;
 
       set((state) => ({
-        family: state.family.map((fam) =>
-          fam.familyId === familyId ? updatedFamily : fam,
-        ),
+        family:
+          state.family?.familyId === familyId ? updatedFamily : state.family,
+        // familyList: state.familyList.map((fam) =>
+        //   fam.familyId === familyId ? updatedFamily : fam,
+        // ),
         error: null,
       }));
 
@@ -201,7 +252,9 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       if (response.data.code === 200) {
         alert('가족방이 삭제되었습니다.');
         set((state) => ({
-          family: state.family.filter((fam) => fam.familyId !== familyId),
+          familyList: state.familyList.filter(
+            (fam) => fam.familyId !== familyId,
+          ),
           error: null,
           selectedFamilyId:
             state.selectedFamilyId === familyId ? null : state.selectedFamilyId,
@@ -209,6 +262,123 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       }
     } catch (error: any) {
       console.log('Error deleting family', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 승인 대기 리스트
+  pendingMemberList: async (familyId: number) => {
+    try {
+      const response = await api.get(`member/approval/${familyId}`);
+      const pendingMembers: Member[] = response.data.result;
+      set({ member: pendingMembers, error: null });
+    } catch (error: any) {
+      console.log('Error fetching pending members', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 가족 구성원 신청
+  applyMember: async (familyId: number, role: string) => {
+    try {
+      const response = await api.post(`/member`, { familyId, role });
+      if (response.data.code === 201) {
+        // alert('가족 구성원 신청이 성공적으로 완료되었습니다.')
+      }
+    } catch (error: any) {
+      console.log('Error applying for family membership', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 가족 구성원 승인
+  approvedMember: async (familyMemberId: number) => {
+    try {
+      const response = await api.put(`/member/${familyMemberId}`);
+      if (response.data.code === 201) {
+        // alert('구성원이 승인되었습니다.');
+      }
+    } catch (error: any) {
+      console.log('Error approving family member', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 가족 구성원 취소
+  cancleMember: async (familyMemberId: number) => {
+    try {
+      const response = await api.delete(
+        `/member/cancellation/${familyMemberId}`,
+      );
+      if (response.data.code === 201) {
+        // alert('구성원 신청이 취소되었습니다.');
+      }
+    } catch (error: any) {
+      console.log('Error approving family member', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 가족 구성원 거절
+  decliedMember: async (familyMemberId: number) => {
+    try {
+      const response = await api.delete(`/member/denial/${familyMemberId}`);
+      if (response.data.code === 200) {
+        // alert('구성원 신청이 거절되었습니다.');
+      }
+    } catch (error: any) {
+      console.log('Error approving family member', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 가족 구성원 리스트
+  fetchMemberList: async (familyId: number) => {
+    try {
+      const response = await api.get(`/member/${familyId}`);
+      const famMemberList: Member[] = response.data.result;
+      set({ member: famMemberList, error: null });
+    } catch (error: any) {
+      console.log('Error approving family member', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 가족 역할 설정
+  setMemberRole: async (
+    userId: number,
+    familyRole: string,
+    familyId: number,
+  ) => {
+    try {
+      const response = await api.put(`/member/role`, {
+        userId,
+        familyRole,
+        familyId,
+      });
+      if (response.data.code === 201) {
+        // alert('역할 설정이 완료되었습니다.');
+      }
+    } catch (error: any) {
+      console.log('Error approving family member', error);
+      set({ error: error.message });
+    }
+  },
+
+  // 구성원 탈퇴
+  deleteMember: async (familyMemberId: number, type: boolean) => {
+    try {
+      const response = await api.delete(`/member`, {
+        data: {
+          familyMemberId,
+          type,
+        },
+      });
+      if (response.data.code === 201) {
+        // alert('탈퇴가 완료되었습니다.');
+      }
+    } catch (error: any) {
+      console.log('Error approving family member', error);
       set({ error: error.message });
     }
   },
