@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { Client, IMessage } from '@stomp/stompjs';
+import { useFamilyStore } from '@/stores/familyStore.ts';
 import SockJS from 'sockjs-client';
 import QuizButton from './QuizButton';
 import './gamepart.css';
-import { useFamilyStore } from '../../../stores/familyStore';
 
 interface Participant {
   userName: string;
@@ -147,7 +147,6 @@ const QuizResult = () => {
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       getGameInfo();
-      quitGame();
     }
   }, [stompClientInstance]);
 

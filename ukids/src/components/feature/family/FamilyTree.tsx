@@ -8,17 +8,20 @@ import treeLv5 from '../../../assets/tree_lv5.png';
 import '../../common/common.css';
 
 const FamilyTree = () => {
-  const { treeData, fetchTreeData, updateTreeExp, familyId } = useTreeStore((state) => ({
-    treeData: state.treeData,
-    fetchTreeData: state.fetchTreeData,
-    updateTreeExp: state.updateTreeExp,
-    setFamilyId: state.setFamilyId,
-    familyId: state.familyId,
-  }));
+  const { treeData, fetchTreeData, updateTreeExp, familyId } = useTreeStore(
+    (state) => ({
+      treeData: state.treeData,
+      fetchTreeData: state.fetchTreeData,
+      updateTreeExp: state.updateTreeExp,
+      setFamilyId: state.setFamilyId,
+      familyId: state.familyId,
+    }),
+  );
 
   const [level, setLevel] = useState(1);
 
   useEffect(() => {
+    console.log('familyID : ', familyId);
     if (familyId !== null) {
       fetchTreeData(familyId);
     }
@@ -95,8 +98,7 @@ const FamilyTree = () => {
               color: '#fff',
               background: '#FFBF33',
             }}
-          >
-          </div>
+          ></div>
         </div>
         <div></div>
       </section>

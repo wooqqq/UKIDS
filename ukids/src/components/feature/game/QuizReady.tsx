@@ -5,7 +5,8 @@ import './gamepart.css';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
-import { useFamilyStore } from '../../../stores/familyStore';
+import { useFamilyStore } from '@/stores/familyStore.ts';
+import ReadyCall from './ReadyCall';
 
 interface Participant {
   userName: string;
@@ -33,9 +34,21 @@ interface EnterGameMessage {
   gameRoomInfo: GameRoom;
 }
 
+interface ExitGameMessage {
+  type: 'EXIT_GAME';
+  id: number;
+  webrtcConnection: string;
+  gameRoomInfo: GameRoom;
+}
+
 interface SetQuizMessage {
   type: 'SET_QUIZ_COUNTS';
   quizCount: number;
+}
+
+interface GetQuizMaxMessage {
+  type: 'GET_MAX_QUESTION_COUNTS';
+  maxCounts: number;
 }
 
 interface ErrorMessage {
@@ -43,7 +56,12 @@ interface ErrorMessage {
   message: string;
 }
 
-type GameMessage = EnterGameMessage | SetQuizMessage | ErrorMessage;
+type GameMessage =
+  | EnterGameMessage
+  | SetQuizMessage
+  | ExitGameMessage
+  | GetQuizMaxMessage
+  | ErrorMessage;
 
 const QuizReady = () => {
   const [isReady, setIsReady] = useState();
@@ -54,10 +72,12 @@ const QuizReady = () => {
       return;
     }
 
-    setIsReady(() => {
-      window.location.href = '/quiz/start';
-    });
+    setIsReady(true); // 상태 변경
   };
+
+  useEffect(() => {
+    if (isReady) navigate('/quiz/start');
+  }, [isReady]);
 
   const { ukidsURL, token, userInfo } = useAuthStore();
   const { selectedFamilyId } = useFamilyStore();
@@ -70,6 +90,10 @@ const QuizReady = () => {
   const [participants, setParticipants] = useState<
     { userName: string; role: string }[]
   >([]);
+
+  const [nameOfUser, setNameOfUser] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [connection, setConnection] = useState<string | null>(null);
 
   const handleBack = () => {
     exitQuizRoom();
@@ -113,6 +137,25 @@ const QuizReady = () => {
     }
   };
 
+  const GetQuizMaxCounts = async () => {
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: `/app/quiz/quiz-max`,
+          body: JSON.stringify({
+            familyId: selectedFamilyId,
+            counts: `${selectedValue}`,
+          }),
+        });
+      } catch (error) {
+        console.error('최대 퀴즈 개수 갱신 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
   const setQuizCounts = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
@@ -140,6 +183,7 @@ const QuizReady = () => {
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       enterQuizRoom();
+      GetQuizMaxCounts();
     }
   }, [stompClientInstance]);
 
@@ -160,9 +204,6 @@ const QuizReady = () => {
       debug: (str) => {
         console.log('웹소켓 디버그: ' + str);
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
@@ -186,6 +227,10 @@ const QuizReady = () => {
               const participant =
                 receivedMessage.gameRoomInfo.participantList[user];
               console.log('----user : ----', participant);
+              setNameOfUser(participant.userName);
+              setSessionId(receivedMessage.gameRoomInfo.sessionId);
+              setConnection(receivedMessage.webrtcConnection);
+
               if (participant && participant.maxQuestion === 0) {
                 alert('퀴즈 문제 개수가 0입니다. 게임에 참여할 수 없습니다.');
                 navigate('../');
@@ -233,6 +278,10 @@ const QuizReady = () => {
 
               break;
 
+            case 'GET_MAX_QUESTION_COUNTS':
+              setMaxOptions(receivedMessage.maxCounts);
+              break;
+
             case 'SET_QUIZ_COUNTS':
               setSelectedValue(receivedMessage.quizCount);
               break;
@@ -254,7 +303,7 @@ const QuizReady = () => {
       if (client) {
         // exitQuizRoom();
         client.deactivate();
-        navigate('../');
+        // navigate('../');
       }
     };
   }, [ukidsURL, token, selectedFamilyId]);
@@ -351,6 +400,15 @@ const QuizReady = () => {
               </li>
             ))}
           </ul>
+        </div>
+        <div>
+          {nameOfUser && sessionId && connection && (
+            <ReadyCall
+              nameOfUser={nameOfUser}
+              sessionId={sessionId}
+              token={connection}
+            />
+          )}
         </div>
       </div>
     </>
