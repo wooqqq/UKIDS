@@ -20,7 +20,7 @@ const UserJoin = () => {
 
   const nav = useNavigate();
   const joinUser = useAuthStore((state) => state.joinUser);
-
+  const today = new Date().toISOString().split('T')[0];
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
@@ -97,6 +97,7 @@ const UserJoin = () => {
             id="birthDate"
             placeholder="생년월일"
             value={form.birthDate}
+            max={today}
             onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
             className="input-box px-5 font-semibold text-[#555555]"
           />
