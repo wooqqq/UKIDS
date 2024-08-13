@@ -17,6 +17,8 @@ const FamilyTree = () => {
   }));
 
   const [level, setLevel] = useState(1);
+  // 새로 추가
+  const [canClick, setCanClick] = useState(true);
 
   useEffect(() => {
     if (familyId !== null) {
@@ -41,9 +43,25 @@ const FamilyTree = () => {
     }
   }, [treeData]);
 
+  useEffect(() => {
+    const lastClick = localStorage.getItem('lastClickTime');
+    if (lastClick) {
+      const lastClickTimestamp = parseInt(lastClick, 10);
+      const lastClickDate = new Date(lastClickTimestamp);
+      const now = new Date();
+      const diffDays = Math.floor((now.getDate() - lastClickDate.getTime()) / (1000 * 60 * 60 * 24));
+      setCanClick(diffDays >= 1);
+    } else {
+      setCanClick(true);
+    }
+  }, []);
+
+  // 나무 클릭 시 출석 
   const handleAddExperience = async () => {
-    if (treeData && treeData.result) {
-      await updateTreeExp(familyId, 5);
+    if (treeData && treeData.result && canClick) {
+      await updateTreeExp(familyId, 10);
+      localStorage.setItem('lastClickTime', new Date().toString());
+      setCanClick(false);
     }
   };
 
