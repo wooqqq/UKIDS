@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useFamilyStore } from '@/stores/familyStore';
 import { useTreeStore } from '@/stores/treeStore';
 import treeLv1 from '@/assets/tree_lv1.png';
 import treeLv2 from '@/assets/tree_lv2.png';
@@ -8,6 +9,7 @@ import treeLv5 from '@/assets/tree_lv5.png';
 import '../../common/common.css';
 
 const FamilyTree = () => {
+  const { selectedFamilyId } = useFamilyStore();
   const { treeData, fetchTreeData, updateTreeExp, familyId } = useTreeStore(
     (state) => ({
       treeData: state.treeData,
@@ -23,11 +25,10 @@ const FamilyTree = () => {
   const [canClick, setCanClick] = useState(true);
 
   useEffect(() => {
-    console.log('familyID : ', familyId);
     if (familyId !== null) {
-      fetchTreeData(familyId);
+      fetchTreeData(selectedFamilyId);
     }
-  }, [fetchTreeData, familyId]);
+  }, [fetchTreeData, selectedFamilyId]);
 
   useEffect(() => {
     if (treeData && treeData.result && treeData.result.exp != undefined) {
@@ -62,7 +63,7 @@ const FamilyTree = () => {
   // 나무 클릭 시 출석 
   const handleAddExperience = async () => {
     if (treeData && treeData.result && canClick) {
-      await updateTreeExp(familyId, 10);
+      await updateTreeExp(selectedFamilyId, 10);
       localStorage.setItem('lastClickTime', new Date().toString());
       setCanClick(false);
     }
