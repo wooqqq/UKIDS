@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { LetterList } from '@components/feature/Letters/LetterList';
-import { LetterDetail } from '@components/feature/Letters/LetterDetail';
-import { LetterWrite } from '@components/feature/Letters/LetterWrite';
+import { LetterList } from '@components/feature/letter/LetterList';
+import { LetterDetail } from '@components/feature/letter/LetterDetail';
+import { LetterWrite } from '@components/feature/letter/LetterWrite';
 
 const Letter = () => {
   return (
