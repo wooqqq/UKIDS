@@ -66,6 +66,7 @@ const ScheduleCreate = () => {
             id="title"
             type="text"
             value={createForm.title}
+            required
             placeholder="제목"
             className="p-2"
             onChange={(e) =>
@@ -94,6 +95,7 @@ const ScheduleCreate = () => {
             value={createForm.startTime}
             placeholder="시작 날짜"
             className="p-2"
+            required
             max={createForm.endTime}
             onChange={(e) =>
               setCreateForm({
@@ -111,6 +113,7 @@ const ScheduleCreate = () => {
             defaultValue={createForm.startTime}
             value={createForm.endTime}
             placeholder="종료 날짜"
+            required
             className="p-2"
             min={createForm.startTime}
             onChange={(e) =>

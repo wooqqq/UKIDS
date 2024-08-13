@@ -65,6 +65,7 @@ const ScheduleUpdate = () => {
             id="title"
             type="text"
             value={updateForm.title}
+            required
             placeholder="제목"
             className="p-2"
             onChange={(e) =>
@@ -92,6 +93,7 @@ const ScheduleUpdate = () => {
             type="datetime-local"
             value={updateForm.startTime}
             placeholder="시작 날짜"
+            required
             className="p-2"
             max={updateForm.endTime}
             onChange={(e) =>
@@ -109,6 +111,7 @@ const ScheduleUpdate = () => {
             type="datetime-local"
             value={updateForm.endTime}
             placeholder="종료 날짜"
+            required
             className="p-2"
             min={updateForm.startTime}
             onChange={(e) =>
