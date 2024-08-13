@@ -2,7 +2,8 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import api from '@/util/api';
 import { useAuthStore } from '../../../stores/authStore';
-
+import { useFamilyStore } from '@/stores/familyStore';
+import { useTreeStore } from '@/stores/treeStore';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -32,7 +33,8 @@ const UploadAlbum = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const token = useAuthStore((state) => state.token);
   
-
+  const {selectedFamilyId} = useFamilyStore();
+  const {updateTreeExp} = useTreeStore();
 
 
   const handleFileChange = (event: any) => {
@@ -72,11 +74,11 @@ const UploadAlbum = () => {
       const response = await api.post('/album', {
         title,
         date: date ? date.toISOString().slice(0, 10) : '',
-        familyId: '1'
+        familyId: selectedFamilyId
       });
       return {
         albumId: response.data.albumId,
-        familyId: '1',
+        familyId: selectedFamilyId,
         date: date.toISOString().slice(0, 10)
       };
     } catch (error) {
@@ -95,7 +97,7 @@ const UploadAlbum = () => {
         const formData = new FormData();
         formData.append('multipartFile', photo.file);
         formData.append('caption', photo.caption);
-        formData.append('familyId', albumData.familyId);
+        formData.append('familyId', selectedFamilyId);
         formData.append('date', albumData.date);
   
         return api.post('/photo', formData, {
@@ -108,7 +110,7 @@ const UploadAlbum = () => {
       // 응답에서 사진 ID 추출 (응답 형식에 따라 수정 필요)
       const photoIds = responses.map(res => res.data.photoId);
       console.log("Uploaded photo IDs:", photoIds);
-
+      updateTreeExp(selectedFamilyId, 50);
       alert('모든 사진이 성공적으로 업로드되었습니다!');
     } catch (error) {
       console.error('사진 업로드 실패:', error);

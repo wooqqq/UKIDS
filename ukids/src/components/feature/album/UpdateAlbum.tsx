@@ -4,6 +4,8 @@ import { useAuthStore } from '../../../stores/authStore';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '@/util/api';
 
+import {format} from 'date-fns';
+
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,9 +15,15 @@ import BlueButton from '../../common/BlueButton';
 import WhiteButton from '../../common/WhiteButton';
 import "../../feature/album/UploadAlbum.css"
 import closeIcon from '../../../assets/close.png'; // 이미지 파일 import
+import { useFamilyStore } from '@/stores/familyStore';
 
 
 // 인터페이스 수정
+interface Album{
+  date: string;
+  title: string;
+}
+
 interface Photo {
   file: File;
   caption: string;
@@ -40,7 +48,7 @@ interface Caption {
 export const UpdateAlbum = () => {
 
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date>();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhoto[]>([]);
   const [deletePhotos, setDeletePhotos] = useState<UploadedPhoto[]>([]);
@@ -51,6 +59,8 @@ export const UpdateAlbum = () => {
   const navigate = useNavigate();
   
   const {albumId} = useParams();
+
+  const {selectedFamilyId} = useFamilyStore();
 
 
   const handleFileChange = (event: any) => {
@@ -77,7 +87,8 @@ export const UpdateAlbum = () => {
     }
   };
 
-  const handleDateChange = (newDate: Date | null) => {
+
+  const handleDateChange = (newDate: Date) => {
     setDate(newDate);
   };
 
@@ -108,7 +119,7 @@ export const UpdateAlbum = () => {
         const formData = new FormData();
         formData.append('multipartFile', photo.file);
         formData.append('caption', photo.caption);
-        formData.append('familyId', albumData.family.familyId);
+        formData.append('familyId', selectedFamilyId);
         formData.append('date', albumData.date);
   
         return api.post('/photo', formData, {
@@ -121,6 +132,19 @@ export const UpdateAlbum = () => {
       // 응답에서 사진 ID 추출 (응답 형식에 따라 수정 필요)
       const photoIds = responses.map(res => res.data.photoId);
       console.log("Uploaded photo IDs:", photoIds);
+      
+
+
+      // 앨범 정보 변경
+      const inputData = {
+        albumId: albumId,
+        familyId: selectedFamilyId,
+        title: title,
+        date: format(date as Date, 'yyyy-MM-dd')
+      }
+      console.log(inputData.title)
+      api.put(`/album`, inputData);
+
 
       alert('모든 사진이 성공적으로 업로드되었습니다!');
     } catch (error) {
@@ -141,6 +165,8 @@ export const UpdateAlbum = () => {
       return ;
     }
 
+
+
     const url = `/album/${albumId}`;
     const{data} = await api.get(url);
     console.log(data.result);
@@ -154,6 +180,8 @@ export const UpdateAlbum = () => {
     console.log(data);
 
     setUploadedPhotos(data.result.photoList);
+    setDate(data.result.album.date);
+    setTitle(data.result.album.title)
 
     for(let i=0; i<data.result.photoList.length; i++){
       console.log("photoId: ", data.result.photoList[i].photoId);
@@ -269,7 +297,6 @@ export const UpdateAlbum = () => {
               onClick={() => deletePrevPhoto(photo, index)}
             />
             <img src={photo.imgUrl} alt={`Preview ${index}`} className="w-full h-auto rounded" />
-            {/* <p>{uploadedCaption[index]?.content}</p> */}
             <input className='text-center w-[100px]' type="text" value={uploadedCaption[index]?.content} onChange={(e) => {
               setUploadedCaption(prevCaptions => 
                 prevCaptions.map((caption, i) => 
@@ -288,7 +315,6 @@ export const UpdateAlbum = () => {
               onClick={() => handleDeletePhoto(index)}
             />
         <img src={URL.createObjectURL(photo.file)} alt={`Preview ${index}`} className="w-full h-auto rounded" />
-            {/* <p>{photo.caption}</p> */}
             <input className='text-center w-[100px]' type="text" value={photo.caption} onChange={(e) => 
               setPhotos(prevPhotos => 
                 prevPhotos.map((photo, i) => 

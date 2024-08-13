@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '@/util/api.ts';
 import { Link, useParams } from 'react-router-dom';
 import BlueButton from '@components/common/BlueButton';
-import { LetterItem } from '@components/feature/Letters/LetterItem';
+import { LetterItem } from '@components/feature/letters/LetterItem';
 
 interface Letter {
   letterId: number;
