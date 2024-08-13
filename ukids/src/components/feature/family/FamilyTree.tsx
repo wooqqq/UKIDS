@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useTreeStore } from '../../../stores/treeStore';
-import treeLv1 from '../../../assets/tree_lv1.png';
-import treeLv2 from '../../../assets/tree_lv2.png';
-import treeLv3 from '../../../assets/tree_lv3.png';
-import treeLv4 from '../../../assets/tree_lv4.png';
-import treeLv5 from '../../../assets/tree_lv5.png';
+import { useFamilyStore } from '@/stores/familyStore';
+import { useTreeStore } from '@/stores/treeStore';
+import treeLv1 from '@/assets/tree_lv1.png';
+import treeLv2 from '@/assets/tree_lv2.png';
+import treeLv3 from '@/assets/tree_lv3.png';
+import treeLv4 from '@/assets/tree_lv4.png';
+import treeLv5 from '@/assets/tree_lv5.png';
 import '../../common/common.css';
 
 const FamilyTree = () => {
+  const { selectedFamilyId } = useFamilyStore();
   const { treeData, fetchTreeData, updateTreeExp, familyId } = useTreeStore(
     (state) => ({
       treeData: state.treeData,
@@ -19,13 +21,14 @@ const FamilyTree = () => {
   );
 
   const [level, setLevel] = useState(1);
+  // 새로 추가
+  const [canClick, setCanClick] = useState(true);
 
   useEffect(() => {
-    console.log('familyID : ', familyId);
     if (familyId !== null) {
-      fetchTreeData(familyId);
+      fetchTreeData(selectedFamilyId);
     }
-  }, [fetchTreeData, familyId]);
+  }, [fetchTreeData, selectedFamilyId]);
 
   useEffect(() => {
     if (treeData && treeData.result && treeData.result.exp != undefined) {
@@ -44,9 +47,25 @@ const FamilyTree = () => {
     }
   }, [treeData]);
 
+  useEffect(() => {
+    const lastClick = localStorage.getItem('lastClickTime');
+    if (lastClick) {
+      const lastClickTimestamp = parseInt(lastClick, 10);
+      const lastClickDate = new Date(lastClickTimestamp);
+      const now = new Date();
+      const diffDays = Math.floor((now.getDate() - lastClickDate.getTime()) / (1000 * 60 * 60 * 24));
+      setCanClick(diffDays >= 1);
+    } else {
+      setCanClick(true);
+    }
+  }, []);
+
+  // 나무 클릭 시 출석 
   const handleAddExperience = async () => {
-    if (treeData && treeData.result) {
-      await updateTreeExp(5);
+    if (treeData && treeData.result && canClick) {
+      await updateTreeExp(selectedFamilyId, 10);
+      localStorage.setItem('lastClickTime', new Date().toString());
+      setCanClick(false);
     }
   };
 
@@ -74,10 +93,11 @@ const FamilyTree = () => {
         <img
           src={treeImage}
           alt="가족 유대감 나무"
-          className="max-w-[400px]"
+          className="max-w-[400px] cursor-pointer"
           style={{
             margin: '50px auto 15px',
           }}
+          onClick={handleAddExperience}
         />
       </section>
       <section>
