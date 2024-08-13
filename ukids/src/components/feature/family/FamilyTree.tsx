@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useTreeStore } from '../../../stores/treeStore';
-import treeLv1 from '../../../assets/tree_lv1.png';
-import treeLv2 from '../../../assets/tree_lv2.png';
-import treeLv3 from '../../../assets/tree_lv3.png';
-import treeLv4 from '../../../assets/tree_lv4.png';
-import treeLv5 from '../../../assets/tree_lv5.png';
+import { useTreeStore } from '@/stores/treeStore';
+import treeLv1 from '@/assets/tree_lv1.png';
+import treeLv2 from '@/assets/tree_lv2.png';
+import treeLv3 from '@/assets/tree_lv3.png';
+import treeLv4 from '@/assets/tree_lv4.png';
+import treeLv5 from '@/assets/tree_lv5.png';
 import '../../common/common.css';
 
 const FamilyTree = () => {
@@ -43,7 +43,7 @@ const FamilyTree = () => {
 
   const handleAddExperience = async () => {
     if (treeData && treeData.result) {
-      await updateTreeExp(5);
+      await updateTreeExp(familyId, 5);
     }
   };
 
