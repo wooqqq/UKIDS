@@ -35,12 +35,12 @@ const Home = () => {
         <div className="flex flex-col items-center">
           <p className="first">가족과의 추억을 쌓으며</p>
           <p className="second">유대감 나무를 키워보세요</p>
-          <p className="third m-6">추억이 늘어날수록 나무도 쑥쑥 자랄거에요</p>
+          <p className="third m-6">추억이 늘어날수록 나무도 쑥쑥 자랄거예요</p>
         </div>
 
-        <div className="w-full fourth m-12 flex flex-row justify-center">
-          <img src={introImg1} alt="introImg1" className="" />
-          <img src={introImg2} alt="introImg2" className="" />
+        <div className="fourth flex flex-row justify-center">
+          <img src={introImg1} alt="introImg1" className="h-[311px]" />
+          <img src={introImg2} alt="introImg2" className="h-[272px]" />
         </div>
       </div>
     </>

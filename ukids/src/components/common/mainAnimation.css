@@ -37,6 +37,15 @@
   transform: translateY(0);
 }
 
-img {
-  background-size: 30%;
+.fourth {
+  font-size: 24px;
+  font-weight: 600;
+  color: #555;
+  opacity: 0;
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+  transform: translateY(20px);
+}
+.fourth.show {
+  opacity: 1;
+  transform: translateY(0);
 }
