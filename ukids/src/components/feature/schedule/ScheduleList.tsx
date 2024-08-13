@@ -30,7 +30,7 @@ const ScheduleList = () => {
   useEffect(() => {
     setDateScheduleList(selectedDate, selectedFamilyId);
     console.log('date schedule : ', dateScheduleList);
-  }, [selectedDate, selectedFamilyId, setSelectedDate]);
+  }, [selectedFamilyId, setSelectedDate, setDateScheduleList]);
 
   return (
     <div className="schedule-box">
@@ -50,9 +50,9 @@ const ScheduleList = () => {
                   <div className="circle-color"></div>
                   {value.title}
                 </p>
-                <p>장소: {value.place}</p>
-                <p>시작 날짜: {value.startTime.split('T').join(' ')}</p>
-                <p>끝 날짜: {value.endTime.split('T').join(' ')}</p>
+                {value.place && <p>장소: {value.place}</p>}
+                <p>시작 일시: {value.startTime.split('T').join(' ')}</p>
+                <p>종료 일시: {value.endTime.split('T').join(' ')}</p>
               </div>
             ))
           ) : (

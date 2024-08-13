@@ -43,6 +43,7 @@ const ScheduleUpdate = () => {
     if (data.code == 201) {
       alert('일정 수정 성공');
       nav('/schedule/list');
+      return;
     }
     alert('일정 수정 실패, 재시도해주세요.');
   };

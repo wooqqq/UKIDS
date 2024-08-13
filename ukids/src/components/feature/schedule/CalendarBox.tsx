@@ -6,8 +6,9 @@ import { DateClickArg } from '@fullcalendar/interaction'; // DateClickArg 타입
 import { useScheduleStore } from '../../../stores/scheduleStore';
 import { useFamilyStore } from '@/stores/familyStore.ts';
 // zustand를 사용한 상태 관리 store
-import { useEffect } from 'react'; // React의 useEffect 훅
+import { useEffect, useRef, useState } from 'react'; // React의 useEffect 훅
 import './schedule.css'; // CSS 스타일 파일
+import { useNavigate } from 'react-router-dom';
 
 interface CalendarBoxProps {
   onDateClick?: () => void;
@@ -24,10 +25,13 @@ export default function CalendarBox({
     setSelectedDate,
     monthScheduleList,
     setMonthScheduleList,
+    setDateScheduleList,
     events,
     setEvents,
   } = useScheduleStore();
   const { selectedFamilyId } = useFamilyStore();
+  const nav = useNavigate();
+  const [month, setMonth] = useState<string>();
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -63,15 +67,20 @@ export default function CalendarBox({
   const handleDateClick = (info: DateClickArg) => {
     const date = new Date(info.dateStr); // 클릭한 날짜를 문자열로 가져옴
     const formattedDate = formatDate(date);
-    console.log('click dates : ', date.getMonth() + 1);
+    console.log('click dates : ', formattedDate);
     // const formattedToday = formatDate(date); // 오늘 날짜 포맷팅
     setSelectedDate(formattedDate);
 
     // 클릭한 날짜에 해당하는 이벤트를 필터링
     setMonthScheduleList(date.getMonth() + 1, selectedFamilyId);
+    setDateScheduleList(formattedDate, selectedFamilyId);
     setEvents(monthScheduleList?.scheduleList, monthScheduleList?.familyName);
 
     if (onDateClick) onDateClick();
+  };
+
+  const goCreateSchedule = () => {
+    nav('/schedule/new');
   };
 
   return (
@@ -84,15 +93,22 @@ export default function CalendarBox({
         weekends={true} // 주말을 표시
         fixedWeekCount={false} // 고정된 주 수를 사용하지 않음
         height={height} // 캘린더의 높이 설정 - 여기에서 height props 사용
+        displayEventTime={true}
         customButtons={{
           createButton: {
             text: '일정 추가하기',
+            click: function () {
+              goCreateSchedule();
+            },
           },
         }}
         selectable={true} // 날짜 선택 기능 활성화
         headerToolbar={{
           start: 'title', // 툴바의 시작 부분에 제목 표시
-          end: 'today, prev,next', // 툴바의 끝 부분에 이전/다음 버튼 표시
+          end: 'today, prev, next', // 툴바의 끝 부분에 이전/다음 버튼 표시
+        }}
+        footerToolbar={{
+          right: 'createButton',
         }}
         eventTextColor="#fff" // 이벤트 텍스트 색상 설정
         titleFormat={function (date) {

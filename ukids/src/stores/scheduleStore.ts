@@ -134,11 +134,8 @@ export const useScheduleStore = create<Store>((set, get) => ({
   dateScheduleList: null,
   setDateScheduleList: async (date: string, familyId: number) => {
     if (date != null && familyId != null) {
-      const encodedDate = encodeURIComponent(date);
       console.log('encodedDate : ', date);
-      const { data } = await api.get(
-        `/schedule/date/${familyId}?date=${encodedDate}`,
-      );
+      const { data } = await api.get(`/schedule/date/${familyId}?date=${date}`);
       console.log('schedule by date : ', data);
       const dateScheduleList: DateScheduleList = {
         scheduleList: data.result.scheduleList,

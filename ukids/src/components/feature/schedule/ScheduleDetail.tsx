@@ -24,6 +24,7 @@ const ScheduleDetail = () => {
     if (data.code == 200) {
       alert('일정 삭제 성공');
       nav('/schedule/list');
+      return;
     }
     alert('일정 삭제 실패');
   };
@@ -35,7 +36,7 @@ const ScheduleDetail = () => {
           <section className="flex justify-between">
             <WhiteButton name="목록" path="/schedule/list" />
             <GrayButton name="수정" path={`/schedule/edit/${scheduleId}`} />
-            <GrayButton name="삭제" onClick={deleteSchedule()} />
+            <GrayButton name="삭제" onClick={() => deleteSchedule()} />
           </section>
           <section className="px-5 content-center">
             <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>

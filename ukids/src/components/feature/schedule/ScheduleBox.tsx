@@ -5,8 +5,12 @@ import { useFamilyStore } from '@/stores/familyStore.ts';
 import { useEffect } from 'react';
 
 const ScheduleBox = () => {
-  const { selectedDate, setDateScheduleList, dateScheduleList } =
-    useScheduleStore();
+  const {
+    selectedDate,
+    setSelectedDate,
+    setDateScheduleList,
+    dateScheduleList,
+  } = useScheduleStore();
   const nav = useNavigate();
   const onClickAlbumButton = () => {
     // 앨범 페이지로 이동
@@ -29,7 +33,7 @@ const ScheduleBox = () => {
       setDateScheduleList(selectedDate, selectedFamilyId);
       console.log('date schedule : ', dateScheduleList);
     }
-  }, [selectedDate, selectedFamilyId]);
+  }, [selectedFamilyId, setDateScheduleList, setSelectedDate]);
 
   return (
     <>
@@ -63,7 +67,7 @@ const ScheduleBox = () => {
                     <div className="circle-color"></div>
                     {value.title}
                   </p>
-                  <p>장소: {value.place}</p>
+                  {value.place && <p>장소: {value.place}</p>}
                 </div>
               ))
             ) : (

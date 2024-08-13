@@ -44,6 +44,7 @@ const ScheduleCreate = () => {
     if (data.code == 201) {
       alert('일정 등록 성공');
       nav('/schedule/list');
+      return;
     }
     alert('일정 등록 실패, 재시도해주세요.');
   };
