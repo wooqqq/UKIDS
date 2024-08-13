@@ -27,11 +27,13 @@
 .modal-container {
   position: relative;
   border-radius: 10px;
-  background-color: rgb(235, 235, 235);
+  background-color: white;
   margin: 0 auto;
   width: 400px;
   height: 250px;
 }
+
+
 .modal-header {
     position: relative;
     background-color: #dadada;
@@ -45,6 +47,7 @@
 
 /* x 버튼 */
 .modal-close-button {
+    cursor: pointer; /* 커서를 포인터로 설정 */
     position: absolute;
     border: none;
     top: 12px;

@@ -50,7 +50,9 @@ export const Modal = ({
     const checkPassword = async () => {
         const url = "/family/pwcheck";
         const config = {
-            familyId : 6,
+
+            // 삭제용 familyId
+            familyId : 21,
             password
         }
 

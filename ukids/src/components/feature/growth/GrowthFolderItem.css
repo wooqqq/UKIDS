@@ -1,0 +1,56 @@
+/* font-family: 'Ownglyph_ryuttung-Rg', sans-serif; */
+
+
+/* 폴더 전체 */
+.folder-container {
+    position: relative;
+    padding-top: 70px; /* 상단 고정 영역만큼의 패딩 */
+}
+
+
+.folder-scrollable {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 최소 너비를 250px로 증가 */
+    grid-gap: 40px; /* 칼럼과 행 사이의 간격 */
+    padding: 10px; /* 내부 패딩 */
+    margin: 0 10px; /* 외부 좌우 마진 */
+    max-height: 426px; /* 스크롤 영역의 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    overflow-x: hidden; /* 세로 스크롤 활성화 */
+
+}
+
+
+
+
+
+/* 폴더 아이템 */
+.folderItem {
+    display: flex;
+    flex-direction: column; /* 세로로 요소들 쌓음 */
+    align-items: center; /* 가운데 정렬 */
+    font-family: 'Ownglyph_ryuttung-Rg', sans-serif;
+    color: #333;
+    margin-bottom: 10px;
+   
+    
+}
+
+.folderImage img {
+    width: 200px; /* 이미지 너비 지정 */
+    height: 180; /* 이미지 높이 지정 */
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+.folderName {
+
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center; /* 텍스트 가운데 정렬 */
+    width: 100%; /* 전체 폭을 사용하도록 설정 */
+   
+}
+
+
+
