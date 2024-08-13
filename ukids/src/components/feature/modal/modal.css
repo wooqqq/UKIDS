@@ -27,11 +27,13 @@
 .modal-container {
   position: relative;
   border-radius: 10px;
-  background-color: rgb(235, 235, 235);
+  background-color: white;
   margin: 0 auto;
   width: 400px;
   height: 250px;
 }
+
+
 .modal-header {
     position: relative;
     background-color: #dadada;

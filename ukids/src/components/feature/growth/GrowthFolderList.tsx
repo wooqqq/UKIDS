@@ -69,8 +69,8 @@ export const GrowthFolderList = () => {
 
                     // 각각의 아이템 : 폴더 list item
                     (
-                    <div className="album-container">
-                        <div className="albums-scrollable">
+                    <div className="folder-container">
+                        <div className="folder-scrollable">
                             {folders.map((item) => (
                                 <Link to={`/growthdiary/folder/${item.folderId}`}>
                                     <GrowthFolderItem key={item.folderId} folderName={item.folderName} />
