@@ -9,6 +9,9 @@ import { useFamilyStore } from '@stores/familyStore';
 import ReadyCall from './ReadyCall';
 import VideoToggleButton from '../family_communication/VideoToggleButton';
 import AudioToggleButton from '../family_communication/AudioToggleButton';
+import ImageSlider from '@components/common/ImageSlider';
+import example_game1 from '@/assets/example_gamming.png';
+import example_game2 from '@/assets/example_result.png';
 
 interface Participant {
   userName: string;
@@ -64,6 +67,8 @@ type GameMessage =
   | ExitGameMessage
   | GetQuizMaxMessage
   | ErrorMessage;
+
+const images = [example_game1, example_game2];
 
 const QuizReady = () => {
   const [isReady, setIsReady] = useState();
@@ -339,8 +344,8 @@ const QuizReady = () => {
                 <br />
                 기다리는 동안 내가 작성한 질문의 수만큼 개수를 설정할 수 있어요!
                 <br />
-                가족이 선택한 질문 수 중 가장 작은 개수가 맞출 퀴즈의 개수가
-                돼요.
+                가족이 선택한 질문 개수 중 가장 적은 개수가 게임이 진행될 퀴즈
+                개수에요
                 <br />한 질문당 12초가 주어져요! 문제를 선택하면 글씨가
                 굵어져요!
               </div>
@@ -369,7 +374,7 @@ const QuizReady = () => {
 
             {/* 퀴즈 예시 */}
             <div className="m-4">
-              <div className="w-[499px] h-[249px] bg-[#d9d9d9] rounded-[10px]"></div>
+              <ImageSlider images={images} />
             </div>
           </div>
 
