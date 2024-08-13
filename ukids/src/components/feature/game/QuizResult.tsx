@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { Client, IMessage } from '@stomp/stompjs';
 import { useFamilyStore } from '@/stores/familyStore.ts';
+import { useTreeStore } from '@/stores/treeStore';
 import SockJS from 'sockjs-client';
 import QuizButton from './QuizButton';
 import './gamepart.css';
@@ -36,9 +37,11 @@ interface ErrorMessage {
 }
 
 type GameMessage = GameInfoMessage | ErrorMessage;
+
 const QuizResult = () => {
   const { ukidsURL, token } = useAuthStore();
   const { selectedFamilyId } = useFamilyStore();
+  const { updateTreeExp } = useTreeStore();
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
   const [stompClientInstance, setStompClientInstance] = useState<Client | null>(
@@ -121,6 +124,10 @@ const QuizResult = () => {
                 (a, b) => b.hit - a.hit,
               );
               setParticipants(sortedParticipants);
+
+              // 가족 나무 경험치 증가 로직 추가
+              updateTreeExp(selectedFamilyId, 150);
+
               break;
 
             case 'ERROR':

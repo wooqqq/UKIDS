@@ -5,7 +5,7 @@ interface TreeState {
   familyId: number | null;
   treeData: any | null;
   fetchTreeData: (familyId: number) => Promise<void>;
-  updateTreeExp: (point: number) => Promise<void>;
+  updateTreeExp: (familyId: number, point: number) => Promise<void>;
   error: string | null;
   setFamilyId: (familyId: number) => void;
 }
@@ -24,8 +24,8 @@ export const useTreeStore = create<TreeState>((set, get) => ({
       }
     }
   },
-  updateTreeExp: async (point: number) => {
-    const { familyId } = get();
+  updateTreeExp: async (familyId: number, point: number) => {
+    // const { familyId } = get();
     if (familyId !== null) {
       try {
         await api.put(`/tree`, { familyId, point });

@@ -1,17 +1,29 @@
-import growth from "@/assets/growth.png"
+import folder from "@/assets/folder.png"
+
+import './GrowthFolderItem.css'; 
+
+
 
 interface Folder {
     folderName: string;
 }
 
+// 전체 보기 화면에 나오는 각각의 성장 폴더
+
 export const GrowthFolderItem = ({folderName} : Folder) => {
-
     return(
-        <>
-            {/* 아래 폴더사진에 div대신 이미지(폴더 사진) 넣어야함 */}
-            <div><img width="71" height="97" src={growth} alt="그림 일기" /></div>
-            <div>{folderName}</div>
-        </>
-    )
+        <div className="folderItem">
 
+
+            {/* 이미지 */}
+            <div className="folderImage">
+                <img src={folder} alt="그림 일기" />
+            </div>
+
+            {/* 폴더 이름 */}
+            <div className="folderName">{folderName}</div>
+        </div>
+    );
 }
+
+export default GrowthFolderItem;

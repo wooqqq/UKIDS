@@ -7,6 +7,7 @@ interface GrayButtonProps {
   path: string;
   className?: string;
   type?: string;
+  onClick?: () => void; // onClick 타입 정의 추가
 }
 
 const GrayButton = (props: GrayButtonProps) => {
@@ -16,6 +17,14 @@ const GrayButton = (props: GrayButtonProps) => {
   const handleClick = () => {
     nav(props.path);
   };
+
+  const deleteHandleClick = () => {
+    if(props.onClick){
+      props.onClick();
+    } else {
+      nav(props.path);
+    }
+  }
 
   const onClickLogoutButton = () => {
     localStorage.removeItem('token');
@@ -50,6 +59,12 @@ const GrayButton = (props: GrayButtonProps) => {
             fill="white"
           />
         </svg>
+      </button>
+    );
+  } else if (props.name == '삭제') {
+    return (
+      <button onClick={deleteHandleClick} className="gray-btn common-btn">
+        {props.name}
       </button>
     );
   } else {

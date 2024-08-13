@@ -4,14 +4,17 @@
 
 // 절대 경로로 수정하기
 import axios from 'axios';
+import api from '@/util/api';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
+import { useNavigate } from 'react-router-dom';
 
 import './AlbumDetail.css';
 import WhiteButton from '../../common/WhiteButton';
 import BlueButton from '../../common/BlueButton';
 import GrayButton from '../../common/GrayButton';
+import { Modal } from "@components/feature/modal/Modal.tsx";
 
 import '../../common/common.css';
 
@@ -35,12 +38,18 @@ interface Album {
 const AlbumDetail: React.FC = () => {
   // 현재 URL에서 albumId 추출
   const { albumId } = useParams<{ albumId: string }>();
-  console.log(albumId);
+  const [modalState, setModalState] = useState<boolean>(false);
+  const content = "앨범 삭제";
+  const navigate = useNavigate();
 
   // 상태관리 : 앨범 하나
   const [album, setAlbum] = useState<Album | null>(null);
 
   const token = useAuthStore((state) => state.token);
+
+  const onModalOpen = () => {
+    setModalState(!modalState);
+  }
 
   // 네비게이션 함수(수정, 삭제 할 때 사용)
 
@@ -48,13 +57,8 @@ const AlbumDetail: React.FC = () => {
   useEffect(() => {
     const fetchAlbumDetails = async () => {
       try {
-        const response = await axios.get(
-          `https://i11b306.p.ssafy.io/api/photo/all/${albumId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+        const response = await api.get(
+          `/photo/all/${albumId}`,
         );
 
         if (response.data.result) {
@@ -76,6 +80,16 @@ const AlbumDetail: React.FC = () => {
   // 앨범 정보가 아직 없을 경우 (주소 직접 입력했을시)
   if (!album) {
     return <div>로딩 중...</div>;
+  }
+
+  const deleteAlbum = async () => {
+    const url = `/album/${albumId}`;
+
+    const {data} = await api.delete(url);
+
+    console.log(data);
+
+    navigate('/albums');
   }
 
   return (
@@ -119,8 +133,8 @@ const AlbumDetail: React.FC = () => {
         {/* 수정,삭제 */}
         {/* 기능 추가 필요함 */}
         <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
-          <BlueButton name="수정" path="/albums" className="submit-btn mr-2" />
-          <GrayButton name="삭제" path="/albums" className="submit-btn" />
+          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn mr-2" />
+          <GrayButton name="삭제" path="" className="submit-btn" onClick={onModalOpen}/>
         </div>
       </div>
 
@@ -137,6 +151,12 @@ const AlbumDetail: React.FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div>
+        {modalState && (
+          <Modal content={content} modalState={modalState} setModalState={setModalState} deleteElement={deleteAlbum}/>
+        )}
       </div>
     </div>
   );
