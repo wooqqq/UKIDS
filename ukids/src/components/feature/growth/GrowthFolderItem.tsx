@@ -4,6 +4,8 @@ interface Folder {
     folderName: string;
 }
 
+// 전체 보기 화면에 나오는 성장 폴더들
+
 export const GrowthFolderItem = ({folderName} : Folder) => {
 
     return(
