@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const ImageSlider = ({ images }: any) => {
+const ImageSlider = ({ images, descriptions }: any) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToNext = () => {
@@ -15,25 +15,30 @@ const ImageSlider = ({ images }: any) => {
     );
   };
 
-  const explainText = ['게임 화면', '게임 결과'];
-
   return (
     <div className="w-[500px] h-[250px] bg-[#d9d9d9] rounded-[10px] relative overflow-hidden">
-      {/* 이미지 리스트 */}
+      {/* 이미지 및 텍스트 리스트 */}
       <div
         className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        style={{
+          transform: `translateX(-${currentIndex * 50}%)`,
+          width: `${images.length * 100}%`,
+        }}
       >
-        {images.map((image: any, index: number) => (
-          <>
+        {images.map((image: any, index: any) => (
+          <div
+            key={index}
+            className="w-full h-full flex flex-col justify-center items-center"
+          >
             <img
-              key={index}
               src={image}
               alt={`Slide ${index}`}
-              className="w-[60%] h-[60%] object-cover"
+              className="w-[60%] h-[60%] object-contain"
             />
-            <p>{explainText[index]}</p>
-          </>
+            <p className="text-center mt-2 text-sm text-gray-700">
+              {descriptions[index]}
+            </p>
+          </div>
         ))}
       </div>
 

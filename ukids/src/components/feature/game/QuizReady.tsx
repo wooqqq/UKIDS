@@ -69,6 +69,7 @@ type GameMessage =
   | ErrorMessage;
 
 const images = [example_game1, example_game2];
+const descripstions = ['게임화면', '게임결과'];
 
 const QuizReady = () => {
   const [isReady, setIsReady] = useState();
@@ -373,9 +374,7 @@ const QuizReady = () => {
             </div>
 
             {/* 퀴즈 예시 */}
-            <div className="m-4">
-              <ImageSlider images={images} />
-            </div>
+            <ImageSlider images={images} descriptions={descripstions} />
           </div>
 
           {/* 버튼 영역 */}
