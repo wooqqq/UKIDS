@@ -24,34 +24,36 @@ const MyPage = () => {
       <div className="feature-box px-[15px] py-[40px]">
         <section className="flex">
           <div className="setting-menu-box">
-            <button
-              className={`block setting-menu-btn ${getButtonClass('mypage')}`}
-              onClick={() => handleClick('mypage')}
-            >
-              개인 정보 수정
-            </button>
-            <button
-              className={`block setting-menu-btn ${getButtonClass(
-                'familyroom',
-              )}`}
-              onClick={() => handleClick('familyroom')}
-            >
-              가족 정보 수정
-            </button>
-            <button
-              className={`block setting-menu-btn ${getButtonClass(
-                'familymember',
-              )}`}
-              onClick={() => handleClick('familymember')}
-            >
-              가족 구성원 수정
-            </button>
+            <div className="w-full text-end">
+              <button
+                className={`mr-2 setting-menu-btn ${getButtonClass('mypage')}`}
+                onClick={() => handleClick('mypage')}
+              >
+                개인 정보 수정
+              </button>
+            </div>
+            <div className="w-full text-end">
+              <button
+                className={`mr-2 setting-menu-btn ${getButtonClass('family')}`}
+                onClick={() => handleClick('family')}
+              >
+                가족 정보 수정
+              </button>
+            </div>
+            <div className="w-full text-end">
+              <button
+                className={`mr-2 setting-menu-btn ${getButtonClass('member')}`}
+                onClick={() => handleClick('member')}
+              >
+                가족 구성원 수정
+              </button>
+            </div>
           </div>
           <section className="setting-box">
             <Routes>
               <Route path="mypage" element={<UserUpdate />} />
-              <Route path="familyroom" element={<FamilyUpdate />} />
-              <Route path="familymember" element={<FamilyMemberUpdate />} />
+              <Route path="family" element={<FamilyUpdate />} />
+              <Route path="member" element={<FamilyMemberUpdate />} />
             </Routes>
           </section>
         </section>

@@ -22,44 +22,52 @@ const FamilyCreate = () => {
     // 가족방 생성 API 요청
     await createFamily(name, password);
     alert('가족방이 생성되었습니다.');
-    window.location.href = `/main`;
+    window.location.replace('/main');
   };
 
   return (
-    <div className="common-feature-box w-[1000px] h-[576px]">
-      <p className="big-title-style text-center text-[#FFBF33] my-10">
+    <div className="common-feature-box w-[1000px] h-[576px] my-0 mx-auto">
+      <p className="big-title-style text-center text-[#FFBF33] my-10 pt-16">
         가족방 생성
       </p>
 
-      <form className="join-form" onSubmit={handleCreateFamily}>
-        {/* <label htmlFor="id">가족방 이름</label> */}
-        <input
-          type="text"
-          id="familyname"
-          placeholder="가족방 이름"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="input-box px-5 py-7 font-semibold text-[#555555]"
-        />
-        {/* <label htmlFor="name">가족방 비밀번호</label> */}
-        <input
-          type="password"
-          id="familypassword"
-          placeholder="가족방 비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input-box px-5 py-7 font-semibold text-[#555555]"
-        />
-        {/* <label htmlFor="familypwConfirm">비밀번호 확인</label> */}
-        <input
-          type="password"
-          id="familypwConfirm"
-          placeholder="가족방 비밀번호 확인"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="input-box px-5 py-7 font-semibold text-[#555555]"
-        />
-        <div className="text-[#F03F2F]">{error ? error : ''}</div>
+      <form className="join-form w-[450px]" onSubmit={handleCreateFamily}>
+        <div className="mb-7">
+          {/* <label htmlFor="id">가족방 이름</label> */}
+          <input
+            type="text"
+            id="familyname"
+            placeholder="가족방 이름"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input-box px-5 py-7 font-semibold text-[#555555]"
+          />
+        </div>
+        <div className="mb-7">
+          {/* <label htmlFor="name">가족방 비밀번호</label> */}
+          <input
+            type="password"
+            id="familypassword"
+            placeholder="가족방 비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input-box px-5 py-7 font-semibold text-[#555555]"
+          />
+        </div>
+        <div className="mb-7">
+          {/* <label htmlFor="familypwConfirm">비밀번호 확인</label> */}
+          <input
+            type="password"
+            id="familypwConfirm"
+            placeholder="가족방 비밀번호 확인"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="input-box px-5 py-7 font-semibold text-[#555555]"
+          />
+          <div className="pl-2 text-sm">
+            <div className="text-[#F03F2F] ">{error ? error : ''}</div>
+          </div>
+        </div>
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="방 만들기" type="submit" path="" />
         </div>
@@ -67,6 +75,8 @@ const FamilyCreate = () => {
     </div>
   );
 };
+
+//////////////////////////////////////////////////////
 
 const FamilyCreateButton = () => {
   const nav = useNavigate();

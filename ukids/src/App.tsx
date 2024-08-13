@@ -57,7 +57,9 @@ const App = () => {
     location.pathname === '/' ||
     location.pathname === '/family' ||
     location.pathname === '/login' ||
-    location.pathname === '/join';
+    location.pathname === '/join' ||
+    location.pathname === '/family/create' ||
+    location.pathname === '/family/find';
 
   // 배경색 변경 (회색 그라데이션)
   // useEffect(() => {

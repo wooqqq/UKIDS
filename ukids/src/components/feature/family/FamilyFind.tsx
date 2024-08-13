@@ -11,6 +11,7 @@ const FamilyFind = () => {
 
   const findFamily = useFamilyStore((state) => state.findFamily);
 
+  const nav = useNavigate();
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -24,12 +25,14 @@ const FamilyFind = () => {
       // 찾은 가족방 정보 가져오기
       const family = useFamilyStore
         .getState()
-        .family.find((family) => family.code === code && family.name === name);
+        .familyList.find(
+          (family) => family.code === code && family.name === name,
+        );
 
       if (family) {
         // 이름과 코드가 일치하면 가족방 신청 처리
         alert(`${name} 가족방에 가입 신청이 완료되었습니다.`);
-        window.location.href = `/main`;
+        nav('/family');
       } else {
         // 일치하지 않으면 오류 메시지 표시
         setError('가족방 이름과 코드가 일치하지 않습니다.');
@@ -41,32 +44,36 @@ const FamilyFind = () => {
   };
 
   return (
-    <div className="common-feature-box w-[1000px] h-[576px]">
-      <p className="big-title-style text-center text-[#FFBF33] my-14">
+    <div className="common-feature-box w-[1000px] h-[576px] my-0 mx-auto">
+      <p className="big-title-style text-center text-[#FFBF33] my-14 pt-16">
         가족방 찾기
       </p>
 
-      <form className="join-form" onSubmit={handleSubmit}>
-        {/* <label htmlFor="familyid">가족방 이름</label> */}
-        <input
-          type="text"
-          id="familyname"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="가족방 이름"
-          className="input-box px-5 py-7 font-semibold text-[#555555]"
-        />
-        {/* <label htmlFor="familycode">가족방 코드</label> */}
-        <input
-          type="text"
-          id="familycode"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          placeholder="가족방 코드"
-          className="input-box px-5 py-7 font-semibold text-[#555555]"
-        />
-        <div className="text-[red] text-center invisible">
-          {error ? error : ''}
+      <form className="join-form w-[450px]" onSubmit={handleSubmit}>
+        <div className="mb-7">
+          {/* <label htmlFor="familyid">가족방 이름</label> */}
+          <input
+            type="text"
+            id="familyname"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="가족방 이름 입력"
+            className="input-box px-5 py-7 font-semibold text-[#555555]"
+          />
+        </div>
+        <div className="mb-7">
+          {/* <label htmlFor="familycode">가족방 코드</label> */}
+          <input
+            type="text"
+            id="familycode"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="초대 코드 입력"
+            className="input-box px-5 py-7 font-semibold text-[#555555]"
+          />
+          <div className="pl-2 text-sm">
+            <div className="text-[#F03F2F]">{error ? error : ''}</div>
+          </div>
         </div>
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="가입신청" type="submit" path="" />
@@ -75,6 +82,8 @@ const FamilyFind = () => {
     </div>
   );
 };
+
+//////////////////////////////////////////////
 
 const FamilyFindButton = () => {
   const nav = useNavigate();
