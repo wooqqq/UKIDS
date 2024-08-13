@@ -7,8 +7,10 @@ import treeLv3 from '@/assets/tree_lv3.png';
 import treeLv4 from '@/assets/tree_lv4.png';
 import treeLv5 from '@/assets/tree_lv5.png';
 import '../../common/common.css';
+import { useNavigate } from 'react-router-dom';
 
 const FamilyTree = () => {
+  const nav = useNavigate();
   const { selectedFamilyId } = useFamilyStore();
   const { treeData, fetchTreeData, updateTreeExp, familyId } = useTreeStore(
     (state) => ({
@@ -69,8 +71,9 @@ const FamilyTree = () => {
     }
   };
 
-  if (!treeData) {
-    return <div>Loading...</div>;
+  // 나무 데이터가 없을 시 나무 클릭 시 가족방 만들기 이동
+  const onClickFamilyButton = () => {
+    nav('/family');
   }
 
   const treeImages: Record<number, string> = {
@@ -82,6 +85,35 @@ const FamilyTree = () => {
   };
 
   const treeImage = treeImages[level];
+
+  // 나무 데이터를 찾지 못했을 때
+  if (!treeData) {
+    return (
+      <div className="h-[576px]">
+      <section>
+        <div className='relative text-center' 
+        onClick={onClickFamilyButton}>
+          <img
+            src={treeImages[5]}
+            alt="가족 유대감 나무"
+            className="max-w-[400px] cursor-pointer opacity-70"
+            style={{
+              margin: '50px auto 15px',
+            }}
+          />
+          <div
+            className="absolute w-[300px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            style={{color: '#fff', fontSize: '2.5rem', fontWeight: 700, textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'}}>
+          가족을 만나보세요!</div>
+          <div 
+          className="absolute w-[300px] top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          style={{color: '#333', fontSize: '1.3rem', fontWeight: 700}}
+          >가족방 만들기 & 가족방 찾기</div>
+        </div>
+      </section>
+    </div>
+    )
+  }
 
   return (
     <div className="h-[576px] ">
@@ -122,13 +154,6 @@ const FamilyTree = () => {
         </div>
         <div></div>
       </section>
-      {/* 경험치 증가 테스트 버튼 */}
-      <button
-        onClick={handleAddExperience}
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
-      >
-        Add 5 EXP
-      </button>
     </div>
   );
 };
