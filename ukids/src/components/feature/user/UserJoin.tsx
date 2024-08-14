@@ -20,51 +20,51 @@ const UserJoin = () => {
 
   const nav = useNavigate();
   const joinUser = useAuthStore((state) => state.joinUser);
-  // const checkedId = useAuthStore((state) => state.checkedId);
-  // const checkedEmail = useAuthStore((state) => state.checkedEmail);
-  // const checkedPhone = useAuthStore((state) => state.checkedPhone);
+  const checkedId = useAuthStore((state) => state.checkedId);
+  const checkedEmail = useAuthStore((state) => state.checkedEmail);
+  const checkedPhone = useAuthStore((state) => state.checkedPhone);
 
-  // const [idError, setIdError] = useState('');
+  const [idError, setIdError] = useState('');
   const [pwError, setPwError] = useState('');
   const [confirmError, setConfirmError] = useState('');
   const [nameError, setNameError] = useState('');
-  // const [emailError, setEmailError] = useState('');
-  // const [phoneError, setPhoneError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [dateError, setDateError] = useState('');
 
-  // const [isIdCheck, setIsIdCheck] = useState(false); // 중복 검사를 했는지 안했는지
-  // const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
+  const [isIdCheck, setIsIdCheck] = useState(false); // 중복 검사를 했는지 안했는지
+  const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
 
   // 아이디 중복 확인
-  // const idCheckHandler = async (id: string) => {
-  //   const idRegex = /^[a-z\d]{5,10}$/;
-  //   if (id === '') {
-  //     setIdError('아이디를 입력해주세요.');
-  //     setIsIdAvailable(false);
-  //     return false;
-  //   } else if (!idRegex.test(id)) {
-  //     setIdError('아이디는 5~10자의 영소문자, 숫자만 입력 가능합니다.');
-  //     setIsIdAvailable(false);
-  //     return false;
-  //   }
-  //   try {
-  //     const responseData = await checkedId(id);
-  //     if (responseData) {
-  //       setIdError('사용 가능한 아이디입니다.');
-  //       setIsIdCheck(true);
-  //       setIsIdAvailable(true);
-  //       return true;
-  //     } else {
-  //       setIdError('이미 사용중인 아이디입니다.');
-  //       setIsIdAvailable(false);
-  //       return false;
-  //     }
-  //   } catch (error) {
-  //     alert('서버 오류입니다. 관리자에게 문의하세요.');
-  //     console.error(error);
-  //     return false;
-  //   }
-  // };
+  const idCheckHandler = async (id: string) => {
+    const idRegex = /^[a-z\d]{5,10}$/;
+    if (id === '') {
+      setIdError('아이디를 입력해주세요.');
+      setIsIdAvailable(false);
+      return false;
+    } else if (!idRegex.test(id)) {
+      setIdError('아이디는 5~10자의 영소문자, 숫자만 입력 가능합니다.');
+      setIsIdAvailable(false);
+      return false;
+    }
+    try {
+      const responseData = await checkedId(id);
+      if (responseData) {
+        setIdError('사용 가능한 아이디입니다.');
+        setIsIdCheck(true);
+        setIsIdAvailable(true);
+        return true;
+      } else {
+        setIdError('이미 사용중인 아이디입니다.');
+        setIsIdAvailable(false);
+        return false;
+      }
+    } catch (error) {
+      alert('서버 오류입니다. 관리자에게 문의하세요.');
+      console.error(error);
+      return false;
+    }
+  };
 
   const passwordCheckHandler = (password: string, confirmPassword: string) => {
     const passwordRegex = /^[a-z\d!@*&-_]{8,16}$/;
@@ -87,11 +87,11 @@ const UserJoin = () => {
     }
   };
 
-  // const onChangeIdHandler = (e: React.FormEvent<HTMLInputElement>) => {
-  //   const idValue = e.currentTarget.value;
-  //   setForm({ ...form, id: idValue });
-  //   idCheckHandler(idValue);
-  // };
+  const onChangeIdHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const idValue = e.currentTarget.value;
+    setForm({ ...form, id: idValue });
+    idCheckHandler(idValue);
+  };
 
   const onChangePasswordHandler = (e: React.FormEvent<HTMLInputElement>) => {
     const { id, value } = e.currentTarget;
@@ -141,70 +141,70 @@ const UserJoin = () => {
     }));
   };
 
-  // const onChangeEmailHandler = async (e: React.FormEvent<HTMLInputElement>) => {
-  //   const { value } = e.currentTarget;
+  const onChangeEmailHandler = async (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
 
-  //   if (!value.trim()) {
-  //     setEmailError('이메일을 입력하세요.');
-  //   } else {
-  //     // 이메일 유효성 검사를 수행하기 전에 상태 업데이트
-  //     setForm((prevForm) => ({
-  //       ...prevForm,
-  //       email: value,
-  //     }));
+    if (!value.trim()) {
+      setEmailError('이메일을 입력하세요.');
+    } else {
+      // 이메일 유효성 검사를 수행하기 전에 상태 업데이트
+      setForm((prevForm) => ({
+        ...prevForm,
+        email: value,
+      }));
 
-  //     try {
-  //       const isEmailDuplicate = await checkedEmail(value);
-  //       if (!isEmailDuplicate) {
-  //         setEmailError('이미 사용 중인 이메일입니다.');
-  //       } else {
-  //         setEmailError(''); // 이메일 사용 가능할 때 에러 메시지 초기화
-  //       }
-  //     } catch (error) {
-  //       console.error('이메일 확인 중 오류 발생:', error);
-  //       setEmailError('서버 오류입니다. 나중에 다시 시도하세요.');
-  //     }
-  //   }
-  // };
+      try {
+        const isEmailDuplicate = await checkedEmail(value);
+        if (!isEmailDuplicate) {
+          setEmailError('이미 사용 중인 이메일입니다.');
+        } else {
+          setEmailError(''); // 이메일 사용 가능할 때 에러 메시지 초기화
+        }
+      } catch (error) {
+        console.error('이메일 확인 중 오류 발생:', error);
+        setEmailError('서버 오류입니다. 나중에 다시 시도하세요.');
+      }
+    }
+  };
 
-  // const onChangePhoneHandler = async (e: React.FormEvent<HTMLInputElement>) => {
-  //   const { value } = e.currentTarget;
+  const onChangePhoneHandler = async (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
 
-  //   if (!value.trim()) {
-  //     setPhoneError('휴대전화번호를 입력하세요.');
-  //     return;
-  //   } else {
-  //     setForm((prevForm) => ({
-  //       ...prevForm,
-  //       phone: value,
-  //     }));
-  //   }
+    if (!value.trim()) {
+      setPhoneError('휴대전화번호를 입력하세요.');
+      return;
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        phone: value,
+      }));
+    }
 
-  //   try {
-  //     const isPhoneDuplicate = await checkedPhone(value);
-  //     if (!isPhoneDuplicate) {
-  //       setPhoneError('이미 사용 중인 전화번호입니다.');
-  //     } else {
-  //       setPhoneError(''); // 사용 가능한 번호일 때 에러 메시지 초기화
-  //     }
-  //   } catch (error) {
-  //     console.error('전화번호 확인 중 오류 발생:', error);
-  //     setPhoneError('서버 오류입니다. 나중에 다시 시도하세요.');
-  //   }
-  // };
+    try {
+      const isPhoneDuplicate = await checkedPhone(value);
+      if (!isPhoneDuplicate) {
+        setPhoneError('이미 사용 중인 전화번호입니다.');
+      } else {
+        setPhoneError(''); // 사용 가능한 번호일 때 에러 메시지 초기화
+      }
+    } catch (error) {
+      console.error('전화번호 확인 중 오류 발생:', error);
+      setPhoneError('서버 오류입니다. 나중에 다시 시도하세요.');
+    }
+  };
 
   ////////////////////////////////////////
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
     // 아이디 중복 확인
-    // const isCheckedId = await checkedId(form.id);
-    // if (isCheckedId) setIdError('');
-    // else return;
-    // if (!isIdCheck || !isIdAvailable) {
-    //   alert('아이디 중복 검사를 해주세요.');
-    //   return;
-    // }
+    const isCheckedId = await checkedId(form.id);
+    if (isCheckedId) setIdError('');
+    else return;
+    if (!isIdCheck || !isIdAvailable) {
+      alert('아이디 중복 검사를 해주세요.');
+      return;
+    }
 
     const passwordCheckResult = passwordCheckHandler(
       form.password,
@@ -215,16 +215,6 @@ const UserJoin = () => {
       setConfirmError('');
     } else return;
 
-    // // 생년월일 유효성 검사
-    // const today = new Date();
-    // const birthDate = new Date(form.birthDate);
-    // const isInvalidBirthDate = birthDate > today;
-
-    // // 생년월일 유효성 검사
-    // if (isInvalidBirthDate) {
-    //   setDateError('생년월일이 오늘 이후의 날짜입니다. 다시 입력해 주세요.');
-    //   return;
-    // }
     // // 이메일 중복 확인
     // if (form.email) {
     //   const isEmailDuplicate = await checkedEmail(form.email);
@@ -273,12 +263,13 @@ const UserJoin = () => {
                 placeholder="아이디"
                 value={form.id}
                 required={true}
-                onChange={(e) => setForm({ ...form, id: e.target.value })}
+                onChange={onChangeIdHandler}
+                // onChange={(e) => setForm({ ...form, id: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
             <div className="pl-2 text-sm text-end">
-              {/* <p className="text-[#F03F2F]">{idError ? idError : ''}</p> */}
+              <p className="text-[#F03F2F]">{idError ? idError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
@@ -381,12 +372,13 @@ const UserJoin = () => {
                 placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
                 value={form.email}
                 required={false}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                onChange={onChangeEmailHandler}
+                // onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
             <div className="pl-2 text-sm text-end">
-              {/* <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p> */}
+              <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
@@ -402,12 +394,13 @@ const UserJoin = () => {
                 placeholder="[선택] 휴대전화번호"
                 value={form.phone}
                 required={false}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                onChange={onChangePhoneHandler}
+                // onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
             <div className="pl-2 text-sm text-end">
-              {/* <p className="text-[#F03F2F]">{phoneError ? phoneError : ''}</p> */}
+              <p className="text-[#F03F2F]">{phoneError ? phoneError : ''}</p>
             </div>
           </section>
           <div className="flex justify-center">
