@@ -1,108 +1,109 @@
-import { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "@/util/api.ts"
-import { useFamilyStore } from "@/stores/familyStore";
-
+import { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '@/util/api.ts';
 import { useFamilyStore } from '@/stores/familyStore';
 
 interface ModalProps {
-    modalState: boolean;
-    setModalState: React.Dispatch<React.SetStateAction<boolean>>;
-    renewFolderList: () => void
+  modalState: boolean;
+  setModalState: React.Dispatch<React.SetStateAction<boolean>>;
+  renewFolderList: () => void;
 }
 
-export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderList}: ModalProps) => {
-    const navigate = useNavigate();
-<<<<<<< HEAD
+export const GrowthFolderCreateModal = ({
+  modalState,
+  setModalState,
+  renewFolderList,
+}: ModalProps) => {
+  const navigate = useNavigate();
+  const { selectedFamilyId } = useFamilyStore();
 
-    const {selectedFamilyId} = useFamilyStore();
+  // 수정 : // 초기 값으로 빈 문자열 설정
+  const [folderName, setFolderName] = useState<string>('');
 
-    
-=======
-    const {selectedFamilyId} = useFamilyStore();
->>>>>>> d7c2990a1394aee6152c6361e44389bc60338154
+  const onClickCloseButton = () => {
+    setModalState(!modalState);
+  };
 
-    // 수정 : // 초기 값으로 빈 문자열 설정
-    const [folderName, setFolderName] = useState<string>(""); 
-
-    const onClickCloseButton = () => { 
-        setModalState(!modalState);
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setModalState(false);
+      }
     };
 
-    useEffect(() => {
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                setModalState(false);
-            }
-        };
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [setModalState]);
 
-        window.addEventListener('keydown', handleEscape);
-        return () => {
-            window.removeEventListener('keydown', handleEscape);
-        };
-    }, [setModalState]);
+  if (!modalState) return null;
 
-    if (!modalState) return null;
-
-    const createFolder = async () => {
-
-
-        if (!folderName.trim()) { // 입력 유효성 검사
-            alert("폴더 이름을 입력해주세요.");
-            return;
-        }
-
-        const url = `/growth-folder`;
-
-        const inputData = {
-            familyId: selectedFamilyId,
-            folderName: folderName
-        }
-
-        const {data} = await api.post(url, inputData);
-
-        console.log(data);
-
-        renewFolderList();
-
-        setModalState(!modalState);
-
-        alert("폴더가 성공적으로 생성되었습니다."); 
-
-
+  const createFolder = async () => {
+    if (!folderName.trim()) {
+      // 입력 유효성 검사
+      alert('폴더 이름을 입력해주세요.');
+      return;
     }
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-top-container">
-                <div className="modal-container">
-                    <div className="modal-header">
-                        <span className='content-title'>폴더 생성</span>
-                        <span className="modal-close-button" onClick={onClickCloseButton}>
-                            X
-                        </span>
-                    </div>
+    const url = `/growth-folder`;
 
-                    <div className="modal-content text-center">
+    const inputData = {
+      familyId: selectedFamilyId,
+      folderName: folderName,
+    };
 
-                    <p className="password-label">생성할 폴더 이름을 입력해주세요 </p>
-                        
-                        
-                        <input
-                            id="foldername"
-                            type="text"
-                            value={folderName} onChange={(e) => setFolderName(e.target.value)}
-                            placeholder="폴더 이름을 입력하세요" // 추가 : 입력 플레이스홀더 
-                            className="password-input" // 추가 : css 
-                        />
-                    </div>
+    const { data } = await api.post(url, inputData);
 
-                    <div className="text-center">
-                        <button className="common-btn list-btn" style={{ position: 'absolute', bottom: '30px', right: '30px', color: 'gray'}} onClick={createFolder}>등록</button>
-                    </div>
+    console.log(data);
 
-                </div>
-            </div>
+    renewFolderList();
+
+    setModalState(!modalState);
+
+    alert('폴더가 성공적으로 생성되었습니다.');
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-top-container">
+        <div className="modal-container">
+          <div className="modal-header">
+            <span className="content-title">폴더 생성</span>
+            <span className="modal-close-button" onClick={onClickCloseButton}>
+              X
+            </span>
+          </div>
+
+          <div className="modal-content text-center">
+            <p className="password-label">생성할 폴더 이름을 입력해주세요 </p>
+
+            <input
+              id="foldername"
+              type="text"
+              value={folderName}
+              onChange={(e) => setFolderName(e.target.value)}
+              placeholder="폴더 이름을 입력하세요" // 추가 : 입력 플레이스홀더
+              className="password-input" // 추가 : css
+            />
+          </div>
+
+          <div className="text-center">
+            <button
+              className="common-btn list-btn"
+              style={{
+                position: 'absolute',
+                bottom: '30px',
+                right: '30px',
+                color: 'gray',
+              }}
+              onClick={createFolder}
+            >
+              등록
+            </button>
+          </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};

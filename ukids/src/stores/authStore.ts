@@ -262,7 +262,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkedId: async (id: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/id/${id}`);
-      if (response.data.code === 200) {
+      if (response.data.result === 'id 중복 없음') {
         // alert('사용 가능한 ID입니다.');
         return true;
       } else {
