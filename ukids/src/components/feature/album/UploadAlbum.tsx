@@ -85,8 +85,6 @@ const UploadAlbum = () => {
     }
   };
 
-  console.log('앨범 만들어짐');
-
   const uploadPhotos = async (albumData: any) => {
     try {
       const responses = await Promise.all(
@@ -104,10 +102,8 @@ const UploadAlbum = () => {
           });
         }),
       );
-      console.log('Photo upload responses:', responses);
       // 응답에서 사진 ID 추출 (응답 형식에 따라 수정 필요)
       const photoIds = responses.map((res) => res.data.photoId);
-      console.log('Uploaded photo IDs:', photoIds);
       updateTreeExp(selectedFamilyId, 25);
       alert('모든 사진이 성공적으로 업로드되었습니다!');
     } catch (error) {

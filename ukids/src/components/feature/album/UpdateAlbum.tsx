@@ -104,7 +104,6 @@ export const UpdateAlbum = () => {
         content: caption.content,
       };
       const { data } = api.put(url, inputData);
-      console.log(data);
     });
 
     try {
@@ -123,10 +122,8 @@ export const UpdateAlbum = () => {
           });
         }),
       );
-      console.log('Photo upload responses:', responses);
       // 응답에서 사진 ID 추출 (응답 형식에 따라 수정 필요)
       const photoIds = responses.map((res) => res.data.photoId);
-      console.log('Uploaded photo IDs:', photoIds);
 
       // 앨범 정보 변경
       const inputData = {
@@ -135,7 +132,6 @@ export const UpdateAlbum = () => {
         title: title,
         date: format(date as Date, 'yyyy-MM-dd'),
       };
-      console.log(inputData.title);
       api.put(`/album`, inputData);
 
       alert('모든 사진이 성공적으로 업로드되었습니다!');
@@ -159,7 +155,6 @@ export const UpdateAlbum = () => {
 
     const url = `/album/${albumId}`;
     const { data } = await api.get(url);
-    console.log(data.result);
     uploadPhotos(data.result);
   };
 
@@ -167,17 +162,14 @@ export const UpdateAlbum = () => {
     const url = `/photo/all/${albumId}`;
 
     const { data } = await api.get(url);
-    console.log(data);
 
     setUploadedPhotos(data.result.photoList);
     setDate(data.result.album.date);
     setTitle(data.result.album.title);
 
     for (let i = 0; i < data.result.photoList.length; i++) {
-      console.log('photoId: ', data.result.photoList[i].photoId);
       const urlCaption = `/caption/${data.result.photoList[i].photoId}`;
       const resp = await api.get(urlCaption);
-      console.log(resp.data.result);
       setUploadedCaption((prevCaption) => [...prevCaption, resp.data.result]);
     }
   };
@@ -190,7 +182,6 @@ export const UpdateAlbum = () => {
     setUploadedCaption((prevUploadedCaptions) =>
       prevUploadedCaptions.filter((_, i) => i !== index),
     );
-    console.log(deletePhotos);
   };
 
   useEffect(() => {
