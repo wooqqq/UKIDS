@@ -49,6 +49,7 @@ const FamilyChatting = () => {
     }
   };
 
+  // 메세지 가져오기
   const getChatList = async () => {
     const url = `/chat/room/${selectedFamilyId}/messages`;
 
@@ -87,6 +88,26 @@ const FamilyChatting = () => {
         });
       } catch (error) {
         console.error('Enter 메세지 전송 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
+  // 채팅방 연결 종료
+  const exitChatRoom = async () => {
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: `/pub/chat/leave`,
+          body: JSON.stringify({
+            familyId: selectedFamilyId,
+          }),
+        });
+        console.log('채팅방 퇴장');
+      } catch (error) {
+        console.error('채팅방 퇴장 오류:', error);
       }
     } else {
       console.log('stompClientInstance is null or message is empty');
@@ -155,24 +176,34 @@ const FamilyChatting = () => {
       setStompClientInstance(client);
 
       client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
-        console.log('Received message:', message.body);
-        const receivedRawMessage = JSON.parse(message.body);
+        console.log('Received message at ChattingRoom: ', message.body);
+        const receivedMessage = JSON.parse(message.body);
+        console.log('----ReceivedMessage----');
+        console.log(receivedMessage);
+        // {
+        //   createTime: '2024-08-14T00:13:58.60193821';
+        //   message: '다른 사람';
+        //   roomId: 1;
+        //   sender: '김싸피';
+        //   senderId: 2;
+        //   type: 'TALK';
+        // }
 
-        const receivedMessage: Message = {
-          messageId: receivedRawMessage.createTime,
-          content: receivedRawMessage.message,
-          user_id: receivedRawMessage.senderId,
-          sender: receivedRawMessage.sender,
+        const displayMessage: Message = {
+          messageId: receivedMessage.createTime,
+          content: receivedMessage.message,
+          user_id: receivedMessage.senderId,
+          sender: receivedMessage.sender,
           is_delete: false,
-          create_time: receivedRawMessage.createTime,
-          update_time: receivedRawMessage.createTime,
+          create_time: receivedMessage.createTime,
+          update_time: receivedMessage.createTime,
         };
         setMessages((prevMessages) => {
           const messageExists = prevMessages.some(
-            (msg) => msg.messageId === receivedMessage.messageId,
+            (msg) => msg.messageId === displayMessage.messageId,
           );
           if (!messageExists) {
-            return [receivedMessage, ...prevMessages];
+            return [displayMessage, ...prevMessages];
           }
           return prevMessages;
         });
@@ -186,16 +217,19 @@ const FamilyChatting = () => {
     client.activate();
 
     return () => {
-      if (client) {
+      if (stompClientInstance) {
+        exitChatRoom();
         client.deactivate();
       }
     };
   }, [ukidsURL, token, chatRoomId]);
 
   useEffect(() => {
-    getChatList();
-    enterChatRoom();
-  }, []);
+    if (stompClientInstance && stompClientInstance.connected) {
+      enterChatRoom();
+      getChatList();
+    }
+  }, [stompClientInstance]);
 
   // 메세지에 변화가 있을 시 스크롤 맨 밑으로
   useEffect(() => {
