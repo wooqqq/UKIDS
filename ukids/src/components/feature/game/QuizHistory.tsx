@@ -20,7 +20,6 @@ const QuizHistory = () => {
   // 게임 기록 가져오기
   useEffect(() => {
     api.get('/quiz').then((response) => {
-      console.log(response.data);
       setHistoryList(response.data.result.quizResults);
     });
   }, []);

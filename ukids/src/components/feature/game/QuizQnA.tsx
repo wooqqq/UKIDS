@@ -28,8 +28,6 @@ const QuizQnA = () => {
 
   // 답변 수정한거 서버로 보내고 리스트 갱신
   const editSubmit = (quizQuestion: any) => {
-    console.log(quizQuestion);
-    console.log(answer);
     api
       .put('/quiz-question', {
         quizQuestionId: quizQuestion.quizQuestionId,
