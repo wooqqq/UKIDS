@@ -22,12 +22,11 @@ export const PictureDiaryCreate = () => {
   // 추가
   const navigate = useNavigate();
 
-  const {selectedFamilyId} = useFamilyStore();
+  const { selectedFamilyId } = useFamilyStore();
 
-  const {updateTreeExp} = useTreeStore();
+  const { updateTreeExp } = useTreeStore();
 
   const [diary, setDiary] = useState<Diary>({
-
     // 가족아이디 수정!
     familyId: selectedFamilyId,
     file: null, // File은 null로 초기화
@@ -58,7 +57,7 @@ export const PictureDiaryCreate = () => {
 
       // 추가 : 성공 후 페이지 이동
       updateTreeExp(selectedFamilyId, 25);
-      navigate('/paintdiary');  
+      navigate('/paintdiary');
     } else {
       alert('그림 또는 사진을 넣어주세요.');
     }
@@ -115,7 +114,9 @@ export const PictureDiaryCreate = () => {
           <label className="input-file-box" htmlFor="fileUpload">
             <span>+</span>
             {/* 이미지 미리보기 */}
-            {previewUrl && <img src={previewUrl} alt="Preview" />}
+            {previewUrl && (
+              <img src={previewUrl} alt="Preview" crossOrigin="anonymous" />
+            )}
             <input
               required
               className="hidden"

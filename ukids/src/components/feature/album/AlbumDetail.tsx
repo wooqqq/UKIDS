@@ -14,7 +14,7 @@ import './AlbumDetail.css';
 import WhiteButton from '../../common/WhiteButton';
 import BlueButton from '../../common/BlueButton';
 import GrayButton from '../../common/GrayButton';
-import { Modal } from "@components/feature/modal/Modal.tsx";
+import { Modal } from '@components/feature/modal/Modal.tsx';
 
 import '../../common/common.css';
 
@@ -39,7 +39,7 @@ const AlbumDetail: React.FC = () => {
   // 현재 URL에서 albumId 추출
   const { albumId } = useParams<{ albumId: string }>();
   const [modalState, setModalState] = useState<boolean>(false);
-  const content = "앨범 삭제";
+  const content = '앨범 삭제';
   const navigate = useNavigate();
 
   // 상태관리 : 앨범 하나
@@ -49,7 +49,7 @@ const AlbumDetail: React.FC = () => {
 
   const onModalOpen = () => {
     setModalState(!modalState);
-  }
+  };
 
   // 네비게이션 함수(수정, 삭제 할 때 사용)
 
@@ -57,9 +57,7 @@ const AlbumDetail: React.FC = () => {
   useEffect(() => {
     const fetchAlbumDetails = async () => {
       try {
-        const response = await api.get(
-          `/photo/all/${albumId}`,
-        );
+        const response = await api.get(`/photo/all/${albumId}`);
 
         if (response.data.result) {
           setAlbum({
@@ -85,12 +83,12 @@ const AlbumDetail: React.FC = () => {
   const deleteAlbum = async () => {
     const url = `/album/${albumId}`;
 
-    const {data} = await api.delete(url);
+    const { data } = await api.delete(url);
 
     console.log(data);
 
     navigate('/albums');
-  }
+  };
 
   return (
     <div className="feature-box relative w-[911px] h-[576px] overflow-x-hidden">
@@ -133,8 +131,17 @@ const AlbumDetail: React.FC = () => {
         {/* 수정,삭제 */}
         {/* 기능 추가 필요함 */}
         <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
-          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn mr-2" />
-          <GrayButton name="삭제" path="" className="submit-btn" onClick={onModalOpen}/>
+          <BlueButton
+            name="수정"
+            path={`/albums/update/${albumId}`}
+            className="submit-btn mr-2"
+          />
+          <GrayButton
+            name="삭제"
+            path=""
+            className="submit-btn"
+            onClick={onModalOpen}
+          />
         </div>
       </div>
 
@@ -145,7 +152,11 @@ const AlbumDetail: React.FC = () => {
           <div key={index} className="photo-container">
             {/* 사진 + 캡션 */}
             <div className="photo-imgandcaption">
-              <img src={photo.imgUrl} alt={`Photo ${index + 1}`} />
+              <img
+                src={photo.imgUrl}
+                alt={`Photo ${index + 1}`}
+                crossOrigin="anonymous"
+              />
               <p dangerouslySetInnerHTML={{ __html: photo.caption }}></p>{' '}
               {/* Here HTML is rendered */}
             </div>
@@ -155,7 +166,12 @@ const AlbumDetail: React.FC = () => {
 
       <div>
         {modalState && (
-          <Modal content={content} modalState={modalState} setModalState={setModalState} deleteElement={deleteAlbum}/>
+          <Modal
+            content={content}
+            modalState={modalState}
+            setModalState={setModalState}
+            deleteElement={deleteAlbum}
+          />
         )}
       </div>
     </div>

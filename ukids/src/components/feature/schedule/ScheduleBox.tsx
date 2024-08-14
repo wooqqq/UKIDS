@@ -42,14 +42,14 @@ const ScheduleBox = () => {
         <button className="half-pre-box" onClick={onClickAlbumButton}>
           <div className="title-style">앨범</div>
           <div>
-            <img src="#" alt="앨범 이미지" />
+            <img src="#" alt="앨범 이미지" crossOrigin="anonymous" />
           </div>
           <button>앨범 페이지 이동</button>
         </button>
         <button className="half-pre-box" onClick={onClickPaintButton}>
           <div className="title-style">그림일기</div>
           <div>
-            <img src="#" alt="그림일기 이미지" />
+            <img src="#" alt="그림일기 이미지" crossOrigin="anonymous" />
             <button>그림일기 페이지 이동</button>
           </div>
         </button>
@@ -57,20 +57,25 @@ const ScheduleBox = () => {
       <section className="pre-box mt-8 p-5">
         <div className="flex justify-between mb-1">
           <div className="title-style">일정</div>
-          <button 
-            style={{marginRight: '10px'}}
-            onClick={onClickScheduleListButton}>더보기</button>
+          <button
+            style={{ marginRight: '10px' }}
+            onClick={onClickScheduleListButton}
+          >
+            더보기
+          </button>
         </div>
 
         <div className="schedule-list">
           {selectedDate && dateScheduleList && dateScheduleList.scheduleList ? (
             dateScheduleList.scheduleList.map((value, index) => (
-              <div key={index} style={{margin: '5px'}}>
-                <p style={{fontWeight: '600'}}>
+              <div key={index} style={{ margin: '5px' }}>
+                <p style={{ fontWeight: '600' }}>
                   <div className="circle-color mr-2"></div>
                   {value.title}
                 </p>
-                {value.place && <p style={{marginLeft: '18px'}}>장소: {value.place}</p>}
+                {value.place && (
+                  <p style={{ marginLeft: '18px' }}>장소: {value.place}</p>
+                )}
                 <hr />
               </div>
             ))
