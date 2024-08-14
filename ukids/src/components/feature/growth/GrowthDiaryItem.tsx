@@ -8,8 +8,8 @@ export const GrowthDiaryItem = ({title, date, imageUrl} : Diary) => {
 
     return(
         <>  <div className="growth-diary-item">
-            <div><img src={imageUrl} alt="" /></div>
             <div>{date}</div>
+            <div><img src={imageUrl} alt="" /></div>
             <div>{title}</div>
             </div>
 

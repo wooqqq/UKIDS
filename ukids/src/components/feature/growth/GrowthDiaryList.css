@@ -36,7 +36,7 @@
     border-radius: 8px; /* 모서리 둥글게 */
 
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 그림자 효과 */
-    transition: transform 0.2s; /* 호버 시 애니메이션 효과 */
+    transition: transform 0.1s; /* 호버 시 애니메이션 효과 */
     font-family: 'Ownglyph_ryuttung-Rg', sans-serif;
     text-align: center;
 

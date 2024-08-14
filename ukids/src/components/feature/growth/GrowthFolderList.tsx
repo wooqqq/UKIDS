@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+
+import { useNavigate } from 'react-router-dom';
+
+import { useFamilyStore } from '@/stores/familyStore';
+
+
 import api from "@/util/api.ts";
 import { GrowthFolderItem } from "@/components/feature/growth/GrowthFolderItem";
 import { GrowthFolderCreateModal } from "@components/feature/growth/GrowthFolderCreateModal";
@@ -11,6 +17,10 @@ interface Folder{
 }
 
 export const GrowthFolderList = () => {
+
+    const navigate = useNavigate();
+
+    const {selectedFamilyId} = useFamilyStore();
     
     const [folders, setFolders] = useState<Folder[]>([]);
     const [modalState, setModalState] = useState<boolean>(false);
@@ -22,9 +32,12 @@ export const GrowthFolderList = () => {
     }
 
 
+
+
+
     const getFolderList = async () => {
-        // 1->6
-        const url = `/growth-folder/all/21?size=10`;
+        // 3번을 familyId로
+        const url = `/growth-folder/all/${selectedFamilyId}?size=10`;
 
         const {data} = await api.get(url);
 
@@ -35,12 +48,26 @@ export const GrowthFolderList = () => {
     }
 
     useEffect(() => {
-        getFolderList();
-    }, [])
+        if (selectedFamilyId) {
+            getFolderList();
+        } else {
+            console.log("등록된 가족이 없어요! 가족을 등록해주세요");
+            // 가족 ID가 설정되지 않았을 때
+        }
+    }, [selectedFamilyId]) // selectedFamilyId가 변경될 때마다 함수 호출
+
+
 
     const renewFolderList = () => {
         getFolderList();
     }
+
+    const goToFolder = (folder : any) => { 
+        navigate(`/growthdiary/folder/${folder.folderId}`, { state: { folderName: folder.folderName } });
+    };
+
+
+
 
 
     return (
@@ -74,9 +101,13 @@ export const GrowthFolderList = () => {
                     <div className="folder-container">
                         <div className="folder-scrollable">
                             {folders.map((item) => (
-                                <Link to={`/growthdiary/folder/${item.folderId}`}>
+                               <Link to={{
+                                pathname: `/growthdiary/folder/${item.folderId}`
+                                
+                            }}>
                                     <GrowthFolderItem key={item.folderId} folderName={item.folderName} />
                                 </Link>
+                                
                             ))}
                         </div>
                     </div>

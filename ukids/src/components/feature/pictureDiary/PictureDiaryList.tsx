@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { PictureDiaryItem } from './PictureDiaryItem';
 import { Link } from 'react-router-dom';
 
+import { useFamilyStore } from '@/stores/familyStore';
+
 import api from '@/util/api.ts';
 
 import BlueButton from '@components/common/BlueButton';
@@ -20,6 +22,10 @@ interface Diary {
 }
 
 const PictureDiaryList = () => {
+
+  const {selectedFamilyId} = useFamilyStore();
+
+
   const [diaries, setDiaries] = useState<Diary[]>([]);
   //   const [totalPage, setTotalPage] = useState<number>();
   //   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -32,7 +38,7 @@ const PictureDiaryList = () => {
 
   const getDiaryList = async () => {
     // 수정
-    const url = `/picture-diary/all/21?page=${currentPage}&size=10`;
+    const url = `/picture-diary/all/${selectedFamilyId}?page=${currentPage}&size=10`;
     const { data } = await api.get(url);
     setDiaries(data.result.pictureDiaries);
   };
