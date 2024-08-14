@@ -5,6 +5,8 @@ import { GrowthFolderCreateModal } from "@components/feature/growth/GrowthFolder
 import { Link } from "react-router-dom";
 import BlueButton from "@components/common/BlueButton";
 import '@components/feature/growth/growthFolder.css'
+import { useFamilyStore } from "@/stores/familyStore";
+
 interface Folder{
     folderId: number;
     folderName: string;
@@ -14,7 +16,7 @@ export const GrowthFolderList = () => {
     
     const [folders, setFolders] = useState<Folder[]>([]);
     const [modalState, setModalState] = useState<boolean>(false);
-
+    const {selectedFamilyId} = useFamilyStore();
 
 
     const onModalOpen = () => {
@@ -24,7 +26,7 @@ export const GrowthFolderList = () => {
 
     const getFolderList = async () => {
         // 1->6
-        const url = `/growth-folder/all/21?size=10`;
+        const url = `/growth-folder/all/${selectedFamilyId}?size=10`;
 
         const {data} = await api.get(url);
 
