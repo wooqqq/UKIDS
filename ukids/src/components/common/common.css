@@ -91,14 +91,15 @@
   z-index: 10;
   background-color: #fff;
   width: 250px;
-  height: 320px;
+  min-height: 100px;
+  max-height: 320px;
   padding: 10px 5px;
 }
 
 .family-list-box {
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 180px;
+  max-height: 180px;
 }
 
 .family-list-box::-webkit-scrollbar {
@@ -119,6 +120,16 @@
   font-size: 1rem;
   color: #555;
   font-weight: 500;
+}
+
+.family-create-btn {
+  width: 100%;
+  color: #999;
+  margin-bottom: 35px;
+  margin-top: 5px;
+  padding-top: 15px;
+  text-align: center;
+  border-top: #ddd solid 1px;
 }
 
 /* index.css로 이동 */
@@ -318,4 +329,31 @@
 .family-btn:focus,
 .family-btn:active {
   border: 10px solid rgba(54, 213, 241, 0.6);
+}
+
+.setting-box {
+  height: 500px;
+}
+
+.setting-menu-box {
+  padding-top: 0px;
+  border-right: 2px solid #ddd;
+  height: 500px;
+  width: 157px;
+}
+
+.setting-menu-btn {
+  margin: 15px 0 25px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #999;
+}
+
+.setting-menu-btn.active {
+  color: #333 !important;
+}
+
+/* 버튼에 마우스를 올렸을 때 스타일 */
+.setting-menu-btn:hover {
+  color: #555; /* 마우스를 올렸을 때 버튼의 텍스트 색상 */
 }
