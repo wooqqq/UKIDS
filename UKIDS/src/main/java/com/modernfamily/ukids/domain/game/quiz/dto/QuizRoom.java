@@ -17,6 +17,7 @@ public class QuizRoom {
     private Long quizCount;
     private boolean isStart;
     private boolean isSave;
+    private String hostId;
     private Long numberOfParticipants;
     private Long maxQuestionCounts;
     private int currentQuestionIndex;
@@ -24,13 +25,14 @@ public class QuizRoom {
     private List<QuizQuestionRandomResponseDto> randomQuizQuestionList;
 
     @Builder
-    private QuizRoom(String sessionId ,Long quizCount, boolean isStart, boolean isSave,
+    private QuizRoom(String sessionId ,Long quizCount, boolean isStart, boolean isSave, String hostId,
                      Long numberOfParticipants, Long maxQuestionCounts, int currentQuestionIndex,
                      HashMap<String, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
         this.sessionId = sessionId;
         this.quizCount = quizCount;
         this.isStart = isStart;
         this.isSave = isSave;
+        this.hostId = hostId;
         this.numberOfParticipants = numberOfParticipants;
         this.maxQuestionCounts = maxQuestionCounts;
         this.currentQuestionIndex = currentQuestionIndex;
@@ -44,6 +46,7 @@ public class QuizRoom {
                 .quizCount(0L)
                 .isStart(false)
                 .isSave(false)
+                .hostId(null)
                 .numberOfParticipants(0L)
                 .maxQuestionCounts(Long.MAX_VALUE)
                 .currentQuestionIndex(-1)
@@ -51,6 +54,18 @@ public class QuizRoom {
                 .randomQuizQuestionList(new ArrayList<>())
                 .build();
 
+    }
+
+    public void changeHost(String hostId){
+        this.hostId = hostId;
+    }
+
+    public void nextHost(String hostId){
+        for(Map.Entry<String, Participate> entry : participantList.entrySet()){
+            if(entry.getKey().equals(hostId)) continue;
+            this.hostId = entry.getKey();
+            break;
+        }
     }
 
     public void saveGame(){
@@ -76,8 +91,7 @@ public class QuizRoom {
 
     public void endGame(){
         this.isStart = false;
-        this.currentQuestionIndex = -1;
-        this.randomQuizQuestionList.clear();
+
     }
 
     public void enterParticipate(String userId, Participate participant){
@@ -101,6 +115,8 @@ public class QuizRoom {
     }
 
     public void generateRandomQuizQuestion(List<QuizQuestionRandomResponseDto> randomQuizQuestionList){
+        this.currentQuestionIndex = -1;
+        this.randomQuizQuestionList.clear();
         this.randomQuizQuestionList.addAll(randomQuizQuestionList);
     }
 
