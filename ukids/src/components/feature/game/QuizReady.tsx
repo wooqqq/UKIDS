@@ -227,6 +227,10 @@ const QuizReady = () => {
     }
   }, [selectedValue]);
 
+  useEffect(() => {
+    GetQuizMaxCounts();
+  }, [setParticipants]);
+
   // 처음 들어왔을 때 방 연결
   useEffect(() => {
     const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
@@ -281,7 +285,6 @@ const QuizReady = () => {
                 navigate('../');
                 return;
               }
-              GetQuizMaxCounts();
 
               setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
 
