@@ -5,6 +5,7 @@ import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRepository;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRoomRespository;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
+import com.modernfamily.ukids.domain.game.quizResult.model.service.QuizResultService;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
 import com.modernfamily.ukids.global.exception.ExceptionResponse;
@@ -28,6 +29,7 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuizRoomRespository quizRoomRespository;
     private final WebrtcService webrtcService;
+    private final QuizResultService quizResultService;
 
     @PostConstruct
     private void init() {
@@ -181,7 +183,7 @@ public class QuizService {
         if(quizQuestion == null) {
             response.put("gameState", "END");
 
-            quizRepository.endGame(familyId, quizRooms.get(familyId));
+            quizResultService.saveGameResult(quizRepository.endGame(familyId, quizRooms.get(familyId)));
             quizRoomRespository.endGame(quizRooms.get(familyId));
             return response;
         }

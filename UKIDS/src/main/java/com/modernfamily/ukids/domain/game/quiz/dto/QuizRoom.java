@@ -91,7 +91,6 @@ public class QuizRoom {
 
     public void endGame(){
         this.isStart = false;
-
     }
 
     public void enterParticipate(String userId, Participate participant){
