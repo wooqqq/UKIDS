@@ -9,18 +9,14 @@ import WhiteButton from '@components/common/WhiteButton';
 import { Modal } from '@components/feature/modal/Modal';
 import { useNavigate } from 'react-router-dom';
 
-import {Pagination} from '@components/feature/pagination/Pagination.tsx';
+import { Pagination } from '@components/feature/pagination/Pagination.tsx';
 
+import './GrowthDiaryList.css';
 
-import './GrowthDiaryList.css'
-
-interface Diary{
+interface Diary {
   recordId: number;
   writerId: number;
-  // 수정: 제목 string
   title: string;
-
-  // 수정: 내용 string
   content: string;
   date: string;
   imageUrl: string;
@@ -41,26 +37,25 @@ export const GrowthDiaryList = () => {
   const content = '성장일지 폴더 삭제';
   const navigate = useNavigate();
 
-    // 페이지네이션
-    const [page, setPage] = useState<number>(1);
-    const [totalPage, setTotalPage] = useState<number>(1);
-    const size: number = 5;
+  // 페이지네이션
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const size: number = 5;
 
-    const handlePageChange = (page: number) => {
-        setPage(page);
-    }
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
 
+  const getDiaryList = async () => {
+    // console.log('folderId: ', folderId);
+    const url = `/growth-record/all/${folderId}?page=${page}&size=${size}`;
 
-    const getDiaryList = async () => {
-        // console.log('folderId: ', folderId);
-        const url = `/growth-record/all/${folderId}?page=${page}&size=${size}`;
+    const { data } = await api.get(url);
 
-        const {data} = await api.get(url);
-
-        console.log(data.result);
-        console.log("강경민")
-        setDiaries(data.result.growthRecords);
-        setTotalPage(data.result.totalPage);
+    console.log(data.result);
+    console.log('강경민');
+    setDiaries(data.result.growthRecords);
+    setTotalPage(data.result.totalPage);
   };
 
   const onModalOpen = () => {
@@ -92,9 +87,7 @@ export const GrowthDiaryList = () => {
       </div>
 
       {/* 제목 */}
-      <div className="absolute left-[342px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">
-        (폴더이름) 성장 일지
-      </div>
+      <div className="absolute left-[342px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap"></div>
 
       {/*만들기*/}
       <div style={{ marginLeft: '664px', marginTop: '27px' }}>
@@ -152,7 +145,7 @@ export const GrowthDiaryList = () => {
       {/* <BlueButton name="폴더 삭제" path="/" onClick={onModalOpen}/> */}
 
       {/* <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p> */}
-      <div className='relative'>
+      <div className="relative">
         <Pagination
           totalPage={totalPage}
           size={size}

@@ -6,7 +6,7 @@
 import axios from 'axios';
 import api from '@/util/api';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ import './AlbumDetail.css';
 import WhiteButton from '../../common/WhiteButton';
 import BlueButton from '../../common/BlueButton';
 import GrayButton from '../../common/GrayButton';
-import { Modal } from "@components/feature/modal/Modal.tsx";
+import { Modal } from '@components/feature/modal/Modal.tsx';
 
 import '../../common/common.css';
 
@@ -39,7 +39,7 @@ const AlbumDetail: React.FC = () => {
   // 현재 URL에서 albumId 추출
   const { albumId } = useParams<{ albumId: string }>();
   const [modalState, setModalState] = useState<boolean>(false);
-  const content = "앨범 삭제";
+  const content = '앨범 삭제';
   const navigate = useNavigate();
 
   // 상태관리 : 앨범 하나
@@ -49,7 +49,7 @@ const AlbumDetail: React.FC = () => {
 
   const onModalOpen = () => {
     setModalState(!modalState);
-  }
+  };
 
   // 네비게이션 함수(수정, 삭제 할 때 사용)
 
@@ -57,9 +57,7 @@ const AlbumDetail: React.FC = () => {
   useEffect(() => {
     const fetchAlbumDetails = async () => {
       try {
-        const response = await api.get(
-          `/photo/all/${albumId}`,
-        );
+        const response = await api.get(`/photo/all/${albumId}`);
 
         if (response.data.result) {
           setAlbum({
@@ -85,18 +83,17 @@ const AlbumDetail: React.FC = () => {
   const deleteAlbum = async () => {
     const url = `/album/${albumId}`;
 
-    const {data} = await api.delete(url);
+    const { data } = await api.delete(url);
 
     console.log(data);
 
     navigate('/albums');
-  }
+  };
 
   return (
-    <div className="feature-box relative w-[911px] h-[576px] overflow-x-hidden">
+    <div className="feature-box">
       {/* 상단 고정 영역 */}
-      <div className=" left-88 top-37 w-[911px] h-[150px] bg-[#fff] z-50">
-        <div className="absolute left-0 top-0 w-[911px] h-[150px] bg-[#fff] rounded-[20px] "></div>
+      <div>
         <div
           className="absolute left-[94px] top-[25px] w-[726px] h-[50px] border-[solid] border-#ddd border border-[0_0_2px] "
           style={{ textAlign: 'center' }}
@@ -114,7 +111,7 @@ const AlbumDetail: React.FC = () => {
         </div>
 
         {/* 목록, 날짜, 수정삭제 */}
-        <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px] z-50">
+        <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px]">
           {/* 목록 */}
           <WhiteButton
             name="목록"
@@ -131,32 +128,62 @@ const AlbumDetail: React.FC = () => {
         </div>
 
         {/* 수정,삭제 */}
+
+        <Link to={`/albums/update/${albumId}`}>
+          <button
+            className="common-btn gray-btn"
+            style={{ position: 'absolute', top: '87px', right: '150px' }}
+          >
+            수정
+          </button>
+        </Link>
+
+        <span className="home-modal-open-Button" onClick={onModalOpen}>
+          <button
+            className="common-btn red-font"
+            style={{ position: 'absolute', top: '87px', right: '60px' }}
+            onClick={onModalOpen}
+          >
+            삭제
+          </button>
+        </span>
+
         {/* 기능 추가 필요함 */}
-        <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
-          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn mr-2" />
+        {/* <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
+          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn" />
           <GrayButton name="삭제" path="" className="submit-btn" onClick={onModalOpen}/>
         </div>
-      </div>
+      </div> */}
 
-      {/* 하단 내용 영역 */}
+        {/* 하단 내용 영역 */}
 
-      <div className="photos-container">
-        {album.photos.map((photo, index) => (
-          <div key={index} className="photo-container">
-            {/* 사진 + 캡션 */}
-            <div className="photo-imgandcaption">
-              <img src={photo.imgUrl} alt={`Photo ${index + 1}`} />
-              <p dangerouslySetInnerHTML={{ __html: photo.caption }}></p>{' '}
-              {/* Here HTML is rendered */}
+        <div className="photos-container">
+          {album.photos.map((photo, index) => (
+            <div key={index} className="photo-container">
+              {/* 사진 + 캡션 */}
+              <div className="photo-imgandcaption">
+                <img
+                  src={photo.imgUrl}
+                  alt={`Photo ${index + 1}`}
+                  crossOrigin="anonymous"
+                />
+                <p dangerouslySetInnerHTML={{ __html: photo.caption }}></p>{' '}
+                {/* Here HTML is rendered */}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <div>
-        {modalState && (
-          <Modal content={content} modalState={modalState} setModalState={setModalState} deleteElement={deleteAlbum}/>
-        )}
+        <div>
+          {modalState && (
+            <Modal
+              content={content}
+              modalState={modalState}
+              setModalState={setModalState}
+              deleteElement={deleteAlbum}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -25,6 +25,8 @@ interface AuthState {
   // 회원정보조회
   userInfo: User | null;
   getUserInfo: () => Promise<void>;
+  repUserInfo: User | null;
+  getRepUserInfo: (userId: number) => Promise<void>;
 
   // 회원가입
   joinUser: (form: {
@@ -61,7 +63,7 @@ interface AuthState {
   checkedEmail: (email: string) => Promise<boolean>;
 
   // 전화번호 중복 검사
-  checkedPhone: (phone: string) => Promise<void>;
+  checkedPhone: (phone: string) => Promise<boolean>;
 }
 
 // 자동 로그아웃 테스트
@@ -119,6 +121,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   /***** 회원 정보 관리 *****/
   userInfo: null,
+  repUserInfo: null,
 
   // 회원정보 조회
   getUserInfo: async () => {
@@ -145,6 +148,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.removeItem('token');
       setToken(null);
       alert('로그인한지 1시간이 경과되어 자동 로그아웃 됩니다.');
+    }
+  },
+
+  getRepUserInfo: async (userId) => {
+    try {
+      const response = await api.get(`/user/${userId}`);
+      const userData = response.data.result;
+
+      set({ repUserInfo: userData });
+      console.log(response.data);
+    } catch (error) {
+      console.error('대표자 정보 가져오기 실패:', error);
     }
   },
 
@@ -262,7 +277,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkedId: async (id: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/id/${id}`);
-      if (response.data.code === 200) {
+      if (response.data.result === 'id 중복 없음') {
         // alert('사용 가능한 ID입니다.');
         return true;
       } else {
@@ -278,7 +293,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   // 이메일 중복 검사
   checkedEmail: async (email: string): Promise<boolean> => {
     try {
-      const response = await api.get(`/user/email/${email}`);
+      const response = await api.get(`/user/email?email=${email}`);
       if (response.data.code === 200) {
         // alert('사용 가능한 이메일입니다.');
         return true;
@@ -295,7 +310,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   // 전화번호 중복 검사
   checkedPhone: async (phone: string): Promise<boolean> => {
     try {
-      const response = await api.get(`/user/phone/${phone}`);
+      const response = await api.get(`/user/phone?phone=${phone}`);
       if (response.data.code === 200) {
         // alert('사용 가능한 전화번호입니다.');
         return true;
@@ -305,7 +320,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('전화번호 중복 검사 실패:', error);
-      alert('전화번호 중복 검사에 실패했습니다.');
+      return false;
     }
   },
 }));

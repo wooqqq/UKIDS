@@ -20,6 +20,7 @@ interface Family {
 
 interface Member {
   familyMemberId: number; // 가족 구성원의 ID
+  role: string;
   userFamilyDto: User;
 }
 
@@ -27,7 +28,10 @@ interface Member {
 interface FamilyState {
   family: Family;
   familyList: Family[];
+  allFamilyList: Family[];
+  applyFamilyList: Family[];
   member: Member[];
+  pendingMember: Member[];
   error: string | null;
   // 가족방 정보
   fetchFamilyInfo: (familyId: number) => Promise<void>;
@@ -59,7 +63,7 @@ interface FamilyState {
   pendingMemberList: (familyId: number) => Promise<void>;
 
   // 가족 구성원 신청
-  applyMember: (familyId: number, role: string) => Promise<void>;
+  applyMember: (familyId: number) => Promise<void>;
 
   // 가족 구성원 승인
   approvedMember: (familyMemberId: number) => Promise<void>;
@@ -102,7 +106,10 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     },
   },
   familyList: [],
+  allFamilyList: [],
   member: [],
+  applyFamilyList: [],
+  pendingMember: [],
   error: null,
   selectedFamilyId: Number(localStorage.getItem('selectedFamilyId')) || null,
   chatRoomId: null,
@@ -133,7 +140,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
-      const newFamilyId: number = newFamily.familyId;
       console.log('newFamily.familyId : ' + newFamily.familyId);
       set({
         family: newFamily,
@@ -154,6 +160,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
 
       // webRTC 세션 생성
       await api.post(`/webrtc?familyId=${newFamily.familyId}`);
+      return chatRoomId;
     } catch (error: any) {
       console.error('Error creating family', error);
       set({ error: error.message });
@@ -166,11 +173,11 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.get(`/family/search/${code}`);
       const familyData: Family = response.data.result;
-      set((state) => ({
-        familyList: [...state.familyList, familyData],
+      set({
+        family: familyData,
         error: null,
         selectedFamilyId: familyData.familyId,
-      }));
+      });
     } catch (error: any) {
       console.log('Error finding family', error);
       set({ error: error.message });
@@ -219,6 +226,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     } catch (error: any) {
       console.log('Error updating family', error);
       set({ error: error.message });
+      alert('대표자만 수정이 가능합니다.');
     }
   },
 
@@ -269,7 +277,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.get(`member/approval/${familyId}`);
       const pendingMembers: Member[] = response.data.result;
-      set({ member: pendingMembers, error: null });
+      set({ pendingMember: pendingMembers, error: null });
     } catch (error: any) {
       console.log('Error fetching pending members', error);
       set({ error: error.message });
@@ -277,8 +285,9 @@ export const useFamilyStore = create<FamilyState>((set) => ({
   },
 
   // 가족 구성원 신청
-  applyMember: async (familyId: number, role: string) => {
+  applyMember: async (familyId: number) => {
     try {
+      const role = 'ROLE_NONE';
       const response = await api.post(`/member`, { familyId, role });
       if (response.data.code === 201) {
         // alert('가족 구성원 신청이 성공적으로 완료되었습니다.')
