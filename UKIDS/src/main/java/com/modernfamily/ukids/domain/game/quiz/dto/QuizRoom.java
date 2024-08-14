@@ -16,7 +16,7 @@ public class QuizRoom {
     private String sessionId;
     private Long quizCount;
     private boolean isStart;
-    private boolean isSave;
+    private Long saveCounts;
     private String hostId;
     private Long numberOfParticipants;
     private Long maxQuestionCounts;
@@ -25,13 +25,13 @@ public class QuizRoom {
     private List<QuizQuestionRandomResponseDto> randomQuizQuestionList;
 
     @Builder
-    private QuizRoom(String sessionId ,Long quizCount, boolean isStart, boolean isSave, String hostId,
+    private QuizRoom(String sessionId ,Long quizCount, boolean isStart, Long saveCounts, String hostId,
                      Long numberOfParticipants, Long maxQuestionCounts, int currentQuestionIndex,
                      HashMap<String, Participate> participantList, List<QuizQuestionRandomResponseDto> randomQuizQuestionList) {
         this.sessionId = sessionId;
         this.quizCount = quizCount;
         this.isStart = isStart;
-        this.isSave = isSave;
+        this.saveCounts = saveCounts;
         this.hostId = hostId;
         this.numberOfParticipants = numberOfParticipants;
         this.maxQuestionCounts = maxQuestionCounts;
@@ -45,7 +45,7 @@ public class QuizRoom {
                 .sessionId(sessionId)
                 .quizCount(0L)
                 .isStart(false)
-                .isSave(false)
+                .saveCounts(0L)
                 .hostId(null)
                 .numberOfParticipants(0L)
                 .maxQuestionCounts(Long.MAX_VALUE)
@@ -69,7 +69,7 @@ public class QuizRoom {
     }
 
     public void saveGame(){
-        this.isSave = true;
+        this.saveCounts++;
     }
 
     public void updateQuizCount(long quizCount){
@@ -86,7 +86,8 @@ public class QuizRoom {
 
     public void startGame(){
         this.isStart = true;
-        this.isSave = false;
+        this.saveCounts = 0L;
+        this.numberOfParticipants = (long) participantList.size();
     }
 
     public void endGame(){

@@ -38,6 +38,10 @@ public class QuizRepository {
     // 게임 종료 및 퀴즈 결과 저장
     public List<QuizResultSaveDto> endGame(Long familyId, QuizRoom quizRoom){
 
+        quizRoom.saveGame();
+        if(quizRoom.getSaveCounts() < quizRoom.getParticipantList().size())
+            return null;
+
         List<Map.Entry<String, Participate>> entryList = new ArrayList<>(quizRoom.getParticipantList().entrySet());
         entryList.sort(Comparator.comparing((Map.Entry<String, Participate> entry) -> entry.getValue().getHit()).reversed());
 
