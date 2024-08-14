@@ -1,4 +1,4 @@
-import GameBackButton from './GameBackButton';
+import WhiteBackButton from '../../common/WhiteBackButton';
 
 interface GamePageHeader {
   title: string;
@@ -10,7 +10,7 @@ const GamePageHeader = ({ title }: GamePageHeader) => {
       {/* 헤더 내부 플렉스 */}
       <div className="w-full flex justify-between">
         {/* 좌측 상단 버튼 */}
-        <GameBackButton path={'../'} />
+        <WhiteBackButton path={'../'} />
         {/* 제목 */}
         <p className="text-5xl font-[ONE-Mobile-POP]">{title}</p>
         {/* 빈 div로 오른쪽 여백 맞추기 */}
