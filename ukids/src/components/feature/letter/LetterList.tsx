@@ -77,13 +77,11 @@ export const LetterList = () => {
   };
 
   const getLetters = async () => {
-    console.log(state);
     let url = '';
     // 받은 편지
     if (!state) url = `/letter/to?page=${page}&size=${size}`;
     else url = `letter/from?page=${page}&size=${size}`;
     const { data } = await api.get(url);
-    console.log(data);
     setLetters(data.result.letters);
     setTotalPage(data.result.totalPages);
   };

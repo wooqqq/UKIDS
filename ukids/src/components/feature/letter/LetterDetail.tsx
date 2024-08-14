@@ -29,11 +29,9 @@ export const LetterDetail = () => {
         const {data} = await api.get(url);
 
         setLetter(data.result);
-
     }
 
     useEffect(() => {
-        console.log(state);
         getLetter();
     }, [])
 

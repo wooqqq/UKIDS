@@ -20,7 +20,6 @@ interface LetterProps {
 export const LetterItem = ({ letter, state }: LetterProps) => {
   const letterImgTag = () => {
     if (!state) {
-      console.log(letter.read);
       if (!letter.read) {
         return (
           <div>

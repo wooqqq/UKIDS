@@ -55,17 +55,14 @@ export const LetterWrite = () => {
         const url = `/user/${fromUserId}`;
 
         const {data} = await api.get(url);
-        console.log(data);
 
         setToMember(data.result);
-
     }
 
     const getMembers = async () => {
         const url = `/member/${selectedFamilyId}`;
         
         const {data} = await api.get(url);
-        console.log(data);
         setMembers(data.result);
     }
 
@@ -82,7 +79,6 @@ export const LetterWrite = () => {
         const url = `/letter`;
         let inputData = null;
         if(toMember){
-            console.log("답장");
             inputData = {
                 // 가족 ID 전역에서 가져올 수 있도록 수정
                 familyId: selectedFamilyId,
@@ -92,7 +88,6 @@ export const LetterWrite = () => {
             
         }
         else{
-            console.log("편지작성");
             if(!toUser){
                 alert('편지 받을 사람을 선택해주세요.');
                 return;
@@ -110,8 +105,6 @@ export const LetterWrite = () => {
         updateTreeExp(selectedFamilyId, 75);
 
         navigate('/letters')
-
-        console.log(data);
     }
 
     useEffect(() => {
