@@ -86,7 +86,6 @@ const QuizReady = () => {
       alert('문제 개수가 0입니다. 준비 상태를 변경할 수 없습니다.');
       return;
     }
-    // console.log('isReady : ', isReady);
     setIsReady(!isReady);
   };
 
@@ -194,7 +193,7 @@ const QuizReady = () => {
   const setQuizCounts = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('setQuizCounts : ', selectedValue);
+        // console.log('setQuizCounts : ', selectedValue);
         // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/quiz-count`,
@@ -240,24 +239,24 @@ const QuizReady = () => {
         Authorization: `${token}`,
       },
       debug: (str) => {
-        console.log('웹소켓 디버그: ' + str);
+        // console.log('웹소켓 디버그: ' + str);
       },
     });
 
     client.onConnect = (frame) => {
-      console.log('WebSocket 연결이 열렸습니다.', frame);
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
 
       // 올바른 stompClientInstance 설정
-      console.log('Setting stompClientInstance:', client);
+      // console.log('Setting stompClientInstance:', client);?-
       setStompClientInstance(client);
 
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
-          console.log('Received message at GameRoom:', message.body);
+          // console.log('Received message at GameRoom:', message.body);
           const receivedMessage: GameMessage = JSON.parse(message.body);
 
-          console.log('receivedMessage : ', receivedMessage);
+          // console.log('receivedMessage : ', receivedMessage);
 
           switch (receivedMessage.type) {
             case 'IS_READY_GAME':
@@ -269,7 +268,6 @@ const QuizReady = () => {
             case 'ENTER_GAME':
               const participant =
                 receivedMessage.gameRoomInfo.participantList[user];
-              console.log('----user : ----', participant);
               setNameOfUser(participant.userName);
               setSessionId(receivedMessage.gameRoomInfo.sessionId);
               setConnection(receivedMessage.webrtcConnection);
@@ -279,7 +277,7 @@ const QuizReady = () => {
                 navigate('../');
                 return;
               }
-
+              console.log(receivedMessage.gameRoomInfo);
               if (receivedMessage.gameRoomInfo.isStart) {
                 alert('현재 게임이 진행 중입니다.');
                 navigate('../');
@@ -287,11 +285,6 @@ const QuizReady = () => {
               }
 
               setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
-
-              console.log(
-                'participantList:',
-                receivedMessage.gameRoomInfo.participantList,
-              );
 
               const participantEntries = Object.entries(
                 receivedMessage.gameRoomInfo.participantList,
@@ -304,11 +297,6 @@ const QuizReady = () => {
 
             case 'EXIT_GAME':
               setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
-
-              console.log(
-                'participantList:',
-                receivedMessage.gameRoomInfo.participantList,
-              );
 
               const newParticipantEntries = Object.entries(
                 receivedMessage.gameRoomInfo.participantList,

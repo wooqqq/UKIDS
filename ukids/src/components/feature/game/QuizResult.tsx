@@ -81,7 +81,7 @@ const QuizResult = () => {
     });
 
     client.onConnect = (frame) => {
-      console.log('WebSocket 연결이 열렸습니다.', frame);
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
       setStompClientInstance(client);
 
       client.subscribe(
