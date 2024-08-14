@@ -42,6 +42,14 @@ const FamilyChatting = () => {
     setMessage(e.target.value);
   };
 
+  // Enter 키 입력 시 메시지 전송
+  const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
   // 스크롤 맨 밑으로 내리기
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -268,11 +276,15 @@ const FamilyChatting = () => {
           {/* 채팅입력 영역 */}
           <div className="flex-none">
             <form className="flex flex-row justify-center" onSubmit={onSubmit}>
-              <input
-                type="text"
-                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4"
+              <textarea
+                // type="text"
+                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2"
                 onChange={onChange}
+                onKeyDown={onKeyDown}
                 value={message}
+                rows={2}
+                style={{resize: 'none', overflowY: 'auto'}}
+                placeholder="메시지를 입력하세요"
               />
               <BlueButton name="전송" path="" />
             </form>
