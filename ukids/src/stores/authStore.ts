@@ -25,6 +25,8 @@ interface AuthState {
   // 회원정보조회
   userInfo: User | null;
   getUserInfo: () => Promise<void>;
+  repUserInfo: User | null;
+  getRepUserInfo: (userId: number) => Promise<void>;
 
   // 회원가입
   joinUser: (form: {
@@ -119,6 +121,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   /***** 회원 정보 관리 *****/
   userInfo: null,
+  repUserInfo: null,
 
   // 회원정보 조회
   getUserInfo: async () => {
@@ -145,6 +148,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.removeItem('token');
       setToken(null);
       alert('로그인한지 1시간이 경과되어 자동 로그아웃 됩니다.');
+    }
+  },
+
+  getRepUserInfo: async (userId) => {
+    try {
+      const response = await api.get(`/user/${userId}`);
+      const userData = response.data.result;
+
+      set({ repUserInfo: userData });
+      console.log(response.data);
+    } catch (error) {
+      console.error('대표자 정보 가져오기 실패:', error);
     }
   },
 
