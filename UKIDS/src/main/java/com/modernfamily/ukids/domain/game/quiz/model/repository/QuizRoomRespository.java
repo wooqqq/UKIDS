@@ -100,6 +100,7 @@ public class QuizRoomRespository {
     // 퀴즈 생성
     public synchronized void generateQuiz(QuizRoom quizRoom){
         long quizCounts = quizRoom.getQuizCount();
+        quizRoom.initQuizList();
         for(Map.Entry<String, Participate> entrySet : quizRoom.getParticipantList().entrySet()){
             log.info("choose random participate {}", entrySet.getKey());
             quizRoom.generateRandomQuizQuestion(

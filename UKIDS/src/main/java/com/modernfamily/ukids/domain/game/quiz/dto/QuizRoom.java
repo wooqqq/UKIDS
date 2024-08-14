@@ -91,7 +91,6 @@ public class QuizRoom {
 
     public void endGame(){
         this.isStart = false;
-
     }
 
     public void enterParticipate(String userId, Participate participant){
@@ -114,9 +113,13 @@ public class QuizRoom {
         --this.numberOfParticipants;
     }
 
-    public void generateRandomQuizQuestion(List<QuizQuestionRandomResponseDto> randomQuizQuestionList){
+    public void initQuizList(){
         this.currentQuestionIndex = -1;
         this.randomQuizQuestionList.clear();
+    }
+
+    public void generateRandomQuizQuestion(List<QuizQuestionRandomResponseDto> randomQuizQuestionList){
+
         this.randomQuizQuestionList.addAll(randomQuizQuestionList);
     }
 
