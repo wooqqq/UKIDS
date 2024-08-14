@@ -64,8 +64,6 @@ export const useVideoCallStore = create<VideoCallStore>((set, get) => ({
     });
 
     try {
-      console.log('webrtc token : ', token);
-
       const sessionToken = token || (await getToken(familyId));
       // const token = await getToken(familyId);
       await session.connect(sessionToken, { clientData: userName });
