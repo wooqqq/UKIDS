@@ -20,6 +20,7 @@ const UserJoin = () => {
 
   const nav = useNavigate();
   const joinUser = useAuthStore((state) => state.joinUser);
+  const today = new Date().toISOString().split('T')[0];
   const checkedId = useAuthStore((state) => state.checkedId);
   const checkedEmail = useAuthStore((state) => state.checkedEmail);
   const checkedPhone = useAuthStore((state) => state.checkedPhone);
@@ -34,9 +35,9 @@ const UserJoin = () => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
 
     // 생년월일 유효성 검사
-    const today = new Date();
+    const checkToday = new Date();
     const birthDate = new Date(form.birthDate);
-    const isInvalidBirthDate = birthDate > today;
+    const isInvalidBirthDate = birthDate > checkToday;
 
     // 아이디 중복 확인
     if (form.id) {
@@ -110,6 +111,7 @@ const UserJoin = () => {
                 id="id"
                 placeholder="아이디"
                 value={form.id}
+                required
                 onChange={(e) => setForm({ ...form, id: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
@@ -130,6 +132,7 @@ const UserJoin = () => {
                 id="password"
                 placeholder="비밀번호 입력"
                 value={form.password}
+                required
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
@@ -150,6 +153,7 @@ const UserJoin = () => {
                 id="confirm-password"
                 placeholder="비밀번호 확인"
                 value={form.confirmPassword}
+                required
                 onChange={(e) =>
                   setForm({ ...form, confirmPassword: e.target.value })
                 }
@@ -172,6 +176,7 @@ const UserJoin = () => {
                 id="name"
                 placeholder="이름"
                 value={form.name}
+                required
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
@@ -189,6 +194,8 @@ const UserJoin = () => {
                 id="birthDate"
                 placeholder="생년월일"
                 value={form.birthDate}
+                required
+                max={today}
                 onChange={(e) =>
                   setForm({ ...form, birthDate: e.target.value })
                 }

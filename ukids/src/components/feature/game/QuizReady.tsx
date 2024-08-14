@@ -192,9 +192,14 @@ const QuizReady = () => {
   useEffect(() => {
     if (stompClientInstance && stompClientInstance.connected) {
       enterQuizRoom();
-      GetQuizMaxCounts();
     }
   }, [stompClientInstance]);
+
+  useEffect(() => {
+    if (stompClientInstance && stompClientInstance.connected) {
+      GetQuizMaxCounts();
+    }
+  }, [enterQuizRoom]);
 
   useEffect(() => {
     if (selectedValue > 0) {
