@@ -49,7 +49,7 @@ export default function CalendarBox({
         const formattedDate = formatDate(today);
         setSelectedDate(formattedDate);
 
-        console.log('today month : ', today.getMonth());
+        // console.log('today month : ', today.getMonth());
         setMonthScheduleList(today.getMonth() + 1, selectedFamilyId);
         setEvents(
           monthScheduleList?.scheduleList,
@@ -67,7 +67,7 @@ export default function CalendarBox({
   const handleDateClick = (info: DateClickArg) => {
     const date = new Date(info.dateStr); // 클릭한 날짜를 문자열로 가져옴
     const formattedDate = formatDate(date);
-    console.log('click dates : ', formattedDate);
+    // console.log('click dates : ', formattedDate);
     // const formattedToday = formatDate(date); // 오늘 날짜 포맷팅
     setSelectedDate(formattedDate);
 

@@ -87,10 +87,10 @@ const QuizResult = () => {
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
-          console.log('Received message:', message.body);
+          // console.log('Received message:', message.body);
           const receivedMessage: GameMessage = JSON.parse(message.body);
 
-          console.log('receivedMessage : ', receivedMessage);
+          // console.log('receivedMessage : ', receivedMessage);
 
           switch (receivedMessage.type) {
             case 'GET_QUIZ_ROOM':

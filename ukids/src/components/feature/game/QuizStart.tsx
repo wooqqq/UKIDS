@@ -80,7 +80,7 @@ const QuizStart = () => {
             familyId: selectedFamilyId,
           }),
         });
-        console.log('퀴즈 요청 완료');
+        // console.log('퀴즈 요청 완료');
       } catch (error) {
         console.error('퀴즈 요청 오류:', error);
       }
@@ -100,7 +100,7 @@ const QuizStart = () => {
             inputAnswer: answer,
           }),
         });
-        console.log('정답이 성공적으로 발행되었습니다.');
+        // console.log('정답이 성공적으로 발행되었습니다.');
       } catch (error) {
         console.error('정답 확인 오류:', error);
       }

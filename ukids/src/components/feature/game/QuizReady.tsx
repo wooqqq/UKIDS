@@ -86,7 +86,7 @@ const QuizReady = () => {
       alert('문제 개수가 0입니다. 준비 상태를 변경할 수 없습니다.');
       return;
     }
-    console.log('isReady : ', isReady);
+    // console.log('isReady : ', isReady);
     setIsReady(!isReady);
   };
 
@@ -120,7 +120,7 @@ const QuizReady = () => {
     console.log('방 입장 ');
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/enter`,
           body: JSON.stringify({
@@ -138,7 +138,7 @@ const QuizReady = () => {
   const setReady = async (state: boolean) => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/ready`,
           body: JSON.stringify({
@@ -157,7 +157,7 @@ const QuizReady = () => {
   const exitQuizRoom = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/exit`,
           body: JSON.stringify({
@@ -175,7 +175,7 @@ const QuizReady = () => {
   const GetQuizMaxCounts = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/quiz-max`,
           body: JSON.stringify({
@@ -195,7 +195,7 @@ const QuizReady = () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
         console.log('setQuizCounts : ', selectedValue);
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/quiz-count`,
           body: JSON.stringify({
