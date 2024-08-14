@@ -72,7 +72,6 @@ export const useScheduleStore = create<Store>((set, get) => ({
     familyName: string,
   ) => {
     if (!scheduleShortList) {
-      console.log('no schedules');
       return;
     }
     const events: Event[] = scheduleShortList.map((schedule) => ({
@@ -117,7 +116,6 @@ export const useScheduleStore = create<Store>((set, get) => ({
   },
   monthScheduleList: null,
   setMonthScheduleList: async (month: number, familyId: number) => {
-    console.log('month : ', month);
     if (month != null && familyId != null) {
       const { data } = await api.get(
         `/schedule/month/${familyId}?month=${month}`,

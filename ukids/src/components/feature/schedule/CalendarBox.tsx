@@ -49,7 +49,6 @@ export default function CalendarBox({
         const formattedDate = formatDate(today);
         setSelectedDate(formattedDate);
 
-        console.log('today month : ', today.getMonth());
         setMonthScheduleList(today.getMonth() + 1, selectedFamilyId);
         setEvents(
           monthScheduleList?.scheduleList,
