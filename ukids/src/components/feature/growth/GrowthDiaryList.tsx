@@ -14,11 +14,7 @@ import './GrowthDiaryList.css'
 interface Diary{
     recordId: number;
     writerId: number;
-
-    // 수정: 제목 string
     title: string;
-
-    // 수정: 내용 string
     content: string;
     date: string;
     imageUrl: string;
@@ -102,6 +98,7 @@ export const GrowthDiaryList = () => {
                 {/* 제목 */}
                 <div className="absolute left-[342px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">
                     (폴더이름) 성장 일지
+       
                 </div> 
 
                 

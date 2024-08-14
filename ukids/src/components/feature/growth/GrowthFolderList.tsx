@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+
+import { useNavigate } from 'react-router-dom';
+
+
 import api from "@/util/api.ts";
 import { GrowthFolderItem } from "@/components/feature/growth/GrowthFolderItem";
 import { GrowthFolderCreateModal } from "@components/feature/growth/GrowthFolderCreateModal";
@@ -11,6 +15,8 @@ interface Folder{
 }
 
 export const GrowthFolderList = () => {
+
+    const navigate = useNavigate();
     
     const [folders, setFolders] = useState<Folder[]>([]);
     const [modalState, setModalState] = useState<boolean>(false);
@@ -22,9 +28,12 @@ export const GrowthFolderList = () => {
     }
 
 
+
+
+
     const getFolderList = async () => {
         // 1->6
-        const url = `/growth-folder/all/21?size=10`;
+        const url = `/growth-folder/all/3?size=10`;
 
         const {data} = await api.get(url);
 
@@ -41,6 +50,13 @@ export const GrowthFolderList = () => {
     const renewFolderList = () => {
         getFolderList();
     }
+
+    const goToFolder = (folder : any) => { 
+        navigate(`/growthdiary/folder/${folder.folderId}`, { state: { folderName: folder.folderName } });
+    };
+
+
+
 
 
     return (
@@ -74,9 +90,13 @@ export const GrowthFolderList = () => {
                     <div className="folder-container">
                         <div className="folder-scrollable">
                             {folders.map((item) => (
-                                <Link to={`/growthdiary/folder/${item.folderId}`}>
+                               <Link to={{
+                                pathname: `/growthdiary/folder/${item.folderId}`
+                                
+                            }}>
                                     <GrowthFolderItem key={item.folderId} folderName={item.folderName} />
                                 </Link>
+                                
                             ))}
                         </div>
                     </div>

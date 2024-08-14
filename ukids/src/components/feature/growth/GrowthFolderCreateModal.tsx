@@ -45,7 +45,7 @@ export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderL
         const url = `/growth-folder`;
 
         const inputData = {
-            familyId: 21,
+            familyId: 3,
             folderName: folderName
         }
 
