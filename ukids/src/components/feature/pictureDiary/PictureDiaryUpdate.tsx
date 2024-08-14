@@ -44,9 +44,6 @@ export const PictureDiaryUpdate = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (data.code === 201) {
-      console.log(data.result);
-    }
 
     setDiary(data.result);
     // 추가 : 이미지 URL 설정
@@ -70,8 +67,6 @@ export const PictureDiaryUpdate = () => {
         'Content-Type': 'multipart/form-data',
       },
     });
-
-    console.log(data);
 
     // 추가 : 성공 후 페이지 이동
     navigate('/paintdiary');

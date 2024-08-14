@@ -10,7 +10,7 @@ import api from '@/util/api.ts';
 import BlueButton from '@components/common/BlueButton';
 import './PictureDiaryList.css';
 import './diaryItem.css';
-//
+
 import ReactFlipPage from 'react-flip-page';
 
 import { Pagination } from '@components/feature/pagination/Pagination.tsx';
@@ -56,9 +56,7 @@ const PictureDiaryList = () => {
     // 수정
     const url = `/picture-diary/all/${selectedFamilyId}?page=${page}&size=${size}`;
     const { data } = await api.get(url);
-    console.log(data);
     setDiaries(data.result.pictureDiaries);
-    console.log(data.result.totalPage);
     setTotalPage(data.result.totalPage);
   };
 
