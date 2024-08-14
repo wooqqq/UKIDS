@@ -11,15 +11,12 @@ import './diaryItem.css';
 //
 import ReactFlipPage from 'react-flip-page';
 
-<<<<<<< HEAD
 import { useFamilyStore } from '@/stores/familyStore';
 
 import {Pagination} from '@components/feature/pagination/Pagination.tsx';
 
 import { formatDate } from 'date-fns';
 
-=======
->>>>>>> develop/front
 interface Diary {
   pictureDiaryId: number;
   familyId: number;
@@ -33,19 +30,15 @@ const PictureDiaryList = () => {
   //   const [totalPage, setTotalPage] = useState<number>();
   //   const [currentPage, setCurrentPage] = useState<number>(1);
 
-<<<<<<< HEAD
   const [diaryDate, setDiaryDate] = useState<string>(formatDate(new Date(), 'yyyy-MM-dd'));
 
  
-=======
->>>>>>> develop/front
   // API 요청
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   // 플립 페이지 (인덱스는 0부터 시작)
   const [currentPageflip, setCurrentPageflip] = useState(0);
 
-<<<<<<< HEAD
   const {selectedFamilyId} = useFamilyStore();
 
     // 페이지네이션
@@ -68,13 +61,6 @@ const PictureDiaryList = () => {
       setDiaries(data.result.pictureDiaries);
       console.log(data.result.totalPage)
       setTotalPage(data.result.totalPage);
-=======
-  const getDiaryList = async () => {
-    // 수정
-    const url = `/picture-diary/all/21?page=${currentPage}&size=10`;
-    const { data } = await api.get(url);
-    setDiaries(data.result.pictureDiaries);
->>>>>>> develop/front
   };
 
   const getDiaryByDate = async () => {

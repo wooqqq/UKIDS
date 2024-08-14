@@ -41,16 +41,6 @@ export const GrowthDiaryList = () => {
   const content = '성장일지 폴더 삭제';
   const navigate = useNavigate();
 
-  const getDiaryList = async () => {
-    // console.log('folderId: ', folderId);
-    const url = `/growth-record/all/${folderId}?size=10`;
-
-<<<<<<< HEAD
-    const [modalState, setModalState] = useState<boolean>(false);
-    const [diaries, setDiaries] = useState<Diary[]>([]);
-    const content = "성장일지 폴더 삭제";
-    const navigate = useNavigate();
-
     // 페이지네이션
     const [page, setPage] = useState<number>(1);
     const [totalPage, setTotalPage] = useState<number>(1);
@@ -71,11 +61,6 @@ export const GrowthDiaryList = () => {
         console.log("강경민")
         setDiaries(data.result.growthRecords);
         setTotalPage(data.result.totalPage);
-=======
-    const { data } = await api.get(url);
-
-    console.log(data.result);
-    setDiaries(data.result.growthRecords);
   };
 
   const onModalOpen = () => {
@@ -86,7 +71,6 @@ export const GrowthDiaryList = () => {
     if (diaries.length !== 0) {
       alert('삭제되지 않은 성장일지가 존재합니다.');
       return;
->>>>>>> develop/front
     }
     const url = `/growth-folder/${folderId}`;
 
@@ -98,7 +82,7 @@ export const GrowthDiaryList = () => {
 
   useEffect(() => {
     getDiaryList();
-  }, [folderId]);
+  }, [folderId, page]);
 
   return (
     <div className="feature-box">
@@ -127,105 +111,12 @@ export const GrowthDiaryList = () => {
         </button>
       </span>
 
-<<<<<<< HEAD
-
-    
-
-    
-
-    useEffect(() => {
-        getDiaryList();
-
-
-
-    }, [folderId, page])
-
-
-    return (
-        <div className="feature-box">
-
-
-                {/* 목록 */}
-                <div style={{ position: 'absolute', top: '27px', left: '30px' }}>
-                    <WhiteButton name="폴더 목록" path="/growthfolder"/>
-                </div>
-
-                {/* 제목 */}
-                <div className="absolute left-[342px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">
-                    (폴더이름) 성장 일지
-                </div> 
-
-                
-                {/*만들기*/}
-                <div style={{ marginLeft: '664px', marginTop: '27px' }}>
-                    <BlueButton name="만들기" path={`/growthdiary/write/${folderId}`} />
-                </div>
-
-
-                {/* 삭제 */}
-                <span className="home-modal-open-Button" onClick={onModalOpen}>
-                    <button className="common-btn red-font" style={{ position: 'absolute', top: '27px', right: '30px' }}>
-                    폴더 삭제
-                    </button>
-                </span>
-
-
-
-
-            
-            {/* 게시글 없을 때 */}
-            {diaries.length === 0 ? (
-                <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">아직 성장일지가 없어요!<br/>성장일지를 만들러 가볼까요?</div>
-            ) : (
-            <div className="diary-grid-container">
-                {diaries.map((item) => (
-                    // 수정: 현재의 폴더 아이디도 함께 전달
-                    <Link to={`/growthdiary/diary/${item.recordId}?folderId=${folderId}`}>
-                        <GrowthDiaryItem className="growth-diary-item"
-                        key={item.recordId} title={item.title} date={item.date} imageUrl={item.imageUrl}/>
-                    </Link>
-                ))}
-            </div>
-            
-            
-    
-            )}
-
-            <div>
-                {modalState && (
-                    <Modal content={content} modalState={modalState} setModalState={setModalState} deleteElement={deleteFolder}/>
-                )}
-            </div>
-
-
-
-
-
-
-
-
-                
-            {/* <BlueButton name="만들기" path={`/growthdiary/write/${folderId}`} /> */}
-            {/* <BlueButton name="폴더 삭제" path="/" onClick={onModalOpen}/> */}
-
-
-
-            <Pagination
-                totalPage={totalPage}
-                size={size}
-                countPerPage={5}
-                currentPage={page}
-                onPageChange={handlePageChange} // onPageChange 핸들러를 호출하도록 수정
-            />
-            {/* <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p> */}
-=======
       {/* 게시글 없을 때 */}
       {diaries.length === 0 ? (
         <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
           아직 성장일지가 없어요!
           <br />
           성장일지를 만들러 가볼까요?
->>>>>>> develop/front
         </div>
       ) : (
         <div className="diary-grid-container">
@@ -260,7 +151,16 @@ export const GrowthDiaryList = () => {
       {/* <BlueButton name="만들기" path={`/growthdiary/write/${folderId}`} /> */}
       {/* <BlueButton name="폴더 삭제" path="/" onClick={onModalOpen}/> */}
 
-      <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p>
+      {/* <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p> */}
+      <div className='relative'>
+        <Pagination
+          totalPage={totalPage}
+          size={size}
+          countPerPage={3}
+          currentPage={page}
+          onPageChange={handlePageChange} // onPageChange 핸들러를 호출하도록 수정
+        />
+      </div>
     </div>
   );
 };
