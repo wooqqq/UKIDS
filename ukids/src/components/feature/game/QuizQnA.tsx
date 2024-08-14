@@ -80,18 +80,18 @@ const QuizQnA = () => {
 
   return (
     <>
-      <div className="feature-box">
+      <div className="h-full feature-box flex flex-col items-center">
         {/* 헤더 */}
-        <div className="h-[15%] flex items-center">
-          <GamePageHeader title="질문목록" />
+        <div className="h-[15%] w-[90%]">
+          <GamePageHeader title="질문 목록" />
         </div>
 
         {/* 질문 목록 */}
-        <div className="h-[65%] overflow-y-auto">
+        <div className="h-[65%] w-full overflow-y-auto">
           {/* 테이블 영역 */}
           <div className="flex justify-center">
             {questionList.length !== 0 ? (
-              <table className="w-[80%]">
+              <table className="w-[90%]">
                 <thead>
                   <tr className="border-solid border-b-4 border-[#777777]">
                     <th className="text-center py-3">번호</th>
@@ -177,9 +177,7 @@ const QuizQnA = () => {
                 </tbody>
               </table>
             ) : (
-              <div className="flex items-center text-3xl">
-                질문이 없습니다...!
-              </div>
+              <div className="text-3xl">질문이 없습니다...!</div>
             )}
           </div>
         </div>

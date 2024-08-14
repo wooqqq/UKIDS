@@ -69,7 +69,7 @@ const QuizHistory = () => {
         </div>
 
         {/* 버튼 영역 */}
-        <div className="h-[15%] flex justify-center p-4">
+        <div className="h-[15%] flex justify-center">
           <QuizButton name="메인으로" path="/game" />
         </div>
       </div>
