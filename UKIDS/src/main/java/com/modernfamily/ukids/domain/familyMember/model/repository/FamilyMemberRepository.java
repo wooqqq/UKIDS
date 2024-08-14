@@ -17,7 +17,7 @@ public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long
 
     @Query(value = "select fm " +
             "from FamilyMember fm join fetch fm.user " +
-            "where fm.family.familyId = :familyId")
+            "where fm.family.familyId = :familyId and fm.isApproval = false")
     List<FamilyMember> getFamilyMember(Long familyId);
 
     Optional<FamilyMember> findByFamilyMemberId(Long familyMemberId);
