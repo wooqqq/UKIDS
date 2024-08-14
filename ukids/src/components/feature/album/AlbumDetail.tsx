@@ -6,7 +6,7 @@
 import axios from 'axios';
 import api from '@/util/api';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -93,10 +93,10 @@ const AlbumDetail: React.FC = () => {
   }
 
   return (
-    <div className="feature-box relative w-[911px] h-[576px] overflow-x-hidden">
+    <div className="feature-box">
       {/* 상단 고정 영역 */}
-      <div className=" left-88 top-37 w-[911px] h-[150px] bg-[#fff] z-50">
-        <div className="absolute left-0 top-0 w-[911px] h-[150px] bg-[#fff] rounded-[20px] "></div>
+      <div>
+        
         <div
           className="absolute left-[94px] top-[25px] w-[726px] h-[50px] border-[solid] border-#ddd border border-[0_0_2px] "
           style={{ textAlign: 'center' }}
@@ -131,12 +131,31 @@ const AlbumDetail: React.FC = () => {
         </div>
 
         {/* 수정,삭제 */}
+
+        
+      <Link to={`/albums/update/${albumId}`}>
+      <button className="common-btn gray-btn" style={{ position: 'absolute', top: '87px', right: '150px' }}>
+        수정
+      </button>
+      </Link>
+
+      <span className="home-modal-open-Button" onClick={onModalOpen}>
+        <button className="common-btn red-font" style={{ position: 'absolute', top: '87px', right: '60px' }}  onClick={onModalOpen}>
+          삭제
+        </button>
+      </span>
+
+
+
+
+   
+
         {/* 기능 추가 필요함 */}
-        <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
-          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn mr-2" />
+        {/* <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
+          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn" />
           <GrayButton name="삭제" path="" className="submit-btn" onClick={onModalOpen}/>
         </div>
-      </div>
+      </div> */}
 
       {/* 하단 내용 영역 */}
 
@@ -158,6 +177,7 @@ const AlbumDetail: React.FC = () => {
           <Modal content={content} modalState={modalState} setModalState={setModalState} deleteElement={deleteAlbum}/>
         )}
       </div>
+    </div>
     </div>
   );
 };

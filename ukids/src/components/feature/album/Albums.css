@@ -87,3 +87,9 @@
     font-size: 17px; /* 폰트 사이즈 조절 */
     font-weight: bold; /* 텍스트를 볼드체로 설정 */
 }
+
+
+
+.photos-container{
+    margin-top: 150px; /* 날짜와 제목 상단 마진 조절 */
+}
