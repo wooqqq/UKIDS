@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 import api from '../util/api';
+import axios from 'axios';
 
 interface User {
   userId: number;
@@ -96,9 +97,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   userLogin: async (id, password) => {
     try {
       // 로그인 API 요청
-      const response = await api.post('/user/login', {
-        id: id,
-        password: password,
+      const response = await axios.post(`${ukidsURL}/api/user/login`, {
+        id,
+        password,
       });
 
       const { result } = response.data;
@@ -263,14 +264,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const response = await api.get(`/user/id/${id}`);
       if (response.data.code === 200) {
         // alert('사용 가능한 ID입니다.');
-        return false;
+        return true;
       } else {
         // alert('이미 사용 중인 ID입니다.');
-        return true;
+        return false;
       }
     } catch (error) {
       console.error('ID 중복 검사 실패:', error);
-      return true;
+      return false;
     }
   },
 

@@ -1,6 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Modal } from '@components/feature/modal/Modal.tsx';
 import api from '@/util/api.ts';
 
@@ -25,6 +24,8 @@ export const PictureDiaryDetail = () => {
   const [modalState, setModalState] = useState<boolean>(false);
   const content = '그림일기 삭제';
 
+  const navigate = useNavigate();
+
   const onModalOpen = () => {
     setModalState(!modalState);
   };
@@ -32,18 +33,23 @@ export const PictureDiaryDetail = () => {
   const getDiary = async () => {
     const url = `/picture-diary/details/${pictureDiaryId}`;
     const { data } = await api.get(url);
-    if (data.code === 201) {
-      console.log(data.result);
+    if (data.code !== 200) {
+      alert('그림일기를 불러올 수 없습니다');
+      navigate('/paintdiary')
     }
-
-    setDiary(data.result);
+    else
+      setDiary(data.result);
   };
 
   const deleteDiary = async () => {
     const url = `/picture-diary/${pictureDiaryId}`;
 
     const { data } = await api.delete(url);
-
+    if(data.code !== 200){
+      alert('그림일기를 삭제하지 못했습니다.');
+      return ;
+    } 
+    navigate('/paintdiary');
     console.log(data);
   };
 

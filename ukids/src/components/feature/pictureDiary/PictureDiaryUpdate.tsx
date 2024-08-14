@@ -7,6 +7,8 @@ import api from '@/util/api.ts';
 import BlueButton from '@components/common/BlueButton';
 import WhiteButton from '@components/common/WhiteButton';
 
+import { useFamilyStore } from '@/stores/familyStore';
+
 interface Diary {
   pictureDiaryId: number;
   familyId: number;
@@ -19,10 +21,12 @@ export const PictureDiaryUpdate = () => {
   // 추가
   const navigate = useNavigate();
 
+  const {selectedFamilyId} = useFamilyStore();
+
   let { pictureDiaryId } = useParams() as { pictureDiaryId: string };
   const [diary, setDiary] = useState<Diary>({
     pictureDiaryId: parseInt(pictureDiaryId),
-    familyId: 11,
+    familyId: selectedFamilyId,
     file: null, // File은 null로 초기화
     content: '',
     date: '',
