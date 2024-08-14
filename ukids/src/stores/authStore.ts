@@ -60,7 +60,7 @@ interface AuthState {
   checkedEmail: (email: string) => Promise<boolean>;
 
   // 전화번호 중복 검사
-  checkedPhone: (phone: string) => Promise<void>;
+  checkedPhone: (phone: string) => Promise<boolean>;
 }
 
 // 자동 로그아웃 테스트
@@ -304,7 +304,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('전화번호 중복 검사 실패:', error);
-      alert('전화번호 중복 검사에 실패했습니다.');
+      return false;
     }
   },
 }));
