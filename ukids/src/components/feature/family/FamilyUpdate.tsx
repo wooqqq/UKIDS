@@ -126,7 +126,9 @@ const FamilyUpdate = () => {
               </section>
             </>
           )}
-          <BlueButton name="수정 완료" type="submit" path="" />
+          <div className="flex justify-center mt-52">
+            <BlueButton name="수정 완료" type="submit" path="" />
+          </div>
         </form>
       </div>
     </>

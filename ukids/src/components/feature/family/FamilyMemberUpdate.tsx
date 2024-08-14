@@ -1,10 +1,18 @@
 import { useEffect } from 'react';
 import { useFamilyStore } from '../../../stores/familyStore';
 import RedButton from '../../common/RedButton';
+import BlueButton from '../../common/BlueButton';
+import CharacterTag from '../../common/CharaterTag';
 
 const FamilyMemberUpdate = () => {
-  const { selectedFamilyId, family, member, fetchMemberList, fetchFamilyInfo } =
-    useFamilyStore();
+  const {
+    selectedFamilyId,
+    family,
+    member,
+    fetchMemberList,
+    fetchFamilyInfo,
+    deleteMember,
+  } = useFamilyStore();
 
   // 가족 구성원, 가족 정보 저장
   useEffect(() => {
@@ -14,15 +22,14 @@ const FamilyMemberUpdate = () => {
     }
   }, [selectedFamilyId, fetchMemberList, fetchFamilyInfo]);
 
-  useEffect(() => {
-    if (family) {
+  const onClickDeleteMember = async (familyMemberId: number) => {
+    try {
+      await deleteMember(familyMemberId, true);
+      alert('내보내기가 완료되었습니다.');
+    } catch (error) {
+      console.error('Error deleting family member', error);
     }
-  }, [family]);
-
-  useEffect(() => {
-    if (member.length > 0) {
-    }
-  }, [member]);
+  };
 
   return (
     <>
@@ -49,7 +56,7 @@ const FamilyMemberUpdate = () => {
                 </label>
               </div>
               <div className="px-5 w-80 font-semibold text-[#555555]">
-                {family.userFamilyDto.name}
+                {member[0].userFamilyDto.name}
               </div>
             </div>
           </section>
@@ -62,14 +69,34 @@ const FamilyMemberUpdate = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>이삼성</td>
-                <td>엄마</td>
-                <td></td>
-              </tr>
+              {member.map((member) => (
+                <tr>
+                  <td>{member.userFamilyDto.name}</td>
+                  <td>
+                    <CharacterTag
+                      character={(member.role === 'ROLE_NONE' && '없음') || ''}
+                    />
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => onClickDeleteMember(member.familyMemberId)}
+                      className="common-btn gray-btn"
+                    >
+                      내보내기
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
-          <RedButton name="가족 해체" path="" />
+          <div className="flex justify-center mt-20">
+            <div className="mr-6">
+              <BlueButton name="수정 완료" type="submit" path="" />
+            </div>
+            <div>
+              <RedButton name="가족 해체" path="" />
+            </div>
+          </div>
         </form>
       </div>
     </>

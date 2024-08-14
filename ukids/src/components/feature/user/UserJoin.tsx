@@ -20,67 +20,218 @@ const UserJoin = () => {
 
   const nav = useNavigate();
   const joinUser = useAuthStore((state) => state.joinUser);
-  const today = new Date().toISOString().split('T')[0];
   const checkedId = useAuthStore((state) => state.checkedId);
   const checkedEmail = useAuthStore((state) => state.checkedEmail);
   const checkedPhone = useAuthStore((state) => state.checkedPhone);
 
   const [idError, setIdError] = useState('');
   const [pwError, setPwError] = useState('');
+  const [confirmError, setConfirmError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [dateError, setDateError] = useState('');
 
-  const handleJoin = async (e: React.FormEvent) => {
-    e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
+  const [isIdCheck, setIsIdCheck] = useState(false); // 중복 검사를 했는지 안했는지
+  const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
 
-    // 생년월일 유효성 검사
-    const checkToday = new Date();
-    const birthDate = new Date(form.birthDate);
-    const isInvalidBirthDate = birthDate > checkToday;
-
-    // 아이디 중복 확인
-    if (form.id) {
-      const isIdDuplicate = await checkedId(form.id);
-      if (!isIdDuplicate) {
-        setIdError('이미 사용 중인 아이디입니다.');
-        return;
+  // 아이디 중복 확인
+  const idCheckHandler = async (id: string) => {
+    const idRegex = /^[a-z\d]{5,10}$/;
+    if (id === '') {
+      setIdError('아이디를 입력해주세요.');
+      setIsIdAvailable(false);
+      return false;
+    } else if (!idRegex.test(id)) {
+      setIdError('아이디는 5~10자의 영소문자, 숫자만 입력 가능합니다.');
+      setIsIdAvailable(false);
+      return false;
+    }
+    try {
+      const responseData = await checkedId(id);
+      if (responseData) {
+        setIdError('사용 가능한 아이디입니다.');
+        setIsIdCheck(true);
+        setIsIdAvailable(true);
+        return true;
+      } else {
+        setIdError('이미 사용중인 아이디입니다.');
+        setIsIdAvailable(false);
+        return false;
       }
+    } catch (error) {
+      alert('서버 오류입니다. 관리자에게 문의하세요.');
+      console.error(error);
+      return false;
+    }
+  };
+
+  const passwordCheckHandler = (password: string, confirmPassword: string) => {
+    const passwordRegex = /^[a-z\d!@*&-_]{8,16}$/;
+    if (password === '') {
+      setPwError('비밀번호를 입력해주세요.');
+      return false;
+    } else if (!passwordRegex.test(password)) {
+      setPwError(
+        '비밀번호는 8~16자의 영소문자, 숫자, !@*&-_만 입력 가능합니다.',
+      );
+      return false;
+    } else if (confirmPassword !== password) {
+      setPwError('');
+      setConfirmError('비밀번호가 일치하지 않습니다.');
+      return false;
+    } else {
+      setPwError('');
+      setConfirmError('');
+      return true;
+    }
+  };
+
+  const onChangeIdHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const idValue = e.currentTarget.value;
+    setForm({ ...form, id: idValue });
+    idCheckHandler(idValue);
+  };
+
+  const onChangePasswordHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { id, value } = e.currentTarget;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [id]: value, // name에 따라 password 또는 confirmPassword 업데이트
+    }));
+    if (id === 'password') {
+      passwordCheckHandler(value, form.confirmPassword);
+    } else {
+      passwordCheckHandler(form.password, value);
+    }
+  };
+
+  const onChangeNameHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+
+    if (!value.trim()) {
+      setNameError('이름을 작성하세요.');
+    } else {
+      setNameError(''); // 이름이 입력되면 에러 메시지 초기화
     }
 
-    if (form.password !== form.confirmPassword) {
-      setPwError('비밀번호가 일치하지 않습니다.');
-      return;
-    }
+    setForm((prevForm) => ({
+      ...prevForm,
+      name: value,
+    }));
+  };
 
-    // 비밀번호 빈 값 불가능
-    if (!form.password || !form.confirmPassword) {
-      setPwError('비밀번호를 입력하세요.');
-      return;
-    }
+  const onChangeBirthDateHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+    const today = new Date();
+    const birthDate = new Date(value);
+    const isInvalidBirthDate = birthDate > today;
 
     // 생년월일 유효성 검사
     if (isInvalidBirthDate) {
       setDateError('생년월일이 오늘 이후의 날짜입니다. 다시 입력해 주세요.');
-      return;
-    }
-    // 이메일 중복 확인
-    if (form.email) {
-      const isEmailDuplicate = await checkedEmail(form.email);
-      if (!isEmailDuplicate) {
-        setEmailError('이미 사용 중인 이메일입니다.');
-        return;
-      }
+    } else {
+      setDateError(''); // 에러가 없을 때는 에러 메시지 초기화
     }
 
-    // 전화번호 중복 확인
-    if (form.phone) {
-      const isPhoneDuplicate = await checkedPhone(form.phone);
-      if (!isPhoneDuplicate) {
-        setPhoneError('이미 사용 중인 전화번호입니다.');
-        return;
+    // 상태 업데이트
+    setForm((prevForm) => ({
+      ...prevForm,
+      birthDate: value,
+    }));
+  };
+
+  const onChangeEmailHandler = async (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+
+    if (!value.trim()) {
+      setEmailError('이메일을 입력하세요.');
+    } else {
+      // 이메일 유효성 검사를 수행하기 전에 상태 업데이트
+      setForm((prevForm) => ({
+        ...prevForm,
+        email: value,
+      }));
+
+      try {
+        const isEmailDuplicate = await checkedEmail(value);
+        if (!isEmailDuplicate) {
+          setEmailError('이미 사용 중인 이메일입니다.');
+        } else {
+          setEmailError(''); // 이메일 사용 가능할 때 에러 메시지 초기화
+        }
+      } catch (error) {
+        console.error('이메일 확인 중 오류 발생:', error);
+        setEmailError('서버 오류입니다. 나중에 다시 시도하세요.');
       }
     }
+  };
+
+  const onChangePhoneHandler = async (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+
+    if (!value.trim()) {
+      setPhoneError('휴대전화번호를 입력하세요.');
+      return;
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        phone: value,
+      }));
+    }
+
+    try {
+      const isPhoneDuplicate = await checkedPhone(value);
+      if (!isPhoneDuplicate) {
+        setPhoneError('이미 사용 중인 전화번호입니다.');
+      } else {
+        setPhoneError(''); // 사용 가능한 번호일 때 에러 메시지 초기화
+      }
+    } catch (error) {
+      console.error('전화번호 확인 중 오류 발생:', error);
+      setPhoneError('서버 오류입니다. 나중에 다시 시도하세요.');
+    }
+  };
+
+  ////////////////////////////////////////
+  const handleJoin = async (e: React.FormEvent) => {
+    e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
+
+    // 아이디 중복 확인
+    const isCheckedId = await checkedId(form.id);
+    if (isCheckedId) setIdError('');
+    else return;
+    if (!isIdCheck || !isIdAvailable) {
+      alert('아이디 중복 검사를 해주세요.');
+      return;
+    }
+
+    const passwordCheckResult = passwordCheckHandler(
+      form.password,
+      form.confirmPassword,
+    );
+    if (passwordCheckResult) {
+      setPwError('');
+      setConfirmError('');
+    } else return;
+
+    // // 이메일 중복 확인
+    // if (form.email) {
+    //   const isEmailDuplicate = await checkedEmail(form.email);
+    //   if (!isEmailDuplicate) {
+    //     setEmailError('이미 사용 중인 이메일입니다.');
+    //     return;
+    //   }
+    // }
+
+    // // 전화번호 중복 확인
+    // if (form.phone) {
+    //   const isPhoneDuplicate = await checkedPhone(form.phone);
+    //   if (!isPhoneDuplicate) {
+    //     setPhoneError('이미 사용 중인 전화번호입니다.');
+    //     return;
+    //   }
+    // }
 
     // 회원가입 API 요청
     await joinUser({
@@ -111,8 +262,9 @@ const UserJoin = () => {
                 id="id"
                 placeholder="아이디"
                 value={form.id}
-                required
-                onChange={(e) => setForm({ ...form, id: e.target.value })}
+                required={true}
+                onChange={onChangeIdHandler}
+                // onChange={(e) => setForm({ ...form, id: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
@@ -132,10 +284,13 @@ const UserJoin = () => {
                 id="password"
                 placeholder="비밀번호 입력"
                 value={form.password}
-                required
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                required={true}
+                onChange={onChangePasswordHandler}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
@@ -150,18 +305,18 @@ const UserJoin = () => {
               </div>
               <input
                 type="password"
-                id="confirm-password"
+                id="confirmPassword"
                 placeholder="비밀번호 확인"
                 value={form.confirmPassword}
-                required
-                onChange={(e) =>
-                  setForm({ ...form, confirmPassword: e.target.value })
-                }
+                required={true}
+                onChange={onChangePasswordHandler}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
             <div className="pl-2 text-sm text-end">
-              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
+              <p className="text-[#F03F2F]">
+                {confirmError ? confirmError : ''}
+              </p>
             </div>
           </section>
           <section className="mb-6">
@@ -176,10 +331,13 @@ const UserJoin = () => {
                 id="name"
                 placeholder="이름"
                 value={form.name}
-                required
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required={true}
+                onChange={onChangeNameHandler}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
+            </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{nameError ? nameError : ''}</p>
             </div>
           </section>
           <section className="mb-6">
@@ -194,11 +352,8 @@ const UserJoin = () => {
                 id="birthDate"
                 placeholder="생년월일"
                 value={form.birthDate}
-                required
-                max={today}
-                onChange={(e) =>
-                  setForm({ ...form, birthDate: e.target.value })
-                }
+                required={true}
+                onChange={onChangeBirthDateHandler}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
@@ -216,7 +371,9 @@ const UserJoin = () => {
                 id="email"
                 placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
                 value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required={false}
+                onChange={onChangeEmailHandler}
+                // onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
@@ -236,7 +393,9 @@ const UserJoin = () => {
                 id="phone"
                 placeholder="[선택] 휴대전화번호"
                 value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                required={false}
+                onChange={onChangePhoneHandler}
+                // onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>

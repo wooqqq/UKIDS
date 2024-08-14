@@ -21,7 +21,7 @@ export const PictureDiaryUpdate = () => {
   // 추가
   const navigate = useNavigate();
 
-  const {selectedFamilyId} = useFamilyStore();
+  const { selectedFamilyId } = useFamilyStore();
 
   let { pictureDiaryId } = useParams() as { pictureDiaryId: string };
   const [diary, setDiary] = useState<Diary>({
@@ -130,7 +130,9 @@ export const PictureDiaryUpdate = () => {
           <label className="input-file-box" htmlFor="fileUpload">
             <span>+</span>
             {/* 이미지 미리보기 */}
-            {previewUrl && <img src={previewUrl} alt="Preview" />}
+            {previewUrl && (
+              <img src={previewUrl} alt="Preview" crossOrigin="anonymous" />
+            )}
             <input
               className="hidden"
               id="fileUpload"

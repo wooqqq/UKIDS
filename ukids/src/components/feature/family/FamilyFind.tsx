@@ -9,7 +9,7 @@ const FamilyFind = () => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
-  const findFamily = useFamilyStore((state) => state.findFamily);
+  const { findFamily, applyMember } = useFamilyStore();
 
   const nav = useNavigate();
   const handleSubmit = async (event: React.FormEvent) => {
@@ -31,6 +31,7 @@ const FamilyFind = () => {
 
       if (family) {
         // 이름과 코드가 일치하면 가족방 신청 처리
+        await applyMember(family.familyId, 'none'); // 역할 일단 none으로 지정.
         alert(`${name} 가족방에 가입 신청이 완료되었습니다.`);
         nav('/family');
       } else {
