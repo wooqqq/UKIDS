@@ -30,6 +30,26 @@
     color: inherit; /* 링크 색상을 상속받음 */
 }
 
+
+
+
+
+
+/* 다이어리 아이템*/
+
+.diary-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 각 항목의 최소 너비를 250px, 가능한 많이 채워지도록 설정 */
+    gap: 20px; /* 그리드 항목 간의 간격 */
+    padding: 20px; /* 그리드 패딩 */
+  
+}
+
+.diary-item-link {
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    color: inherit; /* 링크 색상을 상속받음 */
+}
+
 .growth-diary-item {
     border: 1px solid #ccc; /* 테두리 설정 */
 
@@ -41,6 +61,15 @@
     text-align: center;
 
 
+}
+
+.growth-diary-item img{
+    width: 100%; /* 이미지 너비를 부모 컨테이너에 맞춤 */
+    height: 150px; /* 이미지 높이 고정 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너를 채움 */
+
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .growth-diary-item:hover {
