@@ -47,7 +47,7 @@ const ScheduleList = () => {
             dateScheduleList.scheduleList.map((value, index) => (
               <div 
                 key={index}
-                style={{margin: '15px 5px'}} 
+                style={{margin: '15px 5px', cursor: 'pointer'}} 
                 onClick={() => onClickDetail(value.scheduleId)}>
                 <p style={{fontWeight: '600'}}>
                   <div className="circle-color" style={{marginRight: '10px'}}></div>
