@@ -260,7 +260,9 @@ const UserUpdate = () => {
               <p className="text-[#F03F2F]">{phoneError ? phoneError : ''}</p>
             </div>
           </section>
-          <BlueButton name="수정 완료" type="submit" path="" />
+          <div className="flex justify-center">
+            <BlueButton name="수정 완료" type="submit" path="" />
+          </div>
         </form>
       </div>
     </>

@@ -20,6 +20,7 @@ interface Family {
 
 interface Member {
   familyMemberId: number; // 가족 구성원의 ID
+  role: string;
   userFamilyDto: User;
 }
 
@@ -133,7 +134,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
-      const newFamilyId: number = newFamily.familyId;
       console.log('newFamily.familyId : ' + newFamily.familyId);
       set({
         family: newFamily,
@@ -154,6 +154,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
 
       // webRTC 세션 생성
       await api.post(`/webrtc?familyId=${newFamily.familyId}`);
+      return chatRoomId;
     } catch (error: any) {
       console.error('Error creating family', error);
       set({ error: error.message });
