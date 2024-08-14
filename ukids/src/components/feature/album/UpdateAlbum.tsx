@@ -41,6 +41,7 @@ interface Caption {
 }
 
 export const UpdateAlbum = () => {
+  const today = new Date().toISOString().split('T')[0];
   const [title, setTitle] = useState('');
   const [date, setDate] = useState<Date>();
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -238,6 +239,7 @@ export const UpdateAlbum = () => {
           >
             <DatePicker
               selected={date}
+              maxDate={today}
               onChange={handleDateChange}
               dateFormat="yyyy/MM/dd"
               className="text-center w-full"
