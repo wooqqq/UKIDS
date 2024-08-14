@@ -184,6 +184,7 @@ const Albums: React.FC = () => {
                       <img
                         src={album.photos[0].imgUrl}
                         alt={`Image of ${album.title}`}
+                        crossOrigin="anonymous"
                       />
                     ) : (
                       <div className="no-photo">사진 없음</div>

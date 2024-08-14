@@ -5,6 +5,8 @@ interface ChattingProps {
 }
 
 const ChattingBox = ({ message, isSender, sender }: ChattingProps) => {
+  if (!message.trim()) return null;
+
   const color = isSender ? 'bg-[#fceecf]' : 'bg-[#cbeef4]';
 
   return (
@@ -13,7 +15,8 @@ const ChattingBox = ({ message, isSender, sender }: ChattingProps) => {
         {isSender ? null : <p>{sender}</p>}
         {/* <p className="flex justify-end">{sender}</p> */}
         <div
-          className={`flex justify-center items-center px-4 py-2 rounded-[5px] ${color}`}
+          className={`flex justify-center items-center px-4 fpy-2 rounded-[5px] ${color}`}
+          
         >
           {message}
         </div>
