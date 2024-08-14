@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import QuizButton from './QuizButton';
-import GamePageHeader from './GamePageHeader';
-import api from '../../../util/api';
-import './gamepart.css';
+import QuizButton from '@components/feature/game/QuizButton';
+import GamePageHeader from '@components/feature/game/GamePageHeader';
+import api from '@/util/api';
+import '@components/feature/game/gamepart.css';
 
 interface History {
   correctCounts: number;
@@ -19,7 +19,7 @@ const QuizHistory = () => {
 
   // 게임 기록 가져오기
   useEffect(() => {
-    api.get('/quiz').then((response) => {
+    api.get('/quiz').then((response: any) => {
       console.log(response.data);
       setHistoryList(response.data.result.quizResults);
     });
@@ -27,18 +27,18 @@ const QuizHistory = () => {
 
   return (
     <>
-      <div className="feature-box h-full">
+      <div className="h-full feature-box flex flex-col items-center">
         {/* 헤더 */}
-        <div className="h-[15%] flex items-center">
+        <div className="h-[15%] w-[90%]">
           <GamePageHeader title="게임 결과 기록" />
         </div>
 
         {/* 본문 영역 */}
-        <div className="h-[65%] overflow-y-auto">
+        <div className="h-[65%] w-full overflow-y-auto">
           {/* 테이블 영역 */}
           <div className="flex justify-center">
             {historyList.length !== 0 ? (
-              <table className="w-[80%]">
+              <table className="w-[90%]">
                 <thead>
                   <tr className="border-solid border-b-4 border-[#777777]">
                     <th className="text-center py-3">번호</th>
@@ -63,9 +63,7 @@ const QuizHistory = () => {
                 </tbody>
               </table>
             ) : (
-              <div className="flex items-center text-3xl">
-                게임 기록이 없습니다!
-              </div>
+              <div className="text-3xl">게임 기록이 없습니다!</div>
             )}
           </div>
         </div>

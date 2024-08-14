@@ -1,4 +1,5 @@
-import WhiteBackButton from '../../common/WhiteBackButton';
+import WhiteBackButton from '@components/common/WhiteBackButton';
+import '@components/feature/game/gamepart.css';
 
 interface GamePageHeader {
   title: string;
@@ -7,14 +8,14 @@ interface GamePageHeader {
 const GamePageHeader = ({ title }: GamePageHeader) => {
   return (
     <>
-      {/* 헤더 내부 플렉스 */}
-      <div className="w-full flex justify-between">
+      {/* 헤더 내부 그리드 */}
+      <div className="head-grid">
         {/* 좌측 상단 버튼 */}
         <WhiteBackButton path={'../'} />
         {/* 제목 */}
         <p className="text-5xl font-[ONE-Mobile-POP]">{title}</p>
-        {/* 빈 div로 오른쪽 여백 맞추기 */}
-        <div className="w-[6rem]"> </div>
+        {/* 빈 div로 오른쪽 여백 맞추기 + 상하여백주기 */}
+        <div className="my-11"></div>
       </div>
     </>
   );

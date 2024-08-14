@@ -207,3 +207,10 @@
   visibility: visible;
   opacity: 1;
 }
+
+.head-grid {
+  display: grid;
+  grid-template-columns: 1fr 7fr 1fr;
+  grid-auto-rows: max-content;
+  place-items: center;
+}
