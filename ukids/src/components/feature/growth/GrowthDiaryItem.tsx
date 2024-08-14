@@ -1,3 +1,5 @@
+import './GrowthDiaryList.css';
+
 interface Diary {
   title: number;
   date: string;
@@ -5,15 +7,14 @@ interface Diary {
 }
 export const GrowthDiaryItem = ({ title, date, imageUrl }: Diary) => {
   return (
-    <>
-      {' '}
+    <div className="box-box">
       <div className="growth-diary-item">
+        <div>{date}</div>
         <div>
           <img src={imageUrl} alt="" crossOrigin="anonymous" />
         </div>
-        <div>{date}</div>
         <div>{title}</div>
       </div>
-    </>
+    </div>
   );
 };

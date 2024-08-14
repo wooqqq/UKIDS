@@ -3,6 +3,8 @@ import axios from 'axios';
 import { PictureDiaryItem } from './PictureDiaryItem';
 import { Link } from 'react-router-dom';
 
+import { useFamilyStore } from '@/stores/familyStore';
+
 import api from '@/util/api.ts';
 
 import BlueButton from '@components/common/BlueButton';
@@ -26,6 +28,8 @@ interface Diary {
 }
 
 const PictureDiaryList = () => {
+  const { selectedFamilyId } = useFamilyStore();
+
   const [diaries, setDiaries] = useState<Diary[]>([]);
   //   const [totalPage, setTotalPage] = useState<number>();
   //   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -39,8 +43,6 @@ const PictureDiaryList = () => {
 
   // 플립 페이지 (인덱스는 0부터 시작)
   const [currentPageflip, setCurrentPageflip] = useState(0);
-
-  const { selectedFamilyId } = useFamilyStore();
 
   // 페이지네이션
   const [page, setPage] = useState<number>(1);

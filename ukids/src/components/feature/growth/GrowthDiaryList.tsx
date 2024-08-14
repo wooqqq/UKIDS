@@ -9,6 +9,9 @@ import WhiteButton from '@components/common/WhiteButton';
 import { Modal } from '@components/feature/modal/Modal';
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
+
+=======
 import {Pagination} from '@components/feature/pagination/Pagination.tsx';
 
 
@@ -19,11 +22,16 @@ interface Diary{
   writerId: number;
   // 수정: 제목 string
   title: string;
+>>>>>>> d7c2990a1394aee6152c6361e44389bc60338154
 
-  // 수정: 내용 string
-  content: string;
-  date: string;
-  imageUrl: string;
+import './GrowthDiaryList.css'
+interface Diary{
+    recordId: number;
+    writerId: number;
+    title: string;
+    content: string;
+    date: string;
+    imageUrl: string;
 }
 
 // // 추가  : 폴더 정보
@@ -35,6 +43,7 @@ interface Diary{
 
 export const GrowthDiaryList = () => {
   const { folderId } = useParams();
+
 
   const [modalState, setModalState] = useState<boolean>(false);
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -91,15 +100,17 @@ export const GrowthDiaryList = () => {
         <WhiteButton name="폴더 목록" path="/growthfolder" />
       </div>
 
-      {/* 제목 */}
-      <div className="absolute left-[342px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">
-        (폴더이름) 성장 일지
-      </div>
+                {/* 제목 */}
+                <div className="absolute left-[342px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">
+                    
+                </div> 
 
-      {/*만들기*/}
-      <div style={{ marginLeft: '664px', marginTop: '27px' }}>
-        <BlueButton name="만들기" path={`/growthdiary/write/${folderId}`} />
-      </div>
+                
+                {/*만들기*/}
+                <div style={{ marginLeft: '664px', marginTop: '27px' }}>
+                    <BlueButton name="만들기" path={`/growthdiary/write/${folderId}`} />
+                </div>
+
 
       {/* 삭제 */}
       <span className="home-modal-open-Button" onClick={onModalOpen}>

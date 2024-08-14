@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useFamilyStore } from '@/stores/familyStore';
+
 import '@components/feature/pictureDiary/diaryItem.css';
 import api from '@/util/api.ts';
 
 import BlueButton from '@components/common/BlueButton';
 import WhiteButton from '@components/common/WhiteButton';
 
+<<<<<<< HEAD
+
+=======
 import { useFamilyStore } from '@/stores/familyStore';
 
 import { useTreeStore } from '@/stores/treeStore';
+>>>>>>> d7c2990a1394aee6152c6361e44389bc60338154
 
 interface Diary {
   familyId: number;
@@ -21,6 +27,7 @@ interface Diary {
 export const PictureDiaryCreate = () => {
   // 추가
   const navigate = useNavigate();
+  const {selectedFamilyId} = useFamilyStore();
 
   const { selectedFamilyId } = useFamilyStore();
 
