@@ -25,9 +25,12 @@ public class QuizRepository {
     public String checkAnswer(QuizRoom quizRoom, String userId, String inputAnswer){
         String answer = quizRoom.getRandomQuizQuestionList().get(quizRoom.getCurrentQuestionIndex()).getAnswer();
 
-        if(inputAnswer.equals(answer))
+        if(inputAnswer.equals(answer)) {
             quizRoom.getParticipantList().get(userId).hittingAnswer();
-
+            log.info("answer hit : {}, {}, {}, {}", userId,
+                    quizRoom.getParticipantList().get(userId),
+                    inputAnswer, answer);
+        }
         return answer;
     }
 

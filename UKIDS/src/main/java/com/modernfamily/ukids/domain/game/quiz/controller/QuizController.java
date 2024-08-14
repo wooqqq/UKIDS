@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequiredArgsConstructor
@@ -87,14 +88,16 @@ public class QuizController {
     }
 
     @MessageMapping("/quiz/question")
-    public void getQuestion(@RequestBody Map<String, Object> payload, SimpMessageHeaderAccessor headerAccessor) {
+    public void getQuestion(@RequestBody Map<String, Object> payload, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
         String userId = headerAccessor.getUser().getName();
         Long familyId = Long.parseLong(payload.get("familyId").toString());
 
         Map<String, Object> question = quizService.getQuizQuestion(familyId, userId);
 
-        if(question != null)
+        if(question != null) {
+            TimeUnit.SECONDS.sleep(3);
             messagingTemplate.convertAndSend("/topic/quiz/" + familyId, question);
+        }
     }
 
     // 정답 확인
