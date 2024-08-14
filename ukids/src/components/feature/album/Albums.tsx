@@ -67,11 +67,6 @@ const Albums: React.FC = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const token = useAuthStore((state) => state.token);
 
-  // familyId를 상태에서 가져오기 -> 가족방 등록 후 주석 해제
-  // const familyId = useAuthStore((state) => state.familyId); 
-
-  // 임시 familyId 6. (ssafy2가 속한 가족)
-    // 앨범 12 개 등록되어있음 (총 3페이지)
   const {selectedFamilyId} = useFamilyStore();
 
 
@@ -140,53 +135,57 @@ const Albums: React.FC = () => {
   }, [token, selectedFamilyId]);
 
   return (
-    <div className="relative feature-box">
-      {albums.length === 0 ? (
-        <div className="absolute left-0 top-0 w-[911px] h-[576px] flex-shrink-0 rounded-xl bg-white shadow-[0_0_15px_rgba(153,153,153,0.25)] overflow-y-auto">
-          {/* <div className="absolute left-0 right-0 top-0 bottom-0 rounded-[20px]"></div> */}
-          <div className="absolute left-[764px] top-[33px]">
-            <BlueButton name="만들기" path="/albums/upload" />
-          </div>
-          <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
-            앨범 {albums.length} {selectedFamilyId} 
-          </div>
-          <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center">
-            아직 앨범이 없어요!<br />앨범을 만들러 가볼까요?
-          </div>
+    <div className="feature-box">
+
+        {/* 메인 오른쪽 만들기 버튼 */}
+        <div style={{ marginLeft: '764px', marginTop: '33px' }}>
+          <BlueButton name=" 만들기 " path="/albums/upload" />
         </div>
-      ) : (
-        <div className="feature-box">
-         
 
-
-            {/* 메인 오른쪽 만들기 버튼 */}
-            <div style={{ marginLeft: '764px', marginTop: '33px' }}>
-              <BlueButton name="만들기" path="/albums/upload" />
-            </div>
-
-
-
-            <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">앨범 ({albums.length}개) </div>
-          
-
-          <div className="album-container">
-            <div className="albums-scrollable">
-              {albums.map((album) => (
-                <Link key={album.albumId} to={`/albums/${album.albumId}`} className="album-item">
-                  {album.photos && album.photos.length > 0 ? (
-                    <img src={album.photos[0].imgUrl} alt={`Image of ${album.title}`} />
-                  ) : (
-                    <div className="no-photo">사진 없음</div>
-                  )}
-                  <div className="album-item-date">{album.date}</div>
-                  <div className="album-item-title">{album.title}</div>
-                </Link>
-              ))}
-            </div>
-          </div>
+         {/* 메인 왼쪽 글자 */}
+        <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
+          앨범
         </div>
-      )}
+
+        {/* 이하 내용물 영역 */}
+
+        {/* 게시글이 없을 때  */}
+        {albums.length === 0 ? (
+                    <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
+                        아직 앨범이 없어요!<br/>앨범을 만들러 가볼까요?</div>
+                )
+                  :
+
+            (
+            <div>
+              <div>
+            
+
+
+
+                {/* <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">앨범 ({albums.length}개) </div> */}
+              
+
+                <div style={{ marginTop: '30px' }}>
+                <div className="albums-scrollable"  style={{ marginRight: '10px' }}>
+                  {albums.map((album) => (
+                    <Link key={album.albumId} to={`/albums/${album.albumId}`} className="album-item">
+                      {album.photos && album.photos.length > 0 ? (
+                        <img src={album.photos[0].imgUrl} alt={`Image of ${album.title}`} />
+                      ) : (
+                        <div className="no-photo">사진 없음</div>
+                      )}
+                      <div className="album-item-date">{album.date}</div>
+                      <div className="album-item-title">{album.title}</div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            </div>
+          )}
     </div>
+    
   );
 };
 
