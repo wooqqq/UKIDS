@@ -45,7 +45,7 @@ const PictureDiaryList = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPage, setTotalPage] = useState<number>(1);
     // 페이지 당 게시글 개수
-    const size: number =100;
+    const size: number =100 ;
   
     const handlePageChange2 = (page: number) => {
       setPage(page);
@@ -54,7 +54,7 @@ const PictureDiaryList = () => {
 
   const getDiaryList = async () =>{
     
-      // 수정
+      // 수정 
       const url = `/picture-diary/all/${selectedFamilyId}?page=${page}&size=${size}`;
       const {data} = await api.get(url);
       console.log(data);

@@ -9,8 +9,11 @@ import WhiteButton from '@components/common/WhiteButton';
 import { Modal } from "@components/feature/modal/Modal";
 import { useNavigate } from "react-router-dom";
 
+import {Pagination} from '@components/feature/pagination/Pagination.tsx';
+
 
 import './GrowthDiaryList.css'
+
 interface Diary{
     recordId: number;
     writerId: number;
@@ -40,22 +43,31 @@ export const GrowthDiaryList = () => {
 
 
 
-
     const [modalState, setModalState] = useState<boolean>(false);
     const [diaries, setDiaries] = useState<Diary[]>([]);
     const content = "성장일지 폴더 삭제";
     const navigate = useNavigate();
 
+    // 페이지네이션
+    const [page, setPage] = useState<number>(1);
+    const [totalPage, setTotalPage] = useState<number>(1);
+    const size: number = 5;
+
+    const handlePageChange = (page: number) => {
+        setPage(page);
+    }
+
+
     const getDiaryList = async () => {
         // console.log('folderId: ', folderId);
-        const url = `/growth-record/all/${folderId}?size=10`;
+        const url = `/growth-record/all/${folderId}?page=${page}&size=${size}`;
 
         const {data} = await api.get(url);
 
         console.log(data.result);
         console.log("강경민")
         setDiaries(data.result.growthRecords);
-
+        setTotalPage(data.result.totalPage);
     }
 
     const onModalOpen = () => {
@@ -88,7 +100,8 @@ export const GrowthDiaryList = () => {
 
 
 
-    }, [folderId])
+    }, [folderId, page])
+
 
     return (
         <div className="feature-box">
@@ -159,7 +172,14 @@ export const GrowthDiaryList = () => {
 
 
 
-            <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p>
+            <Pagination
+                totalPage={totalPage}
+                size={size}
+                countPerPage={5}
+                currentPage={page}
+                onPageChange={handlePageChange} // onPageChange 핸들러를 호출하도록 수정
+            />
+            {/* <p style={{ fontSize: '24px', textAlign: 'center' }}>1 2 3 4</p> */}
         </div>
         
     )

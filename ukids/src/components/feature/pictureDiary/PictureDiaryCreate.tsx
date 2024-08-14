@@ -10,6 +10,8 @@ import WhiteButton from '@components/common/WhiteButton';
 
 import { useFamilyStore } from '@/stores/familyStore';
 
+import { useTreeStore } from '@/stores/treeStore';
+
 interface Diary {
   familyId: number;
   file: File | null;
@@ -22,6 +24,8 @@ export const PictureDiaryCreate = () => {
   const navigate = useNavigate();
 
   const {selectedFamilyId} = useFamilyStore();
+
+  const {updateTreeExp} = useTreeStore();
 
   const [diary, setDiary] = useState<Diary>({
 
@@ -57,6 +61,7 @@ export const PictureDiaryCreate = () => {
 
 
       // 추가 : 성공 후 페이지 이동
+      updateTreeExp(selectedFamilyId, 25);
       navigate('/paintdiary');  
     } else {
       alert('그림 또는 사진을 넣어주세요.');
