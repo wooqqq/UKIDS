@@ -4,7 +4,7 @@ import { useFamilyStore } from '@/stores/familyStore';
 import { useTreeStore } from '@/stores/treeStore';
 import api from '@/util/api';
 import BlueButton from '@components/common/BlueButton';
-import WhiteBackButton from '../../common/WhiteBackButton';
+import WhiteBackButton from '@components/common/WhiteBackButton';
 
 // interface Letter {
 //   content: string;
@@ -34,7 +34,7 @@ interface Member {
 const day = new Date();
 const month = day.getMonth() + 1;
 const date = day.getDate();
-const today = `${day.getFullYear()}.${month < 10 ? '0' + month : month}.${
+const today = `${day.getFullYear()}-${month < 10 ? '0' + month : month}-${
   date < 10 ? '0' + date : date
 }`;
 
@@ -145,7 +145,7 @@ export const LetterWrite = () => {
           {fromUserId != undefined ? (
             <div>{toMember?.name}</div>
           ) : (
-            <div className="text-[30px] grid grid-cols-3">
+            <div className="h-full text-[30px] grid grid-cols-3">
               <div></div>
               <div className="flex flex-row justify-center items-center">
                 <div onClick={() => setDropCheck(!dropCheck)}>
@@ -166,7 +166,7 @@ export const LetterWrite = () => {
                   ))}
                 </ul>
               )}
-              <div className="text-[16px] flex flex-row justify-end items-end">
+              <div className="text-[16px] flex flex-row justify-end items-end mb-2">
                 <span>{familyName}</span>
                 <span className="ml-2">{today}</span>
               </div>

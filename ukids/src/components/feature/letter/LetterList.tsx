@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import BlueButton from '@components/common/BlueButton';
 import { LetterItem } from '@components/feature/letter/LetterItem';
 import { Pagination } from '@components/feature/pagination/Pagination.tsx';
-import './letter.css';
+import '@components/feature/letter/letter.css';
 
 interface Letter {
   letterId: number;
@@ -26,7 +26,7 @@ export const LetterList = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   // 페이지 당 게시글 개수
-  const size: number = 5;
+  const size: number = 15;
 
   const handlePageChange = (page: number) => {
     setPage(page);
@@ -37,7 +37,7 @@ export const LetterList = () => {
     if (!state) {
       if (letters.length === 0) {
         return (
-          <div className="flex justify-center items-center text-[30px] font-light text-[#8e8e8e] text-center">
+          <div className="h-full flex justify-center items-center text-[30px] font-light text-[#8e8e8e] text-center">
             아직 받은 편지가 없어요!
             <br />
             먼저 편지를 쓰러 가볼까요?
@@ -57,7 +57,7 @@ export const LetterList = () => {
     } else {
       if (letters.length === 0) {
         return (
-          <div className="flex justify-center items-center text-[30px] font-light text-[#8e8e8e] text-center">
+          <div className="h-full flex justify-center items-center text-[30px] font-light text-[#8e8e8e] text-center">
             아직 보낸 편지가 없어요!
             <br />
             먼저 편지를 쓰러 가볼까요?
@@ -65,7 +65,7 @@ export const LetterList = () => {
         );
       } else {
         return (
-          <div>
+          <div className="h-full grid grid-cols-5 grid-rows-3 place-items-center auto-rows-max">
             {letters.map((item) => (
               <Link to={`/letters/${item.letterId}`} state={{ state: state }}>
                 <LetterItem key={item.letterId} letter={item} state={state} />
@@ -122,10 +122,10 @@ export const LetterList = () => {
       </div>
 
       {/* 본문 영역 */}
-      <div className="relative mt-40">{isExistLetterDiv()}</div>
+      <div className="h-[75%] w-[90%]">{isExistLetterDiv()}</div>
 
       {/* 하단 페이지 선택 버튼 */}
-      <div className="relative">
+      <div className="h-[10%]">
         <Pagination
           totalPage={totalPage}
           size={size}
