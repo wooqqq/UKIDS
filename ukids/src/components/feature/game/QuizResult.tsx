@@ -65,23 +65,6 @@ const QuizResult = () => {
     }
   };
 
-  const quitGame = async () => {
-    if (stompClientInstance && stompClientInstance.connected) {
-      try {
-        stompClientInstance.publish({
-          destination: `/app/quiz/quit`,
-          body: JSON.stringify({
-            familyId: selectedFamilyId,
-          }),
-        });
-      } catch (error) {
-        console.error('퀴즈 게임 삭제 에러:', error);
-      }
-    } else {
-      console.log('stompClientInstance is null or message is empty');
-    }
-  };
-
   useEffect(() => {
     const socket = new SockJS(`${ukidsURL}/ws/ws-stomp`);
     const client = new Client({
