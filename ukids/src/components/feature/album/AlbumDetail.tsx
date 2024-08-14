@@ -114,7 +114,7 @@ const AlbumDetail: React.FC = () => {
         </div>
 
         {/* 목록, 날짜, 수정삭제 */}
-        <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px] z-50">
+        <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px]">
           {/* 목록 */}
           <WhiteButton
             name="목록"
