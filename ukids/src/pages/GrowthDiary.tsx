@@ -19,7 +19,6 @@ const GrowthDiary = () => {
   };
 
   useEffect(() => {
-    console.log('path: ', location.pathname);
     const segments = location.pathname.split('/').filter(Boolean);
     setFolderId(segments[segments.length - 1]);
   }, []);
