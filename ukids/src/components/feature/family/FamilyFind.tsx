@@ -9,7 +9,7 @@ const FamilyFind = () => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
-  const { findFamily, applyMember } = useFamilyStore();
+  const { findFamily, applyMember, family } = useFamilyStore();
 
   const nav = useNavigate();
   const handleSubmit = async (event: React.FormEvent) => {
@@ -23,15 +23,10 @@ const FamilyFind = () => {
       await findFamily(code);
 
       // 찾은 가족방 정보 가져오기
-      const family = useFamilyStore
-        .getState()
-        .familyList.find(
-          (family) => family.code === code && family.name === name,
-        );
 
-      if (family) {
+      if (family.name === name) {
         // 이름과 코드가 일치하면 가족방 신청 처리
-        await applyMember(family.familyId, 'none'); // 역할 일단 none으로 지정.
+        await applyMember(family.familyId); // 역할 일단 none으로 지정.
         alert(`${name} 가족방에 가입 신청이 완료되었습니다.`);
         nav('/family');
       } else {
@@ -57,11 +52,12 @@ const FamilyFind = () => {
             type="text"
             id="familyname"
             value={name}
-            onChange={(e) => setName(e.target.value)}
             placeholder="가족방 이름 입력"
+            onChange={(e) => setName(e.target.value)}
             className="input-box px-5 py-7 font-semibold text-[#555555]"
           />
         </div>
+
         <div className="mb-7">
           {/* <label htmlFor="familycode">가족방 코드</label> */}
           <input
@@ -76,6 +72,7 @@ const FamilyFind = () => {
             <div className="text-[#F03F2F]">{error ? error : ''}</div>
           </div>
         </div>
+
         <div className="mx-auto my-5 w-1/2">
           <BlueButton name="가입신청" type="submit" path="" />
         </div>
