@@ -16,7 +16,7 @@ interface Question {
 }
 
 const QuizQnA = () => {
-  const [questionList, setQuestionList] = useState<Question[]>([]);
+  const [questionList, setQuestionList] = useState([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [answer, setAnswer] = useState<string>('');
 
@@ -28,8 +28,6 @@ const QuizQnA = () => {
 
   // 답변 수정한거 서버로 보내고 리스트 갱신
   const editSubmit = (quizQuestion: any) => {
-    console.log(quizQuestion);
-    console.log(answer);
     api
       .put('/quiz-question', {
         quizQuestionId: quizQuestion.quizQuestionId,
@@ -70,13 +68,22 @@ const QuizQnA = () => {
 
   // 질문 삭제
   const handleDeleteQuestion = (quizQuestionId: number) => {
-    api.delete(`/quiz-question/${quizQuestionId}`).then(loadingQuestionList());
+    api
+      .delete(`/quiz-question/${quizQuestionId}`)
+      .then(loadingQuestionList())
+      .catch((error: any) => {
+        console.error(error);
+      });
   };
 
   // 처음 접속 시 질문 목록 불러오기
   useEffect(() => {
     loadingQuestionList();
   }, []);
+
+  useEffect(() => {
+    loadingQuestionList();
+  }, [questionList.length]);
 
   return (
     <>

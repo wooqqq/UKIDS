@@ -48,7 +48,7 @@ const FamilyChatting = () => {
       e.preventDefault();
       sendMessage();
     }
-  }
+  };
 
   // 스크롤 맨 밑으로 내리기
   const scrollToBottom = () => {
@@ -71,7 +71,7 @@ const FamilyChatting = () => {
       sender: chat.sender,
       user_id: chat.senderId,
       is_delete: false,
-      create_time: chat.createTime,
+      create_time: chat.createTime.substring(11, 16),
       update_time: chat.createTime,
     }));
 
@@ -203,7 +203,7 @@ const FamilyChatting = () => {
           user_id: receivedMessage.senderId,
           sender: receivedMessage.sender,
           is_delete: false,
-          create_time: receivedMessage.createTime,
+          create_time: receivedMessage.createTime.substring(11, 16),
           update_time: receivedMessage.createTime,
         };
         setMessages((prevMessages) => {
@@ -267,6 +267,7 @@ const FamilyChatting = () => {
                     message={storedMessage.content}
                     sender={storedMessage.sender}
                     isSender={storedMessage.user_id === userId}
+                    timestamp={storedMessage.create_time}
                   />
                 </div>
               ))
@@ -278,12 +279,12 @@ const FamilyChatting = () => {
             <form className="flex flex-row justify-center" onSubmit={onSubmit}>
               <textarea
                 // type="text"
-                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2"
-                onChange={onChange}
+                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2 pt-3"
+                onChange={(e) => onChange(e)}
                 onKeyDown={onKeyDown}
                 value={message}
                 rows={2}
-                style={{resize: 'none', overflowY: 'auto'}}
+                style={{ resize: 'none', overflowY: 'auto' }}
                 placeholder="메시지를 입력하세요"
               />
               <BlueButton name="전송" path="" />

@@ -3,8 +3,7 @@
   font-weight: 600;
   color: #999;
 }
-.selected {
-  font-size: 20px;
+.header-font.selected {
   font-weight: 900;
   color: #333;
 }
