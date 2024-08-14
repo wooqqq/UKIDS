@@ -3,6 +3,7 @@ import api from '@/util/api.ts';
 import { Link, useParams } from 'react-router-dom';
 import BlueButton from '@components/common/BlueButton';
 import { LetterItem } from '@components/feature/letter/LetterItem';
+import {Pagination} from '@components/feature/pagination/Pagination.tsx';
 
 interface Letter {
   letterId: number;
@@ -19,6 +20,16 @@ export const LetterList = () => {
 
   // 받은 편지함(false)인지 보낸 편지함(true)인지
   const [state, setState] = useState<boolean>(false);
+
+  // 페이지네이션
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  // 페이지 당 게시글 개수
+  const size: number = 5 ;
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  }
 
   const isExistLetterDiv = () => {
     // 받은 편지함
@@ -69,20 +80,21 @@ export const LetterList = () => {
     console.log(state);
     let url = '';
     // 받은 편지
-    if (!state) url = '/letter/to';
-    else url = 'letter/from';
+    if (!state) url = `/letter/to?page=${page}&size=${size}`;
+    else url = `letter/from?page=${page}&size=${size}`;
     const { data } = await api.get(url);
     console.log(data);
     setLetters(data.result.letters);
+    setTotalPage(data.result.totalPages);
   };
 
-  useEffect(() => {
-    getLetters();
-  }, []);
+  // useEffect(() => {
+  //   getLetters();
+  // }, []);
 
   useEffect(() => {
     getLetters();
-  }, [state]);
+  }, [state, page]);
 
   return (
     <div>
@@ -93,19 +105,37 @@ export const LetterList = () => {
         <BlueButton name="편지쓰기" path={`/letters/write`} />
       </div>
       <button
-        onClick={() => setState(false)}
+        onClick={() => {
+          setState(false);
+          handlePageChange(1);
+        }}
         className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap"
       >
         받은 편지함
       </button>
       <button
-        onClick={() => setState(true)}
+        onClick={() => {
+          setState(true)
+          handlePageChange(1);
+        }}
         className="absolute left-[128px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap"
       >
         보낸 편지함
       </button>
 
-      <div className="relative mt-40">{isExistLetterDiv()}</div>
+
+      <div className="relative mt-40">
+        {isExistLetterDiv()}
+      </div>
+      <div className='relative'>
+        <Pagination
+          totalPage={totalPage}
+          size={size}
+          countPerPage={3}
+          currentPage={page}
+          onPageChange={handlePageChange} // onPageChange 핸들러를 호출하도록 수정
+        />
+      </div>
     </div>
   );
 };

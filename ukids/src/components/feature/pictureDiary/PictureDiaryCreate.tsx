@@ -9,7 +9,13 @@ import api from '@/util/api.ts';
 import BlueButton from '@components/common/BlueButton';
 import WhiteButton from '@components/common/WhiteButton';
 
+<<<<<<< HEAD
 
+=======
+import { useFamilyStore } from '@/stores/familyStore';
+
+import { useTreeStore } from '@/stores/treeStore';
+>>>>>>> d7c2990a1394aee6152c6361e44389bc60338154
 
 interface Diary {
   familyId: number;
@@ -22,6 +28,10 @@ export const PictureDiaryCreate = () => {
   // 추가
   const navigate = useNavigate();
   const {selectedFamilyId} = useFamilyStore();
+
+  const {selectedFamilyId} = useFamilyStore();
+
+  const {updateTreeExp} = useTreeStore();
 
   const [diary, setDiary] = useState<Diary>({
 
@@ -54,7 +64,8 @@ export const PictureDiaryCreate = () => {
       console.log(data);
 
       // 추가 : 성공 후 페이지 이동
-      navigate('/paintdiary');
+      updateTreeExp(selectedFamilyId, 25);
+      navigate('/paintdiary');  
     } else {
       alert('그림 또는 사진을 넣어주세요.');
     }

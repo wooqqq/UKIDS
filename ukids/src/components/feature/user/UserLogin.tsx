@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
-import { useAuthStore } from '../../../stores/authStore';
+import { useAuthStore } from '@stores/authStore';
 import { useNavigate } from 'react-router-dom';
+import BlueButton from '@components/common/BlueButton';
 import './user.css';
-import '../../common/common.css';
-import BlueButton from '../../common/BlueButton';
+import '@components/common/common.css';
 
 const UserLogin = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const userLogin = useAuthStore((state) => state.userLogin);
+  const userLogin = useAuthStore((state: any) => state.userLogin);
   const nav = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {

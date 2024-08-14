@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import axios from 'axios';
 import { PictureDiaryItem } from './PictureDiaryItem';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +12,12 @@ import './PictureDiaryList.css';
 import './diaryItem.css';
 //
 import ReactFlipPage from 'react-flip-page';
+
+import { useFamilyStore } from '@/stores/familyStore';
+
+import {Pagination} from '@components/feature/pagination/Pagination.tsx';
+
+import { formatDate } from 'date-fns';
 
 interface Diary {
   pictureDiaryId: number;
@@ -30,22 +36,79 @@ const PictureDiaryList = () => {
   //   const [totalPage, setTotalPage] = useState<number>();
   //   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  const [diaryDate, setDiaryDate] = useState<string>(formatDate(new Date(), 'yyyy-MM-dd'));
+
+ 
   // API 요청
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   // 플립 페이지 (인덱스는 0부터 시작)
   const [currentPageflip, setCurrentPageflip] = useState(0);
 
+<<<<<<< HEAD
   const getDiaryList = async () => {
     // 수정
     const url = `/picture-diary/all/${selectedFamilyId}?page=${currentPage}&size=10`;
     const { data } = await api.get(url);
     setDiaries(data.result.pictureDiaries);
+=======
+  const {selectedFamilyId} = useFamilyStore();
+
+    // 페이지네이션
+    const [page, setPage] = useState<number>(1);
+    const [totalPage, setTotalPage] = useState<number>(1);
+    // 페이지 당 게시글 개수
+    const size: number =100 ;
+  
+    const handlePageChange2 = (page: number) => {
+      setPage(page);
+    }
+
+
+  const getDiaryList = async () =>{
+    
+      // 수정 
+      const url = `/picture-diary/all/${selectedFamilyId}?page=${page}&size=${size}`;
+      const {data} = await api.get(url);
+      console.log(data);
+      setDiaries(data.result.pictureDiaries);
+      console.log(data.result.totalPage)
+      setTotalPage(data.result.totalPage);
+>>>>>>> d7c2990a1394aee6152c6361e44389bc60338154
   };
 
-  useEffect(() => {
-    getDiaryList();
-  }, [currentPage]);
+  const getDiaryByDate = async () => {
+    try{
+      const url = `/picture-diary/${selectedFamilyId}?date=${diaryDate}`;
+      const {data} = await api.get(url);
+      
+      setDiaries(data.result.pictureDiaries);
+      setTotalPage(data.result.totalPage);
+
+    } catch(error){
+      if(axios.isAxiosError(error)){
+        alert(error.response?.data.errorMessage)
+      }
+      setDiaries([]);
+      setTotalPage(0);
+
+    }
+  }
+
+  // useEffect(() => {
+  //   getDiaryList();
+  // }, [currentPage]);
+
+  //   //페이지가 변할 때
+  //   useEffect(() => {
+  //     getDiaryList();
+  //   }, [page])
+
+    // date로 불러온다면
+    useEffect(() => {
+      getDiaryByDate();
+    }, [diaryDate])
+  
 
   // FlipPage 컨트롤 변경 시 API 페이지도 업데이트
   const handlePageChange = (pageNumber: number) => {
@@ -60,6 +123,24 @@ const PictureDiaryList = () => {
         <BlueButton name=" 만들기 " path="/paintdiary/write" />
       </div>
 
+      
+      {/* 날짜 선택 */}
+      <div>
+        <input
+          type="date"
+          value={diaryDate}
+          onChange={(e) => setDiaryDate(e.target.value)}
+          style={{
+            width: '200px', // 너비 조정
+            height: '30px', // 높이 조정
+            marginLeft: '350px',
+            fontSize: '20px', // 글자 크기 조정
+            padding: '5px 10px', // 내부 여백 추가
+            borderRadius: '15px', // 모서리 둥글게 처리
+            fontFamily: 'UhBeejung' // 폰트 
+          }}
+            />
+      </div>
       {/* 메인 왼쪽 글자 */}
       <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
         그림일기

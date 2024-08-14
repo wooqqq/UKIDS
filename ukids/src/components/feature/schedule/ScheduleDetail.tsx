@@ -4,6 +4,7 @@ import GrayButton from '../../common/GrayButton';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import trash from '@/assets/trash.png';
 import api from '@/util/api';
 
 const ScheduleDetail = () => {
@@ -36,7 +37,6 @@ const ScheduleDetail = () => {
           <section className="flex justify-between">
             <WhiteButton name="목록" path="/schedule/list" />
             <GrayButton name="수정" path={`/schedule/edit/${scheduleId}`} />
-            <GrayButton name="삭제" onClick={() => deleteSchedule()} />
           </section>
           <section className="px-5 content-center">
             <div className="mt-3" style={{ borderBottom: '1px solid #ccc' }}>
@@ -63,6 +63,14 @@ const ScheduleDetail = () => {
               <label>메모</label>
               <p className="p-2">{scheduleDetail.content}</p>
             </div>
+          </section>
+          <section className="flex justify-center">
+            <img 
+              src={trash} 
+              alt="삭제"
+              style={{width: '40px', cursor: 'pointer', marginTop: '120px'}}
+              onClick={() => deleteSchedule()}
+             />
           </section>
         </div>
       )}

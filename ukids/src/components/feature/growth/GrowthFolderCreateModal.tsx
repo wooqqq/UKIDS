@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@/util/api.ts"
+import { useFamilyStore } from "@/stores/familyStore";
 
 import { useFamilyStore } from '@/stores/familyStore';
 
@@ -12,10 +13,14 @@ interface ModalProps {
 
 export const GrowthFolderCreateModal = ({modalState, setModalState, renewFolderList}: ModalProps) => {
     const navigate = useNavigate();
+<<<<<<< HEAD
 
     const {selectedFamilyId} = useFamilyStore();
 
     
+=======
+    const {selectedFamilyId} = useFamilyStore();
+>>>>>>> d7c2990a1394aee6152c6361e44389bc60338154
 
     // 수정 : // 초기 값으로 빈 문자열 설정
     const [folderName, setFolderName] = useState<string>(""); 

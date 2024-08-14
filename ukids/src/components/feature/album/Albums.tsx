@@ -32,6 +32,9 @@ import '../../feature/album/Albums.css';
 // import '@/feature/album/Album.css'
 
 
+import {Pagination} from '@components/feature/pagination/Pagination.tsx';
+
+
 
 // 타입스크립트 인터페이스 정의
 // 1. 사진 한 장
@@ -74,70 +77,89 @@ const Albums: React.FC = () => {
     // 앨범 12 개 등록되어있음 (총 3페이지)
   const {selectedFamilyId} = useFamilyStore();
 
+  // 페이지네이션
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  // 페이지 당 게시글 개수
+  const size: number = 3;
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  }
 
 
-  useEffect(() => {
-    const fetchAlbums = async () => {
-      try {
-        
-
-        // 불러온 전체 album에 페이지가 있음
-        // 첫 페이지 데이터를 불러와서 전체 페이지 수 확인
-        let response = await api.get(`/album/all/${selectedFamilyId}?page=1`);
-
-        // 전체 페이지 (예: 3)
-        const totalPages = response.data.result.totalPage;
-        let allAlbums = response.data.result.albumResponseDtoList;
-
-
-
-        // 2페이지 ~ total page 데이터 불러오기
-
-        for (let page = 2; page <= totalPages; page++) {
-          response = await api.get(`/album/all/${selectedFamilyId}?page=${page}`);
-          allAlbums = allAlbums.concat(response.data.result.albumResponseDtoList);
-        }
-
-
-
-
-        // 전달받은 데이터를 albums에 저장
-        // 이렇게 하면 albumId, title, date 세 정보만 저장됨
-        // 사진은 albumId -> photo all 통해서 가져와야함
-        // 이하 코드 참조
-
-        // setAlbums(allAlbums);
-
-        const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
-          const photosResponse = await api.get<AlbumPhotosResponse>(`/photo/all/${album.albumId}`);
-          return {
-            ...album,
-            photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
-          };
-        }));
-        // const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
-        //   const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
-        //     headers: { 'Authorization': `Bearer ${token}` }
-        //   });
-        //   return {
-        //     ...album,
-        //     photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
-        //   };
-        // }));
-        
-        setAlbums(albumsWithPhotos);
-        
+  const fetchAlbums = async () => {
+    try {
       
-        
-      } catch (error) {
-        console.error('앨범 데이터를 불러오기 실패', error);
-      }
-    };
+
+      // 불러온 전체 album에 페이지가 있음
+      // 첫 페이지 데이터를 불러와서 전체 페이지 수 확인
+      let response = await api.get(`/album/all/${selectedFamilyId}?page=${page}&size=${size}`);
+
+      // 전체 페이지 (예: 3)
+      setTotalPage(response.data.result.totalPage);
+      let allAlbums = response.data.result.albumResponseDtoList;
+      console.log(response.data);
+
+
+
+      // 2페이지 ~ total page 데이터 불러오기
+
+      // for (let page = 2; page <= totalPages; page++) {
+      //   response = await api.get(`/album/all/${selectedFamilyId}?page=${page}`);
+      //   allAlbums = allAlbums.concat(response.data.result.albumResponseDtoList);
+      // }
+
+
+
+
+      // 전달받은 데이터를 albums에 저장
+      // 이렇게 하면 albumId, title, date 세 정보만 저장됨
+      // 사진은 albumId -> photo all 통해서 가져와야함
+      // 이하 코드 참조
+
+      // setAlbums(allAlbums);
+
+      const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
+        const photosResponse = await api.get<AlbumPhotosResponse>(`/photo/all/${album.albumId}`);
+        return {
+          ...album,
+          photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
+        };
+      }));
+      // const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
+      //   const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
+      //     headers: { 'Authorization': `Bearer ${token}` }
+      //   });
+      //   return {
+      //     ...album,
+      //     photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
+      //   };
+      // }));
+      
+      setAlbums(albumsWithPhotos);
+      
+    
+      
+    } catch (error) {
+      console.error('앨범 데이터를 불러오기 실패', error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchAlbums();
+  }, [])
+  useEffect(() => {
 
     if (token && selectedFamilyId) {
       fetchAlbums();
     }
   }, [token, selectedFamilyId]);
+
+  // 페이지가 변할 때
+  useEffect(() => {
+    fetchAlbums();
+  }, [page])
 
   return (
     <div className="relative feature-box">
@@ -156,9 +178,6 @@ const Albums: React.FC = () => {
         </div>
       ) : (
         <div className="feature-box">
-         
-
-
             {/* 메인 오른쪽 만들기 버튼 */}
             <div style={{ marginLeft: '764px', marginTop: '33px' }}>
               <BlueButton name="만들기" path="/albums/upload" />
@@ -168,6 +187,13 @@ const Albums: React.FC = () => {
 
             <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">앨범 ({albums.length}개) </div>
           
+              <Pagination
+                totalPage={totalPage}
+                size={size}
+                countPerPage={size}
+                currentPage={page}
+                onPageChange={handlePageChange} // onPageChange 핸들러를 호출하도록 수정
+              />
 
           <div className="album-container">
             <div className="albums-scrollable">
@@ -186,6 +212,7 @@ const Albums: React.FC = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

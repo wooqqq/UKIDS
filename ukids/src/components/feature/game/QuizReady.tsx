@@ -25,6 +25,7 @@ interface GameRoom {
   sessionId: string;
   quizCount: number;
   isStart: boolean;
+  hostId: string;
   numberOfParticipants: number;
   maxQuestionCounts: number;
   currentQuestionIndex: number;
@@ -51,6 +52,11 @@ interface SetQuizMessage {
   quizCount: number;
 }
 
+interface IsStartMessage {
+  type: 'IS_READY_GAME';
+  gameStart: boolean;
+}
+
 interface GetQuizMaxMessage {
   type: 'GET_MAX_QUESTION_COUNTS';
   maxCounts: number;
@@ -66,25 +72,26 @@ type GameMessage =
   | SetQuizMessage
   | ExitGameMessage
   | GetQuizMaxMessage
+  | IsStartMessage
   | ErrorMessage;
 
 const images = [example_game1, example_game2];
 const descripstions = ['게임화면', '게임결과'];
 
 const QuizReady = () => {
-  const [isReady, setIsReady] = useState();
+  const [isReady, setIsReady] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleClick = () => {
     if (selectedValue === 0) {
       alert('문제 개수가 0입니다. 준비 상태를 변경할 수 없습니다.');
       return;
     }
-
-    setIsReady(true); // 상태 변경
+    console.log('isReady : ', isReady);
+    setIsReady(!isReady);
   };
 
   useEffect(() => {
-    if (isReady) navigate('/quiz/start');
+    setReady(isReady);
   }, [isReady]);
 
   const { ukidsURL, token, userInfo } = useAuthStore();
@@ -122,6 +129,25 @@ const QuizReady = () => {
         });
       } catch (error) {
         console.error('게임방 입장 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
+    }
+  };
+
+  const setReady = async (state: boolean) => {
+    if (stompClientInstance && stompClientInstance.connected) {
+      try {
+        console.log('stompClientInstance:', stompClientInstance);
+        stompClientInstance.publish({
+          destination: `/app/quiz/ready`,
+          body: JSON.stringify({
+            familyId: selectedFamilyId,
+            state,
+          }),
+        });
+      } catch (error) {
+        console.error('퀴즈 개수 설정 오류:', error);
       }
     } else {
       console.log('stompClientInstance is null or message is empty');
@@ -196,12 +222,6 @@ const QuizReady = () => {
   }, [stompClientInstance]);
 
   useEffect(() => {
-    if (stompClientInstance && stompClientInstance.connected) {
-      GetQuizMaxCounts();
-    }
-  }, [enterQuizRoom]);
-
-  useEffect(() => {
     if (selectedValue > 0) {
       setQuizCounts();
     }
@@ -227,16 +247,21 @@ const QuizReady = () => {
       console.log('Setting stompClientInstance:', client);
       setStompClientInstance(client);
 
-      // enterQuizRoom();
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
-          console.log('Received message:', message.body);
+          console.log('Received message at GameRoom:', message.body);
           const receivedMessage: GameMessage = JSON.parse(message.body);
 
           console.log('receivedMessage : ', receivedMessage);
 
           switch (receivedMessage.type) {
+            case 'IS_READY_GAME':
+              if (receivedMessage.gameStart) {
+                navigate('/quiz/start');
+                return;
+              }
+              break;
             case 'ENTER_GAME':
               const participant =
                 receivedMessage.gameRoomInfo.participantList[user];
@@ -256,6 +281,7 @@ const QuizReady = () => {
                 navigate('../');
                 return;
               }
+              GetQuizMaxCounts();
 
               setMaxOptions(receivedMessage.gameRoomInfo.maxQuestionCounts);
 
@@ -271,7 +297,6 @@ const QuizReady = () => {
                 role: participant.role,
               }));
               setParticipants(participantEntries);
-
               break;
 
             case 'EXIT_GAME':
@@ -289,7 +314,6 @@ const QuizReady = () => {
                 role: remainParticipant.role,
               }));
               setParticipants(newParticipantEntries);
-
               break;
 
             case 'GET_MAX_QUESTION_COUNTS':
