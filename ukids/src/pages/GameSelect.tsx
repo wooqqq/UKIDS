@@ -12,22 +12,22 @@ const Game = () => {
   };
 
   return (
-    <>
+    <div className="w-full flex justify-center">
       <button onClick={onQuizClick}>
         <img
           src={quizImg}
           alt="QuizButton"
-          className="half-feature-box hover:border-solid border-8 border-[#FFBF33]"
+          className="hover:border-solid border-8 border-[#FFBF33]"
         />
       </button>
-      <button onClick={onCallMyNameClick}>
+      {/* <button onClick={onCallMyNameClick}>
         <img
           src={callmynameImg}
           alt="CallMyNameButton"
           className="half-feature-box hover:border-solid border-8 border-[#9F6AD5]"
         />
-      </button>
-    </>
+      </button> */}
+    </div>
   );
 };
 
