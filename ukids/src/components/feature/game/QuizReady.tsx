@@ -226,7 +226,7 @@ const QuizReady = () => {
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
-          console.log('Received message:', message.body);
+          console.log('Received message at GameRoom:', message.body);
           const receivedMessage: GameMessage = JSON.parse(message.body);
 
           console.log('receivedMessage : ', receivedMessage);
@@ -266,7 +266,6 @@ const QuizReady = () => {
                 role: participant.role,
               }));
               setParticipants(participantEntries);
-
               break;
 
             case 'EXIT_GAME':
@@ -284,7 +283,6 @@ const QuizReady = () => {
                 role: remainParticipant.role,
               }));
               setParticipants(newParticipantEntries);
-
               break;
 
             case 'GET_MAX_QUESTION_COUNTS':
