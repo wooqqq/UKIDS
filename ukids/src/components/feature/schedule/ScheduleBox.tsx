@@ -55,18 +55,22 @@ const ScheduleBox = () => {
         </button>
       </section>
       <section className="pre-box mt-8 p-5">
-        <div className="title-style">일정</div>
-        <button onClick={onClickScheduleListButton}>더보기</button>
+        <div className="flex justify-between mb-1">
+          <div className="title-style">일정</div>
+          <button 
+            style={{marginRight: '10px'}}
+            onClick={onClickScheduleListButton}>더보기</button>
+        </div>
 
         <div className="schedule-list">
           {selectedDate && dateScheduleList && dateScheduleList.scheduleList ? (
             dateScheduleList.scheduleList.map((value, index) => (
-              <div key={index}>
-                <p>
-                  <div className="circle-color"></div>
+              <div key={index} style={{margin: '5px'}}>
+                <p style={{fontWeight: '600'}}>
+                  <div className="circle-color mr-2"></div>
                   {value.title}
                 </p>
-                {value.place && <p>장소: {value.place}</p>}
+                {value.place && <p style={{marginLeft: '18px'}}>장소: {value.place}</p>}
                 <hr />
               </div>
             ))
