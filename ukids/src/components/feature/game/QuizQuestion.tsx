@@ -59,14 +59,14 @@ const QuizQuestion = () => {
 
   return (
     <>
-      <div className="feature-box h-full">
+      <div className="h-full feature-box flex flex-col items-center">
         {/* 헤더 */}
-        <div className="h-[15%] flex items-center">
+        <div className="h-[15%] w-[90%]">
           <GamePageHeader title="퀴즈 등록" />
         </div>
 
         {/* 본문 영역 */}
-        <div className="h-[80%] flex flex-col justify-center items-center">
+        <div className="h-full flex flex-col justify-center items-center">
           <div className="text-4xl">
             <form onSubmit={handleSubmit}>
               <div className="m-4">
