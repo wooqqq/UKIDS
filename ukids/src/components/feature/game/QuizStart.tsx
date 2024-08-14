@@ -56,60 +56,36 @@ const QuizStart = () => {
   const navigate = useNavigate();
   const { ukidsURL, token, userInfo } = useAuthStore();
   const { selectedFamilyId } = useFamilyStore();
-  const [userId] = useState(userInfo.id);
+  const [userId] = useState(userInfo.userId);
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion | null>(null);
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [inputAnswer, setInputAnswer] = useState<string>('');
+  const [answer, setAnswer] = useState<string>('');
   const [options, setOptions] = useState<string[]>([]);
   const [secondsLeft, setSecondsLeft] = useState<number>(20);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
-  const [isStart, setIsStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isQuestionLoaded, setIsQuestionLoaded] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const setReady = async (state: boolean) => {
+  const getQuestion = async () => {
+    console.log('퀴즈 가져오는 중...');
     if (stompClient && stompClient.connected) {
       try {
-        console.log('stompClientInstance:', stompClient);
         stompClient.publish({
-          destination: `/app/quiz/ready`,
-          body: JSON.stringify({
-            familyId: selectedFamilyId,
-            state,
-          }),
-        });
-      } catch (error) {
-        console.error('퀴즈 개수 설정 오류:', error);
-      }
-    } else {
-      console.log('stompClientInstance is null or message is empty');
-    }
-  };
-
-  const handleClick = () => {
-    setReady(false);
-    exitQuizRoom();
-    navigate('/quiz');
-  };
-
-  const exitQuizRoom = async () => {
-    if (stompClient && stompClient.connected) {
-      try {
-        console.log('stompClientInstance:', stompClient);
-        stompClient.publish({
-          destination: `/app/quiz/exit`,
+          destination: `/app/quiz/question`,
           body: JSON.stringify({
             familyId: selectedFamilyId,
           }),
         });
+        console.log('퀴즈 요청 완료');
       } catch (error) {
-        console.error('게임방 퇴장 오류:', error);
+        console.error('퀴즈 요청 오류:', error);
       }
     } else {
-      console.log('stompClientInstance is null or message is empty');
+      console.log('STOMP 클라이언트가 연결되어 있지 않습니다.');
     }
   };
 
@@ -157,12 +133,6 @@ const QuizStart = () => {
           console.log('received message:', receivedMessage);
 
           switch (receivedMessage.type) {
-            case 'IS_READY_GAME':
-              if (receivedMessage.gameStart) {
-                setIsStart(true);
-              }
-              break;
-
             case 'QUIZ_QUESTION':
               if (receivedMessage.gameState === 'END') {
                 navigate('/quiz/result');
@@ -177,21 +147,11 @@ const QuizStart = () => {
               if (quizQuestion.quizType === 'MULTIPLE_CHOICE')
                 setOptions([...quizQuestion.wrongAnswer, quizQuestion.answer]);
 
+              setAnswer(quizQuestion.answer);
               setIsLoading(false);
               setIsQuestionLoaded(true);
               resetTimer();
               setSelectedOption(null);
-              break;
-
-            case 'QUIZ_ANSWER':
-              setModalMessage(`정답: ${receivedMessage.answer}`);
-              setShowModal(true);
-              setTimeout(() => {
-                setShowModal(false);
-              }, 1000);
-              resetTimer();
-              setIsQuestionLoaded(false);
-
               break;
 
             case 'ERROR':
@@ -217,9 +177,7 @@ const QuizStart = () => {
   }, [ukidsURL, token, selectedFamilyId]);
 
   useEffect(() => {
-    if (stompClient && stompClient.connected) {
-      setReady(true);
-    }
+    if (stompClient && stompClient.connected) getQuestion();
   }, [stompClient]);
 
   useEffect(() => {
@@ -232,6 +190,15 @@ const QuizStart = () => {
         if (inputAnswer === '') {
           checkAnswer('');
         } else checkAnswer(inputAnswer);
+
+        setModalMessage(`정답: ${answer}`);
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+        }, 1000);
+        resetTimer();
+        setIsQuestionLoaded(false);
+        getQuestion();
       }
     }
 
@@ -241,6 +208,8 @@ const QuizStart = () => {
   }, [secondsLeft, isQuestionLoaded]);
 
   const handleAnswerClick = (answer: string) => {
+    console.log('작성자 : ', quizQuestion?.writer.userId);
+    console.log('풀이자 : ', userId);
     if (quizQuestion?.writer.userId === userId) {
       alert('자신의 문제에 답변할 수 없습니다.');
       return;
@@ -256,7 +225,7 @@ const QuizStart = () => {
   };
 
   const resetTimer = () => {
-    setSecondsLeft(12);
+    setSecondsLeft(15);
   };
 
   return (
@@ -299,13 +268,6 @@ const QuizStart = () => {
         <div className="flex justify-center items-center w-[106px] h-[106px] rounded-full border-solid border-8 border-[#36d5f1] text-[#36d5f1] text-2xl">
           {secondsLeft}
         </div>
-      </div>
-      <div className="flex justify-center">
-        {!isStart && (
-          <button onClick={handleClick} className="game-btn-g game-btn-common">
-            돌아가기
-          </button>
-        )}
       </div>
 
       {showModal && (

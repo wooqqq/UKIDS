@@ -67,8 +67,11 @@ const ScheduleCreate = () => {
             type="text"
             value={createForm.title}
             required
-            placeholder="제목"
+            placeholder="제목을 입력하세요"
             className="p-2"
+            style={{width: '300px', fontFamily: 'Pretendard',
+              fontWeight: '400',
+              fontSize: '1rem', border: 'none', }}
             onChange={(e) =>
               setCreateForm({ ...createForm, title: e.target.value })
             }
@@ -80,8 +83,11 @@ const ScheduleCreate = () => {
             id="place"
             type="text"
             value={createForm.place}
-            placeholder="장소"
+            placeholder="장소를 입력하세요"
             className="p-2"
+            style={{textAlign: 'center', width: '300px',
+              padding: '10px', marginLeft: '20px'
+            }}
             onChange={(e) =>
               setCreateForm({ ...createForm, place: e.target.value })
             }
@@ -132,6 +138,9 @@ const ScheduleCreate = () => {
             value={createForm.content}
             placeholder="메모할 내용을 입력하세요"
             className="p-2"
+            style={{textAlign: 'center', width: '300px',
+              marginLeft: '20px'
+            }}
             onChange={(e) =>
               setCreateForm({ ...createForm, content: e.target.value })
             }
