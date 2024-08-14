@@ -39,7 +39,7 @@ public class ChatgptService {
         String requestBody;
         ObjectMapper om = new ObjectMapper();
 
-        Chatgpt gpt = Chatgpt.createChatgpt(model, prompt, 0.8f, 1000);
+        Chatgpt gpt = Chatgpt.createChatgpt(model, prompt, 0.0f, 1000);
 
         try {
             requestBody = om.writeValueAsString(gpt);

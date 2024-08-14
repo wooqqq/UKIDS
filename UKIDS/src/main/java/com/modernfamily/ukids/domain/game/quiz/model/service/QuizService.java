@@ -150,6 +150,7 @@ public class QuizService {
 
         // 참가자 모두 준비 완료
         if(quizRoomRespository.checkReady(quizRooms.get(familyId))) {
+            quizRoomRespository.changeHost(quizRooms.get(familyId), userId);
             isState = true;
 
             quizRoomRespository.generateQuiz(quizRooms.get(familyId));
@@ -167,6 +168,9 @@ public class QuizService {
         isExistFamilyGame(familyId);
 
         if(!quizRooms.get(familyId).getHostId().equals(userId))
+            return null;
+
+        if(!quizRoomRespository.checkReady(quizRooms.get(familyId)))
             return null;
 
         QuizQuestionRandomResponseDto quizQuestion = quizRepository.getQuizQuestion(quizRooms.get(familyId));
