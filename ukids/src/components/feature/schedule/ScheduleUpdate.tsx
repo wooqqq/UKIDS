@@ -24,7 +24,6 @@ const ScheduleUpdate = () => {
     endTime: scheduleDetail.endTime,
   });
   const callUpdateSchedule = async () => {
-    console.log('update : ', updateForm);
     if (!updateForm.title || !updateForm.startTime || !updateForm.endTime) {
       alert('제목과 날짜를 입력해주세요.');
       return;
@@ -38,8 +37,6 @@ const ScheduleUpdate = () => {
       endTime: updateForm.endTime,
       familyId: scheduleDetail.familyId,
     });
-    console.log('put : ', data);
-    console.log('post : ', data);
     if (data.code == 201) {
       alert('일정 수정 성공');
       nav('/schedule/list');
