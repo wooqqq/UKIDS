@@ -13,8 +13,6 @@ import './diaryItem.css';
 //
 import ReactFlipPage from 'react-flip-page';
 
-import { useFamilyStore } from '@/stores/familyStore';
-
 import { Pagination } from '@components/feature/pagination/Pagination.tsx';
 
 import { formatDate } from 'date-fns';
