@@ -36,7 +36,7 @@ public class QuizService {
 
     // 게임방 생성 -> 있으면 참여, 없으면 생성 + 중복 참여인지 검사 + 유저 참여
     // + webrtc 세션 생성 + connection 반환
-    public Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public synchronized Map<String, Object> enterQuizRoom(Long familyId, String userId) throws OpenViduJavaClientException, OpenViduHttpException {
         if(!quizRooms.containsKey(familyId)){
             String sessionId = webrtcService.initializeSessions(null);
             quizRooms.put(familyId, quizRoomRespository.createGameRoom(sessionId));
