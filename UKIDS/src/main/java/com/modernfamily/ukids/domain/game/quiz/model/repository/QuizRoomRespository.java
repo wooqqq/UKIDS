@@ -89,6 +89,14 @@ public class QuizRoomRespository {
         return quizRoom.isStart();
     }
 
+    public void changeHost(QuizRoom quizRoom, String hostId){
+        quizRoom.changeHost(hostId);
+    }
+
+    public void nextHost(QuizRoom quizRoom, String hostId){
+        quizRoom.nextHost(hostId);
+    }
+
     // 퀴즈 생성
     public void generateQuiz(QuizRoom quizRoom){
         long quizCounts = quizRoom.getQuizCount();

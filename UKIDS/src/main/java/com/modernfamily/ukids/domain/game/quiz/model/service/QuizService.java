@@ -53,6 +53,7 @@ public class QuizService {
             return response;
         }
 
+        quizRoomRespository.changeHost(quizRooms.get(familyId), userId);
 
         // 참여자 목록에 있어
         if(quizRoomRespository.isExistUser(userId, quizRooms.get(familyId))){
@@ -78,6 +79,9 @@ public class QuizService {
         if(!quizRoomRespository.isExistUser(userId, quizRooms.get(familyId)))
             throw new ExceptionResponse(CustomException.NOT_FOUND_QUIZ_USER_EXCEPTION);
 
+        if(quizRooms.get(familyId).getHostId().equals(userId))
+            quizRoomRespository.nextHost(quizRooms.get(familyId), userId);
+
         quizRoomRespository.exitGame(userId, quizRooms.get(familyId));
 
         response.put("gameRoomInfo", quizRooms.get(familyId));
@@ -102,6 +106,7 @@ public class QuizService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("type", "GET_MAX_QUESTION_COUNTS");
+        quizRoomRespository.updateMaxQuestionCounts(quizRooms.get(familyId));
         response.put("maxCounts", quizRooms.get(familyId).getMaxQuestionCounts());
 
         return response;
@@ -160,12 +165,13 @@ public class QuizService {
     }
 
     // 질문 반환 -> 반환 끝나면 게임 종료
-    public Map<String, Object> getQuizQuestion(Long familyId) {
-        log.info("++++++++++++++++Generate and Pick Quiz++++++++++++++++++");
+    public Map<String, Object> getQuizQuestion(Long familyId, String userId) {
         isExistFamilyGame(familyId);
-        log.info("++++++++++++++++Start++++++++++++++++++");
+
+        if(!quizRooms.get(familyId).getHostId().equals(userId))
+            return null;
+
         QuizQuestionRandomResponseDto quizQuestion = quizRepository.getQuizQuestion(quizRooms.get(familyId));
-        log.info("++++++++++++++++Finish++++++++++++++++++");
 
         Map<String, Object> response = new HashMap<>();
         response.put("type", "QUIZ_QUESTION");

@@ -12,9 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequiredArgsConstructor
@@ -87,25 +84,17 @@ public class QuizController {
 
         Map<String, Object> quizRoom = quizService.isReadyGameStart(familyId, userId, isReady);
         messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizRoom);
+    }
 
-        if((boolean) quizRoom.get("gameStart")) {
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    @MessageMapping("/quiz/question")
+    public void getQuestion(@RequestBody Map<String, Object> payload, SimpMessageHeaderAccessor headerAccessor) {
+        String userId = headerAccessor.getUser().getName();
+        Long familyId = Long.parseLong(payload.get("familyId").toString());
 
-            scheduler.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    Map<String, Object> question = quizService.getQuizQuestion(familyId);
+        Map<String, Object> question = quizService.getQuizQuestion(familyId, userId);
 
-                    // 메세지 전송
-                    messagingTemplate.convertAndSend("/topic/quiz/" + familyId, question);
-
-                    // "END"이면 스케줄러 종료
-                    if ("END".equals(question.get("gameState"))) {
-                        scheduler.shutdown();
-                    }
-                }
-            }, 1, 16, TimeUnit.SECONDS);
-        }
+        if(question != null)
+            messagingTemplate.convertAndSend("/topic/quiz/" + familyId, question);
     }
 
     // 정답 확인
@@ -114,7 +103,8 @@ public class QuizController {
                                                SimpMessageHeaderAccessor headerAccessor) {
         String userId = headerAccessor.getUser().getName();
         Long familyId = Long.parseLong(payload.get("familyId").toString());
-        messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.checkQuizAnswer(familyId, (String) payload.get("inputAnswer"), userId));
+        // messagingTemplate.convertAndSend("/topic/quiz/" + familyId, quizService.checkQuizAnswer(familyId, (String) payload.get("inputAnswer"), userId));
+        quizService.checkQuizAnswer(familyId, (String) payload.get("inputAnswer"), userId);
     }
 
     @MessageMapping("/quiz/quit")
