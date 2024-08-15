@@ -36,6 +36,7 @@ const ChattingBox = ({
           {/* 메세지 영역 */}
           <div
             className={`flex justify-center items-center px-3 py-1.5 rounded-[5px] ${color}`}
+            style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}
           >
             {message}
           </div>

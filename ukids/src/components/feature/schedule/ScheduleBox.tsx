@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../common/common.css';
 import { useFamilyStore } from '@/stores/familyStore.ts';
 import { useEffect } from 'react';
+import plus from '@/assets/plus.png';
 
 const ScheduleBox = () => {
   const {
@@ -31,7 +32,7 @@ const ScheduleBox = () => {
   useEffect(() => {
     if (selectedDate && selectedFamilyId) {
       setDateScheduleList(selectedDate, selectedFamilyId);
-      console.log('date schedule : ', dateScheduleList);
+      // console.log('date schedule : ', dateScheduleList);
     }
   }, [selectedFamilyId, setDateScheduleList, setSelectedDate]);
 
@@ -41,16 +42,14 @@ const ScheduleBox = () => {
       <section className="flex justify-between mt-8">
         <button className="half-pre-box" onClick={onClickAlbumButton}>
           <div className="title-style">앨범</div>
-          <div>
-            <img src="#" alt="앨범 이미지" crossOrigin="anonymous" />
+          <div className="flex justify-center">
+            <img src={plus} alt="앨범 이미지" crossOrigin="anonymous" />
           </div>
-          <button>앨범 페이지 이동</button>
         </button>
         <button className="half-pre-box" onClick={onClickPaintButton}>
           <div className="title-style">그림일기</div>
-          <div>
-            <img src="#" alt="그림일기 이미지" crossOrigin="anonymous" />
-            <button>그림일기 페이지 이동</button>
+          <div className="flex justify-center">
+            <img src={plus} alt="그림일기 이미지" crossOrigin="anonymous" />
           </div>
         </button>
       </section>
@@ -80,9 +79,11 @@ const ScheduleBox = () => {
               </div>
             ))
           ) : (
-            <p className="mt-2" style={{ color: '#999' }}>
-              해당 날짜에 일정이 없습니다.
-            </p>
+            <div>
+              <p className="mt-2" style={{ color: '#999' }}>
+                해당 날짜에 일정이 없습니다.
+              </p>
+            </div>
           )}
         </div>
       </section>

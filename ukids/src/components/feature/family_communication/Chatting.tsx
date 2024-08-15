@@ -63,7 +63,7 @@ const FamilyChatting = () => {
 
     const { data } = await api.get(url);
 
-    console.log('chats : ', data);
+    // console.log('chats : ', data);
 
     const formattedMessages = data.map((chat: any) => ({
       messageId: chat.createTime,
@@ -85,7 +85,7 @@ const FamilyChatting = () => {
     console.log('Enter chat room');
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: '/pub/chat/message',
           body: JSON.stringify({
@@ -124,14 +124,14 @@ const FamilyChatting = () => {
 
   // 메세지 전송
   const sendMessage = async () => {
-    console.log('Sending message:', message);
+    // console.log('Sending message:', message);
     if (
       stompClientInstance &&
       stompClientInstance.connected &&
       message.trim() !== ''
     ) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: '/pub/chat/message',
           body: JSON.stringify({
@@ -169,7 +169,7 @@ const FamilyChatting = () => {
         Authorization: `${token}`,
       },
       debug: (str) => {
-        console.log('웹소켓 디버그: ' + str);
+        // console.log('웹소켓 디버그: ' + str);
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
@@ -177,17 +177,17 @@ const FamilyChatting = () => {
     });
 
     client.onConnect = (frame) => {
-      console.log('WebSocket 연결이 열렸습니다.', frame);
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
 
       // 올바른 stompClientInstance 설정
-      console.log('Setting stompClientInstance:', client);
+      // console.log('Setting stompClientInstance:', client);
       setStompClientInstance(client);
 
       client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
-        console.log('Received message at ChattingRoom: ', message.body);
+        // console.log('Received message at ChattingRoom: ', message.body);
         const receivedMessage = JSON.parse(message.body);
-        console.log('----ReceivedMessage----');
-        console.log(receivedMessage);
+        // console.log('----ReceivedMessage----');
+        // console.log(receivedMessage);
         // {
         //   createTime: '2024-08-14T00:13:58.60193821';
         //   message: '다른 사람';

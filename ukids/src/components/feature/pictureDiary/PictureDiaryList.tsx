@@ -26,6 +26,8 @@ interface Diary {
 }
 
 const PictureDiaryList = () => {
+  const today = new Date().toISOString().split('T')[0];
+
   const { selectedFamilyId } = useFamilyStore();
 
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -110,6 +112,7 @@ const PictureDiaryList = () => {
         <input
           type="date"
           value={diaryDate}
+          max={today}
           onChange={(e) => setDiaryDate(e.target.value)}
           style={{
             width: '200px', // 너비 조정
