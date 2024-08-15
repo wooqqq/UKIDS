@@ -1,24 +1,25 @@
 // 페이지 목표
-// 앞선 페이지로부터 앨범 고유 id를 전달받아서, 해당 앨범의 전체 사진을 조회한다.
+// 앞선 페이지로-> 앨범id를 전달, 해당 앨범의 전체 사진을 조회.
 // api get /api/photo/all/{albumId}
 
-// 절대 경로로 수정하기
-import axios from 'axios';
-import api from '@/util/api';
+
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
-import './AlbumDetail.css';
-import WhiteButton from '../../common/WhiteButton';
-import BlueButton from '../../common/BlueButton';
-import GrayButton from '../../common/GrayButton';
+import api from '@/util/api';
+
+import WhiteButton from '@components/common/WhiteButton';
+
 import { Modal } from '@components/feature/modal/Modal.tsx';
 
+import './AlbumDetail.css';
 import '../../common/common.css';
+import './UploadAlbum.css';
 
-// 타입스크립트 인터페이스 정의
+
 // 1. 사진 한 장
 interface Photo {
   photoId: number;
@@ -92,88 +93,66 @@ const AlbumDetail: React.FC = () => {
 
   return (
     <div className="feature-box">
-      {/* 상단 고정 영역 */}
-      <div>
-        <div
-          className="absolute left-[94px] top-[25px] w-[726px] h-[50px] border-[solid] border-#ddd border border-[0_0_2px] "
-          style={{ textAlign: 'center' }}
-        >
-          {/* 제목 아래 실선*/}
-          <div
-            className="absolute -translate-y-1/2 left-[-1ㄴ0px] top-8 w-[750px]"
-            style={{
-              borderBottom: '2px solid #ddd', // 아래 테두리 추가
-              paddingBottom: '20px', // 아래쪽 패딩 추가
-            }}
-          />
+
+      {/* 맨 윗줄 */}
+      <div className="input-border-box">
           {/* 제목 */}
-          <span style={{ fontSize: '23px', color: '#333' }}>{album.title}</span>
-        </div>
+          <div className="title-input">{album.title}</div>
+      </div>
+          
 
-        {/* 목록, 날짜, 수정삭제 */}
-        <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px]">
-          {/* 목록 */}
-          <WhiteButton
-            name="목록"
-            path="/albums"
-            className="absolute left-0 top-0 w-[80px] h-[30px]"
-          />
+      {/* 둘째 줄 */}
+      <div className="second-container">
+        
+        {/* 목록 */}
+        <div><WhiteButton name="목록" path="/albums" /></div>
 
-          {/* 날짜 */}
-          <div className="absolute left-1/2 top-0 transform -translate-x-1/2 ">
-            <span style={{ fontSize: '20px', color: '#333' }}>
-              {album.date}
-            </span>
-          </div>
-        </div>
+        {/* 날짜 */}
+        <div className="date-input" style={{ marginLeft: '100px' }}>{album.date}</div>
 
-        {/* 수정,삭제 */}
 
+        {/* 수정 삭제 */}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
         <Link to={`/albums/update/${albumId}`}>
-          <button
-            className="common-btn gray-btn"
-            style={{ position: 'absolute', top: '87px', right: '150px' }}
-          >
-            수정
-          </button>
+          <button className="common-btn gray-btn" style={{ marginRight: '10px' }}>수정</button>
         </Link>
 
+
         <span className="home-modal-open-Button" onClick={onModalOpen}>
-          <button
-            className="common-btn red-font"
-            style={{ position: 'absolute', top: '87px', right: '60px' }}
-            onClick={onModalOpen}
-          >
+          <button className="common-btn red-font" onClick={onModalOpen}>
             삭제
           </button>
         </span>
-
-        {/* 기능 추가 필요함 */}
-        {/* <div className="absolute left-1/3 top-[87px] w-[701px] h-[30px] flex  items-center transform translate-x-1/2">
-          <BlueButton name="수정" path={`/albums/update/${albumId}`} className="submit-btn" />
-          <GrayButton name="삭제" path="" className="submit-btn" onClick={onModalOpen}/>
         </div>
-      </div> */}
 
-        {/* 하단 내용 영역 */}
 
-        <div className="photos-container">
+      </div>
+      {/* 둘째줄 끝 */}
+
+
+
+
+
+      {/* 하단 내용 영역 */}
+      <div className="photos-container">
+
+          
           {album.photos.map((photo, index) => (
             <div key={index} className="photo-container">
-              {/* 사진 + 캡션 */}
-              <div className="photo-imgandcaption">
+              
                 <img
                   src={photo.imgUrl}
                   alt={`Photo ${index + 1}`}
                   crossOrigin="anonymous"
                 />
-                <p dangerouslySetInnerHTML={{ __html: photo.caption }}></p>{' '}
-                {/* Here HTML is rendered */}
-              </div>
+                <p>{photo.caption}</p>
+              
             </div>
           ))}
+        
         </div>
-
+        
+        {/* 삭제 모달 */}
         <div>
           {modalState && (
             <Modal
@@ -184,8 +163,12 @@ const AlbumDetail: React.FC = () => {
             />
           )}
         </div>
-      </div>
+
+
+
+      
     </div>
+
   );
 };
 
