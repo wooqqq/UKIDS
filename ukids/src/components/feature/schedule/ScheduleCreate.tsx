@@ -27,6 +27,7 @@ const ScheduleCreate = () => {
   });
 
   const callCreateSchedule = async () => {
+    // console.log('create schedule : ', createForm);
     if (!createForm.title || !createForm.startTime || !createForm.endTime) {
       alert('제목과 날짜를 입력해주세요.');
       return;
@@ -39,6 +40,7 @@ const ScheduleCreate = () => {
       endTime: createForm.endTime,
       familyId: selectedFamilyId,
     });
+    // console.log('post : ', data);
     if (data.code == 201) {
       alert('일정 등록 성공');
       nav('/schedule/list');
@@ -67,9 +69,13 @@ const ScheduleCreate = () => {
             required
             placeholder="제목을 입력하세요"
             className="p-2"
-            style={{width: '300px', fontFamily: 'Pretendard',
+            style={{
+              width: '300px',
+              fontFamily: 'Pretendard',
               fontWeight: '400',
-              fontSize: '1rem', border: 'none', }}
+              fontSize: '1rem',
+              border: 'none',
+            }}
             onChange={(e) =>
               setCreateForm({ ...createForm, title: e.target.value })
             }
@@ -83,8 +89,11 @@ const ScheduleCreate = () => {
             value={createForm.place}
             placeholder="장소를 입력하세요"
             className="p-2"
-            style={{textAlign: 'center', width: '300px',
-              padding: '10px', marginLeft: '20px'
+            style={{
+              textAlign: 'center',
+              width: '300px',
+              padding: '10px',
+              marginLeft: '20px',
             }}
             onChange={(e) =>
               setCreateForm({ ...createForm, place: e.target.value })
@@ -136,9 +145,7 @@ const ScheduleCreate = () => {
             value={createForm.content}
             placeholder="메모할 내용을 입력하세요"
             className="p-2"
-            style={{textAlign: 'center', width: '300px',
-              marginLeft: '20px'
-            }}
+            style={{ textAlign: 'center', width: '300px', marginLeft: '20px' }}
             onChange={(e) =>
               setCreateForm({ ...createForm, content: e.target.value })
             }

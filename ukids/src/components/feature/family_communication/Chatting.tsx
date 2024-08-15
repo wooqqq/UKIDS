@@ -48,7 +48,7 @@ const FamilyChatting = () => {
       e.preventDefault();
       sendMessage();
     }
-  }
+  };
 
   // 스크롤 맨 밑으로 내리기
   const scrollToBottom = () => {
@@ -69,7 +69,7 @@ const FamilyChatting = () => {
       sender: chat.sender,
       user_id: chat.senderId,
       is_delete: false,
-      create_time: chat.createTime,
+      create_time: chat.createTime.substring(11, 16),
       update_time: chat.createTime,
     }));
 
@@ -118,12 +118,20 @@ const FamilyChatting = () => {
 
   // 메세지 전송
   const sendMessage = async () => {
+<<<<<<< HEAD
+=======
+    // console.log('Sending message:', message);
+>>>>>>> develop/front
     if (
       stompClientInstance &&
       stompClientInstance.connected &&
       message.trim() !== ''
     ) {
       try {
+<<<<<<< HEAD
+=======
+        // console.log('stompClientInstance:', stompClientInstance);
+>>>>>>> develop/front
         stompClientInstance.publish({
           destination: '/pub/chat/message',
           body: JSON.stringify({
@@ -160,21 +168,41 @@ const FamilyChatting = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
+<<<<<<< HEAD
       // 웹소켓 디버그 관련 console.log
       // debug: (str) => {
       //   console.log('웹소켓 디버그: ' + str);
       // },
+=======
+      debug: (str) => {
+        // console.log('웹소켓 디버그: ' + str);
+      },
+>>>>>>> develop/front
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
+<<<<<<< HEAD
       // 올바른 stompClientInstance 설정
       setStompClientInstance(client);
 
       client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
         const receivedMessage = JSON.parse(message.body);
+=======
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
+
+      // 올바른 stompClientInstance 설정
+      // console.log('Setting stompClientInstance:', client);
+      setStompClientInstance(client);
+
+      client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
+        // console.log('Received message at ChattingRoom: ', message.body);
+        const receivedMessage = JSON.parse(message.body);
+        // console.log('----ReceivedMessage----');
+        // console.log(receivedMessage);
+>>>>>>> develop/front
         // {
         //   createTime: '2024-08-14T00:13:58.60193821';
         //   message: '다른 사람';
@@ -190,7 +218,7 @@ const FamilyChatting = () => {
           user_id: receivedMessage.senderId,
           sender: receivedMessage.sender,
           is_delete: false,
-          create_time: receivedMessage.createTime,
+          create_time: receivedMessage.createTime.substring(11, 16),
           update_time: receivedMessage.createTime,
         };
         setMessages((prevMessages) => {
@@ -254,6 +282,7 @@ const FamilyChatting = () => {
                     message={storedMessage.content}
                     sender={storedMessage.sender}
                     isSender={storedMessage.user_id === userId}
+                    timestamp={storedMessage.create_time}
                   />
                 </div>
               ))
@@ -265,12 +294,12 @@ const FamilyChatting = () => {
             <form className="flex flex-row justify-center" onSubmit={onSubmit}>
               <textarea
                 // type="text"
-                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2"
-                onChange={onChange}
+                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2 pt-3"
+                onChange={(e) => onChange(e)}
                 onKeyDown={onKeyDown}
                 value={message}
                 rows={2}
-                style={{resize: 'none', overflowY: 'auto'}}
+                style={{ resize: 'none', overflowY: 'auto' }}
                 placeholder="메시지를 입력하세요"
               />
               <BlueButton name="전송" path="" />

@@ -21,6 +21,7 @@ const ScheduleList = () => {
     nav('/schedule/new');
   };
   const onClickDetail = (scheduleId: number) => {
+    // console.log('list schedule id : ', scheduleId);
     if (scheduleId) {
       nav(`/schedule/detail/${scheduleId}`);
     }
@@ -28,6 +29,7 @@ const ScheduleList = () => {
 
   useEffect(() => {
     setDateScheduleList(selectedDate, selectedFamilyId);
+    // console.log('date schedule : ', dateScheduleList);
   }, [selectedFamilyId, setSelectedDate, setDateScheduleList]);
 
   return (
@@ -43,17 +45,27 @@ const ScheduleList = () => {
           <p className="title-style mt-3 mb-3">{selectedDate}</p>{' '}
           {dateScheduleList && dateScheduleList.scheduleList ? (
             dateScheduleList.scheduleList.map((value, index) => (
-              <div 
+              <div
                 key={index}
-                style={{margin: '15px 5px', cursor: 'pointer'}} 
-                onClick={() => onClickDetail(value.scheduleId)}>
-                <p style={{fontWeight: '600'}}>
-                  <div className="circle-color" style={{marginRight: '10px'}}></div>
+                style={{ margin: '15px 5px', cursor: 'pointer' }}
+                onClick={() => onClickDetail(value.scheduleId)}
+              >
+                <p style={{ fontWeight: '600' }}>
+                  <div
+                    className="circle-color"
+                    style={{ marginRight: '10px' }}
+                  ></div>
                   {value.title}
                 </p>
-                {value.place && <p style={{marginLeft: '20px'}}>장소 : {value.place}</p>}
-                <p style={{marginLeft: '20px'}}>시작 일시 : {value.startTime.split('T').join(' ')}</p>
-                <p style={{marginLeft: '20px'}}>종료 일시 : {value.endTime.split('T').join(' ')}</p>
+                {value.place && (
+                  <p style={{ marginLeft: '20px' }}>장소 : {value.place}</p>
+                )}
+                <p style={{ marginLeft: '20px' }}>
+                  시작 일시 : {value.startTime.split('T').join(' ')}
+                </p>
+                <p style={{ marginLeft: '20px' }}>
+                  종료 일시 : {value.endTime.split('T').join(' ')}
+                </p>
               </div>
             ))
           ) : (

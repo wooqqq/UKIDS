@@ -72,6 +72,10 @@ export const useScheduleStore = create<Store>((set, get) => ({
     familyName: string,
   ) => {
     if (!scheduleShortList) {
+<<<<<<< HEAD
+=======
+      // console.log('no schedules');
+>>>>>>> develop/front
       return;
     }
     const events: Event[] = scheduleShortList.map((schedule) => ({
@@ -95,8 +99,15 @@ export const useScheduleStore = create<Store>((set, get) => ({
   // setEventData: (events) => set({ eventData: events }),
   scheduleDetail: null,
   setScheduleDetail: async (scheduleId: number) => {
+<<<<<<< HEAD
     if (scheduleId) {
       const { data } = await api.get(`/schedule/${scheduleId}`);
+=======
+    // console.log('schedule detail api 요청 : ', scheduleId);
+    if (scheduleId) {
+      const { data } = await api.get(`/schedule/${scheduleId}`);
+      // console.log('schedule detail data : ', data);
+>>>>>>> develop/front
       const scheduleDetail: ScheduleDetail = {
         scheduleId: data.result.scheduleId,
         title: data.result.title,
@@ -109,10 +120,18 @@ export const useScheduleStore = create<Store>((set, get) => ({
       };
 
       set({ scheduleDetail });
+<<<<<<< HEAD
+=======
+      // console.log('saved scheduleDetail : ', scheduleDetail);
+>>>>>>> develop/front
     }
   },
   monthScheduleList: null,
   setMonthScheduleList: async (month: number, familyId: number) => {
+<<<<<<< HEAD
+=======
+    // console.log('month : ', month);
+>>>>>>> develop/front
     if (month != null && familyId != null) {
       const { data } = await api.get(
         `/schedule/month/${familyId}?month=${month}`,
@@ -129,7 +148,13 @@ export const useScheduleStore = create<Store>((set, get) => ({
   dateScheduleList: null,
   setDateScheduleList: async (date: string, familyId: number) => {
     if (date != null && familyId != null) {
+<<<<<<< HEAD
       const { data } = await api.get(`/schedule/date/${familyId}?date=${date}`);
+=======
+      // console.log('encodedDate : ', date);
+      const { data } = await api.get(`/schedule/date/${familyId}?date=${date}`);
+      // console.log('schedule by date : ', data);
+>>>>>>> develop/front
       const dateScheduleList: DateScheduleList = {
         scheduleList: data.result.scheduleList,
         familyId: data.result.family.familyId,
