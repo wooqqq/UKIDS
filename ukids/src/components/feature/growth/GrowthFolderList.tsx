@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useFamilyStore } from '@/stores/familyStore';
 
 import api from '@/util/api.ts';
+
 import { GrowthFolderItem } from '@/components/feature/growth/GrowthFolderItem';
 import { GrowthFolderCreateModal } from '@components/feature/growth/GrowthFolderCreateModal';
-import { Link } from 'react-router-dom';
+
 import BlueButton from '@components/common/BlueButton';
-import '@components/feature/growth/growthFolder.css';
-import { useFamilyStore } from '@/stores/familyStore';
+import '@components/feature/growth/GrowthFolderItem.css';
 
 interface Folder {
   folderId: number;
@@ -71,7 +71,6 @@ export const GrowthFolderList = () => {
 
 
 
-
       {/* 이하 내용물 영역 */}
 
       {/* 게시글이 없을 때  */}
@@ -82,8 +81,8 @@ export const GrowthFolderList = () => {
           아이의 성장일지 폴더를 만들러 가볼까요?
         </div>
       ) : (
-        <div className="folder-container">
-          <div className="folder-scrollable">
+        <div className="folders-container">
+          <div className="folders-scrollable">
             {folders.map((item) => (
               <Link
                 to={{
