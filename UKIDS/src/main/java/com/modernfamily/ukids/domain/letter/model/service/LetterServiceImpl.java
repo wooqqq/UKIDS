@@ -41,7 +41,7 @@ public class LetterServiceImpl implements LetterService {
         User toUser = userRepository.findByUserId(letterDto.getToUserId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
-        Tree tree = treeRepository.findByFamily_FamilyIdAndIsOpenFalse(letterDto.getFamilyId())
+        Tree tree = treeRepository.findByFamily_FamilyIdAndIsCompleteFalse(letterDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
         Letter createdLetter = Letter.createLetter(letterDto.getContent(), tree, fromUser, toUser);

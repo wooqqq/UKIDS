@@ -37,7 +37,7 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public TreeInfoResponseDto findByFamilyId(Long familyId) {
         // familyId로 Tree 엔티티 조회
-        Tree tree = treeRepository.findByFamily_FamilyIdAndIsOpenFalse(familyId)
+        Tree tree = treeRepository.findByFamily_FamilyIdAndIsCompleteFalse(familyId)
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
         // 해당 나무와 연결된 편지 수 계산
@@ -50,7 +50,7 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public Tree updateTree(TreeUpdateRequestDto treeDto) {
         // familyId로 Tree 엔티티 조회
-        Tree tree = treeRepository.findByFamily_FamilyIdAndIsOpenFalse(treeDto.getFamilyId())
+        Tree tree = treeRepository.findByFamily_FamilyIdAndIsCompleteFalse(treeDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
         // point를 exp에 저장
