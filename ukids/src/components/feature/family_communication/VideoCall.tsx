@@ -37,7 +37,6 @@ function VideoCall() {
     const connectSession = async () => {
       try {
         await joinSession(selectedFamilyId, userName);
-        console.log('Successfully joined the session.');
       } catch (error) {
         console.error('Error joining the session:', error);
       }

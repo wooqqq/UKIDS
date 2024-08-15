@@ -33,8 +33,6 @@ export const GrowthFolderList = () => {
 
     const { data } = await api.get(url);
 
-    console.log(data.result);
-    console.log('강경민');
     setFolders(data.result.growthFolders);
   };
 
@@ -42,7 +40,6 @@ export const GrowthFolderList = () => {
     if (selectedFamilyId) {
       getFolderList();
     } else {
-      console.log('등록된 가족이 없어요! 가족을 등록해주세요');
       // 가족 ID가 설정되지 않았을 때
     }
   }, [selectedFamilyId]); // selectedFamilyId가 변경될 때마다 함수 호출

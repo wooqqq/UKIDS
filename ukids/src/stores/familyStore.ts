@@ -189,7 +189,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         selectedFamilyId: familyData.familyId,
       });
     } catch (error: any) {
-      console.log('Error finding family', error);
+      console.error('Error finding family', error);
       set({ error: error.message });
     }
   },
@@ -201,7 +201,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       const familyList: Family[] = response.data.result;
       set({ familyList: familyList, error: null });
     } catch (error: any) {
-      console.log('Error fetching family list', error);
+      console.error('Error fetching family list', error);
       set({ error: error.message });
     }
   },
@@ -234,7 +234,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         alert('가족방 정보 수정에 실패했습니다.');
       }
     } catch (error: any) {
-      console.log('Error updating family', error);
+      console.error('Error updating family', error);
       set({ error: error.message });
       alert('대표자만 수정이 가능합니다.');
     }
@@ -251,7 +251,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         alert('비밀번호가 일치하지 않습니다.');
       }
     } catch (error: any) {
-      console.log('Error checking family password', error);
+      console.error('Error checking family password', error);
       set({ error: error.message });
     }
   },
@@ -277,7 +277,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         }));
       }
     } catch (error: any) {
-      console.log('Error deleting family', error);
+      console.error('Error deleting family', error);
       set({ error: error.message });
     }
   },
@@ -289,7 +289,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       const pendingMembers: Member[] = response.data.result;
       set({ pendingMember: pendingMembers, error: null });
     } catch (error: any) {
-      console.log('Error fetching pending members', error);
+      console.error('Error fetching pending members', error);
       set({ error: error.message });
     }
   },
@@ -303,7 +303,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         // alert('가족 구성원 신청이 성공적으로 완료되었습니다.')
       }
     } catch (error: any) {
-      console.log('Error applying for family membership', error);
+      console.error('Error applying for family membership', error);
       set({ error: error.message });
     }
   },
@@ -316,7 +316,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         // alert('구성원이 승인되었습니다.');
       }
     } catch (error: any) {
-      console.log('Error approving family member', error);
+      console.error('Error approving family member', error);
       set({ error: error.message });
     }
   },
@@ -331,7 +331,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         // alert('구성원 신청이 취소되었습니다.');
       }
     } catch (error: any) {
-      console.log('Error approving family member', error);
+      console.error('Error approving family member', error);
       set({ error: error.message });
     }
   },
@@ -344,7 +344,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         // alert('구성원 신청이 거절되었습니다.');
       }
     } catch (error: any) {
-      console.log('Error approving family member', error);
+      console.error('Error approving family member', error);
       set({ error: error.message });
     }
   },
@@ -356,7 +356,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       const famMemberList: Member[] = response.data.result;
       set({ member: famMemberList, error: null });
     } catch (error: any) {
-      console.log('Error approving family member', error);
+      console.error('Error approving family member', error);
       set({ error: error.message });
     }
   },
@@ -377,7 +377,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         // alert('역할 설정이 완료되었습니다.');
       }
     } catch (error: any) {
-      console.log('Error approving family member', error);
+      console.error('Error approving family member', error);
       set({ error: error.message });
     }
   },
@@ -395,7 +395,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         // alert('탈퇴가 완료되었습니다.');
       }
     } catch (error: any) {
-      console.log('Error approving family member', error);
+      console.error('Error approving family member', error);
       set({ error: error.message });
     }
   },

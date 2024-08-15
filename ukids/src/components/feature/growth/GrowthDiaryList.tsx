@@ -52,8 +52,6 @@ export const GrowthDiaryList = () => {
 
     const { data } = await api.get(url);
 
-    console.log(data.result);
-    console.log('강경민');
     setDiaries(data.result.growthRecords);
     setTotalPage(data.result.totalPage);
   };
@@ -71,7 +69,6 @@ export const GrowthDiaryList = () => {
 
     const { data } = await api.delete(url);
 
-    console.log(data);
     navigate(`/growthfolder`);
   };
 

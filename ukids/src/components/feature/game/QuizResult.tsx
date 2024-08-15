@@ -72,9 +72,10 @@ const QuizResult = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
-      debug: (str) => {
-        console.log('웹소켓 디버그: ' + str);
-      },
+      // 웹소켓 디버그 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그: ' + str);
+      // },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -114,7 +115,7 @@ const QuizResult = () => {
               break;
 
             case 'ERROR':
-              console.log('error : ', receivedMessage.message);
+              console.error('error : ', receivedMessage.message);
           }
         },
       );
