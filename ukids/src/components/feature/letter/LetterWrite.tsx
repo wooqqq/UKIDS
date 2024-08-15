@@ -6,6 +6,7 @@ import api from '@/util/api';
 import BlueButton from '@components/common/BlueButton';
 import WhiteBackButton from '@components/common/WhiteBackButton';
 import { jwtDecode } from 'jwt-decode';
+import { Loading } from '@components/feature/loading/Loading';
 
 // interface Letter {
 //   content: string;
@@ -44,6 +45,8 @@ const today = `${day.getFullYear()}-${month < 10 ? '0' + month : month}-${
 }`;
 
 export const LetterWrite = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const [currentUserId, setCurrentUserId] = useState(-1);
@@ -109,6 +112,7 @@ export const LetterWrite = () => {
         alert('편지 받을 사람을 선택해주세요.');
         return;
       }
+
       inputData = {
         // 가족 ID 전역에서 가져올 수 있도록 수정
         familyId: selectedFamilyId,
@@ -116,6 +120,9 @@ export const LetterWrite = () => {
         toUserId: toUser.userId,
       };
     }
+
+    if (!confirm('작성하시겠습니까?')) return;
+    setLoading(true);
     const { data } = await api.post(url, inputData);
 
     // 편지 작성 시 나무 경험치 증가
@@ -199,6 +206,8 @@ export const LetterWrite = () => {
           />
         </div>
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 };
