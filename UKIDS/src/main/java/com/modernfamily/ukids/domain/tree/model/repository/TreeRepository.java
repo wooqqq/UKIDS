@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface TreeRepository extends JpaRepository<Tree, Long> {
-    Optional<Tree> findByFamily_FamilyId(Long familyId);
+    Optional<Tree> findByFamily_FamilyIdAndIsCompleteFalse(Long familyId);
 }

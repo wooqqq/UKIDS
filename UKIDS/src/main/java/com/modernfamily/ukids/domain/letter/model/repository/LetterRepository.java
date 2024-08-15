@@ -17,11 +17,15 @@ public interface LetterRepository extends JpaRepository<Letter, Long>, LetterRep
 
     List<Letter> findAllByFromUser(User fromUser);
 
-    Page<Letter> findByToUserAndIsOpen(User toUser, boolean isOpen, Pageable pageable);
+    Page<Letter> findByToUserAndIsOpenAndTree_Family_FamilyId(User toUser, boolean isOpen, Long familyId, Pageable pageable);
 
-    Page<Letter> findByFromUser(User fromUser, Pageable pageable);
+    Page<Letter> findByFromUserAndTree_Family_FamilyId(User fromUser, Long familyId, Pageable pageable);
 
     long countByTree_TreeId(Long treeId);
+
+    long countByToUserAndTree_Family_FamilyId(User toUser, Long familyId);
+
+    long countByToUserAndIsReadTrueAndTree_Family_FamilyId(User toUser, Long familyId);
 
     @Override
     long updateLettersOpenStatusByTree(Tree tree);

@@ -6,7 +6,6 @@ import com.modernfamily.ukids.domain.letter.dto.response.LetterListResponseDto;
 import com.modernfamily.ukids.domain.letter.dto.response.LetterResponseDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
-import com.modernfamily.ukids.domain.letter.model.repository.LetterRepositoryCustom;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
@@ -42,7 +41,7 @@ public class LetterServiceImpl implements LetterService {
         User toUser = userRepository.findByUserId(letterDto.getToUserId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
-        Tree tree = treeRepository.findByFamily_FamilyId(letterDto.getFamilyId())
+        Tree tree = treeRepository.findByFamily_FamilyIdAndIsCompleteFalse(letterDto.getFamilyId())
                 .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_TREE_EXCEPTION));
 
         Letter createdLetter = Letter.createLetter(letterDto.getContent(), tree, fromUser, toUser);
@@ -69,12 +68,12 @@ public class LetterServiceImpl implements LetterService {
 
     // 로그인한 사용자가 toUser(수신인)인 경우
     @Override
-    public LetterListPagenationResponseDto getLetterListByToUser(int size, int page) {
+    public LetterListPagenationResponseDto getLetterListByToUser(int size, int page, Long familyId) {
         String id = CustomUserDetails.contextGetUserId();
         User loginUser = userRepository.findById(id).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         Pageable pageable = PageRequest.of(--page, size);
-        Page<Letter> letterPage = letterRepository.findByToUserAndIsOpen(loginUser, true, pageable);
+        Page<Letter> letterPage = letterRepository.findByToUserAndIsOpenAndTree_Family_FamilyId(loginUser, true, familyId, pageable);
 
         List<Letter> letterList = letterPage.getContent();
         List<LetterListResponseDto> responseDtoList = new ArrayList<>();
@@ -92,12 +91,12 @@ public class LetterServiceImpl implements LetterService {
 
     // 로그인한 사용자가 fromUser(발신인)인 경우
     @Override
-    public LetterListPagenationResponseDto getLetterListByFromUser(int size, int page) {
+    public LetterListPagenationResponseDto getLetterListByFromUser(int size, int page, Long familyId) {
         String id = CustomUserDetails.contextGetUserId();
         User loginUser = userRepository.findById(id).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
 
         Pageable pageable = PageRequest.of(--page, size);
-        Page<Letter> letterPage = letterRepository.findByFromUser(loginUser, pageable);
+        Page<Letter> letterPage = letterRepository.findByFromUserAndTree_Family_FamilyId(loginUser, familyId, pageable);
 
         List<Letter> letterList = letterPage.getContent();
         List<LetterListResponseDto> responseDtoList = new ArrayList<>();
@@ -133,6 +132,29 @@ public class LetterServiceImpl implements LetterService {
         }
 
         return LetterResponseDto.createResponseDto(letter);
+    }
+
+    // 사용자의 받은 편지 개수 조회
+    @Override
+    public long getLetterCount(Long familyId) {
+        String id = CustomUserDetails.contextGetUserId();
+        User loginUser = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        long count = letterRepository.countByToUserAndTree_Family_FamilyId(loginUser, familyId);
+
+        return count;
+    }
+
+    @Override
+    public long getReadLetterCount(Long familyId) {
+        String id = CustomUserDetails.contextGetUserId();
+        User loginUser = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        long count = letterRepository.countByToUserAndIsReadTrueAndTree_Family_FamilyId(loginUser, familyId);
+
+        return count;
     }
 
 }
