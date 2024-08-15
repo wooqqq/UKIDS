@@ -45,7 +45,7 @@ export const LetterList = () => {
         );
       } else {
         return (
-          <div>
+          <div className="h-full grid grid-cols-5 grid-rows-3 place-items-center auto-rows-max">
             {letters.map((item) => (
               <Link to={`/letters/${item.letterId}`}>
                 <LetterItem key={item.letterId} letter={item} state={state} />
