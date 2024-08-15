@@ -19,7 +19,6 @@ interface Diary {
 export const GrowthDiaryUpdate = () => {
   const [loading, setLoading] = useState<boolean>(false);
   // 안됨
-  // const {folderId} = useParams();
   const today = new Date().toISOString().split('T')[0];
 
   // url 직접 추출
@@ -105,9 +104,6 @@ export const GrowthDiaryUpdate = () => {
     }
     if (imgFile) setDiary({ ...diary, file: imgFile });
 
-    // if (e.target.files?.item(0))
-    //   setDiary({ ...diary, file: e.target.files?.item(0) });
-
     // 추가 : 이미지 미리보기
     const fileReader = new FileReader();
     fileReader.onload = () => {
@@ -154,8 +150,6 @@ export const GrowthDiaryUpdate = () => {
       <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
         <BlueButton name="수정" path="/" onClick={updateDiary} />
       </div>
-
-      {/* <BlueButton name="등록" path="/" onClick={updateDiary} /> */}
 
       <div className="container">
         {/* 그림 등록 네모 박스  */}

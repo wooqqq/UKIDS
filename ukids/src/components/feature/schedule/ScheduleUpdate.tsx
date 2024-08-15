@@ -24,7 +24,6 @@ const ScheduleUpdate = () => {
     endTime: scheduleDetail.endTime,
   });
   const callUpdateSchedule = async () => {
-    // console.log('update : ', updateForm);
     if (!updateForm.title || !updateForm.startTime || !updateForm.endTime) {
       alert('제목과 날짜를 입력해주세요.');
       return;

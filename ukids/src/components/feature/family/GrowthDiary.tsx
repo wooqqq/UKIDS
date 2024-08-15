@@ -24,7 +24,6 @@ const GrowthDiary = () => {
       </div>
       <div className="absolute left-[764px] top-[23px]">
         {/* 블루버튼은 path로만 하기*/}
-        {/* <BlueButton name="만들기" path="/albums/upload" /> */}
         <BlueButton name="만들기" path="/" onClick={onModalOpen} />
       </div>
       <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap">성장일지</div>

@@ -241,10 +241,6 @@ const FamilyMemberUpdate = () => {
             </section>
           </div>
           <div className="flex justify-center mr-10">
-            {/* <div className="mr-10">
-              <BlueButton name="수정 완료" type="submit" path="" />
-            </div> */}
-
             <button onClick={openModal} className="common-btn red-btn">
               가족 해체
             </button>

@@ -53,8 +53,6 @@
   flex-direction: column; /* 내부 요소를 수직으로 배열합니다. */
   justify-content: center; /* 내부 요소를 수직 중앙 정렬합니다. */
   align-items: center; /* 내부 요소를 수평 중앙 정렬합니다. */
-
-
   
   position: relative;
 
@@ -142,7 +140,6 @@
   padding-top: 55px;
   padding-bottom: 65px;
 }
-
 
 /* 첫화면 사진*/
 .diary-image {

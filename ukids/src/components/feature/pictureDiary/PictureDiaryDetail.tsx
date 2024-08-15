@@ -106,25 +106,6 @@ export const PictureDiaryDetail = () => {
           {/* 글자 입력창  */}
           <div className="input-content">{diary?.content}</div>
         </div>
-
-        {/* <div>{diary?.date}</div> */}
-
-        {/* <div>
-        <img src={diary?.pictureUrl} alt="" />
-      </div> */}
-
-        {/* <div>{diary?.content}</div> */}
-
-        {/* <div>
-        <button onClick={deleteDiary}>삭제</button>
-      </div> */}
-
-        {/* <Link to={`/paintdiary/update/${pictureDiaryId}`}>수정</Link> */}
-
-        {/* <span className="home-modal-open-Button" onClick={onModalOpen}>
-        modal 열기
-      </span> */}
-
         <div>
           {modalState && (
             <Modal

@@ -124,9 +124,6 @@ export const PictureDiaryCreate = () => {
       </div>
 
       {/* 상단 목록, 등록 버튼 */}
-
-      {/* <button onClick={createDiary}>등록</button> */}
-
       <div style={{ position: 'absolute', top: '27px', left: '30px' }}>
         <WhiteButton name="목록" path="/paintdiary" />
       </div>

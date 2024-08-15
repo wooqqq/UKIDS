@@ -38,11 +38,6 @@ export const GrowthDiaryDetail = () => {
   const getGrowthDiary = async () => {
     const url = `/growth-record/${[recordId]}`;
 
-    // const inputData = {
-    //     recordId: recordId,
-    //     familyId: 11
-    // }
-
     const { data } = await api.get(url);
 
     setDiary(data.result);
@@ -101,11 +96,6 @@ export const GrowthDiaryDetail = () => {
         </button>
       </span>
 
-      {/* 
-            <BlueButton name="수정" path={`/growthdiary/update/${recordId}`} />
-            <BlueButton name="삭제" path="/" onClick={onModalOpen} />
-            */}
-
       <div className="container">
         {/* 그림 등록 네모 박스  */}
         <div className="image-box">
@@ -134,11 +124,7 @@ export const GrowthDiaryDetail = () => {
           </div>
         </div>
       </div>
-
-      {/* <div>{diary?.date}</div>
-                <div><img src={diary?.imageUrl} alt="" /></div>
-                <div>{diary?.content}</div> */}
-
+      
       <div>
         {modalState && (
           <Modal

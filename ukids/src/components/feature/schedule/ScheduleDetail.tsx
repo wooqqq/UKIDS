@@ -13,15 +13,12 @@ const ScheduleDetail = () => {
   const nav = useNavigate();
 
   useEffect(() => {
-    // console.log('schedule detail id : ', scheduleId);
     if (scheduleId) setScheduleDetail(scheduleId);
-    // console.log('get schedules : ', scheduleDetail);
   }, [scheduleId]);
 
   const deleteSchedule = async () => {
     if (!scheduleId) return;
     const { data } = await api.delete(`/schedule/${scheduleId}`);
-    // console.log('일정 삭제 : ', data);
     if (data.code == 200) {
       alert('일정 삭제 성공');
       nav('/schedule/list');

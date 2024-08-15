@@ -1,5 +1,3 @@
-
-
 .modal-top-container {
     background-color: rgba(#000000, 0.5);
     position: fixed;
@@ -24,6 +22,7 @@
   align-items: center;
   z-index: 1000; /* 모달을 최상단에 위치 */
 }
+
 .modal-container {
   position: relative;
   border-radius: 10px;
@@ -33,7 +32,6 @@
   height: 250px;
 }
 
-
 .modal-header {
     position: relative;
     background-color: #dadada;
@@ -41,9 +39,6 @@
     text-align: left;
     padding: 15px;
 }
-
-
-
 
 /* x 버튼 */
 .modal-close-button {
@@ -56,13 +51,10 @@
     text-align: center;
     font-size: 23px; /* 글자 크기 */
 }
-    
   
 .modal-content {
-    padding: 30px;
-    
+    padding: 30px;   
 }
-
 
 /* 모달 제목 */
 .content-title {
@@ -71,20 +63,12 @@
   color: #333; /* 글자 색상 */
 }
 
-
-
-
-
-
 /* 비밀번호 입력하세요 문구 */
 .password-label {
   margin-bottom: 10px; /* 아래 인풋과의 간격 */
   font-size: 17px; /* 글자 크기 */
   color: #333; /* 글자 색상 */
 }
-
-
-
 
 /* 비밀번호 입력창 */
 .password-input {

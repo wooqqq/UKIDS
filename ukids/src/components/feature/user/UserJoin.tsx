@@ -427,7 +427,6 @@ const UserJoin = () => {
                 value={form.phone}
                 required={false}
                 onChange={onChangePhoneHandler}
-                // onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
             </div>
