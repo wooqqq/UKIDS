@@ -11,6 +11,8 @@ import WhiteButton from '@components/common/WhiteButton';
 
 import { useTreeStore } from '@/stores/treeStore';
 
+import { Loading } from '@components/feature/loading/Loading';
+
 interface Diary {
   familyId: number;
   file: File | null;
@@ -23,6 +25,7 @@ export const PictureDiaryCreate = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split('T')[0];
 
+  const [loading, setLoading] = useState<boolean>(false);
   const { selectedFamilyId } = useFamilyStore();
 
   const { updateTreeExp } = useTreeStore();
@@ -35,18 +38,27 @@ export const PictureDiaryCreate = () => {
     date: '',
   });
 
+
   // 추가 : 이미지 미리보기 URL 상태
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const createDiary = async () => {
+    if (!diary.file) {
+      alert('그림 또는 사진을 넣어주세요.');
+      return;
+    }
+    if(!confirm('등록하시겠습니까?'))
+      return;
+    setLoading(true); // 데이터 전송 시작 시 로딩 상태 true로 설정
+    
     const formData = new FormData();
-    if (diary.file) {
-      formData.append('multipartFile', diary.file);
+    formData.append('multipartFile', diary.file);
+    formData.append('date', diary.date);
+    formData.append('content', diary.content);
+    formData.append('familyId', `${diary.familyId}`);
 
-      formData.append('date', diary.date);
-      formData.append('content', diary.content);
-      formData.append(`familyId`, `${diary.familyId}`);
-
+    
+    try {
       const url = `/picture-diary`;
       const { data } = await api.post(url, formData, {
         headers: {
@@ -55,10 +67,14 @@ export const PictureDiaryCreate = () => {
       });
 
       // 추가 : 성공 후 페이지 이동
+      alert('그림일기가 생성되었습니다!')
       updateTreeExp(selectedFamilyId, 25);
-      navigate('/paintdiary');
-    } else {
-      alert('그림 또는 사진을 넣어주세요.');
+      navigate('/paintdiary', {state: diary.date});
+    } catch (error) {
+      console.error('Error creating diary:', error);
+      alert('그림일기 업로드에 실패했습니다.');
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -76,10 +92,6 @@ export const PictureDiaryCreate = () => {
     }
     if (imgFile)
       setDiary({ ...diary, file: imgFile });
-
-
-    // if (e.target.files?.item(0))
-    //   setDiary({ ...diary, file: e.target.files?.item(0) });
 
     // 추가 : 이미지 미리보기
     const fileReader = new FileReader();
@@ -120,7 +132,7 @@ export const PictureDiaryCreate = () => {
       </div>
 
       <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
-        <BlueButton name="등록" path="/paintdiary" onClick={createDiary} />
+        <BlueButton name="등록" path="/paintdiary" onClick={createDiary} data={diary?.date}/>
       </div>
 
       <div className="container">
@@ -155,6 +167,8 @@ export const PictureDiaryCreate = () => {
           </div>
         </div>
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 };

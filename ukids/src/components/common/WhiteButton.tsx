@@ -6,15 +6,15 @@ interface WhiteButtonProps {
   path: string;
   className?: string;
   type?: string;
-
+  data?: any;
 }
 
 const WhiteButton = (props: WhiteButtonProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-
-    navigate(props.path);
+    console.log(props.data);
+    navigate(props.path, {state: props.data});
   };
 
   if (props.name === '삭제') {

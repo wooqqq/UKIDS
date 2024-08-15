@@ -41,3 +41,14 @@
     background-color: #f0eded; /* 마우스 호버 시 배경색을 진하게 변경 */
 }
 
+
+.non-diary{
+    width: 650px;
+    height: 400px;
+    position: relative;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 140px;
+    text-align: center;
+    line-height: 400px;
+}

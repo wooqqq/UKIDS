@@ -1,23 +1,25 @@
 // 가족채팅방 연결하기 이미지 추가
 import { useNavigate } from 'react-router-dom';
 import './button.css';
+import { useState } from 'react';
 
 interface BlueButtonProps {
   name: string;
   path: string;
   className?: string;
   type?: string;
+  // ?를 넣어주면 필수가 아닌 props
+  data?: any;
   onClick?: () => void; // onClick 타입 정의 추가
 }
 
 const BlueButton = (props: BlueButtonProps) => {
   const navigate = useNavigate();
-
   const handleClick = () => {
     if (props.onClick) {
       props.onClick(); // onClick 함수 호출
     } else {
-      navigate(props.path);
+      navigate(props.path, {state: props.data});
     }
   };
 

@@ -103,7 +103,7 @@ const AlbumDetail: React.FC = () => {
       <div className="second-container">
         
         {/* 목록 */}
-        <div><WhiteButton name="목록" path="/albums" /></div>
+        <div><WhiteButton name="목록" path="/albums"/></div>
 
         {/* 날짜 */}
         <div className="date-input" style={{ marginLeft: '100px' }}>{album.date}</div>
