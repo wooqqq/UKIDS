@@ -35,9 +35,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
     setIsChatting(false);
 
     // 가족 리스트를 가져와서 구성원을 띄워준다.
-    api.get(`/member/${selectedFamilyId}`).then((response: any) => {
-      console.log('------------------가족 구성원 리스트----------------------');
-      console.log(response.data.result);
+    api.get(`/member/${selectedFamilyId}`).then((response) => {
       setFamilyList(response.data.result);
     });
   }, []);

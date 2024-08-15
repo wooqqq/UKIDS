@@ -117,7 +117,6 @@ const QuizReady = () => {
   };
 
   const enterQuizRoom = async () => {
-    console.log('방 입장 ');
     if (stompClientInstance && stompClientInstance.connected) {
       try {
         // console.log('stompClientInstance:', stompClientInstance);
@@ -317,7 +316,7 @@ const QuizReady = () => {
               break;
 
             case 'ERROR':
-              console.log('error : ', receivedMessage.message);
+              console.error('error : ', receivedMessage.message);
           }
         },
       );

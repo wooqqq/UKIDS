@@ -54,6 +54,7 @@ export const Pagination = ({ totalPage, size, countPerPage, currentPage, onPageC
                     onClick={() => onPageChange(currentPage + 1)}
                     className="pagination-button"
                     aria-label="Next"
+                    
                 >
                     &gt;
                 </button>

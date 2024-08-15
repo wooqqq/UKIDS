@@ -21,7 +21,7 @@ const LetterBox = ({ path }: letterBoxProps) => {
   // }, []);
 
   return (
-    <button onClick={handleClick} type="button" className="w-[100%] h-[100%]">
+    <button type="button" className="w-[100%] h-[100%]">
       <div className="title-style">편지함</div>
       <section>
         <div>안 읽은 편지 / 받은 편지</div>

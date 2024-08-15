@@ -45,9 +45,6 @@ export const PictureDiaryUpdate = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (data.code === 201) {
-      console.log(data.result);
-    }
 
     setDiary(data.result);
     // 추가 : 이미지 URL 설정
@@ -72,22 +69,52 @@ export const PictureDiaryUpdate = () => {
       },
     });
 
-    console.log(data);
-
     // 추가 : 성공 후 페이지 이동
-    navigate('/paintdiary');
+    navigate(`/paintdiary/${pictureDiaryId}`);
   };
 
+  // const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files?.[0]) {
+  //     const fileReader = new FileReader();
+  //     fileReader.onloadend = () => {
+  //       setPreviewUrl(fileReader.result as string); // 미리보기 URL 업데이트
+  //     };
+  //     fileReader.readAsDataURL(e.target.files[0]);
+  //     setDiary({ ...diary, file: e.target.files[0] });
+  //   }
+  // };
+
+  // 수정 : 사진 파일 검사 
   const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      const fileReader = new FileReader();
-      fileReader.onloadend = () => {
-        setPreviewUrl(fileReader.result as string); // 미리보기 URL 업데이트
-      };
-      fileReader.readAsDataURL(e.target.files[0]);
-      setDiary({ ...diary, file: e.target.files[0] });
+    const imgFile = e.target.files?.item(0);
+    const fileType = imgFile?.type;
+
+    if(!fileType?.includes('image') || fileType?.includes('image/gif')){
+      alert('이미지(.gif 제외) 파일만 업로드 할 수 있습니다.');
+      return;
     }
+    if(imgFile && imgFile.size > (1024 ** 2 * 10)){
+      alert('파일 크기는 10MB를 초과할 수 없습니다.');
+      return;
+    }
+    if (imgFile)
+      setDiary({ ...diary, file: imgFile });
+
+
+    // if (e.target.files?.item(0))
+    //   setDiary({ ...diary, file: e.target.files?.item(0) });
+
+    // 추가 : 이미지 미리보기
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrl(fileReader.result as string);
+    };
+    fileReader.readAsDataURL(e.target.files[0]);
   };
+
+
+
+
 
   useEffect(() => {
     getDiary();
@@ -124,7 +151,7 @@ export const PictureDiaryUpdate = () => {
       </div>
 
       <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
-        <BlueButton name="등록" path="/paintdiary" onClick={updateDiary} />
+        <BlueButton name="등록" path={`/paintdiary/${pictureDiaryId}`} onClick={updateDiary} />
       </div>
 
       <div className="container">

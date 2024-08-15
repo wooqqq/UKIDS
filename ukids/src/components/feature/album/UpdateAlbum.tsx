@@ -1,21 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-import { useAuthStore } from '../../../stores/authStore';
-import { useParams, useNavigate } from 'react-router-dom';
+
 import api from '@/util/api';
+
+import { useFamilyStore } from '@/stores/familyStore';
+import { useParams, useNavigate } from 'react-router-dom';
+
+
+import BlueButton from '@components/common/BlueButton';
+import WhiteButton from '@components/common/WhiteButton';
+
 
 import { format } from 'date-fns';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+// 추가
+import closeIcon from '../../../assets/close.png';
+import uploadIcon from '../../../assets/upload.png'; 
+import './UploadAlbum.css';
 
-import BlueButton from '../../common/BlueButton';
-import WhiteButton from '../../common/WhiteButton';
-import '../../feature/album/UploadAlbum.css';
-import closeIcon from '../../../assets/close.png'; // 이미지 파일 import
-import { useFamilyStore } from '@/stores/familyStore';
 
-// 인터페이스 수정
 interface Album {
   date: string;
   title: string;
@@ -57,9 +59,40 @@ export const UpdateAlbum = () => {
 
   const { selectedFamilyId } = useFamilyStore();
 
-  const handleFileChange = (event: any) => {
-    if (event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
+  // const handleFileChange = (event: any) => {
+  //   if (event.target.files.length > 0) {
+  //     setSelectedFile(event.target.files[0]);
+  //   }
+  // };
+
+  
+  
+  // 수정: 이미지 검증을 추가함
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imgFile = e.target.files?.item(0);
+    const fileType = imgFile?.type;
+
+    // 이미지 파일 유형 검증 (GIF 제외)
+    if (!fileType?.includes('image') || fileType?.includes('image/gif')) {
+      alert('이미지(.gif 제외) 파일만 업로드 할 수 있습니다.');
+      return;
+    }
+
+    // 파일 크기 검증 (10MB 제한)
+    if (imgFile && imgFile.size > (1024 ** 2 * 10)) {
+      alert('파일 크기는 10MB를 초과할 수 없습니다.');
+      return;
+    }
+
+    if (imgFile) {
+      setSelectedFile(imgFile);
+
+      // 이미지 미리보기 생성
+      // const fileReader = new FileReader();
+      // fileReader.onload = () => {
+      //   setPreviewUrl(fileReader.result as string);
+      // };
+      // fileReader.readAsDataURL(imgFile);
     }
   };
 
@@ -105,7 +138,6 @@ export const UpdateAlbum = () => {
         content: caption.content,
       };
       const { data } = api.put(url, inputData);
-      console.log(data);
     });
 
     try {
@@ -124,10 +156,8 @@ export const UpdateAlbum = () => {
           });
         }),
       );
-      console.log('Photo upload responses:', responses);
       // 응답에서 사진 ID 추출 (응답 형식에 따라 수정 필요)
       const photoIds = responses.map((res) => res.data.photoId);
-      console.log('Uploaded photo IDs:', photoIds);
 
       // 앨범 정보 변경
       const inputData = {
@@ -136,10 +166,9 @@ export const UpdateAlbum = () => {
         title: title,
         date: format(date as Date, 'yyyy-MM-dd'),
       };
-      console.log(inputData.title);
       api.put(`/album`, inputData);
 
-      alert('모든 사진이 성공적으로 업로드되었습니다!');
+      alert('수정 완료!');
     } catch (error) {
       console.error('사진 업로드 실패:', error);
       alert('사진 업로드에 실패했습니다.');
@@ -160,7 +189,6 @@ export const UpdateAlbum = () => {
 
     const url = `/album/${albumId}`;
     const { data } = await api.get(url);
-    console.log(data.result);
     uploadPhotos(data.result);
   };
 
@@ -168,17 +196,14 @@ export const UpdateAlbum = () => {
     const url = `/photo/all/${albumId}`;
 
     const { data } = await api.get(url);
-    console.log(data);
 
     setUploadedPhotos(data.result.photoList);
     setDate(data.result.album.date);
     setTitle(data.result.album.title);
 
     for (let i = 0; i < data.result.photoList.length; i++) {
-      console.log('photoId: ', data.result.photoList[i].photoId);
       const urlCaption = `/caption/${data.result.photoList[i].photoId}`;
       const resp = await api.get(urlCaption);
-      console.log(resp.data.result);
       setUploadedCaption((prevCaption) => [...prevCaption, resp.data.result]);
     }
   };
@@ -191,7 +216,6 @@ export const UpdateAlbum = () => {
     setUploadedCaption((prevUploadedCaptions) =>
       prevUploadedCaptions.filter((_, i) => i !== index),
     );
-    console.log(deletePhotos);
   };
 
   useEffect(() => {
@@ -199,155 +223,141 @@ export const UpdateAlbum = () => {
   }, []);
 
   return (
-    <div
-      className="feature-box relative w-[911px] h-[576px]"
-      style={{ zIndex: 1000 }}
-    >
-      <div className="left-88 top-37 w-[911px] h-[150px] bg-[#fff] z-50">
-        <div className="absolute left-0 top-0 w-[911px] h-[150px] bg-[#fff] rounded-[20px]"></div>
-        <div className="absolute left-[94px] top-[20px] w-[726px] h-[50px] border-[solid] border-#ddd border">
+    <div className="feature-box">
+
+      {/* 맨 윗줄 */}
+      <div className="input-border-box">
+          <div className="title-input">{title}</div> 
+      </div>
+
+
+    
+      
+      {/* 둘째 줄 */}
+      <div className="second-container">
+
+        <div>
+          <WhiteButton name="목록" path="/albums" />
+        </div>
+
+        <div>
           <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
-            className="absolute -translate-y-1/2 left-[-10px] top-1/2 w-[750px] form-control"
-            style={{
-              fontSize: '20px',
-              fontWeight: '400',
-              color: 'black',
-              textAlign: 'center',
-              borderRadius: '0',
-              border: 'none',
-              borderBottom: '2px solid #ddd',
-              paddingBottom: '10px',
-              backgroundColor: 'transparent',
-              outline: 'none',
-            }}
+          type="date"
+          value={date}
+          onChange={(e) => handleDateChange(e.target.value)}
+          className="date-input"
           />
         </div>
 
-        <div className="absolute -translate-x-1/2 left-1/2 top-[87px] w-[701px] h-[30px] style={{ zIndex: 9999 }}">
-          <WhiteButton
-            name="목록"
-            path="/albums"
-            className="absolute left-0 top-0 w-[80px] h-[30px]"
-          />
-          <div
-            className="absolute left-1/2 top-0 transform -translate-x-1/2"
-            style={{ zIndex: 9999 }}
-          >
-            <DatePicker
-              selected={date}
-              maxDate={today}
-              onChange={handleDateChange}
-              dateFormat="yyyy/MM/dd"
-              className="text-center w-full"
-            />
-          </div>
+        <div>
+          <BlueButton name="수정" path="/" onClick={updateAlbum}/>
         </div>
-      </div>
 
-      <div className="absolute top-[87px] right-[70px]">
-        <BlueButton
-          name="수정"
-          path="/albums"
-          className="absolute"
-          onClick={updateAlbum}
-        />
       </div>
+      {/* 여기까지 둘째 줄 */}
 
-      {/* <img className="absolute left-[347px] top-[60px] overflow-hidden" width="543" height="494" src="/src/assets/frame1.png" alt="frame1" /> */}
-      <div className="absolute left-[78px] top-[154px] w-[302px] h-[358px]">
-        <div className="absolute left-[35px] top-[12px] w-[99px] h-[29px]">
+
+
+      {/* 셋째 줄 */}
+      <div className="third-container">
+
+
+          {/* 파일 업로드 */}
           <div
-            className="absolute left-[2px] top-[3px] w-[94px] h-[23px] bg-[#fff] rounded-[39px]"
-            style={{
-              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-              cursor: 'pointer',
-            }}
+            className="file-button"
             onClick={handleFileClick}
             aria-label="파일 선택"
-            title="파일 선택"
-          >
+            title="파일 선택">
+
+            <span className="file-button-icon">
+                <img src={uploadIcon} alt="Upload" style={{ verticalAlign: 'middle'}} />
+            </span>
+
             <input
               type="file"
               onChange={handleFileChange}
               ref={fileInputRef}
               className="hidden"
             />
-            <div className="absolute left-[23px] top-[3px] text-[12px] font-roboto text-custom-gray whitespace-nowrap cursor-pointer ">
-              파일 찾기
-            </div>
-          </div>
-        </div>
-        <div className="absolute left-[21px] top-[41px] w-[256px] flex flex-col items-end justify-start gap-[8px] py-[15px] px-[21px] overflow-hidden">
-          <div className="relative w-[214px] h-[204px] shrink-0 bg-[#fff] border-[1px] border-solid border-[#00000033] overflow-hidden">
-            {selectedFile && (
-              <img
-                src={URL.createObjectURL(selectedFile)}
-                crossOrigin="anonymous"
-                alt="Selected"
-                className="absolute left-[6px] top-[9px] w-[208px] h-[184px] object-cover"
-              />
-            )}
-          </div>
-          <div className="w-[213px] h-[26px] shrink-0 flex flex-col items-start justify-start bg-[#fff] border-[1px] border-solid border-[#00000066] rounded-md">
-            <div className="relative w-[190px] h-[24px] shrink-0">
-              <input
-                type="text"
-                value={caption}
-                onChange={(e) => setCaption(e.target.value)}
-                placeholder="↳ 사진 캡션을 작성하세요."
-                className="absolute inset-0 w-full h-full px-2 text-[14px] font-['Inter'] text-[#868585] text-center outline-none rounded-md"
-                maxLength={20}
-              />
-            </div>
           </div>
 
-          <button
-            className="mt-2 text-black rounded px-4 py-2"
-            onClick={handleAddPhoto}
-          >
-            사진 등록
-          </button>
-        </div>
+
+
+          <div className="left-container">
+              <div className="file-photo-container">
+                  {selectedFile && (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      crossOrigin="anonymous"
+                      alt="Selected"/>
+                    )}
+              </div>
+
+
+              <div className="caption-area">
+                <input
+                  type="text"
+                  value={caption}
+                  onChange={(e) => setCaption(e.target.value)}
+                  placeholder=" ㄴ 사진 캡션을 작성하세요."
+                  style={{ width: '310px' }}
+                  className="outline-none rounded-md"
+                  maxLength={50}
+                />
+                </div>
+
+
+                <button className="register-button" onClick={handleAddPhoto}>
+                  앨범에 넣기
+                </button>
+
+
+          </div>
       </div>
 
       <div className="preview-box">
-        {uploadedPhotos.map((photo, index) => (
-          <div key={index} className="photo-containertwo relative">
-            <img
-              src={closeIcon}
-              alt="Delete Icon"
-              className="delete-icon"
-              crossOrigin="anonymous"
-              onClick={() => deletePrevPhoto(photo, index)}
-            />
-            <img
-              src={photo.imgUrl}
-              alt={`Preview ${index}`}
-              crossOrigin="anonymous"
-              className="w-full h-auto rounded"
-            />
-            <input
-              className="text-center w-[100px]"
-              type="text"
-              value={uploadedCaption[index]?.content}
-              onChange={(e) => {
-                setUploadedCaption((prevCaptions) =>
-                  prevCaptions.map((caption, i) =>
-                    i === index
-                      ? { ...caption, content: e.target.value }
-                      : caption,
-                  ),
-                );
-              }}
-            />
-          </div>
-        ))}
+          {uploadedPhotos.map((photo, index) => (
+                <div key={index} className="photo-card">
+                  <img
+                    src={closeIcon}
+                    alt="Delete Icon"
+                    className="delete-icon"
+                    crossOrigin="anonymous"
+                    onClick={() => deletePrevPhoto(photo, index)}
+                  />
+                  <img
+                    src={photo.imgUrl}
+                    alt={`Preview ${index}`}
+                    crossOrigin="anonymous"
+                    className="photo-card-img"
+                  />
+                  {/* <p>{photo.caption}?</p> */}
+
+                  <div className="caption-area">
+                    <input
+                      type="text"
+                      value={uploadedCaption[index]?.content}
+                      onChange={(e) => {
+                        setUploadedCaption((prevCaptions) =>
+                          prevCaptions.map((caption, i) =>
+                            i === index
+                              ? { ...caption, content: e.target.value }
+                              : caption,
+                          ),
+                        );
+                      }}
+                      style={{ width: '323px' }}
+                      // className="outline-none rounded-md"
+                      maxLength={50}
+                    />
+                  </div>
+
+
+                  
+                </div>
+            ))}
         {photos.map((photo, index) => (
-          <div key={index} className="photo-containertwo relative">
+          <div key={index} className="photo-card">
             <img
               src={closeIcon}
               alt="Delete Icon"
@@ -359,10 +369,10 @@ export const UpdateAlbum = () => {
               src={URL.createObjectURL(photo.file)}
               alt={`Preview ${index}`}
               crossOrigin="anonymous"
-              className="w-full h-auto rounded"
+              className="photo-card-img"
             />
+            <div className="caption-area"> 
             <input
-              className="text-center w-[100px]"
               type="text"
               value={photo.caption}
               onChange={(e) =>
@@ -372,8 +382,15 @@ export const UpdateAlbum = () => {
                   ),
                 )
               }
+              style={{ width: '310px' }}
+              className="outline-none rounded-md"
+              maxLength={50}
             />
           </div>
+
+
+          </div>
+
         ))}
       </div>
     </div>
