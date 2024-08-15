@@ -15,16 +15,28 @@ const UserUpdate = () => {
     role: 'ROLE_USER',
   });
 
-  const userInfo = useAuthStore((state) => state.userInfo);
-  const updateUser = useAuthStore((state) => state.updateUser);
-  const getUserInfo = useAuthStore((state) => state.getUserInfo);
-  const checkedEmail = useAuthStore((state) => state.checkedEmail);
-  const checkedPhone = useAuthStore((state) => state.checkedPhone);
+  const {
+    userInfo,
+    updateUser,
+    getUserInfo,
+    checkedEmail,
+    checkedPhone,
+    // deleteUser,
+  } = useAuthStore();
 
   const [pwError, setPwError] = useState('');
+  const [confirmError, setConfirmError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [dateError, setDateError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+
+  const [isEmailCheck, setIsEmailCheck] = useState(false); // 중복 검사를 했는지 안했는지
+  const [isPhoneCheck, setIsPhoneCheck] = useState(false); // 중복 검사를 했는지 안했는지
+  const [isEmailAvailable, setIsEmailAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
+  const [isPhoneAvailable, setIsPhoneAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
+
+  const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
 
   useEffect(() => {
     // 컴포넌트가 마운트되면 사용자 정보를 가져와서 폼을 초기화
@@ -51,51 +63,193 @@ const UserUpdate = () => {
     }
   }, [userInfo]);
 
-  const handleUpdateUser = async (e: React.FormEvent) => {
-    e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
-    setEmailError('');
-    setPwError('');
-    setPhoneError('');
+  const passwordCheckHandler = (password: string, confirmPassword: string) => {
+    const passwordRegex = /^[a-z\d!@*&-_]{8,16}$/;
+    if (password === '') {
+      setPwError('비밀번호를 입력해주세요.');
+      return false;
+    } else if (!passwordRegex.test(password)) {
+      setPwError(
+        '비밀번호는 8~16자의 영소문자, 숫자, !@*&-_만 입력 가능합니다.',
+      );
+      return false;
+    } else if (confirmPassword !== password) {
+      setPwError('');
+      setConfirmError('비밀번호가 일치하지 않습니다.');
+      return false;
+    } else {
+      setPwError('');
+      setConfirmError('');
+      return true;
+    }
+  };
 
-    // 비밀번호와 확인 비밀번호가 일치하지 않을 때
-    if (form.password && form.password !== form.confirmPassword) {
-      setPwError('비밀번호가 일치하지 않습니다.');
-      return;
+  const onChangePasswordHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { id, value } = e.currentTarget;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [id]: value, // name에 따라 password 또는 confirmPassword 업데이트
+    }));
+    if (id === 'password') {
+      passwordCheckHandler(value, form.confirmPassword);
+    } else {
+      passwordCheckHandler(form.password, value);
+    }
+  };
+
+  const onChangeNameHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+
+    if (!value.trim()) {
+      setNameError('이름을 작성하세요.');
+    } else {
+      setNameError(''); // 이름이 입력되면 에러 메시지 초기화
     }
 
-    // 비밀번호 빈 값 불가능
-    if (!form.password || !form.confirmPassword) {
-      setPwError('비밀번호를 입력하세요.');
-      return;
-    }
+    setForm((prevForm) => ({
+      ...prevForm,
+      name: value,
+    }));
+  };
 
-    // 생년월일 유효성 검사
+  const onChangeBirthDateHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
     const today = new Date();
-    const birthDate = new Date(form.birthDate);
+    const birthDate = new Date(value);
     const isInvalidBirthDate = birthDate > today;
 
     // 생년월일 유효성 검사
     if (isInvalidBirthDate) {
       setDateError('생년월일이 오늘 이후의 날짜입니다. 다시 입력해 주세요.');
+    } else {
+      setDateError(''); // 에러가 없을 때는 에러 메시지 초기화
+    }
+
+    // 상태 업데이트
+    setForm((prevForm) => ({
+      ...prevForm,
+      birthDate: value,
+    }));
+  };
+
+  const onChangeEmailHandler = async (e: React.FormEvent<HTMLInputElement>) => {
+    const emailValue = e.currentTarget.value;
+    setForm({ ...form, email: emailValue });
+    emailCheckHandler(emailValue);
+  };
+
+  const emailCheckHandler = async (email: string) => {
+    const emailRegex = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+    if (email === '') {
+      setEmailError('이메일을 입력해주세요.');
+      setIsEmailAvailable(false);
+      return false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('이메일 형식으로 작성해 주세요. (ex. family01@ukids.com)');
+      setIsEmailAvailable(false);
+      return false;
+    }
+
+    try {
+      const responseData = await checkedEmail(email);
+      if (responseData) {
+        setEmailError('사용 가능한 이메일입니다.');
+        setIsEmailCheck(true);
+        setIsEmailAvailable(true);
+        return true;
+      } else {
+        setEmailError('이미 사용중인 이메일입니다.');
+        setIsEmailAvailable(false);
+        return false;
+      }
+    } catch (error) {
+      alert('서버 오류입니다. 관리자에게 문의하세요.');
+      console.error(error);
+      return false;
+    }
+  };
+
+  const onChangePhoneHandler = async (e: React.FormEvent<HTMLInputElement>) => {
+    const phoneValue = e.currentTarget.value;
+    setForm({ ...form, phone: phoneValue });
+    phoneCheckHandler(phoneValue);
+  };
+
+  const phoneCheckHandler = async (phone: string) => {
+    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+    if (phone === '') {
+      setPhoneError('전화번호를 입력해주세요.');
+      setIsPhoneAvailable(false);
+      return false;
+    } else if (!phoneRegex.test(phone)) {
+      setPhoneError(
+        '하이픈(-)을 넣어 전화번호 형식으로 작성해 주세요.(ex. 010-1234-5678)',
+      );
+      setIsPhoneAvailable(false);
+      return false;
+    }
+
+    try {
+      const responseData = await checkedPhone(phone);
+      if (responseData) {
+        setPhoneError('사용 가능한 전화번호입니다.');
+        setIsPhoneCheck(true);
+        setIsPhoneAvailable(true);
+        return true;
+      } else {
+        setPhoneError('이미 사용중인 전화번호입니다.');
+        setIsPhoneAvailable(false);
+        return false;
+      }
+    } catch (error) {
+      alert('서버 오류입니다. 관리자에게 문의하세요.');
+      console.error(error);
+      return false;
+    }
+  };
+
+  // 회원 탈퇴
+  // const onClickDeleteUser = async () => {
+  //   if (userInfo?.userId) {
+  //     try {
+  //       await deleteUser();
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
+
+  /////////////////////////////////////////////////////////////
+
+  const handleUpdateUser = async (e: React.FormEvent) => {
+    e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
+
+    // 비밀번호 확인
+    const passwordCheckResult = passwordCheckHandler(
+      form.password,
+      form.confirmPassword,
+    );
+    if (passwordCheckResult) {
+      setPwError('');
+      setConfirmError('');
+    } else return;
+
+    // 이메일 중복 확인
+    const isCheckedEmail = await checkedEmail(form.email);
+    if (isCheckedEmail) setEmailError('');
+    else return;
+    if (!isEmailCheck || !isEmailAvailable) {
+      alert('이메일 중복 검사를 해주세요.');
       return;
     }
 
-    // 이메일 중복 확인
-    if (form.email) {
-      const isEmailDuplicate = await checkedEmail(form.email);
-      if (!isEmailDuplicate) {
-        setEmailError('이미 사용 중인 이메일입니다.');
-        return;
-      }
-    }
-
     // 전화번호 중복 확인
-    if (form.phone) {
-      const isPhoneDuplicate = await checkedPhone(form.phone);
-      if (!isPhoneDuplicate) {
-        setPhoneError('이미 사용 중인 전화번호입니다.');
-        return;
-      }
+    const isCheckedPhone = await checkedPhone(form.phone);
+    if (isCheckedPhone) setPhoneError('');
+    else return;
+    if (!isPhoneCheck || !isPhoneAvailable) {
+      alert('전화번호 중복 검사를 해주세요.');
+      return;
     }
 
     // 업데이트할 사용자 데이터를 동적으로 생성
@@ -124,7 +278,7 @@ const UserUpdate = () => {
       {/* 회원수정 박스 */}
       <div className="px-[100px]">
         <form onSubmit={handleUpdateUser} className="join-form w-[450px]">
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="id" className="text-[#555] font-bold">
@@ -141,7 +295,7 @@ const UserUpdate = () => {
               />
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="password" className="text-[#555] font-bold">
@@ -153,12 +307,15 @@ const UserUpdate = () => {
                 id="password"
                 placeholder="비밀번호 입력"
                 value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                onChange={onChangePasswordHandler}
                 className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
+            </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label
@@ -170,20 +327,20 @@ const UserUpdate = () => {
               </div>
               <input
                 type="password"
-                id="confirm-password"
+                id="confirmPassword"
                 placeholder="비밀번호 확인"
                 value={form.confirmPassword}
-                onChange={(e) =>
-                  setForm({ ...form, confirmPassword: e.target.value })
-                }
+                onChange={onChangePasswordHandler}
                 className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
             <div className="pl-2 text-sm text-end">
-              <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
+              <p className="text-[#F03F2F]">
+                {confirmError ? confirmError : ''}
+              </p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="name" className="text-[#555] font-bold">
@@ -195,12 +352,15 @@ const UserUpdate = () => {
                 id="name"
                 placeholder="이름"
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                onChange={onChangeNameHandler}
                 className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
+            <div className="pl-2 text-sm text-end">
+              <p className="text-[#F03F2F]">{nameError ? nameError : ''}</p>
+            </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="birth" className="text-[#555] font-bold">
@@ -212,9 +372,8 @@ const UserUpdate = () => {
                 id="birthDate"
                 placeholder="생년월일"
                 value={form.birthDate}
-                onChange={(e) =>
-                  setForm({ ...form, birthDate: e.target.value })
-                }
+                max={today}
+                onChange={onChangeBirthDateHandler}
                 className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
@@ -222,7 +381,7 @@ const UserUpdate = () => {
               <p className="text-[#F03F2F]">{dateError ? dateError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label className="text-[#555] font-bold">이메일</label>
@@ -232,7 +391,7 @@ const UserUpdate = () => {
                 id="email"
                 placeholder="[선택] 이메일 주소 (비밀번호 찾기 등 본인 확인용)"
                 value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                onChange={onChangeEmailHandler}
                 className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
@@ -240,7 +399,7 @@ const UserUpdate = () => {
               <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="phone" className="text-[#555] font-bold">
@@ -252,7 +411,7 @@ const UserUpdate = () => {
                 id="phone"
                 placeholder="[선택] 휴대전화번호"
                 value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                onChange={onChangePhoneHandler}
                 className="input-box px-5 w-80 font-semibold text-[#555555]"
               />
             </div>
@@ -264,6 +423,9 @@ const UserUpdate = () => {
             <BlueButton name="수정 완료" type="submit" path="" />
           </div>
         </form>
+        {/* <button className="common-btn red-btn" onClick={onClickDeleteUser}>
+          회원 탈퇴
+        </button> */}
       </div>
     </>
   );

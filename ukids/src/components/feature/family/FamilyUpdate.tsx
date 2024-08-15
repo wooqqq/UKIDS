@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BlueButton from '../../common/BlueButton';
 import { useFamilyStore } from '../../../stores/familyStore';
-import { useAuthStore } from '../../../stores/authStore';
 
 const FamilyUpdate = () => {
   const {
@@ -15,20 +14,18 @@ const FamilyUpdate = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [representative, setRepresentative] = useState(0);
-  const { userInfo, getUserInfo } = useAuthStore();
 
   useEffect(() => {
     if (selectedFamilyId) {
       fetchFamilyInfo(selectedFamilyId);
       fetchMemberList(selectedFamilyId);
-      getUserInfo();
     }
   }, [selectedFamilyId, fetchFamilyInfo, fetchMemberList]);
 
   useEffect(() => {
     if (family) {
       setName(family.name);
-      setRepresentative(family.representative); // 초기 대표자 설정
+      setRepresentative(family.userFamilyDto.userId); // 초기 대표자 설정
     }
   }, [family]);
 
@@ -118,12 +115,11 @@ const FamilyUpdate = () => {
                       id="representative"
                       key={representative}
                       value={representative}
-                      defaultValue={representative}
                       onChange={(e) =>
                         setRepresentative(Number(e.target.value))
                       }
                       className="input-box px-5 w-80 font-semibold text-[#555555]"
-                      disabled={userInfo?.userId !== family.representative}
+                      // disabled={userInfo?.userId !== family.representative}
                     >
                       {member.map((m) => (
                         <option

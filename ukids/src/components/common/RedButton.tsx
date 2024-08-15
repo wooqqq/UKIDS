@@ -7,6 +7,7 @@ interface RedButtonProps {
   path: string;
   className?: string;
   type?: string;
+  onClick?: () => void;
 }
 
 const RedButton = (props: RedButtonProps) => {

@@ -51,6 +51,17 @@ body {
   user-select: text;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
 /* 기능 박스 수정*/
 .feature-box {
   width: 911px;

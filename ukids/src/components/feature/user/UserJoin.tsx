@@ -33,19 +33,23 @@ const UserJoin = () => {
   const [dateError, setDateError] = useState('');
 
   const [isIdCheck, setIsIdCheck] = useState(false); // 중복 검사를 했는지 안했는지
+  const [isEmailCheck, setIsEmailCheck] = useState(false); // 중복 검사를 했는지 안했는지
+  const [isPhoneCheck, setIsPhoneCheck] = useState(false); // 중복 검사를 했는지 안했는지
   const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
+  const [isEmailAvailable, setIsEmailAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
+  const [isPhoneAvailable, setIsPhoneAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
 
   const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
 
   // 아이디 중복 확인
   const idCheckHandler = async (id: string) => {
-    const idRegex = /^[a-z\d]{5,10}$/;
+    const idRegex = /^[a-z\d]{5,15}$/;
     if (id === '') {
       setIdError('아이디를 입력해주세요.');
       setIsIdAvailable(false);
       return false;
     } else if (!idRegex.test(id)) {
-      setIdError('아이디는 5~10자의 영소문자, 숫자만 입력 가능합니다.');
+      setIdError('아이디는 5~15자의 영소문자, 숫자만 입력 가능합니다.');
       setIsIdAvailable(false);
       return false;
     }
@@ -144,54 +148,78 @@ const UserJoin = () => {
   };
 
   const onChangeEmailHandler = async (e: React.FormEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
+    const emailValue = e.currentTarget.value;
+    setForm({ ...form, email: emailValue });
+    emailCheckHandler(emailValue);
+  };
 
-    if (!value.trim()) {
-      setEmailError('이메일을 입력하세요.');
-    } else {
-      // 이메일 유효성 검사를 수행하기 전에 상태 업데이트
-      setForm((prevForm) => ({
-        ...prevForm,
-        email: value,
-      }));
+  const emailCheckHandler = async (email: string) => {
+    const emailRegex = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+    if (email === '') {
+      setEmailError('이메일을 입력해주세요.');
+      setIsEmailAvailable(false);
+      return false;
+    } else if (!emailRegex.test(email)) {
+      setEmailError('이메일 형식으로 작성해 주세요. (ex. family01@ukids.com)');
+      setIsEmailAvailable(false);
+      return false;
+    }
 
-      try {
-        const isEmailDuplicate = await checkedEmail(value);
-        if (!isEmailDuplicate) {
-          setEmailError('이미 사용 중인 이메일입니다.');
-        } else {
-          setEmailError(''); // 이메일 사용 가능할 때 에러 메시지 초기화
-        }
-      } catch (error) {
-        console.error('이메일 확인 중 오류 발생:', error);
-        setEmailError('서버 오류입니다. 나중에 다시 시도하세요.');
+    try {
+      const responseData = await checkedEmail(email);
+      if (responseData) {
+        setEmailError('사용 가능한 이메일입니다.');
+        setIsEmailCheck(true);
+        setIsEmailAvailable(true);
+        return true;
+      } else {
+        setEmailError('이미 사용중인 이메일입니다.');
+        setIsEmailAvailable(false);
+        return false;
       }
+    } catch (error) {
+      alert('서버 오류입니다. 관리자에게 문의하세요.');
+      console.error(error);
+      return false;
     }
   };
 
   const onChangePhoneHandler = async (e: React.FormEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
+    const phoneValue = e.currentTarget.value;
+    setForm({ ...form, phone: phoneValue });
+    phoneCheckHandler(phoneValue);
+  };
 
-    if (!value.trim()) {
-      setPhoneError('휴대전화번호를 입력하세요.');
-      return;
-    } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        phone: value,
-      }));
+  const phoneCheckHandler = async (phone: string) => {
+    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+    if (phone === '') {
+      setPhoneError('전화번호를 입력해주세요.');
+      setIsPhoneAvailable(false);
+      return false;
+    } else if (!phoneRegex.test(phone)) {
+      setPhoneError(
+        '하이픈(-)을 넣어 전화번호 형식으로 작성해 주세요.(ex. 010-1234-5678)',
+      );
+      setIsPhoneAvailable(false);
+      return false;
     }
 
     try {
-      const isPhoneDuplicate = await checkedPhone(value);
-      if (!isPhoneDuplicate) {
-        setPhoneError('이미 사용 중인 전화번호입니다.');
+      const responseData = await checkedPhone(phone);
+      if (responseData) {
+        setPhoneError('사용 가능한 전화번호입니다.');
+        setIsPhoneCheck(true);
+        setIsPhoneAvailable(true);
+        return true;
       } else {
-        setPhoneError(''); // 사용 가능한 번호일 때 에러 메시지 초기화
+        setPhoneError('이미 사용중인 전화번호입니다.');
+        setIsPhoneAvailable(false);
+        return false;
       }
     } catch (error) {
-      console.error('전화번호 확인 중 오류 발생:', error);
-      setPhoneError('서버 오류입니다. 나중에 다시 시도하세요.');
+      alert('서버 오류입니다. 관리자에게 문의하세요.');
+      console.error(error);
+      return false;
     }
   };
 
@@ -208,6 +236,7 @@ const UserJoin = () => {
       return;
     }
 
+    // 비밀번호 확인
     const passwordCheckResult = passwordCheckHandler(
       form.password,
       form.confirmPassword,
@@ -217,23 +246,23 @@ const UserJoin = () => {
       setConfirmError('');
     } else return;
 
-    // // 이메일 중복 확인
-    // if (form.email) {
-    //   const isEmailDuplicate = await checkedEmail(form.email);
-    //   if (!isEmailDuplicate) {
-    //     setEmailError('이미 사용 중인 이메일입니다.');
-    //     return;
-    //   }
-    // }
+    // 이메일 중복 확인
+    const isCheckedEmail = await checkedEmail(form.email);
+    if (isCheckedEmail) setEmailError('');
+    else return;
+    if (!isEmailCheck || !isEmailAvailable) {
+      alert('이메일 중복 검사를 해주세요.');
+      return;
+    }
 
-    // // 전화번호 중복 확인
-    // if (form.phone) {
-    //   const isPhoneDuplicate = await checkedPhone(form.phone);
-    //   if (!isPhoneDuplicate) {
-    //     setPhoneError('이미 사용 중인 전화번호입니다.');
-    //     return;
-    //   }
-    // }
+    // 전화번호 중복 확인
+    const isCheckedPhone = await checkedPhone(form.phone);
+    if (isCheckedPhone) setPhoneError('');
+    else return;
+    if (!isPhoneCheck || !isPhoneAvailable) {
+      alert('전화번호 중복 검사를 해주세요.');
+      return;
+    }
 
     // 회원가입 API 요청
     await joinUser({
@@ -252,7 +281,7 @@ const UserJoin = () => {
       {/* 회원가입 박스 */}
       <div className="common-feature-box w-[1000px] h-[620px] p-[40px]">
         <form onSubmit={handleJoin} className="join-form w-[520px]">
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="id" className="text-[#555] font-bold">
@@ -274,7 +303,7 @@ const UserJoin = () => {
               <p className="text-[#F03F2F]">{idError ? idError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="password" className="text-[#555] font-bold">
@@ -295,7 +324,7 @@ const UserJoin = () => {
               <p className="text-[#F03F2F]">{pwError ? pwError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label
@@ -321,7 +350,7 @@ const UserJoin = () => {
               </p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="name" className="text-[#555] font-bold">
@@ -342,7 +371,7 @@ const UserJoin = () => {
               <p className="text-[#F03F2F]">{nameError ? nameError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="birth" className="text-[#555] font-bold">
@@ -364,7 +393,7 @@ const UserJoin = () => {
               <p className="text-[#F03F2F]">{dateError ? dateError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label className="text-[#555] font-bold">이메일</label>
@@ -384,7 +413,7 @@ const UserJoin = () => {
               <p className="text-[#F03F2F]">{emailError ? emailError : ''}</p>
             </div>
           </section>
-          <section className="mb-6">
+          <section className="mb-4">
             <div className="flex justify-between items-center">
               <div className="w-28 text-end mr-2">
                 <label htmlFor="phone" className="text-[#555] font-bold">
