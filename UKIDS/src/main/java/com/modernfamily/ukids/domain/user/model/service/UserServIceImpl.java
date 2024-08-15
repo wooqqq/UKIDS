@@ -115,7 +115,7 @@ public class UserServIceImpl implements UserService{
         if(email.isEmpty()) return false;
 
         String id = CustomUserDetails.contextGetUserId();
-        if(id != null){
+        if(id != null && !id.equals("anonymousUser")){
             User user = userRepository.findById(id).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
             if(email.equals(user.getEmail())) return false;
         }
@@ -128,7 +128,7 @@ public class UserServIceImpl implements UserService{
         if(phone.isEmpty()) return false;
 
         String id = CustomUserDetails.contextGetUserId();
-        if(id != null){
+        if(id != null && !id.equals("anonymousUser")){
             User user = userRepository.findById(id).orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
             if(phone.equals(user.getPhone())) return false;
         }
