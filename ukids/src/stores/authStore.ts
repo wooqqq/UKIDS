@@ -1,3 +1,4 @@
+import { react } from '@vitejs/plugin-react';
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 import api from '../util/api';
@@ -276,8 +277,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkedId: async (id: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/id/${id}`);
-      if (response.data.code === 200) {
-        // alert('사용 가능한 ID입니다.');
+      if (response.data.result === 'id 중복 없음') {
         return true;
       } else {
         // alert('이미 사용 중인 ID입니다.');
