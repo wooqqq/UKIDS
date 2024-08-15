@@ -87,7 +87,6 @@ const Albums: React.FC = () => {
       // 전체 페이지 (예: 3)
       setTotalPage(response.data.result.totalPage);
       let allAlbums = response.data.result.albumResponseDtoList;
-      console.log(response.data);
 
       // 2페이지 ~ total page 데이터 불러오기
 

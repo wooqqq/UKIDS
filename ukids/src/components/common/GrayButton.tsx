@@ -22,16 +22,21 @@ const GrayButton = (props: GrayButtonProps) => {
     }
   };
 
-  const deleteHandleClick = () => {
-    if (props.onClick) {
-      props.onClick();
-    } else {
-      nav(props.path);
-    }
-  };
+  // const deleteHandleClick = () => {
+  //   if (props.onClick) {
+  //     props.onClick();
+  //   } else {
+  //     nav(props.path);
+  //   }
+  // };
 
   const onClickLogoutButton = () => {
     localStorage.removeItem('token');
+    
+    if (localStorage.getItem('selectedFamilyId') !== null) {
+      localStorage.removeItem('selectedFamilyId');
+    }
+
     setToken(null);
     nav(props.path);
   };

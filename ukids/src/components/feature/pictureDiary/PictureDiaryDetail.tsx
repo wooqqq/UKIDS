@@ -2,11 +2,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Modal } from '@components/feature/modal/Modal.tsx';
 import api from '@/util/api.ts';
+import WhiteButton from '@components/common/WhiteButton';
 
 import '@components/feature/modal/modal.css';
-
-import BlueButton from '@components/common/BlueButton';
-import WhiteButton from '@components/common/WhiteButton';
 
 interface Diary {
   pictureDiaryId: number;
@@ -47,7 +45,6 @@ export const PictureDiaryDetail = () => {
       return;
     }
     navigate('/paintdiary');
-    console.log(data);
   };
 
   useEffect(() => {

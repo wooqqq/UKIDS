@@ -46,8 +46,6 @@ export const GrowthDiaryUpdate = () => {
 
     const { data } = await api.get(url);
 
-    console.log(data);
-    console.log(111111);
     setDiary(data.result);
     setImageName(data.result.imageName);
     setPreviewUrl(data.result.imageUrl);
@@ -82,10 +80,7 @@ export const GrowthDiaryUpdate = () => {
       },
     });
 
-    console.log(data);
     // 수정: 현재의 폴더 아이디도 함께 전달
-    console.log(11111111111);
-    console.log(folderId);
     navigate(`/growthdiary/diary/${recordId}?folderId=${folderId}`);
   };
 

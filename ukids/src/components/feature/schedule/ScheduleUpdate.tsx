@@ -38,7 +38,6 @@ const ScheduleUpdate = () => {
       endTime: updateForm.endTime,
       familyId: scheduleDetail.familyId,
     });
-
     if (data.code == 201) {
       alert('일정 수정 성공');
       nav('/schedule/list');

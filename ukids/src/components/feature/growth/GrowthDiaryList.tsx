@@ -62,7 +62,6 @@ export const GrowthDiaryList = () => {
 
     const { data } = await api.delete(url);
 
-    console.log(data);
     navigate(`/growthfolder`);
   };
 

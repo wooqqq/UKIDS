@@ -56,7 +56,6 @@ export const GrowthDiaryCreate = () => {
         },
       });
 
-      console.log(data);
       navigate(`/growthdiary/folder/${folderId}`);
     } else {
       alert('그림 또는 사진을 넣어주세요.');

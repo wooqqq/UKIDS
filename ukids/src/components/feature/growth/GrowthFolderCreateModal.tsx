@@ -55,8 +55,6 @@ export const GrowthFolderCreateModal = ({
 
     const { data } = await api.post(url, inputData);
 
-    console.log(data);
-
     renewFolderList();
 
     setModalState(!modalState);
