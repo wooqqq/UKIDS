@@ -54,8 +54,6 @@ export const PictureDiaryCreate = () => {
         },
       });
 
-      console.log(data);
-
       // 추가 : 성공 후 페이지 이동
       updateTreeExp(selectedFamilyId, 25);
       navigate('/paintdiary');

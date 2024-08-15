@@ -71,7 +71,6 @@ const QuizStart = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const getQuestion = async () => {
-    console.log('퀴즈 가져오는 중...');
     if (stompClient && stompClient.connected) {
       try {
         stompClient.publish({
@@ -90,7 +89,6 @@ const QuizStart = () => {
   };
 
   const checkAnswer = async (answer: string) => {
-    console.log('정답 제출 중...', answer);
     if (stompClient && stompClient.connected) {
       try {
         stompClient.publish({
@@ -134,9 +132,10 @@ const QuizStart = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
-      debug: (str) => {
-        console.log('웹소켓 디버그:', str);
-      },
+      // 웹소켓 디버그 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그:', str);
+      // },
     });
 
     client.onConnect = (frame) => {

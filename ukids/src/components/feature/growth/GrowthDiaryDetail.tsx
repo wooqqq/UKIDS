@@ -45,8 +45,6 @@ export const GrowthDiaryDetail = () => {
 
     const { data } = await api.get(url);
 
-    console.log(data);
-    console.log(1111111);
     setDiary(data.result);
   };
 
@@ -55,7 +53,6 @@ export const GrowthDiaryDetail = () => {
 
     const { data } = await api.delete(url);
 
-    console.log(data);
     navigate(`/growthdiary/folder/${diary?.folderId}`);
   };
 
