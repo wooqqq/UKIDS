@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import closeIcon from '../../../assets/close.png';
 import uploadIcon from '../../../assets/upload.png'; 
 import './UploadAlbum.css';
+import { Loading } from '@components/feature/loading/Loading';
 
 
 interface Album {
@@ -53,20 +54,13 @@ export const UpdateAlbum = () => {
   const [caption, setCaption] = useState('');
   const [uploadedCaption, setUploadedCaption] = useState<Caption[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const { albumId } = useParams();
 
   const { selectedFamilyId } = useFamilyStore();
 
-  // const handleFileChange = (event: any) => {
-  //   if (event.target.files.length > 0) {
-  //     setSelectedFile(event.target.files[0]);
-  //   }
-  // };
-
-  
-  
   // 수정: 이미지 검증을 추가함
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imgFile = e.target.files?.item(0);
@@ -171,7 +165,9 @@ export const UpdateAlbum = () => {
       alert('수정 완료!');
     } catch (error) {
       console.error('사진 업로드 실패:', error);
-      alert('사진 업로드에 실패했습니다.');
+      alert('앨범 수정에 실패했습니다.');
+    }finally{
+      setLoading(false);
     }
 
     navigate(`/albums/${albumId}`);
@@ -186,7 +182,10 @@ export const UpdateAlbum = () => {
       alert('날짜를 선택해주세요.');
       return;
     }
-
+    if(!confirm('수정하시겠습니까?')){
+      return ;
+    }
+    setLoading(true);
     const url = `/album/${albumId}`;
     const { data } = await api.get(url);
     uploadPhotos(data.result);
@@ -227,7 +226,13 @@ export const UpdateAlbum = () => {
 
       {/* 맨 윗줄 */}
       <div className="input-border-box">
-          <div className="title-input">{title}</div> 
+          <input
+            type="text"
+            value = {title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="제목을 입력하세요"
+            className="title-input"
+          />
       </div>
 
 
@@ -393,6 +398,7 @@ export const UpdateAlbum = () => {
 
         ))}
       </div>
+      {loading && <Loading />}
     </div>
   );
 };

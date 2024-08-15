@@ -14,6 +14,8 @@ import './UploadAlbum.css';
 
 import { format } from 'date-fns';
 
+import { Loading } from '@components/feature/loading/Loading';
+
 // x 아이콘 
 import closeIcon from '../../../assets/close.png'; 
 import uploadIcon from '../../../assets/upload.png'; 
@@ -31,6 +33,7 @@ const UploadAlbum = () => {
   const [date, setDate] = useState("");
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // const [selectedFile, setSelectedFile] = useState<Photo | null>(null);
   
@@ -185,6 +188,7 @@ const UploadAlbum = () => {
         date: formattedDate,
       };
     } catch (error) {
+      setLoading(false);
       console.error('앨범 생성 실패:', error);
       alert('앨범 생성에 실패했습니다.');
       return null;
@@ -215,6 +219,8 @@ const UploadAlbum = () => {
     } catch (error) {
       console.error('사진 업로드 실패:', error);
       alert('사진 업로드에 실패했습니다.');
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -228,8 +234,13 @@ const UploadAlbum = () => {
       return;
     }
 
+    if(!confirm('등록하시겠습니까?')){
+      return;
+    }
+
     const albumData = await createAlbum();
     if (albumData) {
+      setLoading(true);
       await uploadPhotos(albumData);
       setPhotos([]);
       setTitle('');
@@ -372,7 +383,7 @@ const UploadAlbum = () => {
                </div>
    
    
-   
+               {loading && <Loading />}
     </div>
   );
 };

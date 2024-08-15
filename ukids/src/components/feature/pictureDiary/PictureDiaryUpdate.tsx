@@ -9,6 +9,8 @@ import WhiteButton from '@components/common/WhiteButton';
 
 import { useFamilyStore } from '@/stores/familyStore';
 
+import { Loading } from '@components/feature/loading/Loading';
+
 interface Diary {
   pictureDiaryId: number;
   familyId: number;
@@ -22,6 +24,7 @@ export const PictureDiaryUpdate = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split('T')[0];
 
+  const [loading, setLoading] = useState<boolean>(false);
   const { selectedFamilyId } = useFamilyStore();
 
   let { pictureDiaryId } = useParams() as { pictureDiaryId: string };
@@ -53,6 +56,12 @@ export const PictureDiaryUpdate = () => {
 
   const updateDiary = async () => {
     const formData = new FormData();
+
+    if(!confirm('수정하시겠습니까?')){
+      return;
+    }
+    
+    setLoading(true); // 데이터 전송 시작 시 로딩 상태 true로 설정
     if (diary.file) {
       formData.append('multipartFile', diary.file);
     }
@@ -60,29 +69,28 @@ export const PictureDiaryUpdate = () => {
     formData.append('familyId', diary.familyId.toString());
     formData.append('date', diary.date);
     formData.append('content', diary.content);
-
-    const url = `/picture-diary`;
-
-    const { data } = await api.put(url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    // 추가 : 성공 후 페이지 이동
-    navigate(`/paintdiary/${pictureDiaryId}`);
+    try{
+      const url = `/picture-diary`;
+  
+      const { data } = await api.put(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      console.log(data);
+  
+      alert('수정 완료!');
+      // 추가 : 성공 후 페이지 이동
+      navigate(`/paintdiary/${diary.pictureDiaryId}`);
+    }catch(error){
+      console.error('Error creating diary:', error);
+      alert('그림일기 수정에 실패했습니다.');
+    } finally {
+      setLoading(false); 
+    }
   };
 
-  // const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files?.[0]) {
-  //     const fileReader = new FileReader();
-  //     fileReader.onloadend = () => {
-  //       setPreviewUrl(fileReader.result as string); // 미리보기 URL 업데이트
-  //     };
-  //     fileReader.readAsDataURL(e.target.files[0]);
-  //     setDiary({ ...diary, file: e.target.files[0] });
-  //   }
-  // };
 
   // 수정 : 사진 파일 검사 
   const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,10 +107,6 @@ export const PictureDiaryUpdate = () => {
     }
     if (imgFile)
       setDiary({ ...diary, file: imgFile });
-
-
-    // if (e.target.files?.item(0))
-    //   setDiary({ ...diary, file: e.target.files?.item(0) });
 
     // 추가 : 이미지 미리보기
     const fileReader = new FileReader();
@@ -151,7 +155,7 @@ export const PictureDiaryUpdate = () => {
       </div>
 
       <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
-        <BlueButton name="등록" path={`/paintdiary/${pictureDiaryId}`} onClick={updateDiary} />
+        <BlueButton name="수정" path="/paintdiary" onClick={updateDiary} />
       </div>
 
       <div className="container">
@@ -179,6 +183,7 @@ export const PictureDiaryUpdate = () => {
           ></textarea>
         </div>
 
+        {loading && <Loading />}
         {/* <button onClick={updateDiary}>등록</button> */}
       </div>
     </div>
