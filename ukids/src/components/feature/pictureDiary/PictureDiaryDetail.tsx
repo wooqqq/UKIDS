@@ -70,7 +70,7 @@ export const PictureDiaryDetail = () => {
       </div>
 
       <div style={{ position: 'absolute', top: '27px', left: '30px' }}>
-        <WhiteButton name="목록" path="/paintdiary" />
+        <WhiteButton name="목록" path="/paintdiary" data={diary?.date}/>
       </div>
 
       <Link to={`/paintdiary/update/${pictureDiaryId}`}>

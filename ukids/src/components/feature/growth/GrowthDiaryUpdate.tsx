@@ -5,6 +5,8 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import BlueButton from '@components/common/BlueButton';
 import WhiteButton from '@components/common/WhiteButton';
 
+import { Loading } from '@components/feature/loading/Loading';
+
 interface Diary {
   title: string;
   content: string;
@@ -15,6 +17,7 @@ interface Diary {
 }
 
 export const GrowthDiaryUpdate = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   // 안됨
   // const {folderId} = useParams();
   const today = new Date().toISOString().split('T')[0];
@@ -64,6 +67,8 @@ export const GrowthDiaryUpdate = () => {
     }
     if (!confirm('수정하시겠습니까?')) return;
 
+    setLoading(true);
+
     const formData = new FormData();
     formData.append('date', diary.date);
     formData.append('content', diary.content);
@@ -80,6 +85,8 @@ export const GrowthDiaryUpdate = () => {
       },
     });
 
+    alert('수정 완료!');
+
     // 수정: 현재의 폴더 아이디도 함께 전달
     navigate(`/growthdiary/diary/${recordId}?folderId=${folderId}`);
   };
@@ -88,17 +95,15 @@ export const GrowthDiaryUpdate = () => {
     const imgFile = e.target.files?.item(0);
     const fileType = imgFile?.type;
 
-    if(!fileType?.includes('image') || fileType?.includes('image/gif')){
+    if (!fileType?.includes('image') || fileType?.includes('image/gif')) {
       alert('이미지(.gif 제외) 파일만 업로드 할 수 있습니다.');
       return;
     }
-    if(imgFile && imgFile.size > (1024 ** 2 * 10)){
+    if (imgFile && imgFile.size > 1024 ** 2 * 10) {
       alert('파일 크기는 10MB를 초과할 수 없습니다.');
       return;
     }
-    if (imgFile)
-      setDiary({ ...diary, file: imgFile });
-
+    if (imgFile) setDiary({ ...diary, file: imgFile });
 
     // if (e.target.files?.item(0))
     //   setDiary({ ...diary, file: e.target.files?.item(0) });
@@ -147,7 +152,7 @@ export const GrowthDiaryUpdate = () => {
       </div>
 
       <div style={{ position: 'absolute', top: '27px', right: '30px' }}>
-        <BlueButton name="등록" path="/" onClick={updateDiary} />
+        <BlueButton name="수정" path="/" onClick={updateDiary} />
       </div>
 
       {/* <BlueButton name="등록" path="/" onClick={updateDiary} /> */}
@@ -193,6 +198,8 @@ export const GrowthDiaryUpdate = () => {
           </div>
         </div>
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 };

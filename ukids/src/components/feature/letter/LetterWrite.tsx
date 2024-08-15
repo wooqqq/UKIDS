@@ -5,6 +5,8 @@ import { useTreeStore } from '@/stores/treeStore';
 import api from '@/util/api';
 import BlueButton from '@components/common/BlueButton';
 import WhiteBackButton from '@components/common/WhiteBackButton';
+import { jwtDecode } from 'jwt-decode';
+import { Loading } from '@components/feature/loading/Loading';
 
 // interface Letter {
 //   content: string;
@@ -31,6 +33,10 @@ interface Member {
   userFamilyDto: UserFamilyDto;
 }
 
+interface JwtPayload {
+  userId: string;
+}
+
 const day = new Date();
 const month = day.getMonth() + 1;
 const date = day.getDate();
@@ -39,7 +45,11 @@ const today = `${day.getFullYear()}-${month < 10 ? '0' + month : month}-${
 }`;
 
 export const LetterWrite = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
+
+  const [currentUserId, setCurrentUserId] = useState(-1);
 
   const { fromUserId } = useParams();
 
@@ -102,6 +112,7 @@ export const LetterWrite = () => {
         alert('편지 받을 사람을 선택해주세요.');
         return;
       }
+
       inputData = {
         // 가족 ID 전역에서 가져올 수 있도록 수정
         familyId: selectedFamilyId,
@@ -109,6 +120,9 @@ export const LetterWrite = () => {
         toUserId: toUser.userId,
       };
     }
+
+    if (!confirm('작성하시겠습니까?')) return;
+    setLoading(true);
     const { data } = await api.post(url, inputData);
 
     // 편지 작성 시 나무 경험치 증가
@@ -128,6 +142,12 @@ export const LetterWrite = () => {
     api.get(`/family/${selectedFamilyId}`).then((response: any) => {
       setFamilyName(response.data.result.name);
     });
+
+    setCurrentUserId(
+      Number.parseInt(
+        jwtDecode<JwtPayload>(localStorage.getItem('token')!).userId,
+      ),
+    );
   }, []);
 
   return (
@@ -155,15 +175,18 @@ export const LetterWrite = () => {
               </div>
               {dropCheck && (
                 <ul className="absolute left-[310px] top-[130px] w-[15rem] text-center bg-[#333] text-stone-50">
-                  {members.map((item) => (
-                    <li
-                      key={item.userFamilyDto.userId}
-                      onClick={() => getToUser(item.userFamilyDto.userId)}
-                      className="border-solid border-2 border-white"
-                    >
-                      {item.userFamilyDto.name}
-                    </li>
-                  ))}
+                  {members.map((item) => {
+                    if (item.userFamilyDto.userId === currentUserId) return;
+                    return (
+                      <li
+                        key={item.userFamilyDto.userId}
+                        onClick={() => getToUser(item.userFamilyDto.userId)}
+                        className="border-solid border-2 border-white"
+                      >
+                        {item.userFamilyDto.name}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
               <div className="text-[16px] flex flex-row justify-end items-end mb-2">
@@ -183,6 +206,8 @@ export const LetterWrite = () => {
           />
         </div>
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 };

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import gameExplain from '@/assets/game_explain.png';
-import './gamepart.css';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@stores/authStore';
 import { useFamilyStore } from '@stores/familyStore';
-import ReadyCall from './ReadyCall';
-import VideoToggleButton from '../family_communication/VideoToggleButton';
-import AudioToggleButton from '../family_communication/AudioToggleButton';
+import CharacterTag from '@components/common/CharaterTag';
 import ImageSlider from '@components/common/ImageSlider';
+import ReadyCall from '@components/feature/game/ReadyCall';
+import VideoToggleButton from '@components/feature/family_communication/VideoToggleButton';
+import AudioToggleButton from '@components/feature/family_communication/AudioToggleButton';
+import '@components/feature/game/gamepart.css';
+import gameExplain from '@/assets/game_explain.png';
 import example_game1 from '@/assets/example_gamming.png';
 import example_game2 from '@/assets/example_result.png';
 
@@ -431,8 +432,8 @@ const QuizReady = () => {
           <ul className="h-[20%] overflow-y-auto">
             {participants.map((participant, index) => (
               <li key={index} className="mb-2">
-                <span className="font-bold">{participant.userName}</span>:{' '}
-                {participant.role}
+                <span className="font-bold mr-2">{participant.userName}</span>
+                <CharacterTag character={participant.role} />
               </li>
             ))}
           </ul>

@@ -4,7 +4,6 @@ import axios from 'axios';
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: 'https://i11b306.p.ssafy.io/api',
-  // baseURL: 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json',
   },

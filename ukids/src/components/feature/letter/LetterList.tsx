@@ -5,6 +5,7 @@ import BlueButton from '@components/common/BlueButton';
 import { LetterItem } from '@components/feature/letter/LetterItem';
 import { Pagination } from '@components/feature/pagination/Pagination.tsx';
 import '@components/feature/letter/letter.css';
+import { useFamilyStore } from '@stores/familyStore';
 
 interface Letter {
   letterId: number;
@@ -17,6 +18,8 @@ interface Letter {
 }
 
 export const LetterList = () => {
+  const { selectedFamilyId } = useFamilyStore();
+
   const [letters, setLetters] = useState<Letter[]>([]);
 
   // 받은 편지함(false)인지 보낸 편지함(true)인지
@@ -45,7 +48,7 @@ export const LetterList = () => {
         );
       } else {
         return (
-          <div>
+          <div className="h-full grid grid-cols-5 grid-rows-3 place-items-center auto-rows-max">
             {letters.map((item) => (
               <Link to={`/letters/${item.letterId}`}>
                 <LetterItem key={item.letterId} letter={item} state={state} />
@@ -80,8 +83,9 @@ export const LetterList = () => {
   const getLetters = async () => {
     let url = '';
     // 받은 편지
-    if (!state) url = `/letter/to?page=${page}&size=${size}`;
-    else url = `letter/from?page=${page}&size=${size}`;
+    if (!state)
+      url = `/letter/to/${selectedFamilyId}?page=${page}&size=${size}`;
+    else url = `letter/from/${selectedFamilyId}?page=${page}&size=${size}`;
     const { data } = await api.get(url);
     setLetters(data.result.letters);
     setTotalPage(data.result.totalPages);

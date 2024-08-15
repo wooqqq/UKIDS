@@ -63,7 +63,7 @@ interface AuthState {
   checkedEmail: (email: string) => Promise<boolean>;
 
   // 전화번호 중복 검사
-  checkedPhone: (phone: string) => Promise<boolean>;
+  checkedPhone: (phone: string) => Promise<void>;
 }
 
 // 자동 로그아웃 테스트
@@ -71,7 +71,6 @@ interface AuthState {
 //   'token',
 //   'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlkIjoidXNlcjEiLCJuYW1lIjoi6rmA7Iu47ZS8IiwicGhvbmUiOiIwMTAtMTIxMi0xMjEyIiwiZW1haWwiOiJ3d3dAYXNzZGYuY29tIiwiaWF0IjoxNzIzMDgwMjUwLCJleHAiOjE3MjMwODM4NTB9.HRFEqm_i66m4JOa5yUEFlNHb7BQkuvV8mW_a-wnc2Sk',
 // );
-// const ukidsURL = `http://localhost:8080`;
 const ukidsURL = `https://i11b306.p.ssafy.io`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -277,7 +276,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkedId: async (id: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/id/${id}`);
-      if (response.data.result === 'id 중복 없음') {
+      if (response.data.code === 200) {
         // alert('사용 가능한 ID입니다.');
         return true;
       } else {
@@ -320,7 +319,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('전화번호 중복 검사 실패:', error);
-      return false;
+      alert('전화번호 중복 검사에 실패했습니다.');
     }
   },
 }));

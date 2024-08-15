@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { useVideoCallStore } from '@stores/videoCallStore';
 import VideoToggleButton from '@components/feature/family_communication/VideoToggleButton';
 import AudioToggleButton from '@components/feature/family_communication/AudioToggleButton';
-import api from '../../util/api';
-import { useFamilyStore } from '../../stores/familyStore';
+import api from '@/util/api';
+import { useFamilyStore } from '@stores/familyStore';
+import CharacterTag from '@components/common/CharaterTag';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;
@@ -48,8 +49,8 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
           {familyList.map((family) => {
             return (
               <div key={family.familyMemberId}>
-                <span>{family.userFamilyDto.name}</span>
-                <span>{family.role}</span>
+                <span className="mr-2">{family.userFamilyDto.name}</span>
+                <CharacterTag character={family.role} />
               </div>
             );
           })}

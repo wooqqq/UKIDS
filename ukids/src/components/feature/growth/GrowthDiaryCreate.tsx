@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BlueButton from '@components/common/BlueButton';
 import WhiteButton from '@components/common/WhiteButton';
 
+import { Loading } from '@components/feature/loading/Loading';
+
 import './GrowthDiaryCreate.css';
 interface Diary {
   title: string;
@@ -14,6 +16,7 @@ interface Diary {
 }
 
 export const GrowthDiaryCreate = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const { folderId } = useParams();
   const navigate = useNavigate();
   const today = new Date().toISOString().split('T')[0];
@@ -40,6 +43,8 @@ export const GrowthDiaryCreate = () => {
       return;
     }
 
+    setLoading(true);
+
     const formData = new FormData();
     if (diary.file) {
       formData.append('multipartFile', diary.file);
@@ -56,6 +61,8 @@ export const GrowthDiaryCreate = () => {
         },
       });
 
+      alert('성장일지가 생성되었습니다!');
+
       navigate(`/growthdiary/folder/${folderId}`);
     } else {
       alert('그림 또는 사진을 넣어주세요.');
@@ -66,17 +73,15 @@ export const GrowthDiaryCreate = () => {
     const imgFile = e.target.files?.item(0);
     const fileType = imgFile?.type;
 
-    if(!fileType?.includes('image') || fileType?.includes('image/gif')){
+    if (!fileType?.includes('image') || fileType?.includes('image/gif')) {
       alert('이미지(.gif 제외) 파일만 업로드 할 수 있습니다.');
       return;
     }
-    if(imgFile && imgFile.size > (1024 ** 2 * 10)){
+    if (imgFile && imgFile.size > 1024 ** 2 * 10) {
       alert('파일 크기는 10MB를 초과할 수 없습니다.');
       return;
     }
-    if (imgFile)
-      setDiary({ ...diary, file: imgFile });
-
+    if (imgFile) setDiary({ ...diary, file: imgFile });
 
     // if (e.target.files?.item(0))
     //   setDiary({ ...diary, file: e.target.files?.item(0) });
@@ -99,14 +104,14 @@ export const GrowthDiaryCreate = () => {
           max={today}
           onChange={(e) => setDiary({ ...diary, date: e.target.value })}
           style={{
-            width: '230px',  
-            height: '40px',  
+            width: '230px',
+            height: '40px',
             marginLeft: '350px',
-            fontSize: '29px', 
-            padding: '5px 10px',  
-            borderRadius: '15px',  
+            fontSize: '29px',
+            padding: '5px 10px',
+            borderRadius: '15px',
             marginTop: '27px',
-            fontFamily: 'Ownglyph_ryuttung-Rg',  
+            fontFamily: 'Ownglyph_ryuttung-Rg',
           }}
         />
       </div>
@@ -162,6 +167,8 @@ export const GrowthDiaryCreate = () => {
           </div>
         </div>
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 };
