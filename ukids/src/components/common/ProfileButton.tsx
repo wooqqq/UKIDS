@@ -61,7 +61,6 @@ const ProfileButton = ({ name }: UserProps) => {
     if (selectedFamilyId) {
       fetchFamilyInfo(selectedFamilyId);
       fetchMemberList(selectedFamilyId);
-      console.log(`Selected family ID has changed: ${selectedFamilyId}`);
     }
   }, [selectedFamilyId, fetchFamilyInfo, fetchMemberList]);
 

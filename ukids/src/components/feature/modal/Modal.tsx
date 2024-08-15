@@ -71,7 +71,6 @@ export const Modal = ({
                 deleteElement();
             }
         }
-        console.log(data);
     }
 
   return (

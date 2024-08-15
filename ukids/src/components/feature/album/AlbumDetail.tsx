@@ -85,8 +85,6 @@ const AlbumDetail: React.FC = () => {
 
     const { data } = await api.delete(url);
 
-    console.log(data);
-
     navigate('/albums');
   };
 
