@@ -69,6 +69,7 @@
     overflow-x: hidden;      
   
     width: 100%;              
+    /* border: 2px solid brown;   */
     margin: 0px 0px 0px 0px;
 
   }
@@ -81,12 +82,26 @@
     
     margin-left: 38px;
     margin-top: 12px;
+   
+
+    
+
+
+
+
+
+
+    
     
     width: 911px;              
     height: 440px;        
          
+   
+  
     overflow-y: hidden;         
     overflow-x: hidden;      
+  
+    /* border: 2px solid brown;   */
   }
   
 
@@ -99,6 +114,10 @@
 
     margin-top: 10px;
     height: 397px; 
+    
+
+
+
     
     align-items: center; /* 아이템들을 중앙에 배치 */
     padding: 1px;  
@@ -123,7 +142,9 @@
 
 /* 날짜*/
 .album-one-date {
+  
     font-size: 24px; /* 폰트 사이즈 조절 */
+    /* border: 2px solid red; */
     font-family: 'ONE-Mobile-POP';
     color: black;
     text-align: center;
@@ -133,10 +154,12 @@
 
 /* 제목*/
 .album-one-title {
+    
     font-size: 24px; /* 폰트 사이즈 조절 */
     font-weight: bold; /* 텍스트를 볼드체로 설정 */
     font-family: 'ONE-Mobile-POP';
    
+    /* height: 30px; */
     width: 100%;
     height: 40px;
     text-align: center;
@@ -145,10 +168,13 @@
 
 /* 하단 페이지 박스*/
 .page-box {
+ 
     height: 50px;        
     margin-top: 1px;
   
+  
     width: 100%;              
+    /* border: 2px solid brown;   */
     display: flex;
     justify-content: center; /* 페이지네이션 버튼을 중앙에 위치시킴 */
     

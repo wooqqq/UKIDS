@@ -133,11 +133,23 @@ textarea.grwoth-input {
   
 }
 
+
+
+
+
+
+
+
+
+
+
 /* 내용을 입력하세요 문구  */
 .input-content::placeholder {
   color: #aaa; /* 플레이스홀더 텍스트 색상 */
   font-style: italic; /* 플레이스홀더 텍스트 스타일 */
 }
+
+
 
 /* 클릭시 색상 */
 .input-content:focus {

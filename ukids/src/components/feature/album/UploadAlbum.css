@@ -64,6 +64,8 @@
 
   left: 50%; /* 중앙 */
   transform: translateX(-50%); /* 중앙 */
+   
+  /* border: solid;  */
 }
 
 
@@ -80,8 +82,10 @@
   width: 32px;
   height: 30px;
   background-color: #fff;
+  /* border: 2px solid rgb(224, 222, 222); */
   border-radius: 4px;
   box-shadow: 1px 6px 8px rgba(0, 0, 0, 0.1);
+  
   
   cursor: pointer;
 
@@ -112,6 +116,7 @@
   padding: 2px;
   overflow: hidden;
   border-radius: 5px;  
+  /* border: 2px solid rgb(223, 221, 221);   */
 }
 
 /*사진 영역 */
@@ -146,6 +151,7 @@
   margin-bottom: 10px;
 
   font-family: 'ONE-Mobile-POP';
+  /* border: 2px solid pink;  */
 }
 
 
@@ -162,8 +168,10 @@
 }
 
 .register-button:hover {
-  background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */  
+  background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
+  
 }
+
 
 
 /* 오른쪽 */
@@ -186,8 +194,10 @@
     margin-left: 423px;
 
     padding: 20px;
-}
+  }
   
+
+
 
 /* 사진 한 개*/
 .photo-card {
@@ -199,6 +209,9 @@
 
   display: flex;
   flex-direction: column;
+
+  /* border: 2px solid pink */
+  
 }
   
 
@@ -222,7 +235,11 @@
   margin-bottom: 20px;
 
   font-family: 'ONE-Mobile-POP';
+
 }
+
+
+
 
 .delete-icon {
   width: 25px;

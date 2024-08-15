@@ -8,7 +8,17 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 246, 252, 255;
+  /* --background-end-rgb: 0, 0, 255; */
 }
+
+/* 다크모드 비활성화 */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */
 
 body {
   background: linear-gradient(
@@ -22,6 +32,7 @@ body {
   background-attachment: fixed;
   padding: 1rem 11rem;
   max-height: 100%;
+  /* overflow: hidden; */
   min-width: 1440px;
   width: 100%;
 
@@ -54,6 +65,7 @@ body {
 /* 기능 박스 수정*/
 .feature-box {
   width: 911px;
+  /* width: 90%; */
   height: 576px;
   flex-shrink: 0;
   border-radius: 20px;
@@ -65,12 +77,14 @@ body {
 /* 기능 박스 (반) */
 .half-feature-box {
   width: 440px;
+  /* width: 43%; */
   height: 576px;
   flex-shrink: 0;
   border-radius: 20px;
   opacity: var(--sds-size-stroke-border);
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
+  /* padding: 30px 15px; */
 }
 
 /* 기능박스 (사이즈, padding값 빠진 것!) */
@@ -83,6 +97,15 @@ body {
 }
 
 @layer base {
+  /* 전체 */
+  /*
+Copyright (c) 2021 Kil Hyung-jin, with Reserved Font Name Pretendard.
+https://github.com/orioncactus/pretendard
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+*/
 
   @font-face {
     font-family: 'Pretendard';

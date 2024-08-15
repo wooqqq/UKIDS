@@ -90,10 +90,17 @@ const Albums: React.FC = () => {
 
       // 2페이지 ~ total page 데이터 불러오기
 
+      // for (let page = 2; page <= totalPages; page++) {
+      //   response = await api.get(`/album/all/${selectedFamilyId}?page=${page}`);
+      //   allAlbums = allAlbums.concat(response.data.result.albumResponseDtoList);
+      // }
+
       // 전달받은 데이터를 albums에 저장
       // 이렇게 하면 albumId, title, date 세 정보만 저장됨
       // 사진은 albumId -> photo all 통해서 가져와야함
       // 이하 코드 참조
+
+      // setAlbums(allAlbums);
 
       const albumsWithPhotos = await Promise.all(
         allAlbums.map(async (album: any): Promise<Album> => {
@@ -106,6 +113,17 @@ const Albums: React.FC = () => {
           };
         }),
       );
+
+      // const albumsWithPhotos = await Promise.all(allAlbums.map(async (album: any): Promise<Album> => {
+      //   const photosResponse = await axios.get<AlbumPhotosResponse>(`https://i11b306.p.ssafy.io/api/photo/all/${album.albumId}`, {
+      //     headers: { 'Authorization': `Bearer ${token}` }
+      //   });
+      //   return {
+      //     ...album,
+      //     photos: photosResponse.data.result.photoList // 타입 에러가 해결되어야 합니다.
+      //   };
+      // }));
+
       setAlbums(albumsWithPhotos);
     } catch (error) {
       console.error('앨범 데이터를 불러오기 실패', error);
@@ -161,7 +179,9 @@ const Albums: React.FC = () => {
                   <Link
                     key={album.albumId}
                     to={`/albums/${album.albumId}`}
+                    
                   >
+
                     <div className="album-one-date">{album.date}</div>
                       {album.photos && album.photos.length > 0 ? (
                         <img
@@ -179,7 +199,9 @@ const Albums: React.FC = () => {
                   
                   </div>
                 ))}
+
             </div>
+
                           <div className="page-box">
                               <Pagination
                                 totalPage={totalPage}
@@ -190,9 +212,15 @@ const Albums: React.FC = () => {
                                 className="page-number"
                               />
                           </div>
+
+
         </div>
+
+         
+        
       )}
     </div>
+    
   );
 };
 

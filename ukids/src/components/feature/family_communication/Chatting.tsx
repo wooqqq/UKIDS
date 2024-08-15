@@ -160,17 +160,35 @@ const FamilyChatting = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
+      // 웹소켓 디버그 관련 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그: ' + str);
+      // },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
+
       // 올바른 stompClientInstance 설정
+      // console.log('Setting stompClientInstance:', client);
       setStompClientInstance(client);
 
       client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
+        // console.log('Received message at ChattingRoom: ', message.body);
         const receivedMessage = JSON.parse(message.body);
+        // console.log('----ReceivedMessage----');
+        // console.log(receivedMessage);
+        // {
+        //   createTime: '2024-08-14T00:13:58.60193821';
+        //   message: '다른 사람';
+        //   roomId: 1;
+        //   sender: '김싸피';
+        //   senderId: 2;
+        //   type: 'TALK';
+        // }
 
         const displayMessage: Message = {
           messageId: receivedMessage.createTime,
@@ -253,6 +271,7 @@ const FamilyChatting = () => {
           <div className="flex-none">
             <form className="flex flex-row justify-center" onSubmit={onSubmit}>
               <textarea
+                // type="text"
                 className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2 pt-3"
                 onChange={(e) => onChange(e)}
                 onKeyDown={onKeyDown}

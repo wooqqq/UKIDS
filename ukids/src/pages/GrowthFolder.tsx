@@ -1,5 +1,7 @@
+// import { useState, EventHandler, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import BlueButton from '../components/common/BlueButton';
+// import { useNavigate } from 'react-router-dom';
 import { GrowthFolderCreateModal } from '@components/feature/growth/GrowthFolderCreateModal';
 import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { GrowthFolderList } from '@/components/feature/growth/GrowthFolderList';

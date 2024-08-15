@@ -98,6 +98,7 @@ const QuizStart = () => {
             inputAnswer: answer,
           }),
         });
+        // console.log('정답이 성공적으로 발행되었습니다.');
       } catch (error) {
         console.error('정답 확인 오류:', error);
       }
@@ -109,6 +110,7 @@ const QuizStart = () => {
   const exitQuizRoom = async () => {
     if (stompClient && stompClient.connected) {
       try {
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClient.publish({
           destination: `/app/quiz/exit`,
           body: JSON.stringify({
@@ -130,15 +132,22 @@ const QuizStart = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
+      // 웹소켓 디버그 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그:', str);
+      // },
     });
 
     client.onConnect = (frame) => {
+      // console.log('웹소켓 연결됨:', frame);
       setStompClient(client);
 
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
           const receivedMessage: GameMessage = JSON.parse(message.body);
+
+          // console.log('received message:', receivedMessage);
 
           switch (receivedMessage.type) {
             case 'QUIZ_QUESTION':
@@ -228,6 +237,8 @@ const QuizStart = () => {
   }, [secondsLeft, isQuestionLoaded]);
 
   const handleAnswerClick = (answer: string) => {
+    // console.log('작성자 : ', quizQuestion?.writer.userId);
+    // console.log('풀이자 : ', userId);
     if (quizQuestion?.writer.userId === userId) {
       alert('자신의 문제에 답변할 수 없습니다.');
       return;

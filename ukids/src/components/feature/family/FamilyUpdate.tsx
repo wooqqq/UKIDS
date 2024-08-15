@@ -119,6 +119,7 @@ const FamilyUpdate = () => {
                         setRepresentative(Number(e.target.value))
                       }
                       className="input-box px-5 w-80 font-semibold text-[#555555]"
+                      // disabled={userInfo?.userId !== family.representative}
                     >
                       {member.map((m) => (
                         <option

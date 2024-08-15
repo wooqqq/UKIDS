@@ -80,6 +80,13 @@ export const UpdateAlbum = () => {
 
     if (imgFile) {
       setSelectedFile(imgFile);
+
+      // 이미지 미리보기 생성
+      // const fileReader = new FileReader();
+      // fileReader.onload = () => {
+      //   setPreviewUrl(fileReader.result as string);
+      // };
+      // fileReader.readAsDataURL(imgFile);
     }
   };
 
@@ -227,6 +234,9 @@ export const UpdateAlbum = () => {
             className="title-input"
           />
       </div>
+
+
+    
       
       {/* 둘째 줄 */}
       <div className="second-container">
@@ -251,8 +261,11 @@ export const UpdateAlbum = () => {
       </div>
       {/* 여기까지 둘째 줄 */}
 
+
+
       {/* 셋째 줄 */}
       <div className="third-container">
+
 
           {/* 파일 업로드 */}
           <div
@@ -273,6 +286,8 @@ export const UpdateAlbum = () => {
             />
           </div>
 
+
+
           <div className="left-container">
               <div className="file-photo-container">
                   {selectedFile && (
@@ -282,6 +297,7 @@ export const UpdateAlbum = () => {
                       alt="Selected"/>
                     )}
               </div>
+
 
               <div className="caption-area">
                 <input
@@ -295,9 +311,12 @@ export const UpdateAlbum = () => {
                 />
                 </div>
 
+
                 <button className="register-button" onClick={handleAddPhoto}>
                   앨범에 넣기
                 </button>
+
+
           </div>
       </div>
 
@@ -337,6 +356,9 @@ export const UpdateAlbum = () => {
                       maxLength={50}
                     />
                   </div>
+
+
+                  
                 </div>
             ))}
         {photos.map((photo, index) => (
@@ -371,7 +393,9 @@ export const UpdateAlbum = () => {
             />
           </div>
 
+
           </div>
+
         ))}
       </div>
       {loading && <Loading />}

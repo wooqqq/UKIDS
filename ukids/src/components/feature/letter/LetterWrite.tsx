@@ -8,6 +8,15 @@ import WhiteBackButton from '@components/common/WhiteBackButton';
 import { jwtDecode } from 'jwt-decode';
 import { Loading } from '@components/feature/loading/Loading';
 
+// interface Letter {
+//   content: string;
+//   createDate: string;
+//   familyName: string;
+//   fromUsername: string;
+//   toUsername: string;
+//   toUserId: number;
+//   isRead: boolean;
+// }
 
 interface UserFamilyDto {
   userId: number;

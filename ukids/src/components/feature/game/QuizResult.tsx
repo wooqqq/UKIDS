@@ -72,18 +72,26 @@ const QuizResult = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
+      // 웹소켓 디버그 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그: ' + str);
+      // },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
       setStompClientInstance(client);
 
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
+          // console.log('Received message:', message.body);
           const receivedMessage: GameMessage = JSON.parse(message.body);
+
+          // console.log('receivedMessage : ', receivedMessage);
 
           switch (receivedMessage.type) {
             case 'GET_QUIZ_ROOM':

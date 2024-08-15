@@ -208,6 +208,17 @@ const UserUpdate = () => {
     }
   };
 
+  // 회원 탈퇴
+  // const onClickDeleteUser = async () => {
+  //   if (userInfo?.userId) {
+  //     try {
+  //       await deleteUser();
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
+
   /////////////////////////////////////////////////////////////
 
   const handleUpdateUser = async (e: React.FormEvent) => {
@@ -412,6 +423,9 @@ const UserUpdate = () => {
             <BlueButton name="수정 완료" type="submit" path="" />
           </div>
         </form>
+        {/* <button className="common-btn red-btn" onClick={onClickDeleteUser}>
+          회원 탈퇴
+        </button> */}
       </div>
     </>
   );

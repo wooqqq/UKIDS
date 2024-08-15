@@ -34,12 +34,28 @@ const UploadAlbum = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // const [selectedFile, setSelectedFile] = useState<Photo | null>(null);
+  
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+
   const [caption, setCaption] = useState('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 
   const { selectedFamilyId } = useFamilyStore();
   const { updateTreeExp } = useTreeStore();
+
+
+
+  // 이미지 검증 과정 추가
+
+  // const handleFileChange = (event: any) => {
+  //   if (event.target.files.length > 0) {
+  //     setSelectedFile(event.target.files[0]);
+  //   }
+  // };
 
   // 이미지 검증을 추가함
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +76,13 @@ const UploadAlbum = () => {
 
     if (imgFile) {
       setSelectedFile(imgFile);
+
+      // 이미지 미리보기 생성
+      // const fileReader = new FileReader();
+      // fileReader.onload = () => {
+      //   setPreviewUrl(fileReader.result as string);
+      // };
+      // fileReader.readAsDataURL(imgFile);
     }
   };
 

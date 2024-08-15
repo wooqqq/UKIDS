@@ -6,9 +6,11 @@ import '../components/common/common.css';
 
 const MyPage = () => {
   const location = useLocation();
+  // const [activeButton, setActiveButton] = useState('');
   const nav = useNavigate();
 
   const handleClick = (path: string) => {
+    // setActiveButton(path); // 클릭된 버튼의 경로를 상태로 저장
     nav(path);
   };
 

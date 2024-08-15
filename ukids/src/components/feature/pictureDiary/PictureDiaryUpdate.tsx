@@ -116,6 +116,10 @@ export const PictureDiaryUpdate = () => {
     fileReader.readAsDataURL(e.target.files[0]);
   };
 
+
+
+
+
   useEffect(() => {
     getDiary();
   }, []);
@@ -143,6 +147,8 @@ export const PictureDiaryUpdate = () => {
       </div>
 
       {/* 상단 목록, 등록 버튼 */}
+
+      {/* <button onClick={createDiary}>등록</button> */}
 
       <div style={{ position: 'absolute', top: '27px', left: '30px' }}>
         <WhiteButton name="목록" path="/paintdiary" />
@@ -178,6 +184,7 @@ export const PictureDiaryUpdate = () => {
         </div>
 
         {loading && <Loading />}
+        {/* <button onClick={updateDiary}>등록</button> */}
       </div>
     </div>
   );

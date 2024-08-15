@@ -66,6 +66,11 @@ interface AuthState {
   checkedPhone: (phone: string) => Promise<void>;
 }
 
+// 자동 로그아웃 테스트
+// localStorage.setItem(
+//   'token',
+//   'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlkIjoidXNlcjEiLCJuYW1lIjoi6rmA7Iu47ZS8IiwicGhvbmUiOiIwMTAtMTIxMi0xMjEyIiwiZW1haWwiOiJ3d3dAYXNzZGYuY29tIiwiaWF0IjoxNzIzMDgwMjUwLCJleHAiOjE3MjMwODM4NTB9.HRFEqm_i66m4JOa5yUEFlNHb7BQkuvV8mW_a-wnc2Sk',
+// );
 const ukidsURL = `https://i11b306.p.ssafy.io`;
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -128,6 +133,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         // 토큰 디코딩
         const decodedToken: User = jwtDecode(token);
         const userId = decodedToken.userId; // 토큰에서 userId 추출
+        // console.log('디코딩!!!!!!!!!!' + decodedToken + userId);
         const response = await api.get(`/user/${userId}`);
         const userData = response.data.result;
 
@@ -150,6 +156,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const userData = response.data.result;
 
       set({ repUserInfo: userData });
+      // console.log(response.data);
     } catch (error) {
       console.error('대표자 정보 가져오기 실패:', error);
     }
@@ -169,6 +176,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
 
       if (response.data.code === 201) {
+        // alert(response.data.result); // '회원 생성 완료' 메시지 표시
         alert('회원가입이 완료되었습니다!');
       }
     } catch (error) {
@@ -235,6 +243,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('비밀번호 확인 실패:', error);
+      // alert('비밀번호 확인에 실패했습니다.');
     }
   },
 
@@ -268,8 +277,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const response = await api.get(`/user/id/${id}`);
       if (response.data.code === 200) {
+        // alert('사용 가능한 ID입니다.');
         return true;
       } else {
+        // alert('이미 사용 중인 ID입니다.');
         return false;
       }
     } catch (error) {
@@ -283,8 +294,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const response = await api.get(`/user/email?email=${email}`);
       if (response.data.result === 'email 중복 없음') {
+        // alert('사용 가능한 이메일입니다.');
         return true;
       } else {
+        // alert('이미 사용 중인 이메일입니다.');
         return false;
       }
     } catch (error) {
@@ -298,8 +311,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const response = await api.get(`/user/phone?phone=${phone}`);
       if (response.data.result === 'phone 중복 없음') {
+        // alert('사용 가능한 전화번호입니다.');
         return true;
       } else {
+        // alert('이미 사용 중인 전화번호입니다.');
         return false;
       }
     } catch (error) {

@@ -12,6 +12,7 @@ import GrowthDiary from './pages/GrowthDiary';
 import GrowthFolder from './pages/GrowthFolder';
 import GameSelect from './pages/GameSelect';
 import Quiz from './pages/Quiz';
+import CallMyName from './pages/CallMyName';
 import FamilyVideoCall from './pages/FamilyCommunication';
 import Setting from './pages/Setting';
 import Notfound from './pages/Notfound';
@@ -61,6 +62,17 @@ const App = () => {
     location.pathname === '/family/create' ||
     location.pathname === '/family/find';
 
+  // 배경색 변경 (회색 그라데이션)
+  // useEffect(() => {
+  //   if (
+  //     location.pathname === '/' ||
+  //     location.pathname === '/login' ||
+  //     location.pathname === '/join'
+  //   ) {
+  //     document.body.style.backgroundColor = '#fff';
+  //   }
+  // }, [location.pathname]);
+
   return (
     <div className="-webkit-user-select:none -moz-user-select:none -ms-user-select:none user-select:none">
       <Header />
@@ -94,6 +106,7 @@ const App = () => {
             <Route path="/chat/*" element={<FamilyVideoCall />} />
             <Route path="/game" element={<GameSelect />}></Route>
             <Route path="/quiz/*" element={<Quiz />} />
+            <Route path="/callmyname/*" element={<CallMyName />} />
             <Route path="/setting/*" element={<Setting />} />
             <Route path="*" element={<Notfound />} />
           </Route>

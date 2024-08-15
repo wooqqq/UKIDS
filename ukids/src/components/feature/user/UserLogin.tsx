@@ -56,6 +56,10 @@ const UserLogin = () => {
           </div>
         </form>
         <div className="flex items-center mt-4 justify-center">
+          {/* <button className="join-find-btn">아이디 찾기</button>
+          <div className="dash-box mx-2"></div>
+          <button className="join-find-btn">비밀번호 찾기</button>
+          <div className="dash-box mx-2"></div> */}
           <button className="join-find-btn" onClick={onClickJoinButton}>
             회원가입
           </button>
