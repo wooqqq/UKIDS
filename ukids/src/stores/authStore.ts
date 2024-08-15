@@ -294,7 +294,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkedEmail: async (email: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/email?email=${email}`);
-      if (response.data.code === 200) {
+      if (response.data.result === 'email 중복 없음') {
         // alert('사용 가능한 이메일입니다.');
         return true;
       } else {
@@ -311,7 +311,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkedPhone: async (phone: string): Promise<boolean> => {
     try {
       const response = await api.get(`/user/phone?phone=${phone}`);
-      if (response.data.code === 200) {
+      if (response.data.result === 'phone 중복 없음') {
         // alert('사용 가능한 전화번호입니다.');
         return true;
       } else {
