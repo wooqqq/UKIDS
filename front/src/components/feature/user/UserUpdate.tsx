@@ -31,11 +31,6 @@ const UserUpdate = () => {
   const [dateError, setDateError] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
-  const [isEmailCheck, setIsEmailCheck] = useState(false); // 중복 검사를 했는지 안했는지
-  const [isPhoneCheck, setIsPhoneCheck] = useState(false); // 중복 검사를 했는지 안했는지
-  const [isEmailAvailable, setIsEmailAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
-  const [isPhoneAvailable, setIsPhoneAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
-
   const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
 
   useEffect(() => {
@@ -141,12 +136,10 @@ const UserUpdate = () => {
   const emailCheckHandler = async (email: string) => {
     const emailRegex = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
     if (email === '') {
-      setEmailError('이메일을 입력해주세요.');
-      setIsEmailAvailable(false);
-      return false;
+      setEmailError('');
+      return true;
     } else if (!emailRegex.test(email)) {
       setEmailError('이메일 형식으로 작성해 주세요. (ex. family01@ukids.com)');
-      setIsEmailAvailable(false);
       return false;
     }
 
@@ -154,12 +147,9 @@ const UserUpdate = () => {
       const responseData = await checkedEmail(email);
       if (responseData) {
         setEmailError('사용 가능한 이메일입니다.');
-        setIsEmailCheck(true);
-        setIsEmailAvailable(true);
         return true;
       } else {
         setEmailError('이미 사용중인 이메일입니다.');
-        setIsEmailAvailable(false);
         return false;
       }
     } catch (error) {
@@ -178,14 +168,12 @@ const UserUpdate = () => {
   const phoneCheckHandler = async (phone: string) => {
     const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
     if (phone === '') {
-      setPhoneError('전화번호를 입력해주세요.');
-      setIsPhoneAvailable(false);
-      return false;
+      setPhoneError('');
+      return true;
     } else if (!phoneRegex.test(phone)) {
       setPhoneError(
         '하이픈(-)을 넣어 전화번호 형식으로 작성해 주세요.(ex. 010-1234-5678)',
       );
-      setIsPhoneAvailable(false);
       return false;
     }
 
@@ -193,12 +181,9 @@ const UserUpdate = () => {
       const responseData = await checkedPhone(phone);
       if (responseData) {
         setPhoneError('사용 가능한 전화번호입니다.');
-        setIsPhoneCheck(true);
-        setIsPhoneAvailable(true);
         return true;
       } else {
         setPhoneError('이미 사용중인 전화번호입니다.');
-        setIsPhoneAvailable(false);
         return false;
       }
     } catch (error) {
@@ -233,24 +218,6 @@ const UserUpdate = () => {
       setPwError('');
       setConfirmError('');
     } else return;
-
-    // 이메일 중복 확인
-    const isCheckedEmail = await checkedEmail(form.email);
-    if (isCheckedEmail) setEmailError('');
-    else return;
-    if (!isEmailCheck || !isEmailAvailable) {
-      alert('이메일 중복 검사를 해주세요.');
-      return;
-    }
-
-    // 전화번호 중복 확인
-    const isCheckedPhone = await checkedPhone(form.phone);
-    if (isCheckedPhone) setPhoneError('');
-    else return;
-    if (!isPhoneCheck || !isPhoneAvailable) {
-      alert('전화번호 중복 검사를 해주세요.');
-      return;
-    }
 
     // 업데이트할 사용자 데이터를 동적으로 생성
     const updateData: any = {
