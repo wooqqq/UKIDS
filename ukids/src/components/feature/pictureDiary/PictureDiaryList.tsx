@@ -73,7 +73,8 @@ const PictureDiaryList = () => {
       setTotalPage(data.result.totalPage);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.errorMessage);
+        // alert(error.response?.data.errorMessage);
+        alert("해당 날짜에 작성한 그림일기가 없어! 만들어볼래?");  // 에러 메시지 변경
       }
       setDiaries([]);
       setTotalPage(0);
