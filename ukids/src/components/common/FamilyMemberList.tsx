@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { useVideoCallStore } from '@stores/videoCallStore';
 import VideoToggleButton from '@components/feature/family_communication/VideoToggleButton';
 import AudioToggleButton from '@components/feature/family_communication/AudioToggleButton';
-import api from '../../util/api';
-import { useFamilyStore } from '../../stores/familyStore';
+import api from '@/util/api';
+import { useFamilyStore } from '@stores/familyStore';
+import CharacterTag from '@components/common/CharaterTag';
 
 interface FamilyMemberListProps {
   isChattingRoom: boolean;
@@ -34,7 +35,7 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
     setIsChatting(false);
 
     // 가족 리스트를 가져와서 구성원을 띄워준다.
-    api.get(`/member/${selectedFamilyId}`).then((response) => {
+    api.get(`/member/${selectedFamilyId}`).then((response: any) => {
       console.log('------------------가족 구성원 리스트----------------------');
       console.log(response.data.result);
       setFamilyList(response.data.result);
@@ -50,8 +51,8 @@ const FamilyMemberList = ({ isChattingRoom }: FamilyMemberListProps) => {
           {familyList.map((family) => {
             return (
               <div key={family.familyMemberId}>
-                <span>{family.userFamilyDto.name}</span>
-                <span>{family.role}</span>
+                <span className="mr-2">{family.userFamilyDto.name}</span>
+                <CharacterTag character={family.role} />
               </div>
             );
           })}
