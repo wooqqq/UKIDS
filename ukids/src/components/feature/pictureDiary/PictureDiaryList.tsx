@@ -118,7 +118,7 @@ const PictureDiaryList = () => {
         <div>
           {diaries.length === 0 ? (
               <div className='non-diary'>
-                해당 날짜의 그림일기가 존재하지 않습니다.
+                해당 날짜에 작성한 그림일기가 없어! 만들어볼래?
               </div>
           ) : (
             <ReactFlipPage

@@ -67,14 +67,14 @@ export const GrowthFolderCreateModal = ({
       <div className="modal-top-container">
         <div className="modal-container">
           <div className="modal-header">
-            <span className="content-title">폴더 생성</span>
+            <span className="content-title">성장일지 폴더 만들기</span>
             <span className="modal-close-button" onClick={onClickCloseButton}>
               X
             </span>
           </div>
 
           <div className="modal-content text-center">
-            <p className="password-label">생성할 폴더 이름을 입력해주세요 </p>
+            <p className="password-label">폴더 이름을 입력하세요. </p>
 
             <input
               id="foldername"

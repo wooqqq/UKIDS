@@ -186,11 +186,11 @@ const Albums: React.FC = () => {
                       {album.photos && album.photos.length > 0 ? (
                         <img
                           src={album.photos[0].imgUrl}
-                          alt={`Image of ${album.title}`}
+                          alt={`사진: ${album.title}`}
                         />
                       ) : (
                         <div className="no-photo">
-                          <img src={diaryIcon} alt="No photo available" />
+                          <img src={diaryIcon} alt="사진 없음" />
                         </div>
                       )}
                       {/* <div className="album-item-date">{album.date}</div> */}

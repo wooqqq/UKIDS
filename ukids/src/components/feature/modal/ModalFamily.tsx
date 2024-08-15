@@ -8,21 +8,20 @@ interface ModalProps {
   content: string;
   modalState: boolean;
   setModalState: React.Dispatch<React.SetStateAction<boolean>>;
-  deleteElement: () => void;
+  deleteElement: (password: string) => void;
 }
 
-export const Modal = ({
+export const ModalFamily = ({
   content,
   modalState,
   setModalState,
   deleteElement,
 }: ModalProps) => {
   const { selectedFamilyId } = useFamilyStore();
-  const navigate = useNavigate();
-  // const modalRef = useRef<HTMLDivElement>(null);
   const { token } = useAuthStore();
 
   const [password, setPassword] = useState<string>();
+  const [error, setError] = useState('');
 
   const onClickCloseButton = () => {
     setModalState(!modalState);
@@ -50,6 +49,10 @@ export const Modal = ({
   if (!modalState) return null;
 
   const checkPassword = async () => {
+    if (!password) {
+      setError('비밀번호가 입력되지 않았습니다.');
+      return;
+    }
     const url = '/family/pwcheck';
     const config = {
       // 삭제용 familyId
@@ -66,7 +69,7 @@ export const Modal = ({
       alert('비밀번호가 일치하지 않습니다.');
     } else {
       if (confirm('삭제하시겠습니까?')) {
-        deleteElement();
+        deleteElement(password);
       }
     }
     console.log(data);
@@ -85,6 +88,9 @@ export const Modal = ({
 
           <div className="modal-content text-center">
             <p className="password-label">가족방 비밀번호를 입력해주세요</p>
+            <p className="password-label text-[#F03F2F]">
+              {error ? error : ''}
+            </p>
 
             <input
               type="password"
