@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import gameExplain from '@/assets/game_explain.png';
-import '@components/feature/game/gamepart.css';
 import { Client, IMessage } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@stores/authStore';
 import { useFamilyStore } from '@stores/familyStore';
+import CharacterTag from '@components/common/CharaterTag';
+import ImageSlider from '@components/common/ImageSlider';
 import ReadyCall from '@components/feature/game/ReadyCall';
 import VideoToggleButton from '@components/feature/family_communication/VideoToggleButton';
 import AudioToggleButton from '@components/feature/family_communication/AudioToggleButton';
-import ImageSlider from '@components/common/ImageSlider';
+import '@components/feature/game/gamepart.css';
+import gameExplain from '@/assets/game_explain.png';
 import example_game1 from '@/assets/example_gamming.png';
 import example_game2 from '@/assets/example_result.png';
-import CharacterTag from '../../common/CharaterTag';
 
 interface Participant {
   userName: string;
