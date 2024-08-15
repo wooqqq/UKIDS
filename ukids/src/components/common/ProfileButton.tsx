@@ -124,7 +124,7 @@ const ProfileButton = ({ name }: UserProps) => {
                     familyList.find(
                       (familyList) => familyList.familyId === selectedFamilyId,
                     )?.name) ||
-                  ''
+                  '가족방을 선택하세요!'
                 : '가족방을 만들어보세요!'}
             </div>
             {/* 대표자 표시 */}
