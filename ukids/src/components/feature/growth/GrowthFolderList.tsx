@@ -28,13 +28,12 @@ export const GrowthFolderList = () => {
 
   const getFolderList = async () => {
     // 3번을 familyId로
-    // 1->6
     const url = `/growth-folder/all/${selectedFamilyId}?size=10`;
 
     const { data } = await api.get(url);
 
     console.log(data.result);
-    console.log('강경민');
+    
     setFolders(data.result.growthFolders);
   };
 
@@ -59,27 +58,30 @@ export const GrowthFolderList = () => {
 
   return (
     <div className="feature-box">
-      {/* 메인 오른쪽 : 만들기 버튼 */}
-      <div style={{ marginLeft: '764px', marginTop: '33px' }}>
-        <BlueButton name="만들기" path="/" onClick={onModalOpen} />
-      </div>
 
-      {/* 메인 왼쪽 : 제목 */}
-      <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
+      {/* 메인 글자 */}
+      <div className="main-label">
         성장일지 폴더 ({folders.length}개)
       </div>
+
+      {/* 메인 오른쪽 : 만들기 버튼 */}
+      <div style={{ marginLeft: '764px', marginTop: '33px' }}>
+        <BlueButton name=" 만들기" path="/" onClick={onModalOpen} />
+      </div>
+
+
+
 
       {/* 이하 내용물 영역 */}
 
       {/* 게시글이 없을 때  */}
       {folders.length === 0 ? (
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
+        <div className="nothing-message">
           아직 성장일지 폴더가 없어요!
           <br />
-          성장일지 폴더를 만들러 가볼까요?
+          아이의 성장일지 폴더를 만들러 가볼까요?
         </div>
       ) : (
-        // 각각의 아이템 : 폴더 list item
         <div className="folder-container">
           <div className="folder-scrollable">
             {folders.map((item) => (
