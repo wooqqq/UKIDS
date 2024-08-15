@@ -374,7 +374,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         familyId,
       });
       if (response.data.code === 201) {
-        // alert('역할 설정이 완료되었습니다.');
+        alert('역할 설정이 완료되었습니다.');
       }
     } catch (error: any) {
       console.error('Error approving family member', error);

@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-import BlueButton from '../../common/BlueButton';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFamilyStore } from '@stores/familyStore';
+import BlueButton from '@components/common/BlueButton';
 
 const FamilyCreate = () => {
   const [name, setName] = useState('');

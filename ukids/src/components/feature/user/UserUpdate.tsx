@@ -15,11 +15,14 @@ const UserUpdate = () => {
     role: 'ROLE_USER',
   });
 
-  const userInfo = useAuthStore((state) => state.userInfo);
-  const updateUser = useAuthStore((state) => state.updateUser);
-  const getUserInfo = useAuthStore((state) => state.getUserInfo);
-  const checkedEmail = useAuthStore((state) => state.checkedEmail);
-  const checkedPhone = useAuthStore((state) => state.checkedPhone);
+  const {
+    userInfo,
+    updateUser,
+    getUserInfo,
+    checkedEmail,
+    checkedPhone,
+    deleteUser,
+  } = useAuthStore();
 
   const [pwError, setPwError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -50,6 +53,15 @@ const UserUpdate = () => {
       });
     }
   }, [userInfo]);
+  const onClickDeleteUser = async () => {
+    if (userInfo?.userId) {
+      try {
+        await deleteUser();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleUpdateUser = async (e: React.FormEvent) => {
     e.preventDefault(); // 폼 제출 시 새로고침 되는 것을 방지
@@ -264,6 +276,9 @@ const UserUpdate = () => {
             <BlueButton name="수정 완료" type="submit" path="" />
           </div>
         </form>
+        <button className="common-btn red-btn" onClick={onClickDeleteUser}>
+          회원 탈퇴
+        </button>
       </div>
     </>
   );
