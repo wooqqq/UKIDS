@@ -5,6 +5,7 @@ import com.modernfamily.ukids.domain.game.quiz.dto.QuizRoom;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRepository;
 import com.modernfamily.ukids.domain.game.quiz.model.repository.QuizRoomRespository;
 import com.modernfamily.ukids.domain.game.quizQuestion.dto.response.QuizQuestionRandomResponseDto;
+import com.modernfamily.ukids.domain.game.quizResult.dto.QuizResultSaveDto;
 import com.modernfamily.ukids.domain.game.quizResult.model.service.QuizResultService;
 import com.modernfamily.ukids.domain.webrtc.model.service.WebrtcService;
 import com.modernfamily.ukids.global.exception.CustomException;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -155,8 +157,8 @@ public class QuizService {
             quizRoomRespository.changeHost(quizRooms.get(familyId), userId);
             isState = true;
 
-            quizRoomRespository.generateQuiz(quizRooms.get(familyId));
             quizRoomRespository.startGame(quizRooms.get(familyId));
+            quizRoomRespository.generateQuiz(quizRooms.get(familyId));
 
         }
         response.put("type", "IS_READY_GAME");
@@ -183,8 +185,12 @@ public class QuizService {
         if(quizQuestion == null) {
             response.put("gameState", "END");
 
-            quizResultService.saveGameResult(quizRepository.endGame(familyId, quizRooms.get(familyId)));
-            quizRoomRespository.endGame(quizRooms.get(familyId));
+            List<QuizResultSaveDto> result = quizRepository.endGame(familyId, quizRooms.get(familyId));
+            if(result != null){
+                quizResultService.saveGameResult(quizRepository.endGame(familyId, quizRooms.get(familyId)));
+                quizRoomRespository.endGame(quizRooms.get(familyId));
+                quizRooms.remove(familyId);
+            }
             return response;
         }
 
