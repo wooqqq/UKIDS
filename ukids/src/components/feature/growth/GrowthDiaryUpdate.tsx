@@ -85,14 +85,30 @@ export const GrowthDiaryUpdate = () => {
   };
 
   const changeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      const fileReader = new FileReader();
-      fileReader.onloadend = () => {
-        setPreviewUrl(fileReader.result as string); // 미리보기 URL 업데이트
-      };
-      fileReader.readAsDataURL(e.target.files[0]);
-      setDiary({ ...diary, file: e.target.files[0] });
+    const imgFile = e.target.files?.item(0);
+    const fileType = imgFile?.type;
+
+    if(!fileType?.includes('image') || fileType?.includes('image/gif')){
+      alert('이미지(.gif 제외) 파일만 업로드 할 수 있습니다.');
+      return;
     }
+    if(imgFile && imgFile.size > (1024 ** 2 * 10)){
+      alert('파일 크기는 10MB를 초과할 수 없습니다.');
+      return;
+    }
+    if (imgFile)
+      setDiary({ ...diary, file: imgFile });
+
+
+    // if (e.target.files?.item(0))
+    //   setDiary({ ...diary, file: e.target.files?.item(0) });
+
+    // 추가 : 이미지 미리보기
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrl(fileReader.result as string);
+    };
+    fileReader.readAsDataURL(e.target.files[0]);
   };
 
   useEffect(() => {

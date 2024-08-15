@@ -1,7 +1,7 @@
 .container {
-  display: flex;       /* Flexbox를 활성화 */
-  align-items: flex-start; /* 자식 요소들을 컨테이너의 상단에 정렬 */
-  gap: 10px;           /* 요소 사이의 간격 설정 */
+  display: flex;      
+  align-items: flex-start;  
+  gap: 10px;           
 }
 
 .image-box{
@@ -10,6 +10,8 @@
   
 }
 
+
+/* 사진 등록 박스*/
 .input-file-box{
 
   position: relative;
@@ -50,12 +52,11 @@
 
 /* 이미지미리보기 */
 .input-file-box img {
-  width: 100%;   /* 이미지 너비 */
-  height: 100%;  /* 이미지 높이 */
-  object-fit: cover; /* 이미지 비율 유지하며 박스 채움 */
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 400px; /* 이미지 너비 */
+  height: 439px;
+
+  
+  object-fit: contain; /*비율 유지*/
 }
 
 
@@ -68,7 +69,7 @@
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: 15px; /* 제목과 내용 입력창 사이의 간격 */
+  gap: 15px;  
 }
 
 #title {
@@ -89,15 +90,15 @@
 
 
   padding: 10px; 
-  box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 설정 */
+  box-sizing: border-box;  
 
   font-family: 'Ownglyph_ryuttung-Rg', sans-serif;
-  font-size: 36px; /* 폰트 크기 설정 */
-  text-align: center; /* 텍스트 가운데 정렬 */
+  font-size: 36px;  
+  text-align: center;  
 
    /* 포커스 상태에서 테두리 제거 */
    &:focus {
-    outline: none; /* 아웃라인 제거 */
+    outline: none;  
    
   }
 
@@ -110,32 +111,23 @@ textarea.grwoth-input {
   height: 380px;
 
 
+  margin-left: 20px;  
+  border-radius: 15px; 
 
-  
-  /* flex-shrink: 0;
-  fill: #FFF;
-  stroke-width: 3px; */
- 
-  /* opacity: var(--sds-size-stroke-border);
-  filter: drop-shadow(0px 0px 7px rgba(153, 153, 153, 0.25));  */
-
-  margin-left: 20px; /* 왼쪽 마진 추가 */
-  border-radius: 15px; /* 테두리를 둥글게 */
-
-  font-family: 'Ownglyph_ryuttung-Rg', sans-serif; /* 폰트 패밀리에 'UhBeejung' 추가 */
+  font-family: 'Ownglyph_ryuttung-Rg', sans-serif;  
 
 
-  font-size: 26px; /* 폰트 크기 설정 */
+  font-size: 26px; 
 
-  color: #333; /* 입력 텍스트 색상 */
+  color: #333;  
 
   overflow-y: auto;
 
-  padding: 15px; /* 내부 간격  */
+  padding: 15px; 
 
-  /* 포커스 상태에서 테두리 제거 */
+   
   &:focus {
-    outline: none; /* 아웃라인 제거 */
+    outline: none;
    
   }
   
