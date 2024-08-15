@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import './gamepart.css';
+import '@components/feature/game/gamepart.css';
 
 interface GameButtonProps {
   name: string;

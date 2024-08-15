@@ -3,7 +3,8 @@ import api from '@/util/api.ts';
 import { Link, useParams } from 'react-router-dom';
 import BlueButton from '@components/common/BlueButton';
 import { LetterItem } from '@components/feature/letter/LetterItem';
-import {Pagination} from '@components/feature/pagination/Pagination.tsx';
+import { Pagination } from '@components/feature/pagination/Pagination.tsx';
+import '@components/feature/letter/letter.css';
 
 interface Letter {
   letterId: number;
@@ -25,21 +26,21 @@ export const LetterList = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   // 페이지 당 게시글 개수
-  const size: number = 5 ;
+  const size: number = 15;
 
   const handlePageChange = (page: number) => {
     setPage(page);
-  }
+  };
 
   const isExistLetterDiv = () => {
     // 받은 편지함
     if (!state) {
       if (letters.length === 0) {
         return (
-          <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
+          <div className="h-full flex justify-center items-center text-[30px] font-light text-[#8e8e8e] text-center">
             아직 받은 편지가 없어요!
             <br />
-            면저 편지를 쓰러 가볼까요?
+            먼저 편지를 쓰러 가볼까요?
           </div>
         );
       } else {
@@ -56,15 +57,15 @@ export const LetterList = () => {
     } else {
       if (letters.length === 0) {
         return (
-          <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 text-[30px] font-['Pretendard'] font-light text-[#8e8e8e] text-center whitespace-nowrap">
+          <div className="h-full flex justify-center items-center text-[30px] font-light text-[#8e8e8e] text-center">
             아직 보낸 편지가 없어요!
             <br />
-            면저 편지를 쓰러 가볼까요?
+            먼저 편지를 쓰러 가볼까요?
           </div>
         );
       } else {
         return (
-          <div>
+          <div className="h-full grid grid-cols-5 grid-rows-3 place-items-center auto-rows-max">
             {letters.map((item) => (
               <Link to={`/letters/${item.letterId}`} state={{ state: state }}>
                 <LetterItem key={item.letterId} letter={item} state={state} />
@@ -88,46 +89,43 @@ export const LetterList = () => {
     setTotalPage(data.result.totalPages);
   };
 
-  // useEffect(() => {
-  //   getLetters();
-  // }, []);
-
   useEffect(() => {
     getLetters();
   }, [state, page]);
 
   return (
-    <div>
-      <div className="absolute left-0 top-0 w-[911px] h-[576px] shadow-[0_0_15px_rgba(153,153,153,0.25)] rounded-xl">
-        <div className="absolute left-0 right-0 top-0 bottom-0 bg-[#fff] rounded-[20px]"></div>
-      </div>
-      <div className="absolute left-[764px] top-[23px]">
+    <div className="feature-box flex flex-col items-center">
+      {/* 상단 영역 */}
+      <div className="h-[15%] w-[90%] flex justify-between items-center">
+        <div>
+          <button
+            onClick={() => {
+              setState(false);
+              handlePageChange(1);
+            }}
+            className={`header-font ${!state && 'selected'}`}
+          >
+            받은 편지함
+          </button>
+          <span className="header-font"> | </span>
+          <button
+            onClick={() => {
+              setState(true);
+              handlePageChange(1);
+            }}
+            className={`header-font ${state && 'selected'}`}
+          >
+            보낸 편지함
+          </button>
+        </div>
         <BlueButton name="편지쓰기" path={`/letters/write`} />
       </div>
-      <button
-        onClick={() => {
-          setState(false);
-          handlePageChange(1);
-        }}
-        className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap"
-      >
-        받은 편지함
-      </button>
-      <button
-        onClick={() => {
-          setState(true)
-          handlePageChange(1);
-        }}
-        className="absolute left-[128px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333] whitespace-nowrap"
-      >
-        보낸 편지함
-      </button>
 
+      {/* 본문 영역 */}
+      <div className="h-[75%] w-[90%]">{isExistLetterDiv()}</div>
 
-      <div className="relative mt-40">
-        {isExistLetterDiv()}
-      </div>
-      <div className='relative'>
+      {/* 하단 페이지 선택 버튼 */}
+      <div className="h-[10%]">
         <Pagination
           totalPage={totalPage}
           size={size}
