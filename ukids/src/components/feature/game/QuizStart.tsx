@@ -71,7 +71,6 @@ const QuizStart = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const getQuestion = async () => {
-    console.log('퀴즈 가져오는 중...');
     if (stompClient && stompClient.connected) {
       try {
         stompClient.publish({
@@ -80,7 +79,7 @@ const QuizStart = () => {
             familyId: selectedFamilyId,
           }),
         });
-        console.log('퀴즈 요청 완료');
+        // console.log('퀴즈 요청 완료');
       } catch (error) {
         console.error('퀴즈 요청 오류:', error);
       }
@@ -90,7 +89,6 @@ const QuizStart = () => {
   };
 
   const checkAnswer = async (answer: string) => {
-    console.log('정답 제출 중...', answer);
     if (stompClient && stompClient.connected) {
       try {
         stompClient.publish({
@@ -100,12 +98,30 @@ const QuizStart = () => {
             inputAnswer: answer,
           }),
         });
-        console.log('정답이 성공적으로 발행되었습니다.');
+        // console.log('정답이 성공적으로 발행되었습니다.');
       } catch (error) {
         console.error('정답 확인 오류:', error);
       }
     } else {
       console.log('STOMP 클라이언트가 연결되어 있지 않습니다.');
+    }
+  };
+
+  const exitQuizRoom = async () => {
+    if (stompClient && stompClient.connected) {
+      try {
+        // console.log('stompClientInstance:', stompClientInstance);
+        stompClient.publish({
+          destination: `/app/quiz/exit`,
+          body: JSON.stringify({
+            familyId: selectedFamilyId,
+          }),
+        });
+      } catch (error) {
+        console.error('게임방 퇴장 오류:', error);
+      }
+    } else {
+      console.log('stompClientInstance is null or message is empty');
     }
   };
 
@@ -116,13 +132,14 @@ const QuizStart = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
-      debug: (str) => {
-        console.log('웹소켓 디버그:', str);
-      },
+      // 웹소켓 디버그 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그:', str);
+      // },
     });
 
     client.onConnect = (frame) => {
-      console.log('웹소켓 연결됨:', frame);
+      // console.log('웹소켓 연결됨:', frame);
       setStompClient(client);
 
       client.subscribe(
@@ -130,7 +147,7 @@ const QuizStart = () => {
         (message: IMessage) => {
           const receivedMessage: GameMessage = JSON.parse(message.body);
 
-          console.log('received message:', receivedMessage);
+          // console.log('received message:', receivedMessage);
 
           switch (receivedMessage.type) {
             case 'QUIZ_QUESTION':
@@ -181,15 +198,25 @@ const QuizStart = () => {
   }, [stompClient]);
 
   useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (stompClient) {
+        exitQuizRoom();
+      }
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    };
+  }, []);
+
+  useEffect(() => {
     let timerId: NodeJS.Timeout | null = null;
 
     if (isQuestionLoaded) {
       if (secondsLeft > 0) {
         timerId = setTimeout(() => setSecondsLeft((prev) => prev - 1), 1000);
       } else if (secondsLeft === 0) {
-        if (inputAnswer === '') {
-          checkAnswer('');
-        } else checkAnswer(inputAnswer);
+        checkAnswer(inputAnswer);
 
         setModalMessage(`정답: ${answer}`);
         setShowModal(true);
@@ -198,6 +225,8 @@ const QuizStart = () => {
         }, 1000);
         resetTimer();
         setIsQuestionLoaded(false);
+        setIsLoading(true);
+        setOptions([]);
         getQuestion();
       }
     }
@@ -208,8 +237,8 @@ const QuizStart = () => {
   }, [secondsLeft, isQuestionLoaded]);
 
   const handleAnswerClick = (answer: string) => {
-    console.log('작성자 : ', quizQuestion?.writer.userId);
-    console.log('풀이자 : ', userId);
+    // console.log('작성자 : ', quizQuestion?.writer.userId);
+    // console.log('풀이자 : ', userId);
     if (quizQuestion?.writer.userId === userId) {
       alert('자신의 문제에 답변할 수 없습니다.');
       return;
@@ -236,7 +265,7 @@ const QuizStart = () => {
 
       <div className="h-[20%] flex justify-center items-center text-3xl">
         {isLoading ? (
-          <p>준비중...</p>
+          <p>문제를 가져오고 있습니다...</p>
         ) : (
           <p>
             {quizQuestion?.writer.name}이(가) {quizQuestion?.question}

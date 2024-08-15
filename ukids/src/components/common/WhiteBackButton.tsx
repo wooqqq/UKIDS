@@ -4,7 +4,7 @@ interface BtnProps {
   path: string;
 }
 
-const GameBackButton = ({ path }: BtnProps) => {
+const WhiteBackButton = ({ path }: BtnProps) => {
   const nav = useNavigate();
   const onClick = () => {
     nav(path);
@@ -20,4 +20,4 @@ const GameBackButton = ({ path }: BtnProps) => {
   );
 };
 
-export default GameBackButton;
+export default WhiteBackButton;

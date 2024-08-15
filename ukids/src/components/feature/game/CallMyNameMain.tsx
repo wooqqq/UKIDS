@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import GameBackButton from './GameBackButton';
+import GameBackButton from '../../common/WhiteBackButton';
 import gameExplain from '@/assets/game_explain.png';
 import './gamepart.css';
 

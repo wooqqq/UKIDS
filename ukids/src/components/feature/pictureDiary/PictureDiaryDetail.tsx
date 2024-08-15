@@ -45,7 +45,6 @@ export const PictureDiaryDetail = () => {
       return;
     }
     navigate('/paintdiary');
-    console.log(data);
   };
 
   useEffect(() => {

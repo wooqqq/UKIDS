@@ -17,6 +17,7 @@ interface Diary {
 export const GrowthDiaryUpdate = () => {
   // 안됨
   // const {folderId} = useParams();
+  const today = new Date().toISOString().split('T')[0];
 
   // url 직접 추출
   const location = useLocation();
@@ -45,8 +46,6 @@ export const GrowthDiaryUpdate = () => {
 
     const { data } = await api.get(url);
 
-    console.log(data);
-    console.log(111111);
     setDiary(data.result);
     setImageName(data.result.imageName);
     setPreviewUrl(data.result.imageUrl);
@@ -81,10 +80,7 @@ export const GrowthDiaryUpdate = () => {
       },
     });
 
-    console.log(data);
     // 수정: 현재의 폴더 아이디도 함께 전달
-    console.log(11111111111);
-    console.log(folderId);
     navigate(`/growthdiary/diary/${recordId}?folderId=${folderId}`);
   };
 
@@ -110,6 +106,7 @@ export const GrowthDiaryUpdate = () => {
         <input
           type="date"
           value={diary.date}
+          max={today}
           onChange={(e) => setDiary({ ...diary, date: e.target.value })}
           style={{
             width: '230px', // 너비 조정

@@ -13,7 +13,7 @@ const Schedule = () => {
   const [scheduleId, setScheduleId] = useState<string>();
 
   useEffect(() => {
-    console.log('path: ', location.pathname);
+    // console.log('path: ', location.pathname);
     const segments = location.pathname.split('/').filter(Boolean);
     setScheduleId(segments[segments.length - 1]);
   }, []);

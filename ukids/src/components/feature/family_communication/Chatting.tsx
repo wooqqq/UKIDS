@@ -48,7 +48,7 @@ const FamilyChatting = () => {
       e.preventDefault();
       sendMessage();
     }
-  }
+  };
 
   // 스크롤 맨 밑으로 내리기
   const scrollToBottom = () => {
@@ -63,15 +63,13 @@ const FamilyChatting = () => {
 
     const { data } = await api.get(url);
 
-    console.log('chats : ', data);
-
     const formattedMessages = data.map((chat: any) => ({
       messageId: chat.createTime,
       content: chat.message,
       sender: chat.sender,
       user_id: chat.senderId,
       is_delete: false,
-      create_time: chat.createTime,
+      create_time: chat.createTime.substring(11, 16),
       update_time: chat.createTime,
     }));
 
@@ -82,10 +80,8 @@ const FamilyChatting = () => {
 
   // 채팅방 입장
   const enterChatRoom = async () => {
-    console.log('Enter chat room');
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: '/pub/chat/message',
           body: JSON.stringify({
@@ -106,14 +102,12 @@ const FamilyChatting = () => {
   const exitChatRoom = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/pub/chat/leave`,
           body: JSON.stringify({
             familyId: selectedFamilyId,
           }),
         });
-        console.log('채팅방 퇴장');
       } catch (error) {
         console.error('채팅방 퇴장 오류:', error);
       }
@@ -124,14 +118,12 @@ const FamilyChatting = () => {
 
   // 메세지 전송
   const sendMessage = async () => {
-    console.log('Sending message:', message);
     if (
       stompClientInstance &&
       stompClientInstance.connected &&
       message.trim() !== ''
     ) {
       try {
-        console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: '/pub/chat/message',
           body: JSON.stringify({
@@ -168,26 +160,27 @@ const FamilyChatting = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
-      debug: (str) => {
-        console.log('웹소켓 디버그: ' + str);
-      },
+      // 웹소켓 디버그 관련 console.log
+      // debug: (str) => {
+      //   console.log('웹소켓 디버그: ' + str);
+      // },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
-      console.log('WebSocket 연결이 열렸습니다.', frame);
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
 
       // 올바른 stompClientInstance 설정
-      console.log('Setting stompClientInstance:', client);
+      // console.log('Setting stompClientInstance:', client);
       setStompClientInstance(client);
 
       client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
-        console.log('Received message at ChattingRoom: ', message.body);
+        // console.log('Received message at ChattingRoom: ', message.body);
         const receivedMessage = JSON.parse(message.body);
-        console.log('----ReceivedMessage----');
-        console.log(receivedMessage);
+        // console.log('----ReceivedMessage----');
+        // console.log(receivedMessage);
         // {
         //   createTime: '2024-08-14T00:13:58.60193821';
         //   message: '다른 사람';
@@ -203,7 +196,7 @@ const FamilyChatting = () => {
           user_id: receivedMessage.senderId,
           sender: receivedMessage.sender,
           is_delete: false,
-          create_time: receivedMessage.createTime,
+          create_time: receivedMessage.createTime.substring(11, 16),
           update_time: receivedMessage.createTime,
         };
         setMessages((prevMessages) => {
@@ -267,6 +260,7 @@ const FamilyChatting = () => {
                     message={storedMessage.content}
                     sender={storedMessage.sender}
                     isSender={storedMessage.user_id === userId}
+                    timestamp={storedMessage.create_time}
                   />
                 </div>
               ))
@@ -278,12 +272,12 @@ const FamilyChatting = () => {
             <form className="flex flex-row justify-center" onSubmit={onSubmit}>
               <textarea
                 // type="text"
-                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2"
-                onChange={onChange}
+                className="flex-grow h-[50px] bg-white rounded-[5px] border border-[#999999] mx-2 ml-4 p-2 pt-3"
+                onChange={(e) => onChange(e)}
                 onKeyDown={onKeyDown}
                 value={message}
                 rows={2}
-                style={{resize: 'none', overflowY: 'auto'}}
+                style={{ resize: 'none', overflowY: 'auto' }}
                 placeholder="메시지를 입력하세요"
               />
               <BlueButton name="전송" path="" />

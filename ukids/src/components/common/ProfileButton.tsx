@@ -61,7 +61,6 @@ const ProfileButton = ({ name }: UserProps) => {
     if (selectedFamilyId) {
       fetchFamilyInfo(selectedFamilyId);
       fetchMemberList(selectedFamilyId);
-      console.log(`Selected family ID has changed: ${selectedFamilyId}`);
     }
   }, [selectedFamilyId, fetchFamilyInfo, fetchMemberList]);
 
@@ -118,7 +117,7 @@ const ProfileButton = ({ name }: UserProps) => {
         <div className="inline-block profile-name">{name}</div>
         <button onClick={handleClick} className="profile-btn">
           <div className="flex">
-            <div className="min-w-[120px] text-start  truncate">
+            <div className="min-w-[120px] text-start truncate">
               {familyList.length > 0
                 ? (selectedFamilyId !== null &&
                     familyList.find(

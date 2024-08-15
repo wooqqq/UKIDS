@@ -56,6 +56,10 @@ interface FamilyState {
   // 가족 id
   selectedFamilyId: number | null;
   setSelectedFamilyId: (familyId: number) => void;
+
+  // 가족 선택 확인
+  isFamilySelected: () => boolean;
+
   // 채팅방 id
   chatRoomId: number | null;
 
@@ -119,6 +123,12 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     set({ selectedFamilyId: familyId });
   },
 
+  // 가족 선택 확인하기
+  isFamilySelected: () => {
+    const familyId = localStorage.getItem('selectedFamilyId');
+    return familyId !== null;
+  },
+
   // 가족방 정보 가져오기
   fetchFamilyInfo: async (familyId: number) => {
     try {
@@ -140,7 +150,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
-      console.log('newFamily.familyId : ' + newFamily.familyId);
+      // console.log('newFamily.familyId : ' + newFamily.familyId);
       set({
         family: newFamily,
         error: null,

@@ -3,7 +3,7 @@ import { useVideoCallStore } from '@stores/videoCallStore';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import api from '@/util/api';
-import CallMyNameSession from './CallMyNameSession';
+import CallMyNameSession from '@components/feature/game/CallMyNameSession';
 import { useNavigate } from 'react-router-dom';
 
 interface JwtPayload {
