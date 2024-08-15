@@ -13,18 +13,18 @@ public interface LetterService {
     void deleteLetter(Long letterId);
 
     // 로그인한 사용자가 toUser(수신인)인 경우
-    LetterListPagenationResponseDto getLetterListByToUser(int size, int page);
+    LetterListPagenationResponseDto getLetterListByToUser(int size, int page, Long familyId);
 
     // 로그인한 사용자가 fromUser(발신인)인 경우
-    LetterListPagenationResponseDto getLetterListByFromUser(int size, int page);
+    LetterListPagenationResponseDto getLetterListByFromUser(int size, int page, Long familyId);
 
     // 편지 상세 조회
     LetterResponseDto getLetterById(Long letterId);
 
     // 받은 편지 개수 조회
-    long getLetterCount();
+    long getLetterCount(Long familyId);
 
     // 읽은 편지 개수 조회
-    long getReadLetterCount();
+    long getReadLetterCount(Long familyId);
 
 }

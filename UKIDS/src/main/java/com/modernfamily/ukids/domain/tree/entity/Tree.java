@@ -11,7 +11,6 @@ import org.hibernate.annotations.Where;
 @Entity
 @NoArgsConstructor
 @Getter
-@Where(clause = "is_complete = false")
 public class Tree extends BaseTimeEntity {
 
     @Id
@@ -24,10 +23,6 @@ public class Tree extends BaseTimeEntity {
     @ColumnDefault("false")
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isComplete;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "tree_type_id")
-//    private TreeType treeType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id")

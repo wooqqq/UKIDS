@@ -39,19 +39,21 @@ public class LetterController {
     }
 
     // 요청 사용자 id가 받은 편지 리스트 조회
-    @GetMapping("/to")
+    @GetMapping("/to/{id}")
     public ResponseEntity<?> getReceivedLetters(@RequestParam(value = "size", defaultValue = "5") int size,
-                                                @RequestParam(value = "page", defaultValue = "1") int page) {
+                                                @RequestParam(value = "page", defaultValue = "1") int page,
+                                                @PathVariable("id") Long familyId) {
 
-        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterListByToUser(size, page));
+        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterListByToUser(size, page, familyId));
     }
 
     // 요청 사용자 id가 보낸 편지 리스트 조회
-    @GetMapping("/from")
+    @GetMapping("/from/{id}")
     public ResponseEntity<?> getSentLetters(@RequestParam(value = "size", defaultValue = "5") int size,
-                                            @RequestParam(value = "page", defaultValue = "1") int page) {
+                                            @RequestParam(value = "page", defaultValue = "1") int page,
+                                            @PathVariable("id") Long familyId) {
 
-        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterListByFromUser(size, page));
+        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterListByFromUser(size, page, familyId));
     }
 
     // 편지 내용 상세 조회
@@ -61,16 +63,16 @@ public class LetterController {
         return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterById(letterId));
     }
 
-    @GetMapping("/receive")
-    public ResponseEntity<?> getLetterCount() {
+    @GetMapping("/receiveCount/{id}")
+    public ResponseEntity<?> getLetterCount(@PathVariable("id") Long familyId) {
 
-        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterCount());
+        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterCount(familyId));
     }
 
-    @GetMapping("/readCount")
-    public ResponseEntity<?> getReadLetterCount() {
+    @GetMapping("/readCount/{id}")
+    public ResponseEntity<?> getReadLetterCount(@PathVariable("id") Long familyId) {
 
-        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getReadLetterCount());
+        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getReadLetterCount(familyId));
     }
 
 }
