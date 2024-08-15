@@ -6,7 +6,6 @@ import com.modernfamily.ukids.domain.letter.dto.response.LetterListResponseDto;
 import com.modernfamily.ukids.domain.letter.dto.response.LetterResponseDto;
 import com.modernfamily.ukids.domain.letter.entity.Letter;
 import com.modernfamily.ukids.domain.letter.model.repository.LetterRepository;
-import com.modernfamily.ukids.domain.letter.model.repository.LetterRepositoryCustom;
 import com.modernfamily.ukids.domain.tree.entity.Tree;
 import com.modernfamily.ukids.domain.tree.model.repository.TreeRepository;
 import com.modernfamily.ukids.domain.user.dto.CustomUserDetails;
@@ -133,6 +132,29 @@ public class LetterServiceImpl implements LetterService {
         }
 
         return LetterResponseDto.createResponseDto(letter);
+    }
+
+    // 사용자의 받은 편지 개수 조회
+    @Override
+    public long getLetterCount() {
+        String id = CustomUserDetails.contextGetUserId();
+        User loginUser = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        long count = letterRepository.countByToUser(loginUser);
+
+        return count;
+    }
+
+    @Override
+    public long getReadLetterCount() {
+        String id = CustomUserDetails.contextGetUserId();
+        User loginUser = userRepository.findById(id)
+                .orElseThrow(() -> new ExceptionResponse(CustomException.NOT_FOUND_USER_EXCEPTION));
+
+        long count = letterRepository.countByToUserAndIsRead(loginUser, true);
+
+        return count;
     }
 
 }

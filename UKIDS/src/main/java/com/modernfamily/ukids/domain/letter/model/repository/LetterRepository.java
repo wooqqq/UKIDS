@@ -23,6 +23,10 @@ public interface LetterRepository extends JpaRepository<Letter, Long>, LetterRep
 
     long countByTree_TreeId(Long treeId);
 
+    long countByToUser(User toUser);
+
+    long countByToUserAndIsRead(User toUser, boolean isRead);
+
     @Override
     long updateLettersOpenStatusByTree(Tree tree);
 

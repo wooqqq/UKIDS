@@ -21,4 +21,10 @@ public interface LetterService {
     // 편지 상세 조회
     LetterResponseDto getLetterById(Long letterId);
 
+    // 받은 편지 개수 조회
+    long getLetterCount();
+
+    // 읽은 편지 개수 조회
+    long getReadLetterCount();
+
 }

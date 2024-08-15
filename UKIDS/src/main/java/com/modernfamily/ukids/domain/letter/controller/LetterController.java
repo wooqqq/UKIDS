@@ -61,7 +61,16 @@ public class LetterController {
         return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterById(letterId));
     }
 
-    // 타임캡슐 오픈하여 편지 상태(isOpen)를 true로 변경
-    // 프론트로부터 오픈 요청 받기 (편지 개수 보내기)
+    @GetMapping("/receive")
+    public ResponseEntity<?> getLetterCount() {
+
+        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getLetterCount());
+    }
+
+    @GetMapping("/readCount")
+    public ResponseEntity<?> getReadLetterCount() {
+
+        return responseUtil.createResponse(HttpMethodCode.GET, letterService.getReadLetterCount());
+    }
 
 }
