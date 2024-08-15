@@ -16,8 +16,8 @@ const LetterBox = ({ path }: letterBoxProps) => {
 
   const { selectedFamilyId } = useFamilyStore();
 
-  const [openLetter, setOpenLetter] = useState(-1);
-  const [totalLetter, setTotalLetter] = useState(-1);
+  const [openLetter, setOpenLetter] = useState(0);
+  const [totalLetter, setTotalLetter] = useState(0);
 
   useEffect(() => {
     // 받은 편지 총 개수 가져오기
