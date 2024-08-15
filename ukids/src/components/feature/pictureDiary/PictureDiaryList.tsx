@@ -100,13 +100,11 @@ const PictureDiaryList = () => {
 
   return (
     <div>
-      {/* 메인 오른쪽 만들기 버튼 */}
-      <div style={{ marginLeft: '764px', marginTop: '33px' }}>
-        <BlueButton name=" 만들기 " path="/paintdiary/write" />
-      </div>
+      
+      
 
       {/* 날짜 선택 */}
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '33px'}}>
         <input
           type="date"
           value={diaryDate}
@@ -116,15 +114,27 @@ const PictureDiaryList = () => {
             width: '200px', // 너비 조정
             height: '30px', // 높이 조정
             marginLeft: '350px',
-            fontSize: '20px', // 글자 크기 조정
-            padding: '5px 10px', // 내부 여백 추가
+            fontSize: '25px', // 글자 크기 조정
+            padding: '5px 15px', // 내부 여백 추가
             borderRadius: '15px', // 모서리 둥글게 처리
             fontFamily: 'UhBeejung', // 폰트
+            
+            
           }}
         />
+
+        {/* 메인 오른쪽 만들기 버튼 */}
+        <div  style={{ marginLeft: '214px' }}>
+          <BlueButton name="만들기" path="/paintdiary/write" />
+        </div>
+
+
       </div>
+        
+
+
       {/* 메인 왼쪽 글자 */}
-      <div className="absolute left-[32px] top-[31px] text-[20px] font-['Pretendard'] font-semibold text-[#333]">
+      <div className="main-label">
         그림일기
       </div>
 

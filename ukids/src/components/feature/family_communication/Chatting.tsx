@@ -118,20 +118,12 @@ const FamilyChatting = () => {
 
   // 메세지 전송
   const sendMessage = async () => {
-<<<<<<< HEAD
-=======
-    // console.log('Sending message:', message);
->>>>>>> develop/front
     if (
       stompClientInstance &&
       stompClientInstance.connected &&
       message.trim() !== ''
     ) {
       try {
-<<<<<<< HEAD
-=======
-        // console.log('stompClientInstance:', stompClientInstance);
->>>>>>> develop/front
         stompClientInstance.publish({
           destination: '/pub/chat/message',
           body: JSON.stringify({
@@ -168,29 +160,16 @@ const FamilyChatting = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
-<<<<<<< HEAD
       // 웹소켓 디버그 관련 console.log
       // debug: (str) => {
       //   console.log('웹소켓 디버그: ' + str);
       // },
-=======
-      debug: (str) => {
-        // console.log('웹소켓 디버그: ' + str);
-      },
->>>>>>> develop/front
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     client.onConnect = (frame) => {
-<<<<<<< HEAD
-      // 올바른 stompClientInstance 설정
-      setStompClientInstance(client);
-
-      client.subscribe(`/sub/chat/room/${chatRoomId}`, (message: IMessage) => {
-        const receivedMessage = JSON.parse(message.body);
-=======
       // console.log('WebSocket 연결이 열렸습니다.', frame);
 
       // 올바른 stompClientInstance 설정
@@ -202,7 +181,6 @@ const FamilyChatting = () => {
         const receivedMessage = JSON.parse(message.body);
         // console.log('----ReceivedMessage----');
         // console.log(receivedMessage);
->>>>>>> develop/front
         // {
         //   createTime: '2024-08-14T00:13:58.60193821';
         //   message: '다른 사람';
