@@ -30,6 +30,13 @@
 /* 버튼 색상 수정 */
 
 :root {
+  /* background-color: rgba(0, 0, 0, 0.1);
+  --fc-button-bg-color: rgba(0, 0, 0, 0.1);
+  --fc-button-border-color: rgba(0, 0, 0, 0.1);
+  --fc-button-hover-bg-color: rgba(0, 0, 0, 0.1);
+  --fc-button-hover-border-color: rgba(0, 0, 0, 0.1);
+  --fc-button-active-bg-color: rgba(0, 0, 0, 0.1);
+  --fc-button-active-border-color: rgba(0, 0, 0, 0.1); */
   --fc-button-text-color: #000;
   --fc-button-bg-color: transparent;
   --fc-button-border-color: transparent;

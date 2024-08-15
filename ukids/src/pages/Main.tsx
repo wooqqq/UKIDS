@@ -1,12 +1,16 @@
+// Main.tsx
+
 import { useNavigate } from 'react-router-dom';
 import { useFamilyStore } from '@/stores/familyStore';
 import LetterBox from '../components/feature/letter/LetterBox';
 import FamilyTree from '../components/feature/family/FamilyTree';
 import CalendarBox from '../components/feature/schedule/CalendarBox';
+// import { useScheduleStore } from '../stores/scheduleStore';
 
 const Main = () => {
   const nav = useNavigate();
   const { isFamilySelected } = useFamilyStore();
+  // const { setSelectedDate } = useScheduleStore();
 
   const handleNavigation = (path: string) => {
     if (isFamilySelected()) {
@@ -19,6 +23,11 @@ const Main = () => {
 
   const onClickScheduleBox = () => {
     // 오늘 날짜로 넘어감
+    // const today = new Date();
+    // const formattedToday = `${today.getFullYear()}년 ${
+    //   today.getMonth() + 1
+    // }월 ${today.getDate()}일`;
+    // setSelectedDate(formattedToday);
     handleNavigation('/schedule');
   };
 

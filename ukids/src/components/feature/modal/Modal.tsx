@@ -28,6 +28,12 @@ export const Modal = ({
     setModalState(!modalState);
   };
 
+  // const onOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  //     if(modalRef.current && !modalRef.current.contains(e.target as Node)){
+  //         setModalState(false);
+  //     }
+  // }
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

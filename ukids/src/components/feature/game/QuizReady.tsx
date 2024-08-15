@@ -119,6 +119,7 @@ const QuizReady = () => {
   const enterQuizRoom = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/enter`,
           body: JSON.stringify({
@@ -136,6 +137,7 @@ const QuizReady = () => {
   const setReady = async (state: boolean) => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/ready`,
           body: JSON.stringify({
@@ -154,6 +156,7 @@ const QuizReady = () => {
   const exitQuizRoom = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/exit`,
           body: JSON.stringify({
@@ -171,6 +174,7 @@ const QuizReady = () => {
   const GetQuizMaxCounts = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/quiz-max`,
           body: JSON.stringify({
@@ -189,6 +193,8 @@ const QuizReady = () => {
   const setQuizCounts = async () => {
     if (stompClientInstance && stompClientInstance.connected) {
       try {
+        // console.log('setQuizCounts : ', selectedValue);
+        // console.log('stompClientInstance:', stompClientInstance);
         stompClientInstance.publish({
           destination: `/app/quiz/quiz-count`,
           body: JSON.stringify({
@@ -232,16 +238,25 @@ const QuizReady = () => {
       connectHeaders: {
         Authorization: `${token}`,
       },
+      debug: (str) => {
+        // console.log('웹소켓 디버그: ' + str);
+      },
     });
 
     client.onConnect = (frame) => {
+      // console.log('WebSocket 연결이 열렸습니다.', frame);
+
       // 올바른 stompClientInstance 설정
+      // console.log('Setting stompClientInstance:', client);?-
       setStompClientInstance(client);
 
       client.subscribe(
         `/topic/quiz/${selectedFamilyId}`,
         (message: IMessage) => {
+          // console.log('Received message at GameRoom:', message.body);
           const receivedMessage: GameMessage = JSON.parse(message.body);
+
+          // console.log('receivedMessage : ', receivedMessage);
 
           switch (receivedMessage.type) {
             case 'IS_READY_GAME':

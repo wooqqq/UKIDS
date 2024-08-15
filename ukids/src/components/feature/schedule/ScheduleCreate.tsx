@@ -27,6 +27,7 @@ const ScheduleCreate = () => {
   });
 
   const callCreateSchedule = async () => {
+    // console.log('create schedule : ', createForm);
     if (!createForm.title || !createForm.startTime || !createForm.endTime) {
       alert('제목과 날짜를 입력해주세요.');
       return;
@@ -39,6 +40,7 @@ const ScheduleCreate = () => {
       endTime: createForm.endTime,
       familyId: selectedFamilyId,
     });
+    // console.log('post : ', data);
     if (data.code == 201) {
       alert('일정 등록 성공');
       nav('/schedule/list');

@@ -91,6 +91,8 @@ export const useScheduleStore = create<Store>((set, get) => ({
   },
   selectedDate: null,
   setSelectedDate: (date) => set({ selectedDate: date }),
+  // eventData: null,
+  // setEventData: (events) => set({ eventData: events }),
   scheduleDetail: null,
   setScheduleDetail: async (scheduleId: number) => {
     if (scheduleId) {
