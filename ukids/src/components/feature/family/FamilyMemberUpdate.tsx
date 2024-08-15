@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useFamilyStore } from '../../../stores/familyStore';
-import CharacterTag from '../../common/CharaterTag';
-import { useAuthStore } from '../../../stores/authStore';
-import { ModalFamily } from '../modal/ModalFamily';
+import { useFamilyStore } from '@stores/familyStore';
+import CharacterTag from '@components/common/CharaterTag';
+import { useAuthStore } from '@stores/authStore';
+import { ModalFamily } from '@components/feature/modal/ModalFamily';
 import { useNavigate } from 'react-router-dom';
-import { userInfo } from 'os';
 
 const FamilyMemberUpdate = () => {
   const {
@@ -147,12 +146,10 @@ const FamilyMemberUpdate = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {member.map((member) => (
+                    {member.map((member: any) => (
                       <tr key={member.userFamilyDto.userId}>
                         <td className="font-semibold">
                           {member.userFamilyDto.name}
-                          {family.userFamilyDto.userId}
-                          {userInfo?.userId}
                         </td>
                         <td>
                           <select
@@ -209,7 +206,7 @@ const FamilyMemberUpdate = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {pendingMember.map((pendingMember) => (
+                    {pendingMember.map((pendingMember: any) => (
                       <tr key={pendingMember.familyMemberId}>
                         <td className="font-semibold px-6">
                           {pendingMember.userFamilyDto.name}
