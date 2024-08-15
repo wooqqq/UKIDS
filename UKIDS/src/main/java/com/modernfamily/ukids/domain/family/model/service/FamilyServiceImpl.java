@@ -177,7 +177,9 @@ public class FamilyServiceImpl implements FamilyService{
         List<FamilyMember> familyMembers = familyMemberRepository.findByUser_IdAndIsApprovalTrue(id);
         List<Family> families = new ArrayList<>();
         for(FamilyMember familyMember : familyMembers){
-            families.add(familyMember.getFamily());
+            Family family = familyMember.getFamily();
+            if(!family.isDelete())
+                families.add(familyMember.getFamily());
         }
 
 
