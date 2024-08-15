@@ -24,7 +24,7 @@ const Header = () => {
       }
     };
     UserName();
-    console.log(token);
+    // console.log(token);
   }, [userInfo, token, getUserInfo]);
 
   const handleLogoClick = () => {

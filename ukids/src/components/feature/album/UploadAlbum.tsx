@@ -20,6 +20,7 @@ interface Photo {
 }
 
 const UploadAlbum = () => {
+  const today = new Date().toISOString().split('T')[0];
   const [title, setTitle] = useState('');
   const [date, setDate] = useState<Date | null>(new Date());
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -176,6 +177,7 @@ const UploadAlbum = () => {
           >
             <DatePicker
               selected={date}
+              maxDate={today}
               onChange={handleDateChange}
               dateFormat="yyyy/MM/dd"
               className="text-center w-full"

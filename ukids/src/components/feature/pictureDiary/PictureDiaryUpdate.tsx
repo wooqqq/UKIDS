@@ -20,6 +20,7 @@ interface Diary {
 export const PictureDiaryUpdate = () => {
   // 추가
   const navigate = useNavigate();
+  const today = new Date().toISOString().split('T')[0];
 
   const { selectedFamilyId } = useFamilyStore();
 
@@ -99,6 +100,7 @@ export const PictureDiaryUpdate = () => {
         <input
           type="date"
           value={diary.date}
+          max={today}
           onChange={(e) => setDiary({ ...diary, date: e.target.value })}
           style={{
             width: '200px', // 너비 조정

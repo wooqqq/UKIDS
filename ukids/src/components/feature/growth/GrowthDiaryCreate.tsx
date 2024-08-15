@@ -16,6 +16,7 @@ interface Diary {
 export const GrowthDiaryCreate = () => {
   const { folderId } = useParams();
   const navigate = useNavigate();
+  const today = new Date().toISOString().split('T')[0];
 
   // 추가 : 이미지 미리보기 URL 상태
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -81,6 +82,7 @@ export const GrowthDiaryCreate = () => {
         <input
           type="date"
           value={diary.date}
+          max={today}
           onChange={(e) => setDiary({ ...diary, date: e.target.value })}
           style={{
             width: '230px', // 너비 조정

@@ -157,7 +157,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const userData = response.data.result;
 
       set({ repUserInfo: userData });
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error('대표자 정보 가져오기 실패:', error);
     }

@@ -140,7 +140,7 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
-      console.log('newFamily.familyId : ' + newFamily.familyId);
+      // console.log('newFamily.familyId : ' + newFamily.familyId);
       set({
         family: newFamily,
         error: null,

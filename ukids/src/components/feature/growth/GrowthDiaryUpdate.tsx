@@ -17,6 +17,7 @@ interface Diary {
 export const GrowthDiaryUpdate = () => {
   // 안됨
   // const {folderId} = useParams();
+  const today = new Date().toISOString().split('T')[0];
 
   // url 직접 추출
   const location = useLocation();
@@ -110,6 +111,7 @@ export const GrowthDiaryUpdate = () => {
         <input
           type="date"
           value={diary.date}
+          max={today}
           onChange={(e) => setDiary({ ...diary, date: e.target.value })}
           style={{
             width: '230px', // 너비 조정

@@ -35,6 +35,8 @@ const UserJoin = () => {
   const [isIdCheck, setIsIdCheck] = useState(false); // 중복 검사를 했는지 안했는지
   const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능한지 아닌지
 
+  const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
+
   // 아이디 중복 확인
   const idCheckHandler = async (id: string) => {
     const idRegex = /^[a-z\d]{5,10}$/;
@@ -353,6 +355,7 @@ const UserJoin = () => {
                 placeholder="생년월일"
                 value={form.birthDate}
                 required={true}
+                max={today}
                 onChange={onChangeBirthDateHandler}
                 className="input-box px-5 w-96 font-semibold text-[#555555]"
               />
