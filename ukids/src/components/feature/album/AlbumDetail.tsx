@@ -160,13 +160,8 @@ const AlbumDetail: React.FC = () => {
               deleteElement={deleteAlbum}
             />
           )}
-        </div>
-
-
-
-      
+        </div>  
     </div>
-
   );
 };
 

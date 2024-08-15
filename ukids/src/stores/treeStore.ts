@@ -25,7 +25,6 @@ export const useTreeStore = create<TreeState>((set, get) => ({
     }
   },
   updateTreeExp: async (familyId: number, point: number) => {
-    // const { familyId } = get();
     if (familyId !== null) {
       try {
         await api.put(`/tree`, { familyId, point });

@@ -13,7 +13,6 @@
   margin-top: 155px;    
 
   width: 100%;              
-  /* border: 2px solid brown;  */
 }
 
 
@@ -26,16 +25,12 @@
   box-sizing: border-box;   /* 패딩과 테두리를 전체 크기에 포함 */
   width: 600px;
   margin: 40px 0; /* 위아래 */
-  
-  /* border: 2px solid pink;  */
 }
 
 .photo-container img{
   width: 600px;   
   height: 100%; 
   object-fit: contain; /*비율 유지*/
-  
-  /* border: 2px solid pink;  */
 }
 
 .photo-container p{
@@ -49,7 +44,6 @@
   font-family: 'ONE-Mobile-POP';
   font-size: 25px;
   
-  /* border: 2px solid pink;  */
   text-align: center;
   padding-top: 8px;
 }

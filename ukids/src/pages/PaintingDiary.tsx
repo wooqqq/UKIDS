@@ -8,9 +8,6 @@ import { PictureDiaryUpdate } from '@components/feature/pictureDiary/PictureDiar
 const PaintingDiary = () => {
   return (
     <div className="feature-box">
-
-
-  
       {/* <PictureDiaryList /> */}
       <Routes>
         <Route path="" element={<PictureDiaryList />} />
@@ -18,10 +15,6 @@ const PaintingDiary = () => {
         <Route path="write" element={<PictureDiaryCreate />} />
         <Route path="update/:pictureDiaryId" element={<PictureDiaryUpdate />} />
       </Routes>
-
-    
-
-
     </div>
   );
 };

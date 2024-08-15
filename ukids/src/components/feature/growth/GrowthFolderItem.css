@@ -1,5 +1,3 @@
-/* font-family: 'Ownglyph_ryuttung-Rg', sans-serif; */
-
 /* 폴더 전체 박스와 스크롤 */
 .folders-container {
     position: relative;
@@ -16,7 +14,6 @@
     overflow-y: auto; 
     overflow-x: hidden;  
 }
-
 
 /* 폴더 하나 */
 .folderItem {

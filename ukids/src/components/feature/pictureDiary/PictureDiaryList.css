@@ -3,10 +3,8 @@
     padding-top: 30px; /* 상단 고정 영역만큼의 패딩 */
 }
 
-
 .paints-scrollable {
     display: grid;
-
 
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 최소 너비를 250px로 증가 */
     grid-gap: 4000px; /* 칼럼과 행 사이의 간격 */
@@ -22,9 +20,7 @@
     overflow-x: hidden; 
 
     width: 99%; /* 100% 하면 스크롤 안보임. 살짝 보이게 */
-
 }
-
 
 .paint-item {
     display: flex;
@@ -40,7 +36,6 @@
 .paint-item:hover {
     background-color: #f0eded; /* 마우스 호버 시 배경색을 진하게 변경 */
 }
-
 
 .non-diary{
     width: 650px;

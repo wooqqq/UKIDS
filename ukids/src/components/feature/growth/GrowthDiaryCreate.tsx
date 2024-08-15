@@ -83,9 +83,6 @@ export const GrowthDiaryCreate = () => {
     }
     if (imgFile) setDiary({ ...diary, file: imgFile });
 
-    // if (e.target.files?.item(0))
-    //   setDiary({ ...diary, file: e.target.files?.item(0) });
-
     // 추가 : 이미지 미리보기
     const fileReader = new FileReader();
     fileReader.onload = () => {

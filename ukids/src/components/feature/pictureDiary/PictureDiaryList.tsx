@@ -72,9 +72,6 @@ const PictureDiaryList = () => {
 
   return (
     <div>
-      
-      
-
       {/* 날짜 선택 */}
       <div style={{ display: 'flex', alignItems: 'center', marginTop: '33px'}}>
         <input
@@ -90,8 +87,6 @@ const PictureDiaryList = () => {
             padding: '5px 15px', // 내부 여백 추가
             borderRadius: '15px', // 모서리 둥글게 처리
             fontFamily: 'UhBeejung', // 폰트
-            
-            
           }}
         />
 
@@ -99,18 +94,12 @@ const PictureDiaryList = () => {
         <div  style={{ marginLeft: '214px' }}>
           <BlueButton name="만들기" path="/paintdiary/write" />
         </div>
-
-
       </div>
-        
-
 
       {/* 메인 왼쪽 글자 */}
       <div className="main-label">
         그림일기
       </div>
-
-      {/* <div><Link to={`/paintdiary/write`}>만들기</Link></div> */}
 
       {/* 이하 영역 */}
 
@@ -156,27 +145,6 @@ const PictureDiaryList = () => {
               ))}
             </ReactFlipPage>
           )}
-
-          {/* <div className="page-selector">
-                  {diaries.map((_, index) => (
-                    <button key={index} onClick={() => handlePageChange(index)}>
-                      {index + 1}
-                    </button>
-                  ))}
-                </div> */}
-
-          {/*         
-        {diaries.map((item) => (
-          <Link to={`/paintdiary/${item.pictureDiaryId}`} className="paint-item">
-            <PictureDiaryItem
-              key={item.pictureDiaryId}
-              pictureUrl={item.pictureUrl}
-              content={item.content}
-              date={item.date}
-            />
-          </Link>
-        ))}
-     */}
         </div>
       </div>
     </div>

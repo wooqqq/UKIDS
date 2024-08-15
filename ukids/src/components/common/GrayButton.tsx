@@ -22,14 +22,6 @@ const GrayButton = (props: GrayButtonProps) => {
     }
   };
 
-  // const deleteHandleClick = () => {
-  //   if (props.onClick) {
-  //     props.onClick();
-  //   } else {
-  //     nav(props.path);
-  //   }
-  // };
-
   const onClickLogoutButton = () => {
     localStorage.removeItem('token');
     

@@ -150,7 +150,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.post(`/family`, { name, password });
       const newFamily: Family = response.data.result;
-      // console.log('newFamily.familyId : ' + newFamily.familyId);
       set({
         family: newFamily,
         error: null,
@@ -300,7 +299,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
       const role = 'ROLE_NONE';
       const response = await api.post(`/member`, { familyId, role });
       if (response.data.code === 201) {
-        // alert('가족 구성원 신청이 성공적으로 완료되었습니다.')
       }
     } catch (error: any) {
       console.error('Error applying for family membership', error);
@@ -313,7 +311,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.put(`/member/${familyMemberId}`);
       if (response.data.code === 201) {
-        // alert('구성원이 승인되었습니다.');
       }
     } catch (error: any) {
       console.error('Error approving family member', error);
@@ -328,7 +325,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         `/member/cancellation/${familyMemberId}`,
       );
       if (response.data.code === 201) {
-        // alert('구성원 신청이 취소되었습니다.');
       }
     } catch (error: any) {
       console.error('Error approving family member', error);
@@ -341,7 +337,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
     try {
       const response = await api.delete(`/member/denial/${familyMemberId}`);
       if (response.data.code === 200) {
-        // alert('구성원 신청이 거절되었습니다.');
       }
     } catch (error: any) {
       console.error('Error approving family member', error);
@@ -392,7 +387,6 @@ export const useFamilyStore = create<FamilyState>((set) => ({
         },
       });
       if (response.data.code === 201) {
-        // alert('탈퇴가 완료되었습니다.');
       }
     } catch (error: any) {
       console.error('Error approving family member', error);

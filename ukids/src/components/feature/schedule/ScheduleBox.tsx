@@ -32,7 +32,6 @@ const ScheduleBox = () => {
   useEffect(() => {
     if (selectedDate && selectedFamilyId) {
       setDateScheduleList(selectedDate, selectedFamilyId);
-      // console.log('date schedule : ', dateScheduleList);
     }
   }, [selectedFamilyId, setDateScheduleList, setSelectedDate]);
 

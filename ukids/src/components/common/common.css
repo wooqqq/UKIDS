@@ -132,29 +132,6 @@
   border-top: #ddd solid 1px;
 }
 
-/* index.css로 이동 */
-/* 기능 박스 */
-/* .feature-box {
-  width: 56.9375rem;
-  height: 36rem;
-  flex-shrink: 0;
-  border-radius: 1.25rem;
-  opacity: var(--sds-size-stroke-border);
-  background: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
-} 
-
-.half-feature-box {
-  width: 27.5rem;
-  height: 36rem;
-  flex-shrink: 0;
-  border-radius: 1.25rem;
-  opacity: var(--sds-size-stroke-border);
-  background: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(153, 153, 153, 0.25);
-  padding: 30px 15px;
-}*/
-
 /* 사이드바 */
 .sidebar {
   width: 7.9375rem;
@@ -367,7 +344,6 @@ table th {
 
 table td {
   padding: 10px 0px;
-  /* width: 300px; */
 }
 
 table {

@@ -21,7 +21,6 @@ const ScheduleList = () => {
     nav('/schedule/new');
   };
   const onClickDetail = (scheduleId: number) => {
-    // console.log('list schedule id : ', scheduleId);
     if (scheduleId) {
       nav(`/schedule/detail/${scheduleId}`);
     }
@@ -29,7 +28,6 @@ const ScheduleList = () => {
 
   useEffect(() => {
     setDateScheduleList(selectedDate, selectedFamilyId);
-    // console.log('date schedule : ', dateScheduleList);
   }, [selectedFamilyId, setSelectedDate, setDateScheduleList]);
 
   return (
